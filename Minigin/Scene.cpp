@@ -3,8 +3,6 @@
 
 #include <algorithm>
 
-using namespace dae;
-
 unsigned int Scene::m_idCounter = 0;
 
 Scene::Scene(const std::string& name) : m_name(name) {}

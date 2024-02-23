@@ -1,31 +1,79 @@
 #pragma once
 #include <memory>
 #include "Transform.h"
+#include <vector>
 
-namespace dae
+//probably make a header file with all the includes for the components
+#include "FPSCounter.h"
+#include "Component.h"
+#include <type_traits>
+
+class Texture2D;
+
+// todo: this should become final.
+class GameObject 
 {
-	class Texture2D;
+public:
+	GameObject() = default;
+	virtual ~GameObject();
 
-	// todo: this should become final.
-	class GameObject 
+	template<typename... Args>
+	GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested
+
+	GameObject(const GameObject& other) = delete;
+	GameObject(GameObject&& other) = delete;
+	GameObject& operator=(const GameObject& other) = delete;
+	GameObject& operator=(GameObject&& other) = delete;
+		
+	virtual void Update();
+	virtual void Render() const;
+	
+	template<typename T, typename... Args>
+	void AddComponents(Args&&... args)
 	{
-	public:
-		virtual void Update();
-		virtual void Render() const;
+		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
 
-		void SetTexture(const std::string& filename);
-		void SetPosition(float x, float y);
+		m_ComponentsPtrVec.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+	}
 
-		GameObject() = default;
-		virtual ~GameObject();
-		GameObject(const GameObject& other) = delete;
-		GameObject(GameObject&& other) = delete;
-		GameObject& operator=(const GameObject& other) = delete;
-		GameObject& operator=(GameObject&& other) = delete;
+	void RemoveComponent(const Component& component);
+	const std::vector<std::unique_ptr<Component>>& GetComponents() const { return m_ComponentsPtrVec; };
 
-	private:
-		Transform m_transform{};
-		// todo: mmm, every gameobject has a texture? Is that correct?
-		std::shared_ptr<Texture2D> m_texture{};
-	};
-}
+	template<typename T>
+	T* GetComponent() const
+	{
+		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+
+		for (const auto& comp : m_ComponentsPtrVec)
+		{
+			if (dynamic_cast<T*>(comp.get()) != nullptr)
+			{
+				return static_cast<T*>(comp.get());
+			}
+		}
+		return nullptr;
+	}
+
+	template<typename T>
+	bool HasComponent() const
+	{
+		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+
+		for (const auto& comp : m_ComponentsPtrVec)
+		{
+			if (dynamic_cast<T*>(comp.get()) != nullptr)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	void SetTexture(const std::string& filename);
+	void SetPosition(float x, float y);
+
+private:
+	Transform m_transform{};
+	// todo: mmm, every gameobject has a texture? Is that correct?
+	std::shared_ptr<Texture2D> m_texture{};
+	std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
+};

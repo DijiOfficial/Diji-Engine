@@ -9,7 +9,11 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include <chrono>
+#include <thread>
+#include <windows.h>
 
+using namespace std;
 SDL_Window* g_window{};
 
 void PrintSDLVersion()
@@ -40,7 +44,7 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string &dataPath)
+Minigin::Minigin(const std::string &dataPath)
 {
 	PrintSDLVersion();
 	
@@ -62,12 +66,15 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
+	m_RefreshRate = GetMonitorRefreshRate();
+	m_TimePerFrame = 1000 / m_RefreshRate;
+
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
 }
 
-dae::Minigin::~Minigin()
+Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
@@ -75,7 +82,21 @@ dae::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run(const std::function<void()>& load)
+int Minigin::GetMonitorRefreshRate()
+{
+	DEVMODE dm;
+	ZeroMemory(&dm, sizeof(dm));
+	dm.dmSize = sizeof(dm);
+
+	if (EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &dm) != 0)
+	{
+		return dm.dmDisplayFrequency;
+	}
+
+	return 0;
+}
+
+void Minigin::Run(const std::function<void()>& load)
 {
 	load();
 
@@ -84,11 +105,34 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 
 	// todo: this update loop could use some work.
+	using clock = std::chrono::high_resolution_clock;
 	bool doContinue = true;
+	auto lastTime = clock::now();
+	float lag = 0.0f;
+
 	while (doContinue)
 	{
+		//account for lag
+		const auto currentTime = clock::now();
+		const float dt = chrono::duration<float>(currentTime - lastTime).count();
+		lastTime = currentTime;
+		lag += dt;
+
+		//main loop
 		doContinue = input.ProcessInput();
+		//while (lag >= fixedTimeStep)
+		//{
+		//	fixed_update(fixedTimeStep);
+		//	lag -= fixedTimeStep;
+		//}
+
 		sceneManager.Update();
 		renderer.Render();
+		//renderer.Render(lag/fixedTimeStep); //if wee need to render based on delta time, lag/fixedTimeStep tells us how far we are into the next frame (only matters if we skip over more than 1 frame I guess)
+		//The renderer knows each game object and its current velocity. Say that bullet is 20 pixels from the left side of the screen and is moving right 400 pixels per frame. If we are halfway between frames, then we’ll end up passing 0.5 to render(). So it draws the bullet half a frame ahead, at 220 pixels. Ta-da, smooth motion.
+
+		//caping the framerate
+		const auto sleepTime = currentTime + chrono::milliseconds(m_TimePerFrame) - clock::now();
+		this_thread::sleep_for(sleepTime);
 	}
 }
