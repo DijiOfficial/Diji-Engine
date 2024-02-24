@@ -5,8 +5,7 @@
 #include "Texture.h"
 #include <type_traits>
 
-// todo: this should become final.
-class GameObject 
+class GameObject final
 {
 public:
 	GameObject() = default;
@@ -63,16 +62,9 @@ public:
 		}
 		return false;
 	}
-	void SetTexture(const std::string& filename);
 	void SetPosition(float x, float y);
 
-
-	void SetNoTexture() { hasTexture = false; }
-	bool GetHasTexture() const { return hasTexture; }
 private:
 	Transform m_transform{};
-	// todo: mmm, every gameobject has a texture? Is that correct?
-	std::shared_ptr<Texture2D> m_texture{};
 	std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
-	bool hasTexture = true;
 };
