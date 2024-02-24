@@ -1,7 +1,7 @@
-#include <string>
+//#include <string>
 #include "GameObject.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
+//#include "ResourceManager.h"
+//#include "Renderer.h"
 
 GameObject::~GameObject()
 {
@@ -19,7 +19,11 @@ void GameObject::RemoveComponent(const Component& component)
 
 void GameObject::Update()
 {
-
+	for (const auto& component : m_ComponentsPtrVec)
+	{
+		component->Update();
+		//component->Update(m_ComponentsPtrVec);
+	}
 };
 
 void GameObject::Render() const

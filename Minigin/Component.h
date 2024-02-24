@@ -1,5 +1,15 @@
 #pragma once
+#include "Transform.h"
+//not sure about those two
+#include "ResourceManager.h"
+#include "Renderer.h"
 
+#include <vector>
+#include <memory>
+#include <string>
+
+//#include <chrono>
+//#include <iostream>
 class Component
 {
 public:
@@ -12,6 +22,7 @@ public:
 	Component& operator=(Component&& other) = delete;
 
 	virtual void Update();
+	//virtual void Update(std::vector<std::unique_ptr<Component>>& compVec);
 	virtual void Render() const;
 
 private:

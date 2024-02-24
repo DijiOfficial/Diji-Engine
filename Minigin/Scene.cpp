@@ -36,7 +36,10 @@ void Scene::Render() const
 {
 	for (const auto& object : m_objects)
 	{
-		object->Render();
+		if (object.get()->GetHasTexture())
+		{
+			object->Render();
+		}
 	}
 }
 
