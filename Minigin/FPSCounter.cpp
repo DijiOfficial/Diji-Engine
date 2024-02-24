@@ -22,5 +22,4 @@ void FPSCounter::CalculateFps(const std::chrono::steady_clock::time_point& curre
     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - m_LastFpsUpdate).count();
     m_Fps = static_cast<float>((m_FrameCount * 1000.f) / elapsedTime);
     m_LastFpsUpdate = currentTime;
-    std::cout << "FPS: " << m_Fps << std::endl;
 };

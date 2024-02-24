@@ -104,7 +104,6 @@ void Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	// todo: this update loop could use some work.
 	using clock = std::chrono::high_resolution_clock;
 	bool doContinue = true;
 	auto lastTime = clock::now();
@@ -118,8 +117,8 @@ void Minigin::Run(const std::function<void()>& load)
 		lastTime = currentTime;
 		lag += dt;
 
-		//main loop
 		doContinue = input.ProcessInput();
+		//fixed update are not needed yet
 		//while (lag >= fixedTimeStep)
 		//{
 		//	fixed_update(fixedTimeStep);
@@ -131,7 +130,6 @@ void Minigin::Run(const std::function<void()>& load)
 		//renderer.Render(lag/fixedTimeStep); //if wee need to render based on delta time, lag/fixedTimeStep tells us how far we are into the next frame (only matters if we skip over more than 1 frame I guess)
 		//The renderer knows each game object and its current velocity. Say that bullet is 20 pixels from the left side of the screen and is moving right 400 pixels per frame. If we are halfway between frames, then we’ll end up passing 0.5 to render(). So it draws the bullet half a frame ahead, at 220 pixels. Ta-da, smooth motion.
 
-		//caping the framerate
 		const auto sleepTime = currentTime + chrono::milliseconds(m_TimePerFrame) - clock::now();
 		this_thread::sleep_for(sleepTime);
 	}
