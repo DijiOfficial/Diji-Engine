@@ -125,9 +125,11 @@ void Minigin::Run(const std::function<void()>& load)
 		//	lag -= fixedTimeStep;
 		//}
 
+		//not using dt for now
 		sceneManager.Update();
 		renderer.Render();
-		//renderer.Render(lag/fixedTimeStep); //if wee need to render based on delta time, lag/fixedTimeStep tells us how far we are into the next frame (only matters if we skip over more than 1 frame I guess)
+		//renderer.Render(lag/fixedTimeStep); 
+		//if we need to render based on delta time, lag/fixedTimeStep tells us how far we are into the next frame (only matters if we skip over more than 1 frame I guess)
 		//The renderer knows each game object and its current velocity. Say that bullet is 20 pixels from the left side of the screen and is moving right 400 pixels per frame. If we are halfway between frames, then we’ll end up passing 0.5 to render(). So it draws the bullet half a frame ahead, at 220 pixels. Ta-da, smooth motion.
 
 		const auto sleepTime = currentTime + chrono::milliseconds(m_TimePerFrame) - clock::now();

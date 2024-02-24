@@ -68,7 +68,7 @@ void Texture::Update(GameObject& gameObject)
 		float fps = gameObject.GetComponent<FPSCounter>()->GetFPS();
 
 		std::ostringstream oss;
-		oss << std::fixed << std::setprecision(1) << fps;
+		oss << std::fixed << std::setprecision(1) << fps << " FPS";
 		std::string fpsString = oss.str();
 		
 		SetText(fpsString);
