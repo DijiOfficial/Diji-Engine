@@ -10,6 +10,8 @@
 
 //#include <chrono>
 //#include <iostream>
+class GameObject;
+
 class Component
 {
 public:
@@ -21,9 +23,8 @@ public:
 	Component& operator=(const Component& other) = delete;
 	Component& operator=(Component&& other) = delete;
 
-	virtual void Update();
-	//virtual void Update(std::vector<std::unique_ptr<Component>>& compVec);
-	virtual void Render() const;
+	virtual void Update(GameObject& gameObject) = 0;
+	virtual void Render() const = 0;
 
 private:
 

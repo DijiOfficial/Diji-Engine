@@ -13,14 +13,17 @@ public:
 	FPSCounter& operator=(const FPSCounter& other) = delete;
 	FPSCounter& operator=(FPSCounter&& other) = delete;
 
-	//void Update(std::vector<std::unique_ptr<Component>>& compVec) override;
-	void Update() override;
+	void Update(GameObject& gameObject) override;
 	void Render() const override {};
-	int GetFPS() const { return m_Fps; };
+	float GetFPS() const { return m_Fps; };
 
 private:
+	const int REFRESH_RATE = 100;
 	int m_FrameCount;
-	int m_Fps;
+	float m_Fps;
 	std::chrono::steady_clock::time_point m_LastTime;
+	std::chrono::steady_clock::time_point m_LastFpsUpdate;
+
+	void CalculateFps(const std::chrono::steady_clock::time_point& currentTime);
 };
 

@@ -6,6 +6,8 @@
 #include <SDL_ttf.h>
 #include <stdexcept>
 
+#include "GameObject.h" //circular dependency???
+
 Texture::Texture()
 	: m_FontPtr{ nullptr }
 	, m_Text{ "" }
@@ -57,10 +59,20 @@ void Texture::FontUpdate()
 	}
 }
 
-void Texture::Update()
+void Texture::Update(GameObject& gameObject)
 {
 	FontUpdate();
 
+	if (gameObject.HasComponent<FPSCounter>())
+	{
+		float fps = gameObject.GetComponent<FPSCounter>()->GetFPS();
+
+		std::ostringstream oss;
+		oss << std::fixed << std::setprecision(1) << fps;
+		std::string fpsString = oss.str();
+		
+		SetText(fpsString);
+	}
 }
 
 void Texture::Render() const

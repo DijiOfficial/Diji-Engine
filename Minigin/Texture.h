@@ -3,6 +3,7 @@
 
 class Font;
 class Texture2D;
+class GameObject;
 
 class Texture final : public Component
 {
@@ -17,7 +18,7 @@ public:
 	Texture& operator=(const Texture& other) = delete;
 	Texture& operator=(Texture&& other) = delete;
 
-	void Update() override;
+	virtual void Update(GameObject& gameObject) override;
 	void Render() const override;
 
 	void SetText(const std::string& text);
@@ -27,7 +28,6 @@ public:
 
 private:
 	bool m_needsUpdate;
-	//bool m_NeedsFrameUpdate;
 	std::string m_Text;
 	Transform m_transform{};
 	std::shared_ptr<Font> m_FontPtr;

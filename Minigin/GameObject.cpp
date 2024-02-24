@@ -18,7 +18,7 @@ void GameObject::Update()
 {
 	for (const auto& component : m_ComponentsPtrVec)
 	{
-		component->Update();
+		component->Update(*this);
 	}
 };
 
