@@ -1,6 +1,7 @@
 #pragma once
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include "Texture2D.h"
 
 #include <vector>
 #include <memory>

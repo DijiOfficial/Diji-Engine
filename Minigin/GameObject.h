@@ -1,10 +1,5 @@
 #pragma once
-
-//probably make a header file with all the includes for the components
-#include "FPSCounter.h"
-#include "Texture.h"
-#include "Transform.h"
-#include <type_traits>
+#include "Components.h"
 
 namespace diji
 {
