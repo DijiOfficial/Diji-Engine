@@ -1,6 +1,4 @@
 #pragma once
-#include "Transform.h"
-//not sure about those two
 #include "ResourceManager.h"
 #include "Renderer.h"
 
@@ -9,7 +7,6 @@
 #include <string>
 
 //#include <chrono>
-//#include <iostream>
 namespace diji 
 {
 	class GameObject;
@@ -26,6 +23,6 @@ namespace diji
 		Component& operator=(Component&& other) = delete;
 
 		virtual void Update(GameObject& gameObject) = 0;
-		virtual void Render() const = 0;
+		virtual void Render(const GameObject& gameObject) const = 0;
 	};
 }

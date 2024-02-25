@@ -26,11 +26,6 @@ void diji::GameObject::Render() const
 {
 	for (const auto& component : m_ComponentsPtrVec)
 	{
-		component->Render();
+		component->Render(*this);
 	}
-}
-
-void diji::GameObject::SetPosition(float x, float y)
-{
-	m_Transform.SetPosition(x, y, 0.0f);
 }

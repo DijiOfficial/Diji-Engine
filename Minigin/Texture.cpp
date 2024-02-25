@@ -6,7 +6,7 @@
 #include <SDL_ttf.h>
 #include <stdexcept>
 
-#include "GameObject.h" //circular dependency???
+#include "GameObject.h"
 
 diji::Texture::Texture()
 	: m_FontPtr{ nullptr }
@@ -75,11 +75,11 @@ void diji::Texture::Update(GameObject& gameObject)
 	}
 }
 
-void diji::Texture::Render() const
+void diji::Texture::Render(const GameObject& gameObject) const
 {
 	if (m_TexturePtrPtr != nullptr)
 	{
-		const auto& pos = m_Transform.GetPosition();
+		const auto& pos = gameObject.HasComponent<Transform>() ? gameObject.GetComponent<Transform>()->GetPosition() : glm::vec3{ 0, 0, 0 };
 		Renderer::GetInstance().RenderTexture(*m_TexturePtrPtr, pos.x, pos.y);
 	}
 }
@@ -95,11 +95,6 @@ void diji::Texture::SetFont(std::shared_ptr<Font> font)
 {
 	m_FontPtr = std::move(font);
 	m_needsUpdate = true;
-}
-
-void diji::Texture::SetPosition(const float x, const float y)
-{
-	m_Transform.SetPosition(x, y, 0.0f);
 }
 
 

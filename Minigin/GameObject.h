@@ -3,6 +3,7 @@
 //probably make a header file with all the includes for the components
 #include "FPSCounter.h"
 #include "Texture.h"
+#include "Transform.h"
 #include <type_traits>
 
 namespace diji
@@ -64,10 +65,8 @@ namespace diji
 			}
 			return false;
 		}
-		void SetPosition(float x, float y);
 
 	private:
-		Transform m_Transform{};
 		std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
 	};
 

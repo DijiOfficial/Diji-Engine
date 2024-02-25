@@ -16,7 +16,7 @@ namespace diji
 		FPSCounter& operator=(FPSCounter&& other) = delete;
 
 		void Update(GameObject& gameObject) override;
-		void Render() const override {};
+		void Render(const GameObject& gameObject) const override { (void)gameObject; };
 		double GetFPS() const { return m_Fps; };
 
 	private:
