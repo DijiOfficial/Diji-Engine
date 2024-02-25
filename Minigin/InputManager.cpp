@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "InputManager.h"
 
-bool InputManager::ProcessInput()
+bool diji::InputManager::ProcessInput()
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {

@@ -8,7 +8,7 @@
 
 #include "GameObject.h" //circular dependency???
 
-Texture::Texture()
+diji::Texture::Texture()
 	: m_FontPtr{ nullptr }
 	, m_Text{ "" }
 	, m_TexturePtr{ nullptr }
@@ -16,7 +16,7 @@ Texture::Texture()
 {
 }
 
-Texture::Texture(const std::string& filename)
+diji::Texture::Texture(const std::string& filename)
 	: m_FontPtr{ nullptr }
 	, m_Text{ "" }
 	, m_TexturePtr{ nullptr }
@@ -25,7 +25,7 @@ Texture::Texture(const std::string& filename)
 		SetTexture(filename);
 }
 
-Texture::Texture(const std::string& text, std::shared_ptr<Font> font)
+diji::Texture::Texture(const std::string& text, std::shared_ptr<Font> font)
 	: m_FontPtr{ std::move(font)}
 	, m_Text{ text }
 	, m_TexturePtr{ nullptr }
@@ -33,12 +33,12 @@ Texture::Texture(const std::string& text, std::shared_ptr<Font> font)
 {
 }
 
-void Texture::SetTexture(const std::string& filename)
+void diji::Texture::SetTexture(const std::string& filename)
 {
 	m_TexturePtr = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
-void Texture::FontUpdate()
+void diji::Texture::FontUpdate()
 {
 	if (m_needsUpdate)
 	{
@@ -59,13 +59,13 @@ void Texture::FontUpdate()
 	}
 }
 
-void Texture::Update(GameObject& gameObject)
+void diji::Texture::Update(GameObject& gameObject)
 {
 	FontUpdate();
 
 	if (gameObject.HasComponent<FPSCounter>())
 	{
-		float fps = gameObject.GetComponent<FPSCounter>()->GetFPS();
+		double fps = gameObject.GetComponent<FPSCounter>()->GetFPS();
 
 		std::ostringstream oss;
 		oss << std::fixed << std::setprecision(1) << fps << " FPS";
@@ -75,7 +75,7 @@ void Texture::Update(GameObject& gameObject)
 	}
 }
 
-void Texture::Render() const
+void diji::Texture::Render() const
 {
 	if (m_TexturePtr != nullptr)
 	{
@@ -85,19 +85,19 @@ void Texture::Render() const
 }
 
 // This implementation uses the "dirty flag" pattern
-void Texture::SetText(const std::string& text)
+void diji::Texture::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_needsUpdate = true;
 }
 
-void Texture::SetFont(std::shared_ptr<Font> font)
+void diji::Texture::SetFont(std::shared_ptr<Font> font)
 {
 	m_FontPtr = std::move(font);
 	m_needsUpdate = true;
 }
 
-void Texture::SetPosition(const float x, const float y)
+void diji::Texture::SetPosition(const float x, const float y)
 {
 	m_transform.SetPosition(x, y, 0.0f);
 }

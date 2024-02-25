@@ -10,22 +10,22 @@
 
 //#include <chrono>
 //#include <iostream>
-class GameObject;
-
-class Component
+namespace diji 
 {
-public:
-	Component() = default;
-	virtual ~Component() = default;
+	class GameObject;
 
-	Component(const Component& other) = default;
-	Component(Component&& other) = default;
-	Component& operator=(const Component& other) = delete;
-	Component& operator=(Component&& other) = delete;
+	class Component
+	{
+	public:
+		Component() = default;
+		virtual ~Component() = default;
 
-	virtual void Update(GameObject& gameObject) = 0;
-	virtual void Render() const = 0;
+		Component(const Component& other) = default;
+		Component(Component&& other) = default;
+		Component& operator=(const Component& other) = delete;
+		Component& operator=(Component&& other) = delete;
 
-private:
-
-};
+		virtual void Update(GameObject& gameObject) = 0;
+		virtual void Render() const = 0;
+	};
+}

@@ -1,8 +1,11 @@
 #pragma once
 #include "Singleton.h"
 
-class InputManager final : public Singleton<InputManager>
+namespace diji 
 {
-public:
-	bool ProcessInput();
-};
+	class InputManager final : public Singleton<InputManager>
+	{
+	public:
+		bool ProcessInput();
+	};
+}

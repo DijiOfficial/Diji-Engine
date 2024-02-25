@@ -1,10 +1,10 @@
 #include "GameObject.h"
 
-GameObject::~GameObject()
+diji::GameObject::~GameObject()
 {
 };
 
-void GameObject::RemoveComponent(const Component& component)
+void diji::GameObject::RemoveComponent(const Component& component)
 {
 	m_ComponentsPtrVec.erase(std::remove_if(m_ComponentsPtrVec.begin(), m_ComponentsPtrVec.end(),
 		[&](const auto& comp) 
@@ -14,7 +14,7 @@ void GameObject::RemoveComponent(const Component& component)
 		m_ComponentsPtrVec.end());
 }
 
-void GameObject::Update()
+void diji::GameObject::Update()
 {
 	for (const auto& component : m_ComponentsPtrVec)
 	{
@@ -22,7 +22,7 @@ void GameObject::Update()
 	}
 };
 
-void GameObject::Render() const
+void diji::GameObject::Render() const
 {
 	for (const auto& component : m_ComponentsPtrVec)
 	{
@@ -30,7 +30,7 @@ void GameObject::Render() const
 	}
 }
 
-void GameObject::SetPosition(float x, float y)
+void diji::GameObject::SetPosition(float x, float y)
 {
 	m_transform.SetPosition(x, y, 0.0f);
 }

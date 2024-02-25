@@ -6,7 +6,7 @@
 #include "Texture2D.h"
 #include "Font.h"
 
-void ResourceManager::Init(const std::string& dataPath)
+void diji::ResourceManager::Init(const std::string& dataPath)
 {
 	m_dataPath = dataPath;
 
@@ -16,7 +16,7 @@ void ResourceManager::Init(const std::string& dataPath)
 	}
 }
 
-std::shared_ptr<Texture2D> ResourceManager::LoadTexture(const std::string& file) const
+std::shared_ptr<diji::Texture2D> diji::ResourceManager::LoadTexture(const std::string& file) const
 {
 	const auto fullPath = m_dataPath + file;
 	auto texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
@@ -27,7 +27,7 @@ std::shared_ptr<Texture2D> ResourceManager::LoadTexture(const std::string& file)
 	return std::make_shared<Texture2D>(texture);
 }
 
-std::shared_ptr<Font> ResourceManager::LoadFont(const std::string& file, unsigned int size) const
+std::shared_ptr<diji::Font> diji::ResourceManager::LoadFont(const std::string& file, unsigned int size) const
 {
 	return std::make_shared<Font>(m_dataPath + file, size);
 }

@@ -1,38 +1,41 @@
 #pragma once
 #include "Component.h"
 
-class Font;
-class Texture2D;
-class GameObject;
-
-class Texture final : public Component
+namespace diji
 {
-public:
-	Texture(const std::string& text, std::shared_ptr<Font> font);
-	Texture(const std::string& filename);
-	Texture();
-	virtual ~Texture() = default;
+	class Font;
+	class Texture2D;
+	class GameObject;
 
-	Texture(const Texture& other) = default;
-	Texture(Texture&& other) = default;
-	Texture& operator=(const Texture& other) = delete;
-	Texture& operator=(Texture&& other) = delete;
+	class Texture final : public Component
+	{
+	public:
+		Texture(const std::string& text, std::shared_ptr<Font> font);
+		Texture(const std::string& filename);
+		Texture();
+		virtual ~Texture() = default;
 
-	virtual void Update(GameObject& gameObject) override;
-	void Render() const override;
+		Texture(const Texture& other) = default;
+		Texture(Texture&& other) = default;
+		Texture& operator=(const Texture& other) = delete;
+		Texture& operator=(Texture&& other) = delete;
 
-	void SetText(const std::string& text);
-	void SetFont(std::shared_ptr<Font> font);
-	void SetPosition(float x, float y);
-	void SetTexture(const std::string& filename);
+		virtual void Update(GameObject& gameObject) override;
+		void Render() const override;
 
-private:
-	bool m_needsUpdate;
-	std::string m_Text;
-	Transform m_transform{};
-	std::shared_ptr<Font> m_FontPtr;
-	std::shared_ptr<Texture2D> m_TexturePtr;
+		void SetText(const std::string& text);
+		void SetFont(std::shared_ptr<Font> font);
+		void SetPosition(float x, float y);
+		void SetTexture(const std::string& filename);
 
-	void FontUpdate();
-};
+	private:
+		bool m_needsUpdate;
+		std::string m_Text;
+		Transform m_transform{};
+		std::shared_ptr<Font> m_FontPtr;
+		std::shared_ptr<Texture2D> m_TexturePtr;
+
+		void FontUpdate();
+	};
+}
 

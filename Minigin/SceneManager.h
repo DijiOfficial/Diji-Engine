@@ -4,16 +4,19 @@
 #include <memory>
 #include "Singleton.h"
 
-class Scene;
-class SceneManager final : public Singleton<SceneManager>
+namespace diji
 {
-public:
-	Scene& CreateScene(const std::string& name);
+	class Scene;
+	class SceneManager final : public Singleton<SceneManager>
+	{
+	public:
+		Scene& CreateScene(const std::string& name);
 
-	void Update();
-	void Render();
-private:
-	friend class Singleton<SceneManager>;
-	SceneManager() = default;
-	std::vector<std::shared_ptr<Scene>> m_scenes;
-};
+		void Update();
+		void Render();
+	private:
+		friend class Singleton<SceneManager>;
+		SceneManager() = default;
+		std::vector<std::shared_ptr<Scene>> m_scenes;
+	};
+}

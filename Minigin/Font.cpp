@@ -2,11 +2,11 @@
 #include <SDL_ttf.h>
 #include "Font.h"
 
-TTF_Font* Font::GetFont() const {
+TTF_Font* diji::Font::GetFont() const {
 	return m_FontPtr;
 }
 
-Font::Font(const std::string& fullPath, unsigned int size) : m_FontPtr(nullptr)
+diji::Font::Font(const std::string& fullPath, unsigned int size) : m_FontPtr(nullptr)
 {
 	m_FontPtr = TTF_OpenFont(fullPath.c_str(), size);
 	if (m_FontPtr == nullptr) 
@@ -15,7 +15,7 @@ Font::Font(const std::string& fullPath, unsigned int size) : m_FontPtr(nullptr)
 	}
 }
 
-Font::~Font()
+diji::Font::~Font()
 {
 	TTF_CloseFont(m_FontPtr);
 }
