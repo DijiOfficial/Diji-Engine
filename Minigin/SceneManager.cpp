@@ -3,7 +3,7 @@
 
 void diji::SceneManager::Update()
 {
-	for(auto& scene : m_scenes)
+	for(auto& scene : m_ScenesPtrVec)
 	{
 		scene->Update();
 	}
@@ -11,7 +11,7 @@ void diji::SceneManager::Update()
 
 void diji::SceneManager::Render()
 {
-	for (const auto& scene : m_scenes)
+	for (const auto& scene : m_ScenesPtrVec)
 	{
 		scene->Render();
 	}
@@ -20,6 +20,6 @@ void diji::SceneManager::Render()
 diji::Scene& diji::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_scenes.push_back(scene);
+	m_ScenesPtrVec.push_back(scene);
 	return *scene;
 }

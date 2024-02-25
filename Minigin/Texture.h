@@ -31,9 +31,9 @@ namespace diji
 	private:
 		bool m_needsUpdate;
 		std::string m_Text;
-		Transform m_transform{};
+		Transform m_Transform{};
 		std::shared_ptr<Font> m_FontPtr;
-		std::shared_ptr<Texture2D> m_TexturePtr;
+		std::shared_ptr<Texture2D> m_TexturePtrPtr;
 
 		void FontUpdate();
 	};

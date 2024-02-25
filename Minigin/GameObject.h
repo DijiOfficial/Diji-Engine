@@ -67,7 +67,7 @@ namespace diji
 		void SetPosition(float x, float y);
 
 	private:
-		Transform m_transform{};
+		Transform m_Transform{};
 		std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
 	};
 

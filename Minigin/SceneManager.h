@@ -7,6 +7,7 @@
 namespace diji
 {
 	class Scene;
+
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
@@ -14,9 +15,10 @@ namespace diji
 
 		void Update();
 		void Render();
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
-		std::vector<std::shared_ptr<Scene>> m_scenes;
+		std::vector<std::shared_ptr<Scene>> m_ScenesPtrVec;
 	};
 }

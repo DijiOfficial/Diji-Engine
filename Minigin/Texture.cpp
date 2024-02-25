@@ -11,7 +11,7 @@
 diji::Texture::Texture()
 	: m_FontPtr{ nullptr }
 	, m_Text{ "" }
-	, m_TexturePtr{ nullptr }
+	, m_TexturePtrPtr{ nullptr }
 	, m_needsUpdate{ false }
 {
 }
@@ -19,7 +19,7 @@ diji::Texture::Texture()
 diji::Texture::Texture(const std::string& filename)
 	: m_FontPtr{ nullptr }
 	, m_Text{ "" }
-	, m_TexturePtr{ nullptr }
+	, m_TexturePtrPtr{ nullptr }
 	, m_needsUpdate{ false }
 {
 		SetTexture(filename);
@@ -28,14 +28,14 @@ diji::Texture::Texture(const std::string& filename)
 diji::Texture::Texture(const std::string& text, std::shared_ptr<Font> font)
 	: m_FontPtr{ std::move(font)}
 	, m_Text{ text }
-	, m_TexturePtr{ nullptr }
+	, m_TexturePtrPtr{ nullptr }
 	, m_needsUpdate{ true }
 {
 }
 
 void diji::Texture::SetTexture(const std::string& filename)
 {
-	m_TexturePtr = ResourceManager::GetInstance().LoadTexture(filename);
+	m_TexturePtrPtr = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
 void diji::Texture::FontUpdate()
@@ -54,7 +54,7 @@ void diji::Texture::FontUpdate()
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_TexturePtr = std::make_shared<Texture2D>(texture);
+		m_TexturePtrPtr = std::make_shared<Texture2D>(texture);
 		m_needsUpdate = false;
 	}
 }
@@ -77,10 +77,10 @@ void diji::Texture::Update(GameObject& gameObject)
 
 void diji::Texture::Render() const
 {
-	if (m_TexturePtr != nullptr)
+	if (m_TexturePtrPtr != nullptr)
 	{
-		const auto& pos = m_transform.GetPosition();
-		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y);
+		const auto& pos = m_Transform.GetPosition();
+		Renderer::GetInstance().RenderTexture(*m_TexturePtrPtr, pos.x, pos.y);
 	}
 }
 
@@ -99,7 +99,7 @@ void diji::Texture::SetFont(std::shared_ptr<Font> font)
 
 void diji::Texture::SetPosition(const float x, const float y)
 {
-	m_transform.SetPosition(x, y, 0.0f);
+	m_Transform.SetPosition(x, y, 0.0f);
 }
 
 
