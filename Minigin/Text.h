@@ -7,17 +7,16 @@ namespace diji
 	class Text final : public Component
 	{ 
 	public:
-		Text();
-		Text(const std::string& text, std::shared_ptr<Font> font);
+		Text(GameObject* ownerPtr);
+		Text(const std::string& text, std::shared_ptr<Font> font, GameObject* ownerPtr);
 		virtual ~Text() = default;
 
-		Text(const Text& other) = default;
-		Text(Text&& other) = default;
+		Text(const Text& other) = delete;
+		Text(Text&& other) = delete;
 		Text& operator=(const Text& other) = delete;
 		Text& operator=(Text&& other) = delete;
 
-		virtual void Update(GameObject& gameObject) override;
-		void Render(const GameObject& gameObject) const override;
+		virtual void Update() override;
 
 		void SetText(const std::string& text);
 		void SetFont(std::shared_ptr<Font> font);

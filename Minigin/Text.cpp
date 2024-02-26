@@ -1,20 +1,21 @@
 #include "Text.h"
 #include "Font.h"
-#include "GameObject.h"
 
 #include <SDL_ttf.h>
 #include <stdexcept>
 
-diji::Text::Text()
-	: m_FontPtr{ nullptr }
+diji::Text::Text(GameObject* ownerPtr)
+	: Component(ownerPtr)
+	, m_FontPtr{ nullptr }
 	, m_Text{ "" }
 	, m_TexturePtrPtr{ nullptr }
 	, m_needsUpdate{ false }
 {
 }
 
-diji::Text::Text(const std::string& text, std::shared_ptr<Font> font)
-	: m_FontPtr{ std::move(font) }
+diji::Text::Text(const std::string& text, std::shared_ptr<Font> font, GameObject* ownerPtr)
+	: Component(ownerPtr)
+	, m_FontPtr{ std::move(font) }
 	, m_Text{ text }
 	, m_TexturePtrPtr{ nullptr }
 	, m_needsUpdate{ true }
@@ -42,30 +43,19 @@ void diji::Text::FontUpdate()
 	}
 }
 
-void diji::Text::Update(GameObject& gameObject)
+void diji::Text::Update()
 {
 	FontUpdate();
-
-	if (gameObject.HasComponent<FPSCounter>())
-	{
-		double fps = gameObject.GetComponent<FPSCounter>()->GetFPS();
-
-		std::ostringstream oss;
-		oss << std::fixed << std::setprecision(1) << fps << " FPS";
-		std::string fpsString = oss.str();
-
-		SetText(fpsString);
-	}
 }
 
-void diji::Text::Render(const GameObject& gameObject) const
-{
-	if (m_TexturePtrPtr != nullptr)
-	{
-		const auto& pos = gameObject.HasComponent<Transform>() ? gameObject.GetComponent<Transform>()->GetPosition() : glm::vec3{ 0, 0, 0 };
-		Renderer::GetInstance().RenderTexture(*m_TexturePtrPtr, pos.x, pos.y);
-	}
-}
+//void diji::Text::Render(const GameObject& gameObject) const
+//{
+//	if (m_TexturePtrPtr != nullptr)
+//	{
+//		const auto& pos = gameObject.HasComponent<Transform>() ? gameObject.GetComponent<Transform>()->GetPosition() : glm::vec3{ 0, 0, 0 };
+//		Renderer::GetInstance().RenderTexture(*m_TexturePtrPtr, pos.x, pos.y);
+//	}
+//}
 
 // This implementation uses the "dirty flag" pattern
 void diji::Text::SetText(const std::string& text)

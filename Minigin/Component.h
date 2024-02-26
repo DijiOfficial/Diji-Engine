@@ -15,15 +15,19 @@ namespace diji
 	class Component
 	{
 	public:
-		Component() = default;
 		virtual ~Component() = default;
 
-		Component(const Component& other) = default;
-		Component(Component&& other) = default;
+		Component(const Component& other) = delete;
+		Component(Component&& other) = delete;
 		Component& operator=(const Component& other) = delete;
 		Component& operator=(Component&& other) = delete;
 
-		virtual void Update(GameObject& gameObject) = 0;
-		virtual void Render(const GameObject& gameObject) const = 0;
+		virtual void Update() = 0;
+
+	protected:
+		explicit Component(GameObject* ownerPtr) : m_OwnerPtr{ ownerPtr } {}
+		GameObject* GetOwner() const { return m_OwnerPtr; }
+	private:
+		GameObject* m_OwnerPtr{};
 	};
 }

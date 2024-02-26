@@ -89,30 +89,11 @@ void diji::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
-	using clock = std::chrono::high_resolution_clock;
 	bool doContinue = true;
-	//auto lastTime = clock::now();
-	//float lag = 0.0f;
 
 	while (doContinue)
 	{
-		//account for lag
-		const auto currentTime = clock::now();
-		{
-		//const float dt = chrono::duration<float>(currentTime - lastTime).count();
-		//lastTime = currentTime;
-		//lag += dt;
-		}
-
 		doContinue = input.ProcessInput();
-		{
-		//fixed update are not needed yet
-		//while (lag >= fixedTimeStep)
-		//{
-		//	fixed_update(fixedTimeStep);
-		//	lag -= fixedTimeStep;
-		//}
-		}
 
 		//not using dt for now
 		sceneManager.Update();

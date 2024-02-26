@@ -1,9 +1,10 @@
-#include "FPSCounter.h"
-#include <iostream>
+#include "GameObject.h"
+#include <format>
 
-void diji::FPSCounter::Update(GameObject& gameObject)
+void diji::FPSCounter::Update()
 {
-    (void)gameObject; // Marking the parameter as unused
+    if (not m_TextComponentPtr)
+        m_TextComponentPtr = GetOwner()->GetComponent<Text>();
 
     ++m_FrameCount;
     auto currentTime = std::chrono::steady_clock::now();
@@ -15,6 +16,9 @@ void diji::FPSCounter::Update(GameObject& gameObject)
         m_FrameCount = 0;
         m_LastTime = currentTime;
     }
+
+    //check if fps changed
+    m_TextComponentPtr->SetText(std::format("{:.1f} FPS", m_Fps));
 }
 
 void diji::FPSCounter::CalculateFps(const std::chrono::steady_clock::time_point& currentTime)

@@ -7,7 +7,7 @@ namespace diji
 	{
 	public:
 		GameObject() = default;
-		virtual ~GameObject();
+		~GameObject();
 
 		template<typename... Args>
 		GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested
@@ -17,8 +17,8 @@ namespace diji
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-		virtual void Update();
-		virtual void Render() const;
+		void Update();
+		void Render() const;
 
 		template<typename T, typename... Args>
 		void AddComponents(Args&&... args)
