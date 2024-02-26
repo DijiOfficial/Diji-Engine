@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "GameObject.h"
 
 namespace diji
 {
@@ -9,7 +9,7 @@ namespace diji
 	{
 	public:
 		Texture(GameObject* ownerPtr);
-		Texture(const std::string& filename, GameObject* ownerPtr);
+		Texture(GameObject* ownerPtr, const std::string& filename);
 		virtual ~Texture() = default;
 
 		Texture(const Texture& other) = delete;
@@ -17,12 +17,13 @@ namespace diji
 		Texture& operator=(const Texture& other) = delete;
 		Texture& operator=(Texture&& other) = delete;
 
-		virtual void Update() override;
+		void Update() override;
 
 		void SetTexture(const std::string& filename);
+		std::shared_ptr<Texture2D> GetTexture() const { return m_TexturePtr; };
 
 	private:
-		std::shared_ptr<Texture2D> m_TexturePtr;
+		std::shared_ptr<Texture2D> m_TexturePtr{};
 	};
 }
 

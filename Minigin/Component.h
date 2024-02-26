@@ -1,10 +1,8 @@
 #pragma once
-#include "ResourceManager.h"
 #include "Renderer.h"
+#include "ResourceManager.h"
 #include "Texture2D.h"
 
-#include <vector>
-#include <memory>
 #include <string>
 
 //#include <chrono>
@@ -27,7 +25,9 @@ namespace diji
 	protected:
 		explicit Component(GameObject* ownerPtr) : m_OwnerPtr{ ownerPtr } {}
 		GameObject* GetOwner() const { return m_OwnerPtr; }
+		//std::shared_ptr<GameObject> GetOwner() const { return m_OwnerPtr; }
 	private:
 		GameObject* m_OwnerPtr{};
+		//std::shared_ptr<GameObject> m_OwnerPtr{};
 	};
 }

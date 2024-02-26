@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
-#include "Component.h"
+#include "GameObject.h"
 
 namespace diji
 {
@@ -9,7 +9,7 @@ namespace diji
 	class Transform final : public Component
 	{
 	public:
-		Transform(GameObject* ownerPtr) : Component(ownerPtr) {};
+		Transform(GameObject* ownerPtr) : Component(ownerPtr) { SetPosition(0, 0, 0); };
 		Transform(GameObject* ownerPtr, const float x, const float y, const float z) : Component(ownerPtr) { SetPosition(x, y, z); };
 		Transform(GameObject* ownerPtr, const float x, const float y) : Component(ownerPtr) { SetPosition(x, y); };
 		Transform(GameObject* ownerPtr, int x, int y, int z) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); };

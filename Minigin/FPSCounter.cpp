@@ -1,4 +1,5 @@
-#include "GameObject.h"
+#include "FPSCounter.h"
+#include "Text.h"
 #include <format>
 
 void diji::FPSCounter::Update()

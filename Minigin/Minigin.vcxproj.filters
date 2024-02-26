@@ -64,6 +64,9 @@
     <ClInclude Include="Components.h">
       <Filter>EngineFiles</Filter>
     </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>EngineFiles\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Minigin.cpp">
@@ -106,6 +109,9 @@
       <Filter>EngineFiles\Components</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
+      <Filter>EngineFiles\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
       <Filter>EngineFiles\Components</Filter>
     </ClCompile>
   </ItemGroup>

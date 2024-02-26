@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Render.h"
 
 diji::GameObject::~GameObject()
 {
@@ -18,14 +19,11 @@ void diji::GameObject::Update()
 {
 	for (const auto& component : m_ComponentsPtrVec)
 	{
-		component->Update(*this);
+		component->Update();
 	}
 };
 
 void diji::GameObject::Render() const
 {
-	for (const auto& component : m_ComponentsPtrVec)
-	{
-		component->Render(*this);
-	}
+	GetComponent<diji::Render>()->Update();
 }

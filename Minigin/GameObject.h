@@ -1,8 +1,11 @@
 #pragma once
-#include "Components.h"
-
+#include <vector>
+#include <memory>
+#include "Component.h"
 namespace diji
 {
+	class Component;
+
 	class GameObject final
 	{
 	public:
@@ -25,7 +28,7 @@ namespace diji
 		{
 			static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
 
-			m_ComponentsPtrVec.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+			m_ComponentsPtrVec.push_back(std::make_unique<T>(this, std::forward<Args>(args)...));
 		}
 
 		void RemoveComponent(const Component& component);

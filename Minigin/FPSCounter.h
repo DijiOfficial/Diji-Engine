@@ -1,14 +1,17 @@
 #pragma once
-#include "Component.h"
+#include "GameObject.h"
 #include <chrono>
 
 namespace diji
 {
+	class Text;
+	class GameObject;
+
 	class FPSCounter final : public Component
 	{
 	public:
-		FPSCounter(GameObject* ownerPtr) : Component(ownerPtr), m_FrameCount{ 0 }, m_Fps{ 0 } { m_TextComponentPtr = GetOwner()->GetComponent<Text>(); };
-		~FPSCounter() = default;
+		FPSCounter(GameObject* ownerPtr) : Component(ownerPtr), m_FrameCount{ 0 }, m_Fps{ 0 } { m_TextComponentPtr = ownerPtr->GetComponent<Text>(); };
+		virtual ~FPSCounter() = default;
 
 		FPSCounter(const FPSCounter& other) = delete;
 		FPSCounter(FPSCounter&& other) = delete;
