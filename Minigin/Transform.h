@@ -14,7 +14,7 @@ namespace diji
 		Transform(GameObject* ownerPtr, const float x, const float y) : Component(ownerPtr) { SetPosition(x, y); };
 		Transform(GameObject* ownerPtr, int x, int y, int z) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); };
 		Transform(GameObject* ownerPtr, int x, int y) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y)); };
-		virtual ~Transform() = default;
+		~Transform() override = default;
 
 
 		Transform(const Transform& other) = delete;
@@ -22,7 +22,7 @@ namespace diji
 		Transform& operator=(const Transform& other) = delete;
 		Transform& operator=(Transform&& other) = delete;
 
-		virtual void Update() override { };
+		void Update() override { };
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const float x, const float y, const float z);

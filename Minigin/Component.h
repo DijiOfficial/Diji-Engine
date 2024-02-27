@@ -5,7 +5,6 @@
 
 #include <string>
 
-//#include <chrono>
 namespace diji 
 {
 	class GameObject;
@@ -25,9 +24,8 @@ namespace diji
 	protected:
 		explicit Component(GameObject* ownerPtr) : m_OwnerPtr{ ownerPtr } {}
 		GameObject* GetOwner() const { return m_OwnerPtr; }
-		//std::shared_ptr<GameObject> GetOwner() const { return m_OwnerPtr; }
+
 	private:
 		GameObject* m_OwnerPtr{};
-		//std::shared_ptr<GameObject> m_OwnerPtr{};
 	};
 }

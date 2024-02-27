@@ -10,7 +10,7 @@ namespace diji
 	public:
 		Texture(GameObject* ownerPtr);
 		Texture(GameObject* ownerPtr, const std::string& filename);
-		virtual ~Texture() = default;
+		~Texture() override = default;
 
 		Texture(const Texture& other) = delete;
 		Texture(Texture&& other) = delete;

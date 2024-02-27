@@ -4,27 +4,20 @@
 
 void diji::FPSCounter::Update()
 {
-    if (not m_TextComponentPtr)
+    if (not m_TextComponentPtr) //assuming GameObject has a Text component
         m_TextComponentPtr = GetOwner()->GetComponent<Text>();
 
+    const double tempFps = m_Fps;
+    m_ElapsedTime += Time::GetInstance().GetDeltaTime();
     ++m_FrameCount;
-    auto currentTime = std::chrono::steady_clock::now();
-    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - m_LastTime).count();
 
-    if (elapsedTime >= REFRESH_RATE)
+    if (m_ElapsedTime >= REFRESH_RATE)
     {
-        CalculateFps(currentTime);
+        m_Fps = static_cast<float>(m_FrameCount / m_ElapsedTime);
         m_FrameCount = 0;
-        m_LastTime = currentTime;
+        m_ElapsedTime = 0;
     }
 
-    //check if fps changed
-    m_TextComponentPtr->SetText(std::format("{:.1f} FPS", m_Fps));
+    if (m_Fps != tempFps)
+        m_TextComponentPtr->SetText(std::format("{:.1f} FPS", m_Fps));
 }
-
-void diji::FPSCounter::CalculateFps(const std::chrono::steady_clock::time_point& currentTime)
-{
-    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - m_LastFpsUpdate).count();
-    m_Fps = static_cast<double>((m_FrameCount * 1000.f) / elapsedTime);
-    m_LastFpsUpdate = currentTime;
-};

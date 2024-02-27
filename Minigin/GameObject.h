@@ -1,7 +1,8 @@
 #pragma once
+#include "Component.h"
 #include <vector>
 #include <memory>
-#include "Component.h"
+
 namespace diji
 {
 	class Component;

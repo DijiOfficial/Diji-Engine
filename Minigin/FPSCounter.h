@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include <chrono>
+#include "Time.h"
 
 namespace diji
 {
@@ -10,8 +10,8 @@ namespace diji
 	class FPSCounter final : public Component
 	{
 	public:
-		FPSCounter(GameObject* ownerPtr) : Component(ownerPtr), m_FrameCount{ 0 }, m_Fps{ 0 } { m_TextComponentPtr = ownerPtr->GetComponent<Text>(); };
-		virtual ~FPSCounter() = default;
+		FPSCounter(GameObject* ownerPtr) : Component(ownerPtr), m_FrameCount{ 0 }, m_Fps{ 0 }, m_ElapsedTime{ 0 } { m_TextComponentPtr = ownerPtr->GetComponent<Text>(); };
+		~FPSCounter() override = default;
 
 		FPSCounter(const FPSCounter& other) = delete;
 		FPSCounter(FPSCounter&& other) = delete;
@@ -19,17 +19,14 @@ namespace diji
 		FPSCounter& operator=(FPSCounter&& other) = delete;
 
 		void Update() override;
-		double GetFPS() const { return m_Fps; };
+		float GetFPS() const { return m_Fps; };
 
 	private:
-		const int REFRESH_RATE = 100;
+		const float REFRESH_RATE = 0.1f;
 		int m_FrameCount;
-		double m_Fps;
-		std::chrono::steady_clock::time_point m_LastTime;
-		std::chrono::steady_clock::time_point m_LastFpsUpdate;
+		float m_Fps;
+		float m_ElapsedTime;
 		Text* m_TextComponentPtr;
-
-		void CalculateFps(const std::chrono::steady_clock::time_point& currentTime);
 	};
 }
 

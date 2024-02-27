@@ -9,7 +9,7 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include <chrono>
+#include "Time.h"
 #include <thread>
 
 SDL_Window* g_window{};
@@ -89,19 +89,20 @@ void diji::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
+	auto lastFrameTime{ std::chrono::high_resolution_clock::now() };
 	bool doContinue = true;
 
 	while (doContinue)
 	{
+		const auto currentTime{ std::chrono::high_resolution_clock::now() };
+		const float deltaTime{ std::chrono::duration<float>(currentTime - lastFrameTime).count() };
+		lastFrameTime = currentTime;
+
+		Time::GetInstance().SetDeltaTime(deltaTime);
 		doContinue = input.ProcessInput();
 
-		//not using dt for now
 		sceneManager.Update();
 		renderer.Render();
-		{
-		//renderer.Render(lag/fixedTimeStep); 
-		//if we need to render based on delta time, lag/fixedTimeStep tells us how far we are into the next frame (only matters if we skip over more than 1 frame I guess)
-		//The renderer knows each game object and its current velocity. Say that bullet is 20 pixels from the left side of the screen and is moving right 400 pixels per frame. If we are halfway between frames, then we’ll end up passing 0.5 to render(). So it draws the bullet half a frame ahead, at 220 pixels. Ta-da, smooth motion.
-		}
+
 	}
 }

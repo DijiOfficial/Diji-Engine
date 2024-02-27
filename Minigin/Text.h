@@ -12,7 +12,7 @@ namespace diji
 	public:
 		Text(GameObject* ownerPtr);
 		Text(GameObject* ownerPtr, const std::string& text, std::shared_ptr<Font> font);
-		virtual ~Text() = default;
+		~Text() override = default;
 
 		Text(const Text& other) = delete;
 		Text(Text&& other) = delete;

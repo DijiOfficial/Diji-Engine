@@ -12,7 +12,7 @@ namespace diji
 	{
 	public:
 		Render(GameObject* ownerPtr);
-		virtual ~Render() = default;
+		~Render() override = default;
 
 		Render(const Render& other) = delete;
 		Render(Render&& other) = delete;

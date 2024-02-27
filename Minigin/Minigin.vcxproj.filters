@@ -67,6 +67,9 @@
     <ClInclude Include="Render.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>EngineFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Minigin.cpp">
