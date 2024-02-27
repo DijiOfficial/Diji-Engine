@@ -17,10 +17,13 @@ void diji::Render::Update()
 	CheckNullptr();
 	CheckTextUpdate();
 
-	if (m_TexturePtr != nullptr)
+	if (m_TexturePtr)
 	{
 		const auto& pos = m_TransformCompPtr ? m_TransformCompPtr->GetPosition() : glm::vec3{ 0, 0, 0 };
-		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y);
+		if (m_TextureCompPtr and m_TextureCompPtr->HasVariableSize())
+			Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetIdx());
+		else
+			Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y);
 	}
 	else
 	{

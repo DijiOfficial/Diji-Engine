@@ -1,5 +1,4 @@
 #pragma once
-#include <glm/glm.hpp>
 #include "GameObject.h"
 
 namespace diji
@@ -27,6 +26,7 @@ namespace diji
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const float x, const float y, const float z);
 		void SetPosition(const float x, const float y);
+		void SetPosition(glm::vec3 pos) { m_Position = pos; };
 
 	private:
 		glm::vec3 m_Position;

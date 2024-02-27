@@ -56,14 +56,30 @@ void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
-void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
+void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, int width, int height) const
 {
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(x);
 	dst.y = static_cast<int>(y);
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
+	dst.w = width;
+	dst.h = height;
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
+void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, int width, int height, int idx) const
+{
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(x);
+	dst.y = static_cast<int>(y);
+	dst.w = width;
+	dst.h = height;
+
+	SDL_Rect src{};
+	src.x = idx * width;
+	src.y = 0;
+	src.w = width;
+	src.h = height;
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
 }
 
 SDL_Renderer* diji::Renderer::GetSDLRenderer() const { return m_RendererPtr; }
