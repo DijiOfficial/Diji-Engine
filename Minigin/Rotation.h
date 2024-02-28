@@ -37,5 +37,6 @@ namespace diji
         glm::vec3 m_Center;
         float m_DistanceFromCenter;
         Transform* m_TransformCompPtr{};
+        GameObject* m_OwnerPtr{};
     };
 }

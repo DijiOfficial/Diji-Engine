@@ -10,13 +10,15 @@ diji::GameObject::~GameObject()
 void diji::GameObject::Update()
 {
     if (not m_TransformCompPtr)
+    {
         m_TransformCompPtr = GetComponent<Transform>();
+        SetPositionDirty();
+    }
 
     if (not m_RenderCompPtr)
         m_RenderCompPtr = GetComponent<diji::Render>();
 
-    if(GetWorldPosition() != m_LocalPosition)
-		SetPositionDirty();
+    UpdateWorldPosition();
 
     for (const auto& component : m_ComponentsPtrVec)
     {
@@ -114,7 +116,7 @@ const glm::vec3& diji::GameObject::GetWorldPosition()
 
 void diji::GameObject::SetPositionDirty()
 {
-    //no intialize so make sure to set the local position before calling this function
+    //no intialize so make sure to set the local position
     if (m_LocalPosition == glm::vec3{ 0, 0, 0 })
     {
         m_LocalPosition = GetWorldPosition();
@@ -131,10 +133,14 @@ void diji::GameObject::SetPositionDirty()
 
 void diji::GameObject::UpdateWorldPosition()
 {
+    if (not m_TransformCompPtr)
+        return;
+
     if (m_ParentPtr)
         m_TransformCompPtr->SetPosition(m_ParentPtr->GetWorldPosition() + m_LocalPosition);
     else
-        SetLocalPosition(m_TransformCompPtr->GetPosition());
+        m_TransformCompPtr->SetPosition(m_LocalPosition);
+        //SetLocalPosition(m_TransformCompPtr->GetPosition());
     
     m_PositionIsDirty = false;
 }

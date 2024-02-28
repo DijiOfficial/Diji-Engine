@@ -77,7 +77,10 @@ namespace diji
 		void SetParent(GameObject* parent, bool keepWorldPosition);
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
+		void SetLocalPosition(const glm::vec3& pos);
 
+		void SetPositionClean() { m_PositionIsDirty = false; };
+		const glm::vec3& GetWorldPosition();
 	private:
 		bool m_PositionIsDirty{ false };
 		glm::vec3 m_LocalPosition{ 0 ,0 ,0 };
@@ -88,9 +91,7 @@ namespace diji
 		std::vector<GameObject*> m_ChildrenPtrVec{};
 
 		bool IsChildOf(GameObject* potentialChild) const;
-		const glm::vec3& GetWorldPosition();
 		void SetPositionDirty();
-		void SetLocalPosition(const glm::vec3& pos);
 		void UpdateWorldPosition();
 	};
 
