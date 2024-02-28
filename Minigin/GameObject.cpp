@@ -71,11 +71,8 @@ void diji::GameObject::AddChild(GameObject* child)
 
     m_ChildrenPtrVec.push_back(child);
 
-    // Update position, rotation, and scale (not implemented here)
-    // UpdatePositionRotationScale();
-    //child->SetLocalPosition(m_LocalPosition - m_ParentPtr->GetWorldPosition());
-    //UpdateWorldPosition();
-
+    //child->SetLocalPosition(m_LocalPosition - m_ParentPtr->GetWorldPosition()); //??
+    child->UpdateWorldPosition();
 }
 
 void diji::GameObject::RemoveChild(GameObject* child)
@@ -88,8 +85,7 @@ void diji::GameObject::RemoveChild(GameObject* child)
 
     child->m_ParentPtr = nullptr;
 
-    // Update position, rotation, and scale (not implemented here)
-    // UpdatePositionRotationScale();
+    child->UpdateWorldPosition();
 }
 
 void diji::GameObject::SetLocalPosition(const glm::vec3& pos)
@@ -132,7 +128,6 @@ void diji::GameObject::UpdateWorldPosition()
         m_TransformCompPtr->SetPosition(m_ParentPtr->GetWorldPosition() + m_LocalPosition);
     else
         m_TransformCompPtr->SetPosition(m_LocalPosition);
-        //SetLocalPosition(m_TransformCompPtr->GetPosition());
     
     m_PositionIsDirty = false;
 }

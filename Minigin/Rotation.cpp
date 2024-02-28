@@ -28,6 +28,10 @@ void diji::Rotation::Update()
 {
     Initialize();
 
+    const auto parent{ m_OwnerPtr->GetParent() };
+    if (parent)
+        SetCenter(parent->GetWorldPosition());
+
     m_RotationAngle += m_RotationSpeed * Time::GetInstance().GetDeltaTime();
 
     if (m_TransformCompPtr)
@@ -46,8 +50,4 @@ void diji::Rotation::Initialize()
 
     if (m_Center == glm::vec3{ 0, 0, 0 })
         SetCenter(m_OwnerPtr->GetWorldPosition());
-
-    const auto parent{ m_OwnerPtr->GetParent() };
-    if (parent)
-        SetCenter(parent->GetWorldPosition());
 }
