@@ -23,8 +23,10 @@ void diji::GameObject::Update()
 
 void diji::GameObject::Render() const
 {
-    //improve this
-    GetComponent<diji::Render>()->Update();
+    if (not m_RenderCompPtr)
+        GetComponent<diji::Render>()->Update();
+    else
+        m_RenderCompPtr->Update();
 }
 
 void diji::GameObject::RemoveComponent(const Component& component)

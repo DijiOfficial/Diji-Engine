@@ -8,6 +8,7 @@ namespace diji
 {
 	class Component;
 	class Transform;
+	class Render;
 
 	class GameObject final
 	{
@@ -82,6 +83,7 @@ namespace diji
 		glm::vec3 m_LocalPosition{ 0 ,0 ,0 };
 		GameObject* m_ParentPtr{};
 		Transform* m_TransformCompPtr{ nullptr };
+		diji::Render* m_RenderCompPtr{ nullptr };
 		std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
 		std::vector<GameObject*> m_ChildrenPtrVec{};
 

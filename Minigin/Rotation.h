@@ -4,6 +4,7 @@
 namespace diji
 {
     class GameObject;
+    class Transform;
 
     class Rotation final : public Component
     {
@@ -35,5 +36,6 @@ namespace diji
         float m_RotationSpeed;
         glm::vec3 m_Center;
         float m_DistanceFromCenter;
+        Transform* m_TransformCompPtr{};
     };
 }

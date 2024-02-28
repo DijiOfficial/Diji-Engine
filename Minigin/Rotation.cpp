@@ -8,6 +8,7 @@ diji::Rotation::Rotation(GameObject* ownerPtr)
     , m_RotationSpeed{ 1.0f }
     , m_Center{ 0.0f, 0.0f, 0.0f }
     , m_DistanceFromCenter{ 0.0f }
+    , m_TransformCompPtr{ nullptr }
 {
 }
 
@@ -17,11 +18,15 @@ diji::Rotation::Rotation(GameObject* ownerPtr, float rotationSpeed, float distan
     , m_RotationSpeed{ rotationSpeed }
     , m_Center{ 0.0f, 0.0f, 0.0f }
     , m_DistanceFromCenter{ distanceFromCenter }
+    , m_TransformCompPtr{ nullptr }
 {
 }
 
 void diji::Rotation::Update()
 {
+    if (not m_TransformCompPtr)
+        m_TransformCompPtr = GetOwner()->GetComponent<Transform>();
+
     if (m_Center == glm::vec3{ 0, 0, 0 })
         SetCenter(GetOwner()->GetLocalPosition());
 
@@ -31,13 +36,11 @@ void diji::Rotation::Update()
 
     m_RotationAngle += m_RotationSpeed * Time::GetInstance().GetDeltaTime();
 
-    // Update position based on rotation around center
-    auto transform = GetOwner()->GetComponent<Transform>();
-    if (transform)
+    if (m_TransformCompPtr)
     {
         float radians = glm::radians(m_RotationAngle);
         float x = m_Center.x + m_DistanceFromCenter * cosf(radians);
         float y = m_Center.y + m_DistanceFromCenter * sinf(radians);
-        transform->SetPosition(glm::vec3(x, y, 0));
+        m_TransformCompPtr->SetPosition(glm::vec3(x, y, 0));
     }
 }
