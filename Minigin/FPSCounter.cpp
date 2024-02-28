@@ -1,5 +1,7 @@
 #include "FPSCounter.h"
 #include "Text.h"
+#include "Time.h"
+
 #include <format>
 
 void diji::FPSCounter::Update()
