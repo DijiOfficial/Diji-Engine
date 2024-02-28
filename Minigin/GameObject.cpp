@@ -12,7 +12,8 @@ void diji::GameObject::Update()
     if (not m_TransformCompPtr)
         m_TransformCompPtr = GetComponent<Transform>();
 
-    UpdateWorldPosition();
+    if(GetWorldPosition() != m_LocalPosition)
+		SetPositionDirty();
 
     for (const auto& component : m_ComponentsPtrVec)
     {
@@ -22,6 +23,7 @@ void diji::GameObject::Update()
 
 void diji::GameObject::Render() const
 {
+    //improve this
     GetComponent<diji::Render>()->Update();
 }
 
@@ -63,12 +65,13 @@ void diji::GameObject::AddChild(GameObject* child)
     if (child == nullptr || child->IsChildOf(this))
         return;
 
-    if (child->m_ParentPtr)
+    if (child->m_ParentPtr and child->m_ParentPtr != this)
     {
         child->m_ParentPtr->RemoveChild(child);
     }
 
-    child->m_ParentPtr = this;
+    if (child->m_ParentPtr != this)
+        child->m_ParentPtr = this;
 
     m_ChildrenPtrVec.push_back(child);
 
@@ -104,18 +107,33 @@ const glm::vec3& diji::GameObject::GetWorldPosition()
     if (m_PositionIsDirty)
         UpdateWorldPosition();
 
-    return m_TransformCompPtr->GetPosition();
+    return m_TransformCompPtr ? m_TransformCompPtr->GetPosition() : m_LocalPosition;
+}
+
+void diji::GameObject::SetPositionDirty()
+{
+    //no intialize so make sure to set the local position before calling this function
+    if (m_LocalPosition == glm::vec3{ 0, 0, 0 })
+    {
+        m_LocalPosition = GetWorldPosition();
+        return;
+    }
+
+	m_PositionIsDirty = true;
+	for (const auto& childPtr : m_ChildrenPtrVec)
+	{
+        if (not childPtr->m_PositionIsDirty)
+            childPtr->SetPositionDirty();
+	}
 }
 
 void diji::GameObject::UpdateWorldPosition()
 {
-    if (m_PositionIsDirty)
-    {
-        if (m_ParentPtr)
-            m_TransformCompPtr->SetPosition(m_ParentPtr->GetWorldPosition() + m_LocalPosition);
-        else
-            m_TransformCompPtr->SetPosition(m_LocalPosition);
-    }
+    if (m_ParentPtr)
+        m_TransformCompPtr->SetPosition(m_ParentPtr->GetWorldPosition() + m_LocalPosition);
+    else
+        SetLocalPosition(m_TransformCompPtr->GetPosition());
+    
     m_PositionIsDirty = false;
 }
 
