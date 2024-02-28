@@ -72,15 +72,12 @@ namespace diji
 		GameObject* GetParent() const { return m_ParentPtr; };
 		GameObject* GetChild(int index) const { return m_ChildrenPtrVec[index]; };
 		int GetChildCount() const { return static_cast<int>(m_ChildrenPtrVec.size()); };
-		const glm::vec3& GetLocalPosition() const { return m_LocalPosition; };
+		const glm::vec3& GetWorldPosition();
 
 		void SetParent(GameObject* parent, bool keepWorldPosition);
 		void AddChild(GameObject* child);
 		void RemoveChild(GameObject* child);
-		void SetLocalPosition(const glm::vec3& pos);
 
-		void SetPositionClean() { m_PositionIsDirty = false; };
-		const glm::vec3& GetWorldPosition();
 	private:
 		bool m_PositionIsDirty{ false };
 		glm::vec3 m_LocalPosition{ 0 ,0 ,0 };
@@ -93,6 +90,7 @@ namespace diji
 		bool IsChildOf(GameObject* potentialChild) const;
 		void SetPositionDirty();
 		void UpdateWorldPosition();
+		void SetLocalPosition(const glm::vec3& pos);
+		void Initialize();
 	};
-
 }

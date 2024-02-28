@@ -9,15 +9,7 @@ diji::GameObject::~GameObject()
 
 void diji::GameObject::Update()
 {
-    if (not m_TransformCompPtr)
-    {
-        m_TransformCompPtr = GetComponent<Transform>();
-        SetPositionDirty();
-    }
-
-    if (not m_RenderCompPtr)
-        m_RenderCompPtr = GetComponent<diji::Render>();
-
+    Initialize();
     UpdateWorldPosition();
 
     for (const auto& component : m_ComponentsPtrVec)
@@ -155,4 +147,16 @@ bool diji::GameObject::IsChildOf(GameObject* potentialChild) const
             else
                 return child->IsChildOf(potentialChild);
         });
+}
+
+void diji::GameObject::Initialize()
+{
+    if (not m_TransformCompPtr)
+    {
+        m_TransformCompPtr = GetComponent<Transform>();
+        SetPositionDirty();
+    }
+
+    if (not m_RenderCompPtr)
+        m_RenderCompPtr = GetComponent<diji::Render>();
 }

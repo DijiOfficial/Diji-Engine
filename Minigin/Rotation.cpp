@@ -26,15 +26,7 @@ diji::Rotation::Rotation(GameObject* ownerPtr, float rotationSpeed, float distan
 
 void diji::Rotation::Update()
 {
-    if (not m_TransformCompPtr)
-        m_TransformCompPtr = m_OwnerPtr->GetComponent<Transform>();
-
-    //if (m_Center == glm::vec3{ 0, 0, 0 })
-    //    SetCenter(m_OwnerPtr->GetWorldPosition());
-
-    const auto parent{ m_OwnerPtr->GetParent() };
-    if (parent)
-        SetCenter(parent->GetWorldPosition());
+    Initialize();
 
     m_RotationAngle += m_RotationSpeed * Time::GetInstance().GetDeltaTime();
 
@@ -45,4 +37,17 @@ void diji::Rotation::Update()
         float y = m_Center.y + m_DistanceFromCenter * sinf(radians);
         m_TransformCompPtr->SetPosition(glm::vec3(x, y, 0));
     }
+}
+
+void diji::Rotation::Initialize()
+{
+    if (not m_TransformCompPtr)
+        m_TransformCompPtr = m_OwnerPtr->GetComponent<Transform>();
+
+    if (m_Center == glm::vec3{ 0, 0, 0 })
+        SetCenter(m_OwnerPtr->GetWorldPosition());
+
+    const auto parent{ m_OwnerPtr->GetParent() };
+    if (parent)
+        SetCenter(parent->GetWorldPosition());
 }

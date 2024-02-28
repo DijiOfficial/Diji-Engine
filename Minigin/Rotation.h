@@ -38,5 +38,7 @@ namespace diji
         float m_DistanceFromCenter;
         Transform* m_TransformCompPtr{};
         GameObject* m_OwnerPtr{};
+
+        void Initialize();
     };
 }
