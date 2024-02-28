@@ -20,6 +20,7 @@ namespace diji
 		Render& operator=(Render&& other) = delete;
 
 		void Update() override;
+		void RenderFrame() const;
 
 	private:
 		std::shared_ptr<Texture2D> m_TexturePtr{};
