@@ -12,6 +12,9 @@ void diji::GameObject::Update()
     if (not m_TransformCompPtr)
         m_TransformCompPtr = GetComponent<Transform>();
 
+    if (not m_RenderCompPtr)
+        m_RenderCompPtr = GetComponent<diji::Render>();
+
     if(GetWorldPosition() != m_LocalPosition)
 		SetPositionDirty();
 
@@ -23,10 +26,7 @@ void diji::GameObject::Update()
 
 void diji::GameObject::Render() const
 {
-    if (not m_RenderCompPtr)
-        GetComponent<diji::Render>()->Update();
-    else
-        m_RenderCompPtr->Update();
+    m_RenderCompPtr->RenderFrame();
 }
 
 void diji::GameObject::RemoveComponent(const Component& component)
