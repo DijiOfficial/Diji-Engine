@@ -27,8 +27,5 @@ namespace diji
 		Texture* m_TextureCompPtr{};
 		Text* m_TextCompPtr{};
 		Transform* m_TransformCompPtr{};
-
-		void CheckNullptr();
-		void CheckTextUpdate();
 	};
 }

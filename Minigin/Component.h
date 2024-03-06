@@ -23,7 +23,7 @@ namespace diji
 
 	protected:
 		explicit Component(GameObject* ownerPtr) : m_OwnerPtr{ ownerPtr } {}
-		GameObject* GetOwner() const { return m_OwnerPtr; }
+		const GameObject* GetOwner() const { return m_OwnerPtr; }
 
 	private:
 		GameObject* m_OwnerPtr{};

@@ -4,11 +4,20 @@
 
 #include <format>
 
+diji::FPSCounter::FPSCounter(GameObject* ownerPtr) 
+    : Component(ownerPtr)
+    , m_FrameCount{ 0 }
+    , m_Fps{ 0 }
+    , m_ElapsedTime{ 0 } 
+{ 
+    m_TextComponentPtr = ownerPtr->GetComponent<Text>(); 
+
+    assert(m_TextComponentPtr and "Text Component needs to be initialized before FPSCounter");
+};
+
+
 void diji::FPSCounter::Update()
 {
-    if (not m_TextComponentPtr) //assuming GameObject has a Text component
-        m_TextComponentPtr = GetOwner()->GetComponent<Text>();
-
     const double tempFps = m_Fps;
     m_ElapsedTime += Time::GetInstance().GetDeltaTime();
     ++m_FrameCount;

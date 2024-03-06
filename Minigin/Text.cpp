@@ -6,8 +6,8 @@
 
 diji::Text::Text(GameObject* ownerPtr)
 	: Component(ownerPtr)
-	, m_FontPtr{ nullptr }
 	, m_Text{ "" }
+	, m_FontPtr{ nullptr }
 	, m_TexturePtr{ nullptr }
 	, m_NeedsUpdate{ false }
 	, m_IsDirty{ false }
@@ -16,15 +16,15 @@ diji::Text::Text(GameObject* ownerPtr)
 
 diji::Text::Text(GameObject* ownerPtr, const std::string& text, std::shared_ptr<Font> font)
 	: Component(ownerPtr)
-	, m_FontPtr{ std::move(font) }
 	, m_Text{ text }
+	, m_FontPtr{ std::move(font) }
 	, m_TexturePtr{ nullptr }
 	, m_NeedsUpdate{ true }
 	, m_IsDirty{ true }
 {
 }
 
-void diji::Text::FontUpdate()
+void diji::Text::Update()
 {
 	if (m_NeedsUpdate)
 	{
@@ -43,11 +43,6 @@ void diji::Text::FontUpdate()
 		m_TexturePtr = std::make_shared<Texture2D>(texture);
 		m_NeedsUpdate = false;
 	}
-}
-
-void diji::Text::Update()
-{
-	FontUpdate();
 }
 
 // This implementation uses the "dirty flag" pattern

@@ -22,6 +22,7 @@ namespace diji
 		void Add(std::shared_ptr<GameObject> object);
 		void Remove(std::shared_ptr<GameObject> object);
 		void RemoveAll();
+		std::vector < std::shared_ptr<GameObject>> GetObjects() const { return m_ObjectsPtrVec; };
 
 	private: 
 		explicit Scene(const std::string& name);

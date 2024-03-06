@@ -20,6 +20,23 @@ namespace diji
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx) const;
 
+		void DrawCircle(int x, int y, int radius)
+		{
+			SDL_SetRenderDrawColor(m_RendererPtr, 255, 255, 255, 255);
+			for (int w = 0; w < radius * 2; w++)
+			{
+				for (int h = 0; h < radius * 2; h++)
+				{
+					int dx = radius - w; // horizontal offset
+					int dy = radius - h; // vertical offset
+					if ((dx * dx + dy * dy) <= (radius * radius))
+					{
+						SDL_RenderDrawPoint(m_RendererPtr, x + dx, y + dy);
+					}
+				}
+			}
+		}
+
 		SDL_Renderer* GetSDLRenderer() const;
 
 		const SDL_Color& GetBackgroundColor() const { return m_ClearColor; }

@@ -9,7 +9,7 @@ namespace diji
 	class FPSCounter final : public Component
 	{
 	public:
-		FPSCounter(GameObject* ownerPtr) : Component(ownerPtr), m_FrameCount{ 0 }, m_Fps{ 0 }, m_ElapsedTime{ 0 } { m_TextComponentPtr = ownerPtr->GetComponent<Text>(); };
+		FPSCounter(GameObject* ownerPtr);
 		~FPSCounter() override = default;
 
 		FPSCounter(const FPSCounter& other) = delete;

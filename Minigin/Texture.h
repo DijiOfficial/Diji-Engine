@@ -10,7 +10,8 @@ namespace diji
 	public:
 		Texture(GameObject* ownerPtr);
 		Texture(GameObject* ownerPtr, const std::string& filename);
-		Texture(GameObject* ownerPtr, const std::string& filename, int width, int height, int idx);
+		Texture(GameObject* ownerPtr, const std::string& filename, int width, int height);
+		Texture(GameObject* ownerPtr, const std::string& filename, int width, int height, int frames);
 		~Texture() override = default;
 
 		Texture(const Texture& other) = delete;
@@ -25,19 +26,23 @@ namespace diji
 
 		void SetWidth(int width) { m_Width = width; }
 		void SetHeight(int height) { m_Height = height; }
-		void SetIdx(int idx) { m_Idx = idx; }
+		void SetAnimated() { m_IsAnimated = true; }
+		void SetNrOfFrames(int nrOfFrames) { m_NrOfFrames = nrOfFrames; }
 
-		bool HasVariableSize() const { return m_HasVariableSize; }
+		bool IsAnimated() const { return m_IsAnimated; }
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
-		int GetIdx() const { return m_Idx; }
+		int GetFrame() const { return m_Frame; }
 
 	private:
-		std::shared_ptr<Texture2D> m_TexturePtr{};
-		int m_Width{};
-		int m_Height{};
-		int m_Idx{};
-		bool m_HasVariableSize{ false };
+		std::shared_ptr<Texture2D> m_TexturePtr;
+		int m_Width;
+		int m_Height;
+		int m_NrOfFrames;
+		int m_Frame;
+		float m_FrameTime;
+		
+		bool m_IsAnimated;
 	};
 }
 

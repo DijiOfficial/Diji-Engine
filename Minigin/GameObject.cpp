@@ -9,13 +9,13 @@ diji::GameObject::~GameObject()
 
 void diji::GameObject::Update()
 {
-    Initialize();
-    UpdateWorldPosition();
 
     for (const auto& component : m_ComponentsPtrVec)
     {
         component->Update();
     }
+    if (m_TransformCompPtr)
+        UpdateWorldPosition();
 };
 
 void diji::GameObject::Render() const
@@ -61,17 +61,15 @@ void diji::GameObject::AddChild(GameObject* child)
     if (child == nullptr || child->IsChildOf(this))
         return;
 
-    if (child->m_ParentPtr and child->m_ParentPtr != this)
+    if (child->m_ParentPtr)
     {
         child->m_ParentPtr->RemoveChild(child);
     }
 
-    if (child->m_ParentPtr != this)
-        child->m_ParentPtr = this;
+    child->m_ParentPtr = this;
 
     m_ChildrenPtrVec.push_back(child);
 
-    //child->SetLocalPosition(m_LocalPosition - m_ParentPtr->GetWorldPosition()); //??
     child->UpdateWorldPosition();
 }
 
@@ -82,10 +80,11 @@ void diji::GameObject::RemoveChild(GameObject* child)
         return;
 
     m_ChildrenPtrVec.erase(it);
+    
+    child->SetLocalPosition(GetWorldPosition() - child->m_LocalPosition); //local position now becomes world position
+    child->SetPositionDirty();
 
     child->m_ParentPtr = nullptr;
-
-    child->UpdateWorldPosition();
 }
 
 void diji::GameObject::SetLocalPosition(const glm::vec3& pos)
@@ -99,18 +98,11 @@ const glm::vec3& diji::GameObject::GetWorldPosition()
     if (m_PositionIsDirty)
         UpdateWorldPosition();
 
-    return m_TransformCompPtr ? m_TransformCompPtr->GetPosition() : m_LocalPosition;
+    return m_TransformCompPtr->GetPosition();
 }
 
 void diji::GameObject::SetPositionDirty()
 {
-    //no intialize so make sure to set the local position
-    if (m_LocalPosition == glm::vec3{ 0, 0, 0 })
-    {
-        m_LocalPosition = GetWorldPosition();
-        return;
-    }
-
 	m_PositionIsDirty = true;
 	for (const auto& childPtr : m_ChildrenPtrVec)
 	{
@@ -121,7 +113,7 @@ void diji::GameObject::SetPositionDirty()
 
 void diji::GameObject::UpdateWorldPosition()
 {
-    if (not m_TransformCompPtr)
+    if (not m_PositionIsDirty)
         return;
 
     if (m_ParentPtr)
@@ -142,16 +134,4 @@ bool diji::GameObject::IsChildOf(GameObject* potentialChild) const
             else
                 return child->IsChildOf(potentialChild);
         });
-}
-
-void diji::GameObject::Initialize()
-{
-    if (not m_TransformCompPtr)
-    {
-        m_TransformCompPtr = GetComponent<Transform>();
-        SetPositionDirty();
-    }
-
-    if (not m_RenderCompPtr)
-        m_RenderCompPtr = GetComponent<diji::Render>();
 }

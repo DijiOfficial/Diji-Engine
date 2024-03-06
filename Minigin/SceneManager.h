@@ -16,6 +16,8 @@ namespace diji
 		void Update();
 		void Render();
 
+		std::vector<std::shared_ptr<Scene>> GetScenes() const { return m_ScenesPtrVec; }
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

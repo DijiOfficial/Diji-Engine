@@ -28,12 +28,10 @@ namespace diji
 		void SetClean() { m_IsDirty = false; };
 
 	private:
-		bool m_NeedsUpdate;
-		bool m_IsDirty;
 		std::string m_Text;
 		std::shared_ptr<Font> m_FontPtr;
 		std::shared_ptr<Texture2D> m_TexturePtr;
-
-		void FontUpdate();
+		bool m_NeedsUpdate;
+		bool m_IsDirty;
 	};
 }

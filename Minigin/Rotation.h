@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
+constexpr int TWO_PI_DEGRESS{ 360 };
 namespace diji
 {
     class GameObject;
@@ -32,13 +33,10 @@ namespace diji
         void Update() override;
 
     private:
+        GameObject* m_OwnerPtr{};
+        glm::vec3 m_Center;
         float m_RotationAngle;
         float m_RotationSpeed;
-        glm::vec3 m_Center;
         float m_DistanceFromCenter;
-        Transform* m_TransformCompPtr{};
-        GameObject* m_OwnerPtr{};
-
-        void Initialize();
     };
 }

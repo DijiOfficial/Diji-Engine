@@ -33,6 +33,16 @@ namespace diji
 			static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
 
 			m_ComponentsPtrVec.push_back(std::make_unique<T>(this, std::forward<Args>(args)...));
+
+			if constexpr (std::is_same_v<T, Transform>)
+			{
+				m_TransformCompPtr = dynamic_cast<Transform*>(m_ComponentsPtrVec.back().get());
+				m_LocalPosition = GetWorldPosition();
+			}
+			else if constexpr (std::is_same_v<T, diji::Render>)
+			{
+				m_RenderCompPtr = dynamic_cast<diji::Render*>(m_ComponentsPtrVec.back().get());
+			}
 		}
 
 		void RemoveComponent(const Component& component);
@@ -75,13 +85,12 @@ namespace diji
 		const glm::vec3& GetWorldPosition();
 
 		void SetParent(GameObject* parent, bool keepWorldPosition);
-		void AddChild(GameObject* child);
-		void RemoveChild(GameObject* child);
+		void SetLocalPosition(const glm::vec3& pos);
 
 	private:
 		bool m_PositionIsDirty{ false };
 		glm::vec3 m_LocalPosition{ 0 ,0 ,0 };
-		GameObject* m_ParentPtr{};
+		GameObject* m_ParentPtr{ nullptr };
 		Transform* m_TransformCompPtr{ nullptr };
 		diji::Render* m_RenderCompPtr{ nullptr };
 		std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
@@ -90,7 +99,8 @@ namespace diji
 		bool IsChildOf(GameObject* potentialChild) const;
 		void SetPositionDirty();
 		void UpdateWorldPosition();
-		void SetLocalPosition(const glm::vec3& pos);
-		void Initialize();
+		
+		void AddChild(GameObject* child);
+		void RemoveChild(GameObject* child);
 	};
 }
