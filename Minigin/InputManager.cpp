@@ -1,7 +1,6 @@
 #include <SDL.h>
 #include "InputManager.h"
-#include "SceneManager.h"
-#include "Scene.h"
+#include "GUI.h"
 
 bool diji::InputManager::ProcessInput()
 {
@@ -45,6 +44,8 @@ bool diji::InputManager::ProcessInput()
 		{
 
 		}
+
+		GUI::GetInstance().ProcessEvent(&e);
 	}
 
 	return true;

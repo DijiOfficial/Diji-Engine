@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "Texture2D.h"
+#include "GUI.h"
 
 int GetOpenGLDriverIndex()
 {
@@ -29,11 +30,14 @@ void diji::Renderer::Init(SDL_Window* window)
 
 void diji::Renderer::Render() const
 {
+	GUI::GetInstance().NewFrame();
+
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor(m_RendererPtr, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_RendererPtr);
 
 	SceneManager::GetInstance().Render();
+	GUI::GetInstance().Render();
 	
 	SDL_RenderPresent(m_RendererPtr);
 }

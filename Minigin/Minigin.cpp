@@ -11,6 +11,7 @@
 #include "ResourceManager.h"
 #include "Time.h"
 #include <thread>
+#include "GUI.h"
 
 SDL_Window* g_window{};
 
@@ -67,12 +68,13 @@ diji::Minigin::Minigin(const std::string &dataPath)
 	}
 
 	Renderer::GetInstance().Init(g_window);
-
 	ResourceManager::GetInstance().Init(dataPath);
+	GUI::GetInstance().Init(g_window, Renderer::GetInstance().GetSDLRenderer());
 }
 
 diji::Minigin::~Minigin()
 {
+	GUI::GetInstance().Destroy();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
