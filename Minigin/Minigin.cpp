@@ -96,6 +96,8 @@ void diji::Minigin::Run(const std::function<void()>& load)
 
 	while (doContinue)
 	{
+		GUI::GetInstance().NewFrame();
+
 		const auto currentTime{ std::chrono::high_resolution_clock::now() };
 		const float deltaTime{ std::chrono::duration<float>(currentTime - lastFrameTime).count() };
 		lastFrameTime = currentTime;
@@ -105,6 +107,5 @@ void diji::Minigin::Run(const std::function<void()>& load)
 
 		sceneManager.Update();
 		renderer.Render();
-
 	}
 }

@@ -30,8 +30,6 @@ void diji::Renderer::Init(SDL_Window* window)
 
 void diji::Renderer::Render() const
 {
-	GUI::GetInstance().NewFrame();
-
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor(m_RendererPtr, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_RendererPtr);

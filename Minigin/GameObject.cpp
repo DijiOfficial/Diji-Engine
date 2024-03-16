@@ -9,7 +9,6 @@ diji::GameObject::~GameObject()
 
 void diji::GameObject::Update()
 {
-
     for (const auto& component : m_ComponentsPtrVec)
     {
         component->Update();
@@ -20,7 +19,7 @@ void diji::GameObject::Update()
 
 void diji::GameObject::Render() const
 {
-    m_RenderCompPtr->RenderFrame();
+    if (m_RenderCompPtr) m_RenderCompPtr->RenderFrame();
 }
 
 void diji::GameObject::RemoveComponent(const Component& component)

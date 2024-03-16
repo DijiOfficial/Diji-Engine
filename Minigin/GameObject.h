@@ -1,8 +1,16 @@
 #pragma once
 #include "Component.h"
+//maybe put all that in component.h
 #include <vector>
 #include <memory>
+#include <chrono>
 #include <glm/glm.hpp>
+#include <algorithm>
+#include <numeric>
+#include <format>
+#include <concepts>
+
+#include <iostream>
 
 namespace diji
 {
