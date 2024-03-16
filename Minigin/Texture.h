@@ -3,8 +3,6 @@
 
 namespace diji
 {
-	class GameObject;
-
 	class Texture final : public Component
 	{
 	public:

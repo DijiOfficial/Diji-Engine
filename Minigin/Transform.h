@@ -3,7 +3,6 @@
 
 namespace diji
 {
-	class GameObject;
 	class Transform final : public Component
 	{
 	public:

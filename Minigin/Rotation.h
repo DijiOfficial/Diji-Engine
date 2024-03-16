@@ -1,14 +1,14 @@
 #pragma once
 #include "GameObject.h"
 
-constexpr int TWO_PI_DEGRESS{ 360 };
 namespace diji
 {
-    class GameObject;
     class Transform;
 
     class Rotation final : public Component
     {
+        constexpr static int TWO_PI_DEGRESS{ 360 };
+
     public:
         Rotation(GameObject* ownerPtr);
         Rotation(GameObject* ownerPtr, float rotationSpeed, float distanceFromCenter);

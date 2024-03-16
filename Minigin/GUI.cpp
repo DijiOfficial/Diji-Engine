@@ -23,6 +23,7 @@ void diji::GUI::NewFrame() const
 
 void diji::GUI::Render() const
 {
+    //ImGui::EndFrame(); //not sure if this is necessary
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

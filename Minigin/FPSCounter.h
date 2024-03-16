@@ -4,7 +4,6 @@
 namespace diji
 {
 	class Text;
-	class GameObject;
 
 	class FPSCounter final : public Component
 	{

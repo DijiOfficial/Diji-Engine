@@ -3,7 +3,6 @@
 
 namespace diji 
 {
-	class GameObject;
 	class Font;
 	class Texture2D;
 
