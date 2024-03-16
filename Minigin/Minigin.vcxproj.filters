@@ -17,11 +17,11 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{2591a5bd-6d1a-4c46-b425-df6f2079243a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EngineFiles\CoreFiles">
+      <UniqueIdentifier>{3e4fc7e0-d5af-48ef-8985-b8d590f69e7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Minigin.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>GameFiles</Filter>
     </ClInclude>
@@ -31,32 +31,11 @@
     <ClInclude Include="FPSCounter.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>GameFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>EngineFiles</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>EngineFiles\Components</Filter>
@@ -64,14 +43,8 @@
     <ClInclude Include="Text.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
     <ClInclude Include="Render.h">
       <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>EngineFiles</Filter>
     </ClInclude>
     <ClInclude Include="Rotation.h">
       <Filter>EngineFiles\Components</Filter>
@@ -103,17 +76,50 @@
     <ClInclude Include="..\3rdParty\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="GUI.h">
-      <Filter>EngineFiles</Filter>
-    </ClInclude>
     <ClInclude Include="TrashTheCache.h">
+      <Filter>EngineFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui\imgui_plot.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Minigin.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerControl.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Minigin.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>GameFiles</Filter>
     </ClCompile>
@@ -123,29 +129,11 @@
     <ClCompile Include="Main.cpp">
       <Filter>GameFiles</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>EngineFiles\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>GameFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>EngineFiles</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>EngineFiles\Components</Filter>
@@ -180,10 +168,37 @@
     <ClCompile Include="..\3rdParty\imgui\backends\imgui_impl_sdl2.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="GUI.cpp">
-      <Filter>EngineFiles</Filter>
-    </ClCompile>
     <ClCompile Include="TrashTheCache.cpp">
+      <Filter>EngineFiles\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Minigin.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerControl.cpp">
       <Filter>EngineFiles\Components</Filter>
     </ClCompile>
   </ItemGroup>

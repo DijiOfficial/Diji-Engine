@@ -2,7 +2,6 @@
 #include "Time.h"
 #include "Transform.h"
 
-#include <iostream>
 diji::Rotation::Rotation(GameObject* ownerPtr) 
     : Component(ownerPtr)
     , m_OwnerPtr{ ownerPtr }
