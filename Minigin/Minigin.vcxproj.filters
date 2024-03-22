@@ -20,6 +20,9 @@
     <Filter Include="EngineFiles\CoreFiles">
       <UniqueIdentifier>{3e4fc7e0-d5af-48ef-8985-b8d590f69e7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EngineFiles\InputManager">
+      <UniqueIdentifier>{8c6986de-dcb2-4888-ab31-14e716d84cf3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -33,9 +36,6 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>GameFiles</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>EngineFiles\Components</Filter>
@@ -100,12 +100,6 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClInclude>
@@ -115,8 +109,20 @@
     <ClInclude Include="Time.h">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerControl.h">
-      <Filter>EngineFiles\Components</Filter>
+    <ClInclude Include="InputManager.h">
+      <Filter>EngineFiles\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>GameFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>GameFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>EngineFiles\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCommand.h">
+      <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -131,9 +137,6 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>GameFiles</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>EngineFiles\Components</Filter>
@@ -189,17 +192,20 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClCompile>
     <ClCompile Include="Texture2D.cpp">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerControl.cpp">
-      <Filter>EngineFiles\Components</Filter>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>EngineFiles\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>GameFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>GameFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCommand.cpp">
+      <Filter>EngineFiles\InputManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

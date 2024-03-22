@@ -1,5 +1,6 @@
 #include "Scene.h"
-#include "GameObject.h"
+//#include "GameObject.h"
+#include "InputManager.h"
 
 #include <algorithm>
 
@@ -26,6 +27,8 @@ void diji::Scene::RemoveAll()
 
 void diji::Scene::Update()
 {
+	InputManager::GetInstance().ExecuteCommand();
+
 	for(auto& object : m_ObjectsPtrVec)
 	{
 		object->Update();

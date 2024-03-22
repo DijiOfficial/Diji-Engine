@@ -1,9 +1,19 @@
 #pragma once
 #include "Singleton.h"
+#include <windows.h>
 #include <XInput.h>
+
+#include "MoveCommand.h"
+
+//#include <memory>
+
 
 namespace diji 
 {
+	//check includes too tired rn
+	class MoveCommand;
+	class GameObject;
+
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
@@ -30,8 +40,20 @@ namespace diji
 			return m_CurrentState.Gamepad.wButtons & button;
 		}
 
+		void BindKeyboard(GameObject* actor); //const gameObj
+		void BindController(GameObject* actor);
+
+		void ExecuteCommand()
+		{
+			m_KeyboardMoveUPtr->Execute();
+			//m_ControllerMoveUPtr->Execute();
+		}
 	
 	private:
+		//template this? or vector of all possible commands?
+		std::unique_ptr<MoveCommand> m_KeyboardMoveUPtr{ nullptr };
+		std::unique_ptr<MoveCommand> m_ControllerMoveUPtr{ nullptr };
+
 		XINPUT_STATE m_PreviousState{}, m_CurrentState{};
 		DWORD dwResult;
 		int m_ControllerIndex = 0;
