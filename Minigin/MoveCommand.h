@@ -10,7 +10,7 @@ namespace diji
 	{
 
 	public:
-		MoveCommand(GameObject* actorPtr);
+		MoveCommand(const GameObject* actorPtr);
 		~MoveCommand() override = default;
 
 		MoveCommand(const MoveCommand& other) = delete;

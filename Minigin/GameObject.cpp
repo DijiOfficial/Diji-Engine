@@ -1,7 +1,6 @@
 #include "GameObject.h"
 #include "Render.h"
 #include "Transform.h"
-#include <algorithm>
 
 diji::GameObject::~GameObject()
 {

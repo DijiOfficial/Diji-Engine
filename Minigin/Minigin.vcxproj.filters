@@ -124,6 +124,9 @@
     <ClInclude Include="MoveCommand.h">
       <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>EngineFiles\InputManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -205,6 +208,9 @@
       <Filter>GameFiles</Filter>
     </ClCompile>
     <ClCompile Include="MoveCommand.cpp">
+      <Filter>EngineFiles\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
       <Filter>EngineFiles\InputManager</Filter>
     </ClCompile>
   </ItemGroup>

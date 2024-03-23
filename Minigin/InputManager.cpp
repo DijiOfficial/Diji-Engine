@@ -1,37 +1,10 @@
 #include <SDL.h>
 #include "InputManager.h"
 #include "GUI.h"
-
-#include <iostream>
-
+#include <cassert>
 
 bool diji::InputManager::ProcessInput()
 {
-	//for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
-	//{
-	//	CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE));
-	//	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-
-	//	dwResult = XInputGetState(i, &m_CurrentState);
-
-	//	if (dwResult == ERROR_SUCCESS)
-	//	{
-	//		m_ControllerIndex = i;
-	//		// Controller is connected
-	//	}
-	//	else
-	//	{
-	//		// Controller is not connected
-	//	}
-	//}
-	CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE));
-	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-	XInputGetState(m_ControllerIndex, &m_CurrentState);
-
-	auto buttonChanges = m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons;
-	m_ButtonsPressedThisFrame = buttonChanges & m_CurrentState.Gamepad.wButtons;
-	m_ButtonsReleasedThisFrame = buttonChanges & (~m_CurrentState.Gamepad.wButtons);
-
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		
@@ -41,6 +14,7 @@ bool diji::InputManager::ProcessInput()
 			return false; 
 
 		case SDL_KEYDOWN:
+			if (not m_KeyboardMoveUPtr) break;
 			if (e.key.keysym.sym == SDLK_w)
 				m_KeyboardMoveUPtr->KeyPressed(Movement::Up);
 			else if (e.key.keysym.sym == SDLK_s)
@@ -52,6 +26,7 @@ bool diji::InputManager::ProcessInput()
 
 			break;
 		case SDL_KEYUP:
+			if (not m_KeyboardMoveUPtr) break;
 			if (e.key.keysym.sym == SDLK_w)
 				m_KeyboardMoveUPtr->KeyReleased(Movement::Up);
 			else if (e.key.keysym.sym == SDLK_s)
@@ -62,28 +37,6 @@ bool diji::InputManager::ProcessInput()
 				m_KeyboardMoveUPtr->KeyReleased(Movement::Right);
 
 			break;
-		//case SDL_KEYDOWN:
-		//	if (e.key.keysym.sym == SDLK_w)
-		//		m_IsGoingUp = true;
-		//	else if (e.key.keysym.sym == SDLK_s)
-		//		m_IsGoingDown = true;
-		//	else if (e.key.keysym.sym == SDLK_a)
-		//		m_IsGoingLeft = true;
-		//	else if (e.key.keysym.sym == SDLK_d)
-		//		m_IsGoingRight = true;
-
-		//	break;
-		//case SDL_KEYUP:
-		//	if (e.key.keysym.sym == SDLK_w)
-		//		m_IsGoingUp = false;
-		//	else if (e.key.keysym.sym == SDLK_s)
-		//		m_IsGoingDown = false;
-		//	else if (e.key.keysym.sym == SDLK_a)
-		//		m_IsGoingLeft = false;
-		//	else if (e.key.keysym.sym == SDLK_d)
-		//		m_IsGoingRight = false;
-		//	
-		//	break;
 		default:
 			break;
 		}
@@ -91,17 +44,81 @@ bool diji::InputManager::ProcessInput()
 		GUI::GetInstance().ProcessEvent(&e);
 	}
 
+	if (not m_ControllersIdxs.empty())
+	{
+		ProcessControllerInput();
+	}
+
 	return true;
 }
 
-void diji::InputManager::BindKeyboard(GameObject* actor)
+void diji::InputManager::BindKeyboard(const GameObject* actor)
 {
 	m_KeyboardMoveUPtr = std::make_unique<MoveCommand>(actor);
 	//add new commands
 }
 
-void diji::InputManager::BindController(GameObject* actor)
+void diji::InputManager::BindController(const GameObject* actor, int controllerIdx)
 {
+	if (controllerIdx < 0 or controllerIdx > 3) 	
+	{
+		assert(std::format("Controller index {} is invalid. XInput support controller 0-3", controllerIdx).c_str());
+	}
+
+	if (std::find(m_ControllersIdxs.begin(), m_ControllersIdxs.end(), controllerIdx) == m_ControllersIdxs.end())
+	{
+		m_PlayersMap[controllerIdx] = std::make_unique<Controller>(controllerIdx);
+		m_ControllersIdxs.push_back(controllerIdx);
+	}
+	else
+	{
+		assert(std::format("Controller with index {} already exists.", controllerIdx).c_str());
+	}
+
 	m_ControllerMoveUPtr = std::make_unique<MoveCommand>(actor);
 	//add new commands
+}
+
+void diji::InputManager::ExecuteCommand()
+{
+	if (m_KeyboardMoveUPtr) 
+		m_KeyboardMoveUPtr->Execute();
+
+	if (m_ControllerMoveUPtr) 
+		m_ControllerMoveUPtr->Execute();
+}
+
+void diji::InputManager::ProcessControllerInput()
+{
+	for (const int index : m_ControllersIdxs)
+	{
+		m_PlayersMap[index]->ProcessControllerInput();
+
+		if (m_PlayersMap[index]->IsKeyDownThisFrame(Controller::Button::DPadUp))
+			m_ControllerMoveUPtr->KeyPressed(Movement::Up);
+
+		if (m_PlayersMap[index]->IsKeyUpThisFrame(Controller::Button::DPadUp))
+			m_ControllerMoveUPtr->KeyReleased(Movement::Up);
+
+
+		if (m_PlayersMap[index]->IsKeyDownThisFrame(Controller::Button::DPadDown))
+			m_ControllerMoveUPtr->KeyPressed(Movement::Down);
+
+		if (m_PlayersMap[index]->IsKeyUpThisFrame(Controller::Button::DPadDown))
+			m_ControllerMoveUPtr->KeyReleased(Movement::Down);
+
+
+		if (m_PlayersMap[index]->IsKeyDownThisFrame(Controller::Button::DPadLeft))
+			m_ControllerMoveUPtr->KeyPressed(Movement::Left);
+
+		if (m_PlayersMap[index]->IsKeyUpThisFrame(Controller::Button::DPadLeft))
+			m_ControllerMoveUPtr->KeyReleased(Movement::Left);
+
+
+		if (m_PlayersMap[index]->IsKeyDownThisFrame(Controller::Button::DPadRight))
+			m_ControllerMoveUPtr->KeyPressed(Movement::Right);
+
+		if (m_PlayersMap[index]->IsKeyUpThisFrame(Controller::Button::DPadRight))
+			m_ControllerMoveUPtr->KeyReleased(Movement::Right);
+	}
 }

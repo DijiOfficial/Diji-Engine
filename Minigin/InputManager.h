@@ -1,68 +1,31 @@
 #pragma once
 #include "Singleton.h"
-#include <windows.h>
-#include <XInput.h>
-
+#include "Controller.h"
 #include "MoveCommand.h"
-
-//#include <memory>
-
+#include <map>
 
 namespace diji 
 {
-	//check includes too tired rn
-	class MoveCommand;
-	class GameObject;
-
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
 		bool ProcessInput();
-		//bool IsPressed(unsigned int button) const;
 		
-		//Going to implement key remapping later by loading controls from a file
-		bool IsGoingUp() const { return m_IsGoingUp; };
-		bool IsGoingDown() const { return m_IsGoingDown; };
-		bool IsGoingLeft() const { return m_IsGoingLeft; };
-		bool IsGoingRight() const { return m_IsGoingRight; };
+		void BindKeyboard(const GameObject* actor);
+		//void BindController(const GameObject* actorx);
+		void BindController(const GameObject* actor, int controllerIdx);
 
-		//Controller
-		bool IsDownThisFrame(unsigned int button) const
-		{
-			return m_ButtonsPressedThisFrame & button;
-		}
-		bool IsUpThisFrame(unsigned int button) const
-		{
-			return m_ButtonsReleasedThisFrame & button;
-		}
-		bool IsPressed(unsigned int button) const
-		{
-			return m_CurrentState.Gamepad.wButtons & button;
-		}
-
-		void BindKeyboard(GameObject* actor); //const gameObj
-		void BindController(GameObject* actor);
-
-		void ExecuteCommand()
-		{
-			m_KeyboardMoveUPtr->Execute();
-			//m_ControllerMoveUPtr->Execute();
-		}
+		void ExecuteCommand();
 	
 	private:
 		//template this? or vector of all possible commands?
 		std::unique_ptr<MoveCommand> m_KeyboardMoveUPtr{ nullptr };
 		std::unique_ptr<MoveCommand> m_ControllerMoveUPtr{ nullptr };
-
-		XINPUT_STATE m_PreviousState{}, m_CurrentState{};
-		DWORD dwResult;
-		int m_ControllerIndex = 0;
-		unsigned int m_ButtonsPressedThisFrame;
-		unsigned int m_ButtonsReleasedThisFrame;
-
-		bool m_IsGoingUp;
-		bool m_IsGoingDown;
-		bool m_IsGoingLeft;
-		bool m_IsGoingRight;
+		//template this to allow creation of any controller very likely nedd 0-3 controllers because of Xinput only supports 0-3
+		//std::unique_ptr<Controller> m_ControllerUPtr{ std::make_unique<Controller>(0) };
+		//std::unique_ptr<Controller> m_ControllerUPtr{ nullptr };
+		std::map<int, std::unique_ptr<Controller>> m_PlayersMap;
+		std::vector<int> m_ControllersIdxs;
+		void ProcessControllerInput();
 	};
 }

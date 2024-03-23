@@ -10,8 +10,6 @@
 #include <format>
 #include <concepts>
 
-#include <iostream>
-
 namespace diji
 {
 	class Component;

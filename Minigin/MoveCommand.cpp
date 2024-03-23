@@ -2,7 +2,7 @@
 #include "Time.h"
 #include "Transform.h"
 
-diji::MoveCommand::MoveCommand(GameObject* actorPtr) 
+diji::MoveCommand::MoveCommand(const GameObject* actorPtr) 
 {
 	m_TransformComponentPtr = actorPtr->GetComponent<Transform>();
 
