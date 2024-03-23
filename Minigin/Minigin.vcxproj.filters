@@ -23,6 +23,9 @@
     <Filter Include="EngineFiles\InputManager">
       <UniqueIdentifier>{8c6986de-dcb2-4888-ab31-14e716d84cf3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EngineFiles\InterfaceFiles">
+      <UniqueIdentifier>{5800e764-2773-487f-b7cc-68721504d6f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -127,6 +130,8 @@
     <ClInclude Include="Controller.h">
       <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
+    <ClInclude Include="ISubject.h" />
+    <ClInclude Include="IObserver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -213,5 +218,7 @@
     <ClCompile Include="Controller.cpp">
       <Filter>EngineFiles\InputManager</Filter>
     </ClCompile>
+    <ClCompile Include="ISubject.cpp" />
+    <ClCompile Include="IObserver.cpp" />
   </ItemGroup>
 </Project>
