@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "GUI.h"
 #include <cassert>
+#include "ScoreCounter.h"
 
 bool diji::InputManager::ProcessInput()
 {
@@ -23,6 +24,7 @@ bool diji::InputManager::ProcessInput()
 				m_KeyboardMoveUPtr->KeyPressed(Movement::Left);
 			else if (e.key.keysym.sym == SDLK_d)
 				m_KeyboardMoveUPtr->KeyPressed(Movement::Right);
+			
 
 			break;
 		case SDL_KEYUP:
@@ -35,6 +37,12 @@ bool diji::InputManager::ProcessInput()
 				m_KeyboardMoveUPtr->KeyReleased(Movement::Left);
 			else if (e.key.keysym.sym == SDLK_d)
 				m_KeyboardMoveUPtr->KeyReleased(Movement::Right);
+			else if (e.key.keysym.sym == SDLK_c)
+				m_KeyboardHitUPtr->KeyReleased();
+			else if (e.key.keysym.sym == SDLK_z)
+				m_KeyboardScoreUPtr->KeyReleased(PointType::Enemy);
+			else if (e.key.keysym.sym == SDLK_x)
+				m_KeyboardScoreUPtr->KeyReleased(PointType::PickUp);
 
 			break;
 		default:
@@ -56,6 +64,8 @@ void diji::InputManager::BindKeyboard(const GameObject* actor)
 {
 	m_KeyboardMoveUPtr = std::make_unique<MoveCommand>(actor);
 	//add new commands
+	m_KeyboardHitUPtr = std::make_unique<HitCommand>(actor);
+	m_KeyboardScoreUPtr = std::make_unique<ScoreCommand>(actor);
 }
 
 void diji::InputManager::BindController(const GameObject* actor, int controllerIdx)
@@ -77,15 +87,24 @@ void diji::InputManager::BindController(const GameObject* actor, int controllerI
 
 	m_ControllerMoveUPtr = std::make_unique<MoveCommand>(actor);
 	//add new commands
+	m_ControllerHitUPtr = std::make_unique<HitCommand>(actor);
+	m_ControllerScoreUPtr = std::make_unique<ScoreCommand>(actor);
 }
 
 void diji::InputManager::ExecuteCommand()
 {
+	//need to template this, this will get old fast
 	if (m_KeyboardMoveUPtr) 
 		m_KeyboardMoveUPtr->Execute();
+	if (m_KeyboardHitUPtr)
+		m_KeyboardHitUPtr->Execute();
+
 
 	if (m_ControllerMoveUPtr) 
 		m_ControllerMoveUPtr->Execute();
+
+	if (m_ControllerHitUPtr)
+		m_ControllerHitUPtr->Execute();
 }
 
 void diji::InputManager::ProcessControllerInput()
@@ -120,5 +139,14 @@ void diji::InputManager::ProcessControllerInput()
 
 		if (m_PlayersMap[index]->IsKeyUpThisFrame(Controller::Button::DPadRight))
 			m_ControllerMoveUPtr->KeyReleased(Movement::Right);
+
+		if (m_PlayersMap[index]->IsKeyUpThisFrame(Controller::Button::X))
+			m_ControllerHitUPtr->KeyReleased();
+
+		if (m_PlayersMap[index]->IsKeyDownThisFrame(Controller::Button::A))
+			m_ControllerScoreUPtr->KeyReleased(PointType::Enemy);
+
+		if (m_PlayersMap[index]->IsKeyDownThisFrame(Controller::Button::B))
+			m_ControllerScoreUPtr->KeyReleased(PointType::PickUp);
 	}
 }

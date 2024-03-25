@@ -28,7 +28,7 @@ namespace diji
 		virtual void Execute() = 0;
 
 	protected:
-		explicit Commands() = default;
+		Commands() = default ;
 
 	};
 }

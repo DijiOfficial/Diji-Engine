@@ -20,7 +20,12 @@ namespace diji
 	private:
 		//template this? or vector of all possible commands?
 		std::unique_ptr<MoveCommand> m_KeyboardMoveUPtr{ nullptr };
+		std::unique_ptr<HitCommand> m_KeyboardHitUPtr{ nullptr };
+		std::unique_ptr<ScoreCommand> m_KeyboardScoreUPtr{ nullptr };
+
 		std::unique_ptr<MoveCommand> m_ControllerMoveUPtr{ nullptr };
+		std::unique_ptr<HitCommand> m_ControllerHitUPtr{ nullptr };
+		std::unique_ptr<ScoreCommand> m_ControllerScoreUPtr{ nullptr };
 		//template this to allow creation of any controller very likely nedd 0-3 controllers because of Xinput only supports 0-3
 		//std::unique_ptr<Controller> m_ControllerUPtr{ std::make_unique<Controller>(0) };
 		//std::unique_ptr<Controller> m_ControllerUPtr{ nullptr };

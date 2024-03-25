@@ -199,6 +199,7 @@
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="HealthCounter.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ISubject.h" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
@@ -232,6 +234,7 @@
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="HealthCounter.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="IObserver.cpp" />
     <ClCompile Include="ISubject.cpp" />
@@ -244,6 +247,7 @@
     <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />

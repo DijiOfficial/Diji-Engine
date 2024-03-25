@@ -33,6 +33,7 @@ namespace diji
 		void Update();
 		void Render() const;
 
+#pragma region Components
 		template<typename T, typename... Args>
 		void AddComponents(Args&&... args)
 		{
@@ -83,6 +84,7 @@ namespace diji
 			}
 			return false;
 		}
+#pragma endregion
 
 		//SceneGraph
 		GameObject* GetParent() const { return m_ParentPtr; };

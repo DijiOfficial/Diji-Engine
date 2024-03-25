@@ -1,8 +1,10 @@
 #include "MoveCommand.h"
 #include "Time.h"
 #include "Transform.h"
+#include "HealthCounter.h"
+#include "ScoreCounter.h"
 
-diji::MoveCommand::MoveCommand(const GameObject* actorPtr) 
+diji::MoveCommand::MoveCommand(const GameObject* actorPtr)
 {
 	m_TransformComponentPtr = actorPtr->GetComponent<Transform>();
 
@@ -37,4 +39,28 @@ void diji::MoveCommand::Execute()
 	}
 
 	m_TransformComponentPtr->SetPosition(pos);
+}
+
+diji::HitCommand::HitCommand(const GameObject* actorPtr)
+{
+	m_HealthComponentPtr = actorPtr->GetComponent<HealthCounter>();
+
+	assert(actorPtr->GetComponent<HealthCounter>() and "GameObjects & HealthComp needs to be initialized before PlayerControls");
+
+}
+void diji::HitCommand::Execute()
+{
+	if (m_IsHit)
+	{
+		m_HealthComponentPtr->Hit();
+		m_IsHit = false;
+	}
+}
+
+diji::ScoreCommand::ScoreCommand(const GameObject* actorPtr)
+{
+	m_ScoreComponentPtr = actorPtr->GetComponent<ScoreCounter>();
+
+	assert(m_ScoreComponentPtr and "GameObjects & ScoreComp needs to be initialized before PlayerControls");
+
 }
