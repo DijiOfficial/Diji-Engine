@@ -15,7 +15,7 @@ namespace diji
 	class IObserver
 	{
 	public:
-		IObserver(EventNames& event) : m_Event{ event } {};
+		//IObserver(EventNames& event) : m_Event{ event } {};
 		IObserver(GameObject* subject) : m_Event{ EventNames::Health }, m_Subject{ subject } {};
 		virtual ~IObserver() = default;
 

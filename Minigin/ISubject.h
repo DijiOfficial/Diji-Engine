@@ -27,6 +27,7 @@ namespace diji
 		ISubject& operator=(const ISubject& other) = delete;
 		ISubject& operator=(ISubject&& other) = delete;
 
+		//remove virtual
 		virtual void AddObserver(MessageTypes message, std::unique_ptr<IObserver>&& observer);
 		virtual void RemoveObserver(MessageTypes message, IObserver* observer);
 		virtual void NotifyAll(const GameObject* entity);
