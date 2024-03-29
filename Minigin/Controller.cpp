@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include <cassert>
 
+#include <iostream>
 class diji::Controller::XInput
 {
 	public:
@@ -15,9 +16,24 @@ class diji::Controller::XInput
 			ZeroMemory(&state, sizeof(XINPUT_STATE));
 			DWORD dwResult = XInputGetState(controllerIdx, &state);
 
+			//if (dwResult != ERROR_SUCCESS)
+			//{
+			//	assert("Controller not connected");
+			//}
 			if (dwResult != ERROR_SUCCESS)
 			{
-				assert("Controller not connected");
+				switch (dwResult)
+				{
+				case ERROR_DEVICE_NOT_CONNECTED:
+					std::cout << "Controller error! Device not connected! \n";
+					break;
+				case ERROR_NOT_SUPPORTED:
+					std::cout << "Controller error! Not supported! \n";
+					break;
+				default:
+					std::cout << "Controller error! \n";
+					break;
+				}
 			}
 		}
 
