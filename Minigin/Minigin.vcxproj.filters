@@ -132,8 +132,12 @@
     </ClInclude>
     <ClInclude Include="ISubject.h" />
     <ClInclude Include="IObserver.h" />
-    <ClInclude Include="HealthCounter.h" />
-    <ClInclude Include="ScoreCounter.h" />
+    <ClInclude Include="HealthCounter.h">
+      <Filter>EngineFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreCounter.h">
+      <Filter>EngineFiles\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -222,7 +226,11 @@
     </ClCompile>
     <ClCompile Include="ISubject.cpp" />
     <ClCompile Include="IObserver.cpp" />
-    <ClCompile Include="HealthCounter.cpp" />
-    <ClCompile Include="ScoreCounter.cpp" />
+    <ClCompile Include="HealthCounter.cpp">
+      <Filter>EngineFiles\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreCounter.cpp">
+      <Filter>EngineFiles\Components</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

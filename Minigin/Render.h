@@ -12,6 +12,7 @@ namespace diji
 	{
 	public:
 		Render(GameObject* ownerPtr);
+		Render(GameObject* ownerPtr, int scale);
 		~Render() override = default;
 
 		Render(const Render& other) = delete;
@@ -21,11 +22,14 @@ namespace diji
 
 		void Update() override;
 		void RenderFrame() const;
+		void UpdateText();
 
 	private:
-		std::shared_ptr<Texture2D> m_TexturePtr{};
+		Texture2D* m_TexturePtr{};
 		Texture* m_TextureCompPtr{};
 		Text* m_TextCompPtr{};
 		Transform* m_TransformCompPtr{};
+
+		int m_Scale{ 1 };
 	};
 }

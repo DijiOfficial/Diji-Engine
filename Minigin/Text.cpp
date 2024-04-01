@@ -1,5 +1,6 @@
 #include "Text.h"
 #include "Font.h"
+#include "Render.h"
 
 #include <SDL_ttf.h>
 #include <stdexcept>
@@ -10,17 +11,15 @@ diji::Text::Text(GameObject* ownerPtr)
 	, m_FontPtr{ nullptr }
 	, m_TexturePtr{ nullptr }
 	, m_NeedsUpdate{ false }
-	, m_IsDirty{ false }
 {
 }
 
-diji::Text::Text(GameObject* ownerPtr, const std::string& text, std::shared_ptr<Font> font)
+diji::Text::Text(GameObject* ownerPtr, const std::string& text, Font* font)
 	: Component(ownerPtr)
 	, m_Text{ text }
-	, m_FontPtr{ std::move(font) }
+	, m_FontPtr{ font }
 	, m_TexturePtr{ nullptr }
 	, m_NeedsUpdate{ true }
-	, m_IsDirty{ true }
 {
 }
 
@@ -40,8 +39,11 @@ void diji::Text::Update()
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_TexturePtr = std::make_shared<Texture2D>(texture);
+		m_TexturePtr = std::make_unique<Texture2D>(texture);
 		m_NeedsUpdate = false;
+
+		// need to update the pointer in Render this frame, Render update was already called so it has previous pointer information
+		GetOwner()->GetComponent<Render>()->UpdateText();
 	}
 }
 
@@ -50,14 +52,12 @@ void diji::Text::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
-	m_IsDirty = true;
 }
 
-void diji::Text::SetFont(std::shared_ptr<Font> font)
+void diji::Text::SetFont(Font* fontPtr)
 {
-	m_FontPtr = std::move(font);
+	m_FontPtr = fontPtr;
 	m_NeedsUpdate = true;
-	m_IsDirty = true;
 }
 
 

@@ -49,12 +49,23 @@ void diji::Renderer::Destroy()
 	}
 }
 
-void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+//void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+//{
+//	SDL_Rect dst{};
+//	dst.x = static_cast<int>(x);
+//	dst.y = static_cast<int>(y);
+//	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+//	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+//}
+
+void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, int scale)
 {
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(x);
 	dst.y = static_cast<int>(y);
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+	dst.w *= scale;
+	dst.h *= scale;
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 

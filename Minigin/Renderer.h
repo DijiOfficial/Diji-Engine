@@ -16,7 +16,8 @@ namespace diji
 		void Render() const;
 		void Destroy();
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const;
+		//void RenderTexture(const Texture2D& texture, float x, float y) const;
+		void RenderTexture(const Texture2D& texture, const float x, const float y, int scale = 1);
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx) const;
 

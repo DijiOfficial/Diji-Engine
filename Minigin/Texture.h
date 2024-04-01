@@ -20,7 +20,7 @@ namespace diji
 		void Update() override;
 
 		void SetTexture(const std::string& filename);
-		std::shared_ptr<Texture2D> GetTexture() const { return m_TexturePtr; };
+		Texture2D* GetTexture() const { return m_TexturePtr; };
 
 		void SetWidth(int width) { m_Width = width; }
 		void SetHeight(int height) { m_Height = height; }
@@ -33,7 +33,7 @@ namespace diji
 		int GetFrame() const { return m_Frame; }
 
 	private:
-		std::shared_ptr<Texture2D> m_TexturePtr;
+		Texture2D* m_TexturePtr;
 		int m_Width;
 		int m_Height;
 		int m_NrOfFrames;

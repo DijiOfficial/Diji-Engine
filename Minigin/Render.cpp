@@ -4,8 +4,15 @@
 #include "Text.h"
 
 #include "Rotation.h"
+
+diji::Render::Render(GameObject* ownerPtr, int scale) 
+	: Render(ownerPtr)
+{
+	m_Scale = scale;
+}
+
 diji::Render::Render(GameObject* ownerPtr) 
-	: Component(ownerPtr) 
+	: Component(ownerPtr)
 { 
 	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
 
@@ -27,28 +34,25 @@ diji::Render::Render(GameObject* ownerPtr)
 
 void diji::Render::Update()
 {
-	if (not m_TextCompPtr)
-		return;
-
-	if (m_TextCompPtr->GetIsDirty())
-	{
-		m_TexturePtr = m_TextCompPtr->GetTexture();
-		m_TextCompPtr->SetClean();
-	}
 }
 
 void diji::Render::RenderFrame() const
 {
 	const glm::vec3 pos = [this]()
-		{
-			if (m_TransformCompPtr)
-				return m_TransformCompPtr->GetPosition();
-			else
-				return glm::vec3{ 0, 0, 0 };
-		}();
-		
+	{
+		if (m_TransformCompPtr)
+			return m_TransformCompPtr->GetPosition();
+		else
+			return glm::vec3{ 0, 0, 0 };
+	}();
+
 	if(m_TextureCompPtr and m_TextureCompPtr->IsAnimated())
 		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame());
 	else
-		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y);
+		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_Scale);
 }
+
+void diji::Render::UpdateText()
+{ 
+	m_TexturePtr = m_TextCompPtr->GetTexture(); 
+};
