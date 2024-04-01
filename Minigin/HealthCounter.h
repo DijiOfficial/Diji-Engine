@@ -23,7 +23,6 @@ namespace diji
 
 	private:	
 		int m_Health;
-		bool m_IsDirty{ false };
 	};
 }
 

@@ -6,8 +6,8 @@ namespace diji
 	class GameObject;
 	class Scene final
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
+		explicit Scene(const std::string& name);
 		~Scene();
 
 		Scene(const Scene& other) = delete;
@@ -18,18 +18,16 @@ namespace diji
 		void Update();
 		void Render() const;
 		
-		void Add(std::shared_ptr<GameObject> object);
-		void Remove(std::shared_ptr<GameObject> object);
+		GameObject* CreateGameObject();
+		void Remove(GameObject* object);
 		void RemoveAll();
-		std::vector < std::shared_ptr<GameObject>> GetObjects() const { return m_ObjectsPtrVec; };
 
-
+		std::string GetName() const { return m_Name; };
+	
 	private: 
-		explicit Scene(const std::string& name);
 
 		std::string m_Name;
-		std::vector < std::shared_ptr<GameObject>> m_ObjectsPtrVec{};
-
+		std::vector<std::unique_ptr<GameObject>> m_ObjectsUPtrVec;
 
 		static unsigned int m_IdCounter; 
 	};

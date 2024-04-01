@@ -130,13 +130,17 @@
     <ClInclude Include="Controller.h">
       <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
-    <ClInclude Include="ISubject.h" />
-    <ClInclude Include="IObserver.h" />
     <ClInclude Include="HealthCounter.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
     <ClInclude Include="ScoreCounter.h">
       <Filter>EngineFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>EngineFiles\InterfaceFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ISubject.h">
+      <Filter>EngineFiles\InterfaceFiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,13 +228,17 @@
     <ClCompile Include="Controller.cpp">
       <Filter>EngineFiles\InputManager</Filter>
     </ClCompile>
-    <ClCompile Include="ISubject.cpp" />
-    <ClCompile Include="IObserver.cpp" />
     <ClCompile Include="HealthCounter.cpp">
       <Filter>EngineFiles\Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreCounter.cpp">
       <Filter>EngineFiles\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IObserver.cpp">
+      <Filter>EngineFiles\InterfaceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ISubject.cpp">
+      <Filter>EngineFiles\InterfaceFiles</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

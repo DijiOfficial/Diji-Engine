@@ -1,5 +1,5 @@
 #include "Scene.h"
-//#include "GameObject.h"
+#include "GameObject.h"
 #include "InputManager.h"
 
 #include <algorithm>
@@ -10,26 +10,32 @@ diji::Scene::Scene(const std::string& name) : m_Name(name) {}
 
 diji::Scene::~Scene() = default;
 
-void diji::Scene::Add(std::shared_ptr<GameObject> object)
+diji::GameObject* diji::Scene::CreateGameObject()
 {
-	m_ObjectsPtrVec.emplace_back(std::move(object));
+	m_ObjectsUPtrVec.emplace_back(std::make_unique<GameObject>());
+	return m_ObjectsUPtrVec.back().get();
 }
 
-void diji::Scene::Remove(std::shared_ptr<GameObject> object)
+void diji::Scene::Remove(GameObject* object)
 {
-	m_ObjectsPtrVec.erase(std::remove(m_ObjectsPtrVec.begin(), m_ObjectsPtrVec.end(), object), m_ObjectsPtrVec.end());
+	std::erase_if(m_ObjectsUPtrVec,
+		[object](const auto& objUPtr)
+		{
+			return objUPtr.get() == object;
+		}
+	);
 }
 
 void diji::Scene::RemoveAll()
 {
-	m_ObjectsPtrVec.clear();
+	m_ObjectsUPtrVec.clear();
 }
 
 void diji::Scene::Update()
 {
 	InputManager::GetInstance().ExecuteCommand();
 
-	for(auto& object : m_ObjectsPtrVec)
+	for(auto& object : m_ObjectsUPtrVec)
 	{
 		object->Update();
 	}
@@ -37,9 +43,8 @@ void diji::Scene::Update()
 
 void diji::Scene::Render() const
 {
-	for (const auto& object : m_ObjectsPtrVec)
+	for (const auto& object : m_ObjectsUPtrVec)
 	{
 		object->Render();
 	}
 }
-

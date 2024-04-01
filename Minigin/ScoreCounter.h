@@ -28,7 +28,6 @@ namespace diji
 
 	private:
 		int m_Score;
-		bool m_IsDirty{ false };
 	};
 }
 

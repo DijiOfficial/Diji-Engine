@@ -3,13 +3,13 @@
 
 #include <format>
 #include <iostream>
+
 diji::ScoreCounter::ScoreCounter(GameObject* ownerPtr, int score)
     : Component(ownerPtr)
     , m_Score{ score }
 {
 
 };
-
 
 void diji::ScoreCounter::HitEnemy(PointType& pointType)
 {

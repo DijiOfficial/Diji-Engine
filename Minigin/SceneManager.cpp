@@ -1,9 +1,16 @@
-#include "SceneManager.h"
 #include "Scene.h"
+
+diji::SceneManager::SceneManager()
+{
+}
+
+diji::SceneManager::~SceneManager()
+{
+}
 
 void diji::SceneManager::Update()
 {
-	for(auto& scene : m_ScenesPtrVec)
+	for(auto& scene : m_ScenesUPtrVec)
 	{
 		scene->Update();
 	}
@@ -11,15 +18,26 @@ void diji::SceneManager::Update()
 
 void diji::SceneManager::Render()
 {
-	for (const auto& scene : m_ScenesPtrVec)
+	for (const auto& scene : m_ScenesUPtrVec)
 	{
 		scene->Render();
 	}
 }
 
-diji::Scene& diji::SceneManager::CreateScene(const std::string& name)
+diji::Scene* diji::SceneManager::GetScene(std::string& name) const
 {
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_ScenesPtrVec.push_back(scene);
-	return *scene;
+	for (const auto& scenePtr : m_ScenesUPtrVec)
+	{
+		if (scenePtr->GetName() == name)
+		{
+			return scenePtr.get();
+		}
+	}
+	return nullptr;
+}
+
+diji::Scene* diji::SceneManager::CreateScene(const std::string& name)
+{
+	m_ScenesUPtrVec.emplace_back(std::make_unique<Scene>(name));
+	return m_ScenesUPtrVec.back().get();
 }

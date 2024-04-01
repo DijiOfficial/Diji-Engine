@@ -11,16 +11,19 @@ namespace diji
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene(const std::string& name);
+		~SceneManager() override;
+
+		Scene* CreateScene(const std::string& name);
 
 		void Update();
 		void Render();
 
-		std::vector<std::shared_ptr<Scene>> GetScenes() const { return m_ScenesPtrVec; }
+		Scene* GetScene(std::string& name) const;
 
 	private:
 		friend class Singleton<SceneManager>;
-		SceneManager() = default;
-		std::vector<std::shared_ptr<Scene>> m_ScenesPtrVec;
+		SceneManager();
+
+		std::vector<std::unique_ptr<Scene>> m_ScenesUPtrVec;
 	};
 }
