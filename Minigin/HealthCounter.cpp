@@ -11,7 +11,7 @@ diji::HealthCounter::HealthCounter(GameObject* ownerPtr, int health)
 };
 
 
-void diji::HealthCounter::Hit()
+void diji::HealthCounter::DecreaseHealth()
 {
 	m_Health--;
 

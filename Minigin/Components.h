@@ -8,6 +8,7 @@
 #include "Rotation.h"
 #include "TrashTheCache.h"
 #include "HealthCounter.h"
+#include "ScoreCounter.h"
 //#include "Isubject.h"
 
 
