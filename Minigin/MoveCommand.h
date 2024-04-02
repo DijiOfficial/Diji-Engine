@@ -1,5 +1,5 @@
 #pragma once
-#include "Commands.h"
+#include "Command.h"
 #include <map>
 
 #include "ScoreCounter.h"
@@ -10,7 +10,7 @@ namespace diji
 	class ScoreCounter;
 	enum class PointType;
 
-	class MoveCommand final : public Commands
+	class MoveCommand final : public Command
 	{
 
 	public:
@@ -28,33 +28,33 @@ namespace diji
 		void KeyReleased(const Movement& movement) { m_Movement[movement] = false; }
 
 	private:
-		const glm::vec2 m_Speed = { 100.f, 100.f };
+		const glm::vec2 m_Speed = { 300.f, 300.f };
 
 		std::map<Movement, bool> m_Movement = { {Movement::Up, false}, {Movement::Down, false},{Movement::Left, false},{Movement::Right, false} };
 		Transform* m_TransformComponentPtr;
 	};
 
-	class HitCommand final : public Commands
-	{
+	//class HitCommand final : public Command
+	//{
 
-	public:
-		//why is this overloaded?
-		HitCommand(const GameObject* actorPtr);
-		~HitCommand() override = default;
+	//public:
+	//	//why is this overloaded?
+	//	HitCommand(const GameObject* actorPtr);
+	//	~HitCommand() override = default;
 
-		HitCommand(const HitCommand& other) = delete;
-		HitCommand(HitCommand&& other) = delete;
-		HitCommand& operator=(const HitCommand& other) = delete;
-		HitCommand& operator=(HitCommand&& other) = delete;
+	//	HitCommand(const HitCommand& other) = delete;
+	//	HitCommand(HitCommand&& other) = delete;
+	//	HitCommand& operator=(const HitCommand& other) = delete;
+	//	HitCommand& operator=(HitCommand&& other) = delete;
 
-		void Execute() override;
+	//	void Execute() override;
 
-		void KeyReleased() { m_IsHit = true; };
-	
-	private:
-		HealthCounter* m_HealthComponentPtr;
-		bool m_IsHit = false;
-	};
+	//	void KeyReleased() { m_IsHit = true; };
+	//
+	//private:
+	//	HealthCounter* m_HealthComponentPtr;
+	//	bool m_IsHit = false;
+	//};
 
 	class ScoreCommand final
 	{

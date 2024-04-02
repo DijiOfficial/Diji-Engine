@@ -41,21 +41,21 @@ void diji::MoveCommand::Execute()
 	m_TransformComponentPtr->SetPosition(pos);
 }
 
-diji::HitCommand::HitCommand(const GameObject* actorPtr)
-{
-	m_HealthComponentPtr = actorPtr->GetComponent<HealthCounter>();
-
-	assert(actorPtr->GetComponent<HealthCounter>() and "GameObjects & HealthComp needs to be initialized before PlayerControls");
-
-}
-void diji::HitCommand::Execute()
-{
-	if (m_IsHit)
-	{
-		m_HealthComponentPtr->Hit();
-		m_IsHit = false;
-	}
-}
+//diji::HitCommand::HitCommand(const GameObject* actorPtr)
+//{
+//	m_HealthComponentPtr = actorPtr->GetComponent<HealthCounter>();
+//
+//	assert(actorPtr->GetComponent<HealthCounter>() and "GameObjects & HealthComp needs to be initialized before PlayerControls");
+//
+//}
+//void diji::HitCommand::Execute()
+//{
+//	if (m_IsHit)
+//	{
+//		m_HealthComponentPtr->DecreaseHealth();
+//		m_IsHit = false;
+//	}
+//}
 
 diji::ScoreCommand::ScoreCommand(const GameObject* actorPtr)
 {

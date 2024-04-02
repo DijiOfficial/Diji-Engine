@@ -121,7 +121,7 @@
     <ClInclude Include="SceneManager.h">
       <Filter>GameFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Commands.h">
+    <ClInclude Include="Command.h">
       <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="MoveCommand.h">
@@ -142,6 +142,7 @@
     <ClInclude Include="ISubject.h">
       <Filter>EngineFiles\InterfaceFiles</Filter>
     </ClInclude>
+    <ClInclude Include="GameActorCommands.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -240,5 +241,6 @@
     <ClCompile Include="ISubject.cpp">
       <Filter>EngineFiles\InterfaceFiles</Filter>
     </ClCompile>
+    <ClCompile Include="GameActorCommands.cpp" />
   </ItemGroup>
 </Project>
