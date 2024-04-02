@@ -55,6 +55,7 @@ class diji::Controller::XInput
 
 		bool IsDownThisFrame(unsigned int button) { return m_ButtonsPressedThisFrame & button; }
 		bool IsUpThisFrame(unsigned int button) { return m_ButtonsReleasedThisFrame & button; };
+		bool IsPressed(unsigned int button) const { return m_CurrentState.Gamepad.wButtons & button; }
 
 	private:
 		int m_ControllerIdx{};
@@ -86,4 +87,9 @@ bool diji::Controller::IsKeyDownThisFrame(const Button& button)
 bool diji::Controller::IsKeyUpThisFrame(const Button& button)
 {
 	return m_XInputUPtr->IsUpThisFrame(static_cast<unsigned int>(button));
+}
+
+bool diji::Controller::IsPressed(const Button& button) const
+{
+	return m_XInputUPtr->IsPressed(static_cast<unsigned int>(button));;
 }

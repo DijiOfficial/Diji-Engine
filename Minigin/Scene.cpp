@@ -33,8 +33,6 @@ void diji::Scene::RemoveAll()
 
 void diji::Scene::Update()
 {
-	InputManager::GetInstance().ExecuteCommand();
-
 	for(auto& object : m_ObjectsUPtrVec)
 	{
 		object->Update();

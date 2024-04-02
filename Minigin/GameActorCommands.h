@@ -54,13 +54,6 @@ namespace diji
 	//	ScoreCommand(const GameObject* actorPtr);
 	//	~ScoreCommand() = default;
 
-	//	ScoreCommand(const ScoreCommand& other) = delete;
-	//	ScoreCommand(ScoreCommand&& other) = delete;
-	//	ScoreCommand& operator=(const ScoreCommand& other) = delete;
-	//	ScoreCommand& operator=(ScoreCommand&& other) = delete;
-
-	//	//void Execute() override;
-
 	//	void KeyReleased(PointType pointType) { m_ScoreComponentPtr->HitEnemy(pointType); };
 
 	//private:

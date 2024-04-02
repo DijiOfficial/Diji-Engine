@@ -36,6 +36,8 @@ namespace diji
 
 		bool IsKeyDownThisFrame(const Button& button);
 		bool IsKeyUpThisFrame(const Button& button);
+		bool IsPressed(const Button& button) const;
+
 
 	private:
 		class XInput;
