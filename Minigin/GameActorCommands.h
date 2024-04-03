@@ -6,6 +6,8 @@ namespace diji
 {
 	class Transform;
 	class HealthCounter;
+	class ScoreCounter;
+	enum class PointType;
 
 	class GameActorCommands : public Command
 	{
@@ -47,18 +49,19 @@ namespace diji
 		HealthCounter* m_HealthComponentPtr;
 	};
 
-	//class ScoreCommand final
-	//{
+	class ScoreCommand final : public GameActorCommands
+	{
 
-	//public:
-	//	ScoreCommand(const GameObject* actorPtr);
-	//	~ScoreCommand() = default;
+	public:
+		ScoreCommand(GameObject* actorPtr, PointType point);
+		~ScoreCommand() override = default;
 
-	//	void KeyReleased(PointType pointType) { m_ScoreComponentPtr->HitEnemy(pointType); };
+		void Execute() override;
 
-	//private:
-	//	ScoreCounter* m_ScoreComponentPtr;
-	//};
+	private:
+		ScoreCounter* m_ScoreComponentPtr;
+		PointType m_PointType;
+	};
 }
 
 

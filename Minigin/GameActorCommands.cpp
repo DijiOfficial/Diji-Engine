@@ -3,6 +3,7 @@
 #include "Time.h"
 #include "Transform.h"
 #include "HealthCounter.h"
+#include "ScoreCounter.h"
 
 diji::Move::Move(GameObject* actor, Movement movement)
 	: GameActorCommands{ actor }
@@ -44,4 +45,16 @@ diji::HitCommand::HitCommand(GameObject* actor)
 void diji::HitCommand::Execute()
 {
 	m_HealthComponentPtr->DecreaseHealth();
+}
+
+diji::ScoreCommand::ScoreCommand(GameObject* actorPtr, PointType point)
+	: GameActorCommands{ actorPtr }
+	, m_PointType{ point }
+{
+	m_ScoreComponentPtr = GetGameActor()->GetComponent<ScoreCounter>();
+}
+
+void diji::ScoreCommand::Execute()
+{
+	m_ScoreComponentPtr->IncreaseScore(m_PointType);
 }
