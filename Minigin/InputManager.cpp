@@ -132,6 +132,10 @@ void diji::InputManager::ProcessControllerInput()
 					if (m_PlayersMap[index]->IsKeyDownThisFrame(scancode))
 						pair.second.second.commandUPtr->Execute();
 					break;
+				case KeyState::RELEASED:
+					if (m_PlayersMap[index]->IsKeyUpThisFrame(scancode))
+						pair.second.second.commandUPtr->Execute();
+					break;
 			default:
 				break;
 			}				
