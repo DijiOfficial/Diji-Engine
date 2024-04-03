@@ -21,7 +21,7 @@ namespace diji
 		ScoreCounter& operator=(ScoreCounter&& other) = delete;
 
 		void Update() override;
-		void HitEnemy(PointType& pointType);
+		void IncreaseScore(PointType& pointType);
 
 		int GetScore() const { return m_Score; }
 

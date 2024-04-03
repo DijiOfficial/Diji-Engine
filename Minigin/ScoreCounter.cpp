@@ -7,7 +7,7 @@ diji::ScoreCounter::ScoreCounter(GameObject* ownerPtr, int score)
 
 };
 
-void diji::ScoreCounter::HitEnemy(PointType& pointType)
+void diji::ScoreCounter::IncreaseScore(PointType& pointType)
 {
     switch (pointType)
     {
