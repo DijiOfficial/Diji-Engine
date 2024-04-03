@@ -6,7 +6,7 @@ namespace diji
 	class Font;
 	class Texture2D;
 
-	class Text final : public Component
+	class Text : public Component
 	{ 
 	public:
 		Text(GameObject* ownerPtr);

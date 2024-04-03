@@ -1,47 +1,35 @@
 #include "IObserver.h"
-#include "Text.h"
+
 #include "HealthCounter.h"
 #include "ScoreCounter.h"
-#include <cassert>
 
-#include <iostream>
-
-diji::HealthObserver::HealthObserver(GameObject* gameObj, GameObject* subject)
-	: IObserver(subject)
-{
-	m_TextCompPtr = { gameObj->GetComponent<Text>() };
-
-	assert(m_TextCompPtr and "Text Component needs to be initialized before HealthObserver");
-
-}
-void diji::HealthObserver::OnNotify(const GameObject* entity)
-{
-	if (entity == m_Subject) return;
-
-	const int lives = entity->GetComponent<HealthCounter>()->GetHealth();
-	
-	std::string text = "lives";
-	if (lives == 1)
+void diji::HealthObserver::OnNotify(MessageTypes message, Subject* subject)
+{ 
+	if (message == MessageTypes::HEALTH_CHANGE)
 	{
-		text = "life";
+		HealthCounter* healthCounter = dynamic_cast<HealthCounter*>(subject);
+		if (not healthCounter)
+			return; // throw error instead
+		
+		const int lives = healthCounter->GetHealth();
+		std::string text = "lives";
+		if (lives == 1)
+		{
+			text = "life";
+		}
+		SetText(std::format("# {}: {}", text, lives));
 	}
-
-	m_TextCompPtr->SetText(std::format("# {}: {}", text, lives));
-
 }
 
-diji::ScoreObserver::ScoreObserver(GameObject* observer, GameObject* subject)
-	: IObserver(subject)
+void diji::ScoreObserver::OnNotify(MessageTypes message, Subject* subject)
 {
-	m_TextCompPtr = { observer->GetComponent<Text>() };
+	if (message == MessageTypes::SCORE_CHANGE)
+	{
+		ScoreCounter* scoreCounter = dynamic_cast<ScoreCounter*>(subject);
+		if (not scoreCounter)
+			return;
 
-	assert(m_TextCompPtr and "Text Component needs to be initialized before ScoreObserver");
-}
-
-void diji::ScoreObserver::OnNotify(const GameObject* entity)
-{
-	if (entity == m_Subject) return;
-	const int score = entity->GetComponent<ScoreCounter>()->GetScore();
-
-	m_TextCompPtr->SetText(std::format("Score: {}", score));
+		const int score = scoreCounter->GetScore();
+		SetText(std::format("Score: {}", score));
+	}
 }

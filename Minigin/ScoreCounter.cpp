@@ -1,8 +1,4 @@
 #include "ScoreCounter.h"
-#include "Text.h"
-
-#include <format>
-#include <iostream>
 
 diji::ScoreCounter::ScoreCounter(GameObject* ownerPtr, int score)
     : Component(ownerPtr)
@@ -25,8 +21,7 @@ void diji::ScoreCounter::HitEnemy(PointType& pointType)
             break;
     }
 
-    auto& subject = ISubject::GetInstance();
-    subject.Notify(GetOwner(), MessageTypes::SCORE_UPDATE);
+    Notify(MessageTypes::SCORE_CHANGE);
 }
 
 void diji::ScoreCounter::Update()

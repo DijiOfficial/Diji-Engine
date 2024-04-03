@@ -1,11 +1,11 @@
 #pragma once
-#include "GameObject.h"
-
+//#include "GameObject.h"
+#include "Subject.h"
 namespace diji
 {
 	class Text;
 
-	class HealthCounter final : public Component
+	class HealthCounter final : public Component, public Subject
 	{
 	public:
 		HealthCounter(GameObject* ownerPtr, int health);

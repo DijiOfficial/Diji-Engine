@@ -1,5 +1,6 @@
 #include "HealthCounter.h"
-#include "Text.h"
+//#include "Text.h"
+//#include "Subject.h"
 
 #include <format>
 #include <iostream>
@@ -15,8 +16,7 @@ void diji::HealthCounter::DecreaseHealth()
 {
 	m_Health--;
 
-    auto& subject = ISubject::GetInstance();
-    subject.Notify(GetOwner(), MessageTypes::ENTITY_COLLISION);
+    Notify(MessageTypes::HEALTH_CHANGE);
 }
 
 void diji::HealthCounter::Update()

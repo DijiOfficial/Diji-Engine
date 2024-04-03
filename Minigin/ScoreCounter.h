@@ -1,6 +1,6 @@
 #pragma once
-#include "GameObject.h"
-
+//#include "GameObject.h"
+#include "Subject.h"
 namespace diji
 {
 	enum class PointType
@@ -8,9 +8,8 @@ namespace diji
 		Enemy = 100,
 		PickUp = 50,
 	};
-	class Text;
 
-	class ScoreCounter final : public Component
+	class ScoreCounter final : public Component, public Subject
 	{
 	public:
 		ScoreCounter(GameObject* ownerPtr, int score);

@@ -203,7 +203,7 @@
     <ClInclude Include="HealthCounter.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IObserver.h" />
-    <ClInclude Include="ISubject.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Renderer.h" />
@@ -238,7 +238,7 @@
     <ClCompile Include="HealthCounter.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="IObserver.cpp" />
-    <ClCompile Include="ISubject.cpp" />
+    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Render.cpp" />

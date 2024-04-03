@@ -1,59 +1,45 @@
 #pragma once
+#include "Text.h"
 
 namespace diji 
 {
-	enum class EventNames
+	enum class MessageTypes
 	{
-		Death,
-		Health
+		HEALTH_CHANGE,
+		SCORE_CHANGE,
+		LOG
 	};
-
-	class ISubject;
-	class GameObject;
-	class Text;
+	class Subject;
 
 	class IObserver
 	{
 	public:
-		//IObserver(EventNames& event) : m_Event{ event } {};
-		IObserver(GameObject* subject) : m_Event{ EventNames::Health }, m_Subject{ subject } {};
+		IObserver() = default;
 		virtual ~IObserver() = default;
-
-		//I pass the owner from the comp but need the comp anyways, will change next week as I am behind on schedule rn
-		virtual void OnNotify(const GameObject* entity) = 0;
 
 		IObserver(const IObserver& other) = delete;
 		IObserver(IObserver&& other) = delete;
 		IObserver& operator=(const IObserver& other) = delete;
 		IObserver& operator=(IObserver&& other) = delete;
-	
-	protected:
-		GameObject* m_Subject;
-	private:
-		EventNames m_Event;
+
+		virtual void OnNotify(MessageTypes message, Subject* subject) = 0;
 	};
 
-	class HealthObserver final : public IObserver
+	class HealthObserver final : public Text, public IObserver
 	{
 		public:
-			explicit HealthObserver(GameObject* gameObj, GameObject* subject);
+			using Text::Text;
+			~HealthObserver() override = default;
 
-			void OnNotify(const GameObject* entity) override;
-		
-		private:
-			Text* m_TextCompPtr;
-
+			void OnNotify(MessageTypes message, Subject* subject) override;
 	};
 
-	class ScoreObserver final : public IObserver
+	class ScoreObserver final : public Text, public IObserver
 	{
 	public:
-		explicit ScoreObserver(GameObject* observer, GameObject* subject);
+		using Text::Text;
+		~ScoreObserver() override = default;
 
-		void OnNotify(const GameObject* entity) override;
-
-	private:
-		Text* m_TextCompPtr;
-
+		void OnNotify(MessageTypes message, Subject* subject) override;
 	};
 }
