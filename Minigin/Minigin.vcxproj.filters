@@ -143,6 +143,12 @@
       <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="ISoundSystem.h" />
+    <ClInclude Include="SoundEffect.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -242,5 +248,11 @@
       <Filter>EngineFiles\InputManager</Filter>
     </ClCompile>
     <ClCompile Include="ISoundSystem.cpp" />
+    <ClCompile Include="SoundEffect.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>EngineFiles\CoreFiles</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

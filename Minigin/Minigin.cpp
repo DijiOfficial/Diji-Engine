@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h> 
+
 #include "Minigin.h"
 #include "InputManager.h"
 #include "SceneManager.h"
@@ -50,6 +52,11 @@ diji::Minigin::Minigin(const std::string &dataPath)
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0)
+	{
+		throw std::runtime_error(std::string("Failed to initialize SDL audio: ") + SDL_GetError());
 	}
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
