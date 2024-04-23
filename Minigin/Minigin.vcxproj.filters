@@ -142,6 +142,7 @@
     <ClInclude Include="GameActorCommands.h">
       <Filter>EngineFiles\InputManager</Filter>
     </ClInclude>
+    <ClInclude Include="ISoundSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -240,5 +241,6 @@
     <ClCompile Include="GameActorCommands.cpp">
       <Filter>EngineFiles\InputManager</Filter>
     </ClCompile>
+    <ClCompile Include="ISoundSystem.cpp" />
   </ItemGroup>
 </Project>

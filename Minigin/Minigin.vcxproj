@@ -203,6 +203,7 @@
     <ClInclude Include="HealthCounter.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="IObserver.h" />
+    <ClInclude Include="ISoundSystem.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Render.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="HealthCounter.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="IObserver.cpp" />
+    <ClCompile Include="ISoundSystem.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
