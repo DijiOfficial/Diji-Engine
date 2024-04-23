@@ -1,14 +1,15 @@
 #pragma once
 #include <memory>
 #include <iostream>
+#include "SoundEffect.h"
 
 namespace diji 
 {
-
 	enum class SoundId
 	{
 		PacmanDie,
-		PacmanEatFruit
+		PacmanEatFruit,
+		test
 	};
 
 	class ISoundSystem

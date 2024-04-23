@@ -1,11 +1,10 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "Texture2D.h"
-#include "Font.h"
 
 #include <stdexcept>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h> 
 
 void diji::ResourceManager::Init(const std::string& dataPath)
 {
@@ -58,4 +57,26 @@ diji::Font* diji::ResourceManager::LoadFont(const std::string& file, unsigned in
 
 	// I wonder if I could just return LoadFont(fullPath, size) here
     return fontPtr;
+}
+
+diji::SoundEffect* diji::ResourceManager::LoadSoundEffect(const std::string& file)
+{
+	// check if sound is already loaded
+	const auto fullPath = m_DataPath + "Audio/" + file;
+	const auto it = m_SoundEffectsUPtrUMap.find(fullPath);
+	if (it != m_SoundEffectsUPtrUMap.cend())
+	{
+		return it->second.get();
+	}
+
+	//Thread this
+	auto sound = Mix_LoadWAV(fullPath.c_str());
+	if (sound == nullptr)
+	{
+		throw std::runtime_error(std::string("Failed to load sound: ") + SDL_GetError());
+	}
+
+	// Store it if it's not already loaded
+	m_SoundEffectsUPtrUMap[fullPath] = std::make_unique<SoundEffect>(sound);
+	return m_SoundEffectsUPtrUMap[fullPath].get();
 }

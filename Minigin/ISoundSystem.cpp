@@ -1,4 +1,5 @@
 #include "ISoundSystem.h"
+#include "ResourceManager.h"
 
 namespace diji 
 {
@@ -6,7 +7,24 @@ namespace diji
 
 	void SDLISoundSystem::PlaySound(const SoundId sound, const int volume) const
 	{
-		(void)sound;
-		(void)volume;
+        SoundEffect* soundEffect = nullptr;
+
+        switch (sound)
+        {
+        case SoundId::PacmanDie:
+            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("pacman_death.wav");
+            break;
+        case SoundId::PacmanEatFruit:
+            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("pacman_eat_fruit.wav");
+            break;
+        default:
+            break;
+        }
+
+        if (soundEffect)
+        {
+            soundEffect->SetVolume(volume);
+            soundEffect->Play();
+        }
 	}
 }
