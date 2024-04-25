@@ -14,6 +14,7 @@
 #include "Time.h"
 #include <thread>
 #include "GUI.h"
+#include "EventQueue.h"
 
 SDL_Window* g_window{};
 
@@ -95,13 +96,16 @@ void diji::Minigin::Run(const std::function<void()>& load)
 	//Enable vSync
 	SDL_GL_SetSwapInterval(1);
 
+	//start thread sound processor
+	SoundProcessor soundProcessor;
+
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 
 	auto lastFrameTime{ std::chrono::high_resolution_clock::now() };
 	bool doContinue = true;
-
+	
 	while (doContinue)
 	{
 		GUI::GetInstance().NewFrame();
