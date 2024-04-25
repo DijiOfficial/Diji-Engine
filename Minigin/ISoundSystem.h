@@ -7,6 +7,7 @@ namespace diji
 {
 	enum class SoundId
 	{
+		InvalidSoundId = -1,
 		PacmanDie,
 		PacmanEatFruit,
 		test
