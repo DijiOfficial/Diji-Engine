@@ -7,7 +7,6 @@ namespace diji
 	{
 		HEALTH_CHANGE,
 		SCORE_CHANGE,
-		LOG
 	};
 	class Subject;
 
