@@ -22,7 +22,7 @@ void diji::Renderer::Init(SDL_Window* window)
 {
 	m_WindowPtr = window;
 	m_RendererPtr = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
-	if (m_RendererPtr == nullptr) 
+	if (m_RendererPtr == nullptr)
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
@@ -36,7 +36,7 @@ void diji::Renderer::Render() const
 
 	SceneManager::GetInstance().Render();
 	GUI::GetInstance().Render();
-	
+
 	SDL_RenderPresent(m_RendererPtr);
 }
 
@@ -93,6 +93,24 @@ void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 	src.w = width;
 	src.h = height;
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
+}
+
+void diji::Renderer::RenderRotatedTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, float angle, int scale) const
+{
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(x);
+	dst.y = static_cast<int>(y);
+	dst.w = width * scale;
+	dst.h = height * scale;
+
+	SDL_Rect src{};
+	src.x = idx * width;
+	src.y = 0;
+	src.w = width;
+	src.h = height;
+
+	// Render the texture with rotation and flipping
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, angle, nullptr, SDL_FLIP_NONE);
 }
 
 SDL_Renderer* diji::Renderer::GetSDLRenderer() const { return m_RendererPtr; }

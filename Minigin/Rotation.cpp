@@ -1,5 +1,5 @@
 #include "Rotation.h"
-#include "Time.h"
+#include "TimeSingleton.h"
 #include "Transform.h"
 
 diji::Rotation::Rotation(GameObject* ownerPtr) 
@@ -28,7 +28,7 @@ diji::Rotation::Rotation(GameObject* ownerPtr, float rotationSpeed, float distan
 
 void diji::Rotation::Update()
 {
-    m_RotationAngle += m_RotationSpeed * Time::GetInstance().GetDeltaTime();
+    m_RotationAngle += m_RotationSpeed * TimeSingleton::GetInstance().GetDeltaTime();
     if (m_RotationAngle > TWO_PI_DEGRESS)
         m_RotationAngle -= TWO_PI_DEGRESS;
 

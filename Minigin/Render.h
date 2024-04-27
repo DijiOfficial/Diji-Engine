@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include <SDL_opengl.h>
+#include "Collision.h"
 
 namespace diji
 {
@@ -31,5 +33,50 @@ namespace diji
 		Transform* m_TransformCompPtr{};
 
 		int m_Scale{ 1 };
+
+		void DrawPolygon(const std::vector<glm::vec2>& vertices, bool closed = true, float lineWidth = 1.0f) const
+		{
+			DrawPolygon(vertices.data(), vertices.size(), closed, lineWidth);
+		}
+
+		void DrawPolygon(const glm::vec2* pVertices, size_t nrVertices, bool closed, float lineWidth = 1.0f) const
+		{
+			glLineWidth(lineWidth);
+			closed ? glBegin(GL_LINE_LOOP) : glBegin(GL_LINE_STRIP);
+			{
+				for (size_t idx{ 0 }; idx < nrVertices; ++idx)
+				{
+					glVertex2f(pVertices[idx].x, pVertices[idx].y);
+				}
+			}
+			glEnd();
+		}
+
+		void DrawRect(float left, float bottom, float width, float height, float lineWidth = 1.0f) const
+		{
+			if (width > 0 && height > 0 && lineWidth > 0)
+			{
+
+				glLineWidth(lineWidth);
+				glBegin(GL_LINE_LOOP);
+				{
+					glVertex2f(left, bottom);
+					glVertex2f(left + width, bottom);
+					glVertex2f(left + width, bottom + height);
+					glVertex2f(left, bottom + height);
+				}
+				glEnd();
+			}
+		}
+
+		void DrawRect(const glm::vec2& bottomLeft, float width, float height, float lineWidth = 1.0f) const
+		{
+			DrawRect(bottomLeft.x, bottomLeft.y, width, height, lineWidth);
+		}
+
+		void DrawRect(const Rectf& rect, float lineWidth = 1.0f) const
+		{
+			DrawRect(rect.left, rect.bottom, rect.width, rect.height, lineWidth);
+		}
 	};
 }

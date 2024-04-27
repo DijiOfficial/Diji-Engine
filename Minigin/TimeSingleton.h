@@ -3,7 +3,7 @@
 
 namespace diji
 {
-    class Time : public Singleton<Time>
+    class TimeSingleton : public Singleton<TimeSingleton>
     {
     public:
         float GetDeltaTime() const { return m_DeltaTime; }
@@ -12,7 +12,7 @@ namespace diji
     private:
         float m_DeltaTime{ 0.0f };
 
-        friend class Singleton<Time>;
-        Time() = default;
+        friend class Singleton<TimeSingleton>;
+        TimeSingleton() = default;
     };
 }

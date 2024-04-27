@@ -7,6 +7,7 @@ namespace diji
 	class Transform;
 	class HealthCounter;
 	class ScoreCounter;
+	class Collider;
 	enum class PointType;
 
 	class GameActorCommands : public Command
@@ -34,6 +35,7 @@ namespace diji
 		const glm::vec2 m_Speed = { 300.f, 300.f }; //sets speed as universal, may change it to get it from the actor
 		Movement m_Movement;
 		Transform* m_TransformComponentPtr;
+		Collider* m_CollisionComponentPtr;
 	};
 
 	class HitCommand final : public GameActorCommands

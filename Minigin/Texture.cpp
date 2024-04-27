@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "Time.h"
+#include "TimeSingleton.h"
 
 diji::Texture::Texture(GameObject* ownerPtr)
 	: Component(ownerPtr)
@@ -56,7 +56,7 @@ void diji::Texture::Update()
 	if (not m_IsAnimated)
 		return;
 
-	m_FrameTime += Time::GetInstance().GetDeltaTime();
+	m_FrameTime += TimeSingleton::GetInstance().GetDeltaTime();
 	if (m_FrameTime >= 0.3f / m_NrOfFrames)
 	{
 		++m_Frame;

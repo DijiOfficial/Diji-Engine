@@ -3,8 +3,7 @@
 #include "Texture.h"
 #include "Text.h"
 
-#include "Rotation.h"
-
+//#include "Rotation.h"
 diji::Render::Render(GameObject* ownerPtr, int scale) 
 	: Render(ownerPtr)
 {
@@ -18,7 +17,7 @@ diji::Render::Render(GameObject* ownerPtr)
 
 	m_TextureCompPtr = ownerPtr->GetComponent<Texture>();
 	m_TextCompPtr = ownerPtr->GetComponent<Text>();
-
+	
 	if (not (m_TextureCompPtr or m_TextCompPtr))
 	{
 		if (m_TextCompPtr)
@@ -46,8 +45,13 @@ void diji::Render::RenderFrame() const
 			return glm::vec3{ 0, 0, 0 };
 	}();
 
-	if(m_TextureCompPtr and m_TextureCompPtr->IsAnimated())
-		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame(), m_Scale);
+	if (m_TextureCompPtr and m_TextureCompPtr->IsAnimated())
+	{
+		if (m_TextureCompPtr->CanRotate())
+			Renderer::GetInstance().RenderRotatedTexture(*m_TexturePtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame(), m_TextureCompPtr->GetRotationAngle(), m_Scale);
+		else
+			Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame(), m_Scale);
+	}
 	else
 		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_Scale);
 }

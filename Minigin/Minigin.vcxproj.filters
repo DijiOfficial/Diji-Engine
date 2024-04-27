@@ -37,24 +37,6 @@
     <ClInclude Include="Component.h">
       <Filter>EngineFiles\Components</Filter>
     </ClInclude>
-    <ClInclude Include="FPSCounter.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Render.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Rotation.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rdParty\imgui\imgui.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -82,9 +64,6 @@
     <ClInclude Include="..\3rdParty\imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="TrashTheCache.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rdParty\imgui\imgui_plot.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -100,7 +79,7 @@
     <ClInclude Include="Singleton.h">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
+    <ClInclude Include="TimeSingleton.h">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
@@ -117,12 +96,6 @@
     </ClInclude>
     <ClInclude Include="Controller.h">
       <Filter>EngineFiles\InputManager</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthCounter.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreCounter.h">
-      <Filter>EngineFiles\Components</Filter>
     </ClInclude>
     <ClInclude Include="IObserver.h">
       <Filter>EngineFiles\Observer</Filter>
@@ -151,37 +124,29 @@
     <ClInclude Include="ISoundSystem.h">
       <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClInclude>
     <ClInclude Include="EventQueue.h">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClInclude>
+    <ClInclude Include="Render.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="FPSCounter.h" />
+    <ClInclude Include="HealthCounter.h" />
+    <ClInclude Include="Rotation.h" />
+    <ClInclude Include="ScoreCounter.h" />
+    <ClInclude Include="TrashTheCache.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="SVGParser.h" />
+    <ClInclude Include="Collider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
       <Filter>GameFiles</Filter>
     </ClCompile>
-    <ClCompile Include="FPSCounter.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>GameFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Render.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Rotation.cpp">
-      <Filter>EngineFiles\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -204,9 +169,6 @@
     <ClCompile Include="..\3rdParty\imgui\backends\imgui_impl_sdl2.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="TrashTheCache.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -227,12 +189,6 @@
     </ClCompile>
     <ClCompile Include="Controller.cpp">
       <Filter>EngineFiles\InputManager</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthCounter.cpp">
-      <Filter>EngineFiles\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreCounter.cpp">
-      <Filter>EngineFiles\Components</Filter>
     </ClCompile>
     <ClCompile Include="IObserver.cpp">
       <Filter>EngineFiles\Observer</Filter>
@@ -261,11 +217,21 @@
     <ClCompile Include="ISoundSystem.cpp">
       <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClCompile>
     <ClCompile Include="EventQueue.cpp">
       <Filter>EngineFiles\CoreFiles</Filter>
     </ClCompile>
+    <ClCompile Include="Render.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="FPSCounter.cpp" />
+    <ClCompile Include="HealthCounter.cpp" />
+    <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="ScoreCounter.cpp" />
+    <ClCompile Include="TrashTheCache.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="SVGParser.cpp" />
+    <ClCompile Include="Collider.cpp" />
   </ItemGroup>
 </Project>

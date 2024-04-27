@@ -7,6 +7,8 @@ namespace diji
 	{
 		HEALTH_CHANGE,
 		SCORE_CHANGE,
+		LEVEL_COLLISION,
+		ENEMY_COLLISION,
 	};
 	class Subject;
 

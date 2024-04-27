@@ -1,20 +1,25 @@
 #include "GameActorCommands.h"
 
-#include "Time.h"
+#include "TimeSingleton.h"
 #include "Transform.h"
 #include "HealthCounter.h"
 #include "ScoreCounter.h"
+#include "Collider.h"
 
 diji::Move::Move(GameObject* actor, Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
 {
 	m_TransformComponentPtr = GetGameActor()->GetComponent<Transform>();
+	m_CollisionComponentPtr = GetGameActor()->GetComponent<Collider>();
+
+	assert(m_TransformComponentPtr and "Move Command need to be initialized after GameObject Transform Component");
+	assert(m_CollisionComponentPtr and "Move Command need to be initialized after GameObject Collision Component");
 }
 
 void diji::Move::Execute()
 {
-	const auto& deltaTime = Time::GetInstance().GetDeltaTime();
+	const auto& deltaTime = TimeSingleton::GetInstance().GetDeltaTime();
 	auto pos = m_TransformComponentPtr->GetPosition();
 
 	switch (m_Movement)
@@ -33,7 +38,14 @@ void diji::Move::Execute()
 		break;
 	}
 
-	m_TransformComponentPtr->SetPosition(pos);
+	m_TransformComponentPtr->SetMovement(m_Movement);
+
+	auto shape = m_CollisionComponentPtr->GetCollisionBox();
+	shape.left = pos.x;
+	shape.bottom = pos.y;
+
+	if (not Collision::GetInstance().IsCollidingWithWorld(shape))
+		m_TransformComponentPtr->SetPosition(pos);
 }
 
 diji::HitCommand::HitCommand(GameObject* actor)

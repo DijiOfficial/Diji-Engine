@@ -21,6 +21,7 @@ namespace diji
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height) const;
 		//void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, int scale) const;
+		void RenderRotatedTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, float angle, int scale = 1) const;
 
 		void DrawCircle(int x, int y, int radius)
 		{
@@ -43,11 +44,11 @@ namespace diji
 
 		const SDL_Color& GetBackgroundColor() const { return m_ClearColor; }
 		void SetBackgroundColor(const SDL_Color& color) { m_ClearColor = color; }
-	
+
 	private:
 		SDL_Renderer* m_RendererPtr{};
 		SDL_Window* m_WindowPtr{};
-		SDL_Color m_ClearColor{};	
+		SDL_Color m_ClearColor{};
 	};
 }
 

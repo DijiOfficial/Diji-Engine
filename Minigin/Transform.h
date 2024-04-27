@@ -1,5 +1,7 @@
 #pragma once
-#include "GameObject.h"
+//i'm not sure if this counts as coupling
+//I can avoid it by putting structs and enum classes in a separate file
+#include "Command.h"
 
 namespace diji
 {
@@ -25,9 +27,12 @@ namespace diji
 		void SetPosition(const float x, const float y, const float z);
 		void SetPosition(const float x, const float y);
 		void SetPosition(glm::vec3 pos) { m_Position = pos; };
+		void SetMovement(Movement& movement) { m_CurrentMovement = movement; };
+		Movement GetMovement() const { return m_CurrentMovement; };
 
 	private:
 		glm::vec3 m_Position;
+		Movement m_CurrentMovement = Movement::Idle;
 		void CheckRenderComponent();
 	};
 }

@@ -1,6 +1,6 @@
 #include "FPSCounter.h"
 #include "Text.h"
-#include "Time.h"
+#include "TimeSingleton.h"
 
 #include <format>
 
@@ -19,7 +19,7 @@ diji::FPSCounter::FPSCounter(GameObject* ownerPtr)
 void diji::FPSCounter::Update()
 {
     const double tempFps = m_Fps;
-    m_ElapsedTime += Time::GetInstance().GetDeltaTime();
+    m_ElapsedTime += TimeSingleton::GetInstance().GetDeltaTime();
     ++m_FrameCount;
 
     if (m_ElapsedTime >= REFRESH_RATE)

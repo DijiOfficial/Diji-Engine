@@ -1,6 +1,7 @@
 #pragma once
 //#include "GameObject.h"
 #include "Subject.h"
+
 namespace diji
 {
 	class Text;

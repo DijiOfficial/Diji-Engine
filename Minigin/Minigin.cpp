@@ -11,7 +11,7 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "Time.h"
+#include "TimeSingleton.h"
 #include <thread>
 #include "GUI.h"
 #include "EventQueue.h"
@@ -66,9 +66,13 @@ diji::Minigin::Minigin(const std::string &dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		576,
-		//544,
+		
+		//1280,
+		//720,	
+		496,
+		//640,
+		//576,
+		544,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
@@ -114,7 +118,7 @@ void diji::Minigin::Run(const std::function<void()>& load)
 		const float deltaTime{ std::chrono::duration<float>(currentTime - lastFrameTime).count() };
 		lastFrameTime = currentTime;
 
-		Time::GetInstance().SetDeltaTime(deltaTime);
+		TimeSingleton::GetInstance().SetDeltaTime(deltaTime);
 		doContinue = input.ProcessInput();
 
 		sceneManager.Update();

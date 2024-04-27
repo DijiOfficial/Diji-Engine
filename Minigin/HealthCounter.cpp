@@ -3,8 +3,7 @@
 //#include "Text.h"
 //#include "Subject.h"
 
-#include <format>
-#include <iostream>
+//#include <format>
 diji::HealthCounter::HealthCounter(GameObject* ownerPtr, int health)
     : Component(ownerPtr)
     , m_Health{ health }
