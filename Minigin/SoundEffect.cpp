@@ -24,5 +24,5 @@ void diji::SoundEffect::Play() const
 
 void diji::SoundEffect::SetVolume(const int volume) const
 {
-	volume == -1 ? Mix_VolumeChunk(m_MixChunkPtr, 64) : Mix_VolumeChunk(m_MixChunkPtr, volume);
+	volume == -1 ? Mix_VolumeChunk(m_MixChunkPtr, 16) : Mix_VolumeChunk(m_MixChunkPtr, volume);
 }
