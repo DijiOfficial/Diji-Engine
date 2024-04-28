@@ -9,6 +9,7 @@ namespace diji
 		SCORE_CHANGE,
 		LEVEL_COLLISION,
 		ENEMY_COLLISION,
+		PICKUP_COLLISION
 	};
 	class Subject;
 
