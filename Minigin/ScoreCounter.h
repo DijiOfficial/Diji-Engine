@@ -8,6 +8,7 @@ namespace diji
 	{
 		Enemy = 100,
 		PickUp = 50,
+		Pellet = 10
 	};
 
 	class ScoreCounter final : public Component, public Subject
@@ -23,6 +24,7 @@ namespace diji
 
 		void Update() override;
 		void IncreaseScore(PointType& pointType);
+		void IncreaseScore(const int score) { m_Score += score; };
 
 		int GetScore() const { return m_Score; }
 
