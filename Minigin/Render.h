@@ -25,6 +25,7 @@ namespace diji
 		void Update() override;
 		void RenderFrame() const;
 		void UpdateText();
+		void DisableRender() { m_Render = false; }
 
 	private:
 		Texture2D* m_TexturePtr{};
@@ -33,6 +34,7 @@ namespace diji
 		Transform* m_TransformCompPtr{};
 
 		int m_Scale{ 1 };
+		bool m_Render{ true };
 
 		void DrawPolygon(const std::vector<glm::vec2>& vertices, bool closed = true, float lineWidth = 1.0f) const
 		{

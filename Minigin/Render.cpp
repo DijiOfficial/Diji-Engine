@@ -3,7 +3,6 @@
 #include "Texture.h"
 #include "Text.h"
 
-//#include "Rotation.h"
 diji::Render::Render(GameObject* ownerPtr, int scale) 
 	: Render(ownerPtr)
 {
@@ -37,6 +36,9 @@ void diji::Render::Update()
 
 void diji::Render::RenderFrame() const
 {
+	if (not m_Render)
+		return;
+
 	const glm::vec3 pos = [this]()
 	{
 		if (m_TransformCompPtr)
