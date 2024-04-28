@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="226"
+   height="248"
+   viewBox="0 0 226 248"
+   sodipodi:docname="Pellets.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="2"
+     inkscape:cx="182.75"
+     inkscape:cy="152"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g1">
+    <image
+       width="226"
+       height="248"
+       preserveAspectRatio="none"
+       xlink:href="..%5C..%5C..%5C..%5CYear%202%5CProgramming%204%5C2DAE09_Programming4_01_Burgisser_Dylan%5CData%5CBackgroundLevelBlack.png"
+       id="image1" />
+    <path
+       style="fill:#000000;stroke-width:1.82571"
+       d="M 213,20 H 173 125 101 53 13 m 160,8 H 125 101 53 m 160,8 H 173 125 101 53 13 m 200,8 h -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 m 200,8 H 173 149 77 53 13 m 200,8 H 173 149 77 53 13 m 200,8 h -8 -8 -8 -8 -8 -24 -8 -8 -8 -24 -8 -8 -8 -24 -8 -8 -8 -8 -8 m 160,8 H 53 M 213,12 h -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -24 -8.000002 -8 -8 -8 -8 -8 -8 -8 -8 -7.999996 -8 M 173,99.999998 H 53 M 173,108 H 53 m 120,8 H 53 m 120,8 H 53 m 120,8 H 53 m 120,8 H 53 m 120,8 H 53 m 120,8 H 53 M 173,91.999998 H 53 m 120,-8 H 53 M 213,164 h -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -24 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 m 192,24 h -8 -24 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -24 -8 m 176,8 H 173 149 77 53 29 m 168,8 H 173 149 77 53 29 m 184,8 h -8 -8 -8 -8 -8 -24 -8 -8 -8 -24 -8 -8 -8 -24 -8 -8 -8 -8 -8 m 200,8 H 125 101 13 m 200,8 H 125 101 13 m 200,8 h -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 M 213,180 H 173 125 101 53 13.00001 M 213,172 H 173 125 101 53 13.00001"
+       id="path13"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  </g>
+</svg>

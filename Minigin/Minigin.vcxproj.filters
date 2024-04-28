@@ -5,38 +5,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="EngineFiles">
-      <UniqueIdentifier>{3a0e04c1-f419-4257-8071-bca1b968985b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameFiles">
-      <UniqueIdentifier>{3794fcfc-0337-43f5-929a-840b19f12a37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EngineFiles\Components">
-      <UniqueIdentifier>{b68428bf-64e6-4c8d-8582-72dd2922beda}</UniqueIdentifier>
-    </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{2591a5bd-6d1a-4c46-b425-df6f2079243a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EngineFiles\CoreFiles">
-      <UniqueIdentifier>{3e4fc7e0-d5af-48ef-8985-b8d590f69e7e}</UniqueIdentifier>
+    <Filter Include="HeaderFiles">
+      <UniqueIdentifier>{3a0e04c1-f419-4257-8071-bca1b968985b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EngineFiles\InputManager">
-      <UniqueIdentifier>{8c6986de-dcb2-4888-ab31-14e716d84cf3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EngineFiles\Observer">
-      <UniqueIdentifier>{5800e764-2773-487f-b7cc-68721504d6f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EngineFiles\CoreFiles\ResourcesManager">
-      <UniqueIdentifier>{72689b40-51f8-4c7b-9c8f-b0ba673509da}</UniqueIdentifier>
+    <Filter Include="Sources Files">
+      <UniqueIdentifier>{3794fcfc-0337-43f5-929a-840b19f12a37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject.h">
-      <Filter>GameFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>EngineFiles\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rdParty\imgui\imgui.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -67,86 +46,121 @@
     <ClInclude Include="..\3rdParty\imgui\imgui_plot.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Minigin.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeSingleton.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>GameFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>GameFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClInclude>
-    <ClInclude Include="IObserver.h">
-      <Filter>EngineFiles\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>EngineFiles\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="GameActorCommands.h">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Music.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundEffect.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ISoundSystem.h">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
+      <Filter>HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="EventQueue.h">
-      <Filter>EngineFiles\CoreFiles</Filter>
+      <Filter>HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="Render.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="FPSCounter.h" />
-    <ClInclude Include="HealthCounter.h" />
-    <ClInclude Include="Rotation.h" />
-    <ClInclude Include="ScoreCounter.h" />
-    <ClInclude Include="TrashTheCache.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Collision.h" />
-    <ClInclude Include="SVGParser.h" />
-    <ClInclude Include="Collider.h" />
+    <ClInclude Include="GUI.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Minigin.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeSingleton.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ISoundSystem.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffect.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActorCommands.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCounter.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthCounter.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUp.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreCounter.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SVGParser.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="TrashTheCache.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
-      <Filter>GameFiles</Filter>
+      <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>GameFiles</Filter>
+      <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -172,66 +186,95 @@
     <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="GUI.cpp">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Minigin.cpp">
-      <Filter>EngineFiles\CoreFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>GameFiles</Filter>
+      <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>GameFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClCompile>
-    <ClCompile Include="IObserver.cpp">
-      <Filter>EngineFiles\Observer</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>EngineFiles\Observer</Filter>
-    </ClCompile>
-    <ClCompile Include="GameActorCommands.cpp">
-      <Filter>EngineFiles\InputManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Music.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundEffect.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
-    </ClCompile>
-    <ClCompile Include="ISoundSystem.cpp">
-      <Filter>EngineFiles\CoreFiles\ResourcesManager</Filter>
+      <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="EventQueue.cpp">
-      <Filter>EngineFiles\CoreFiles</Filter>
+      <Filter>Sources Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="FPSCounter.cpp" />
-    <ClCompile Include="HealthCounter.cpp" />
-    <ClCompile Include="Rotation.cpp" />
-    <ClCompile Include="ScoreCounter.cpp" />
-    <ClCompile Include="TrashTheCache.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="SVGParser.cpp" />
-    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="GUI.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minigin.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ISoundSystem.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffect.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameActorCommands.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IObserver.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCounter.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthCounter.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PickUp.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotation.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreCounter.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SVGParser.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrashTheCache.cpp">
+      <Filter>Sources Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

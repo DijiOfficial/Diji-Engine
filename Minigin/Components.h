@@ -11,5 +11,6 @@
 #include "ScoreCounter.h"
 #include "AI.h"
 #include "Collider.h"
+#include "PickUp.h"
 
 #include <type_traits>

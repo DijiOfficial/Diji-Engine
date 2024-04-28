@@ -236,6 +236,7 @@
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="ISoundSystem.h" />
     <ClInclude Include="Music.h" />
+    <ClInclude Include="PickUp.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rotation.h" />
@@ -278,6 +279,7 @@
     <ClCompile Include="IObserver.cpp" />
     <ClCompile Include="ISoundSystem.cpp" />
     <ClCompile Include="Music.cpp" />
+    <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Rotation.cpp" />

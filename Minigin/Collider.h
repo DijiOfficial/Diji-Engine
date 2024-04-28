@@ -1,12 +1,11 @@
 #pragma once
 #include "Component.h"
-#include "Subject.h"
 #include "Collision.h"
 
 namespace diji 
 {
 	class Transform;
-	class Collider : public Component, public Subject
+	class Collider : public Component
 	{
 	public:
 		Collider(GameObject* ownerPtr, const float width, const float height);
@@ -19,9 +18,10 @@ namespace diji
 		Collider& operator=(Collider&& other) = delete;
 
 		void Update() override;
-		void NotifyWorldCollision();
-		void NotifyCollision();
-		Rectf GetCollisionBox() const { return m_CollisionBox; }
+
+		void HandlePickUp() const;
+		Rectf GetCollisionBox() const { return m_CollisionBox; };
+		const GameObject* GetParent() const { return GetOwner(); };
 	private:
 		Rectf m_CollisionBox;
 		Transform* m_TransformCompPtr;

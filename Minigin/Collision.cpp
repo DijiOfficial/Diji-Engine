@@ -1,5 +1,6 @@
 #include "Collision.h"
 #include "Collider.h"
+#include "PickUp.h"
 
 bool diji::Collision::ParseLevelSVG(const std::string& file, const int yAdjust)
 {
@@ -27,13 +28,21 @@ void diji::Collision::UpdateCollider(const Collider* object, const Rectf& collid
 
 void diji::Collision::IsColliding(Collider* object)
 {
-	for (const auto& pair : m_Colliders)
+	auto collidersCopy = m_Colliders; //copy because collider may be removed
+	for (auto& pair : collidersCopy)
 	{
 		if (pair.first != object)
 		{
 			if (AreRectsColliding(m_Colliders[object], pair.second))
 			{
-				object->NotifyCollision();
+				if (pair.first->GetParent()->HasComponent<PickUp>())
+				{
+					pair.first->HandlePickUp();
+				}
+				else
+				{
+					//object->NotifyCollision(MessageTypes::ENEMY_COLLISION);
+				}
 			}
 		}
 	}
@@ -41,17 +50,11 @@ void diji::Collision::IsColliding(Collider* object)
 
 bool diji::Collision::AreRectsColliding(const Rectf& rect1, const Rectf& rect2) const
 {
-	// If one rectangle is on left side of the other
 	if ((rect1.left + rect1.width) < rect2.left || (rect2.left + rect2.width) < rect1.left)
-	{
-		return false;
-	}
+ 		return false;
 
-	// If one rectangle is under the other
 	if (rect1.bottom > (rect2.bottom + rect2.height) || rect2.bottom > (rect1.bottom + rect1.height))
-	{
 		return false;
-	}
 
 	return true;
 }
