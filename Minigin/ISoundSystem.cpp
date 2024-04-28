@@ -1,5 +1,6 @@
 #include "ISoundSystem.h"
 #include "ResourceManager.h"
+#include "SoundEffect.h"
 
 namespace diji 
 {
@@ -16,6 +17,12 @@ namespace diji
             break;
         case SoundId::PacmanEatFruit:
             soundEffect = ResourceManager::GetInstance().LoadSoundEffect("pacman_eat_fruit.wav");
+            break;
+        case SoundId::PelletPickUp:
+            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_1.wav");
+            break;
+        case SoundId::PelletPickUp2:
+            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_2.wav");
             break;
         default:
             break;

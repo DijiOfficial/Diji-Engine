@@ -1,16 +1,17 @@
 #pragma once
 #include <memory>
 #include <iostream>
-#include "SoundEffect.h"
 
 namespace diji 
 {
 	enum class SoundId
 	{
 		InvalidSoundId = -1,
+		None, 
 		PacmanDie,
 		PacmanEatFruit,
-		test
+		PelletPickUp,
+		PelletPickUp2,
 	};
 
 	class ISoundSystem
@@ -23,7 +24,7 @@ namespace diji
 	class NullSoundSystem final : public ISoundSystem
 	{
 	public:
-		void PlaySound(const SoundId, const int) const override {};
+		void PlaySound(const SoundId, const int) const override { std::cout << "No Sound System available\n"; };
 	};
 
 	class ServiceLocator final
