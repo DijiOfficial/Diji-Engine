@@ -32,7 +32,7 @@ namespace diji
 		void Execute() override;
 	
 	private:
-		const glm::vec2 m_Speed = { 300.f, 300.f }; //sets speed as universal, may change it to get it from the actor
+		const glm::vec2 m_Speed = { 160.f, 160.f }; //sets speed as universal, may change it to get it from the actor
 		Movement m_Movement;
 		Transform* m_TransformComponentPtr;
 		Collider* m_CollisionComponentPtr;
