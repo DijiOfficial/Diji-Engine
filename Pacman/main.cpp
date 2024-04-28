@@ -6,8 +6,9 @@
 
 
 #include "Minigin.h"
-#include "Scene.h"
+//#include "Scene.h"
 #include "Components.h"
+#include "PickUpManager.h"
 //#include "GameObject.h"
 #include "InputManager.h"
 #include "Subject.h"
@@ -19,9 +20,9 @@ void load()
 {
 
 #ifndef NDEBUG
-	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
-#else
 	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLISoundSystem>()));
+#else
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
 #endif
 
 	//auto& ss = ServiceLocator::GetSoundSystem();
@@ -146,18 +147,16 @@ void load()
 void Pacman()
 {
 #ifndef NDEBUG
-	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
-#else
 	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLISoundSystem>()));
+#else
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
 #endif
 
 	auto scene = SceneManager::GetInstance().CreateScene("Pacman");
 	auto& input = InputManager::GetInstance();
-	//auto& subject = ISubject::GetInstance();
 
 	//Background
 	auto background = scene->CreateGameObject();
-	//background->AddComponents<Texture>("BackgroundLevel.png");
 	background->AddComponents<Texture>("BackgroundLevel.png");
 	background->AddComponents<Transform>(0, 78);
 	background->AddComponents<Render>(2);
@@ -167,13 +166,18 @@ void Pacman()
 	auto player = scene->CreateGameObject();
 	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
 	player->GetComponent<Texture>()->SetRotation(true);
-	player->AddComponents<Transform>(210, 439);
+	player->AddComponents<Transform>(214, 439);
 	player->AddComponents<Render>(2);
 	player->AddComponents<HealthCounter>(3);
 	player->AddComponents<ScoreCounter>(0);
-	player->AddComponents<AI>();
 	player->AddComponents<Collider>(15, 15);
+	player->AddComponents<AI>();
 
+	//thought about making it just a temporary object, but what if I want to add more pickups (fruits, but they are recurring items so..)
+	//or reset the level
+	PickUpManager::GetInstance().Initialize(player);
+
+#pragma region Commands
 	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
 	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
 	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
@@ -185,6 +189,11 @@ void Pacman()
 	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
 	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 	input.BindCommand<HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
+#pragma endregion
+
+#pragma region Observers
+
+#pragma endregion
 }
 
 
