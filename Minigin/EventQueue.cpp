@@ -3,9 +3,14 @@
 void diji::SoundEventQueue::AddSoundRequest(SoundId sound, int volume)
 {
 	std::lock_guard<std::mutex> lock(soundMutex_);
+	if (not m_SoundQueue.empty())
+	{
+		auto pendingSound = m_SoundQueue.front();
+		if (sound == pendingSound.first)
+			return;
+	}
+	
 	m_SoundQueue.push({ sound, volume });
-
-	// Notify the waiting thread that a new sound request has been added
 	condition_.notify_one();
 }
 
