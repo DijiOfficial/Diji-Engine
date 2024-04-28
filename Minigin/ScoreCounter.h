@@ -22,9 +22,9 @@ namespace diji
 		ScoreCounter& operator=(const ScoreCounter& other) = delete;
 		ScoreCounter& operator=(ScoreCounter&& other) = delete;
 
-		void Update() override;
+		void Update() override {};
 		void IncreaseScore(PointType& pointType);
-		void IncreaseScore(const int score) { m_Score += score; };
+		void IncreaseScore(const int score);
 
 		int GetScore() const { return m_Score; }
 

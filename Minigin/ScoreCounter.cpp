@@ -24,7 +24,8 @@ void diji::ScoreCounter::IncreaseScore(PointType& pointType)
     Notify(MessageTypes::SCORE_CHANGE);
 }
 
-void diji::ScoreCounter::Update()
+void diji::ScoreCounter::IncreaseScore(const int score)
 {
-
+    m_Score += score;
+	Notify(MessageTypes::SCORE_CHANGE);
 }
