@@ -177,6 +177,31 @@ void Pacman()
 	//or reset the level
 	PickUpManager::GetInstance().Initialize(player);
 
+#pragma region HUD
+	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	auto HUD = scene->CreateGameObject();
+	HUD->AddComponents<Transform>(10, 10);
+
+	auto controllerInfo = scene->CreateGameObject();
+	controllerInfo->AddComponents<Transform>(0, 0);
+	controllerInfo->AddComponents<Text>("Use the D-Pad to move Pacman, X to inflict damage", smallFont);
+	controllerInfo->AddComponents<Render>();
+	controllerInfo->SetParent(HUD, false);
+
+	auto controlsInfo = scene->CreateGameObject();
+	controlsInfo->AddComponents<Transform>(0, 20);
+	controlsInfo->AddComponents<Text>("Use the WASD to move Pacman, C to inflict damage", smallFont);
+	controlsInfo->AddComponents<Render>();
+	controlsInfo->SetParent(HUD, false);
+
+	auto scoreCounter = scene->CreateGameObject();
+	scoreCounter->AddComponents<Transform>(0, 40);
+	scoreCounter->AddComponents<ScoreObserver>("Score: 0", smallFont);
+	scoreCounter->AddComponents<Render>();
+	scoreCounter->SetParent(HUD, false);
+#pragma endregion
+
+
 #pragma region Commands
 	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
 	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
@@ -192,7 +217,7 @@ void Pacman()
 #pragma endregion
 
 #pragma region Observers
-
+	player->GetComponent<ScoreCounter>()->AddObserver(MessageTypes::SCORE_CHANGE, scoreCounter->GetComponent<ScoreObserver>());
 #pragma endregion
 }
 
