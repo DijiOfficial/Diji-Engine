@@ -71,8 +71,8 @@ diji::Minigin::Minigin(const std::string &dataPath)
 		//720,	
 		496,
 		//640,
-		//576,
-		544,
+		576,
+		//544,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
