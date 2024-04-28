@@ -5,6 +5,7 @@
 namespace diji {
 	class Texture;
 	class Transform;
+	class Collider;
 
 	class AI final : public Component, public IObserver
 	{
@@ -18,11 +19,12 @@ namespace diji {
 		AI& operator=(AI&& other) = delete;
 
 		void Update() override;
-		void OnNotify(MessageTypes message, Subject* subject) override;
+		void OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject) override;
 
 	private:
 		Texture* m_TextureCompPtr;
 		Transform* m_TransformCompPtr;
+		Collider* m_ColliderCompPtr;
 		Movement m_PreviousMovement = Movement::Idle;
 	};
 }

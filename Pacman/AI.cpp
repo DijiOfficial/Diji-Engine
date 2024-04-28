@@ -1,14 +1,19 @@
 #include "AI.h"
 #include "Texture.h"
 #include "Transform.h"
+#include "Collider.h"
+#include "PickUp.h"
+#include "ScoreCounter.h"
 
 diji::AI::AI(GameObject* ownerPtr)
 	: Component(ownerPtr)
 {
 	m_TextureCompPtr = ownerPtr->GetComponent<Texture>();
 	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
-	assert(m_TextureCompPtr and "AI Component needs to be initialized before Texture");
-	assert(m_TransformCompPtr and "AI Component needs to be initialized before Transform");
+	m_ColliderCompPtr = ownerPtr->GetComponent<Collider>();
+	assert(m_TextureCompPtr and "AI Component needs to be initialized aftera Texture");
+	assert(m_TransformCompPtr and "AI Component needs to be initialized aftera Transform");
+	assert(m_ColliderCompPtr and "AI Component needs to be initialized aftera Collider");
 }
 
 void diji::AI::Update()
@@ -36,29 +41,25 @@ void diji::AI::Update()
 			break;
 		}
 	}
+
+	Collision::GetInstance().IsColliding(m_ColliderCompPtr);
 }
 
-#include <iostream>
-void diji::AI::OnNotify(MessageTypes message, Subject* subject)
+void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
 {
-	(void)subject;
 	switch (message)
 	{
 	case MessageTypes::LEVEL_COLLISION:
 	{
+		//std::cout << "AI: Level Collision" << std::endl;
+		break;
+	}
+	case MessageTypes::PICKUP_COLLISION:
+	{
+		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
 
-		//HealthCounter* healthCounter = dynamic_cast<HealthCounter*>(subject);
-		//if (not healthCounter)
-		//	return; // throw error instead
-
-		//const int lives = healthCounter->GetHealth();
-		//std::string text = "lives";
-		//if (lives == 1)
-		//{
-		//	text = "life";
-		//}
-		//SetText(std::format("# {}: {}", text, lives));
-		std::cout << "AI: Level Collision" << std::endl;
+		const int value = pickUp->GetValue();
+		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
 		break;
 	}
 	default:
