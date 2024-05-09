@@ -14,7 +14,6 @@
 #include "TimeSingleton.h"
 #include <thread>
 #include "GUI.h"
-#include "EventQueue.h"
 
 SDL_Window* g_window{};
 
@@ -99,9 +98,6 @@ void diji::Minigin::Run(const std::function<void()>& load)
 	load();
 	//Enable vSync
 	SDL_GL_SetSwapInterval(1);
-
-	//start thread sound processor
-	SoundProcessor soundProcessor;
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();

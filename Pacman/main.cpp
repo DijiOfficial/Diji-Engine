@@ -6,14 +6,20 @@
 
 
 #include "Minigin.h"
-//#include "Scene.h"
+#include "Scene.h"
 #include "Components.h"
-#include "PickUpManager.h"
-//#include "GameObject.h"
+#include "PickUpLoader.h"
 #include "InputManager.h"
 #include "Subject.h"
 #include "ISoundSystem.h"
 #include "Collision.h"
+
+#include "CustomCommands.h"
+#include "FPSCounter.h"
+#include "ScoreCounter.h"
+#include "HealthCounter.h"
+#include "AI.h"
+#include "Observers.h"
 
 using namespace diji;
 void load()
@@ -137,10 +143,10 @@ void load()
 #pragma endregion
 
 #pragma region Observers
-	player->GetComponent<HealthCounter>()->AddObserver(MessageTypes::HEALTH_CHANGE, livesCounter->GetComponent<HealthObserver>());
-	player2->GetComponent<HealthCounter>()->AddObserver(MessageTypes::HEALTH_CHANGE, livesCounter2->GetComponent<HealthObserver>());
-	player->GetComponent<ScoreCounter>()->AddObserver(MessageTypes::SCORE_CHANGE, scoreCounter->GetComponent<ScoreObserver>());
-	player2->GetComponent<ScoreCounter>()->AddObserver(MessageTypes::SCORE_CHANGE, scoreCounter2->GetComponent<ScoreObserver>());
+	player->GetComponent<HealthCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<HealthObserver>());
+	player2->GetComponent<HealthCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::HEALTH_CHANGE), livesCounter2->GetComponent<HealthObserver>());
+	player->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<ScoreObserver>());
+	player2->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter2->GetComponent<ScoreObserver>());
 #pragma endregion
 }
 
@@ -154,7 +160,6 @@ void Pacman()
 
 	auto scene = SceneManager::GetInstance().CreateScene("Pacman");
 	auto& input = InputManager::GetInstance();
-
 	//Background
 	auto background = scene->CreateGameObject();
 	background->AddComponents<Texture>("BackgroundLevel.png");
@@ -173,9 +178,8 @@ void Pacman()
 	player->AddComponents<Collider>(15, 15);
 	player->AddComponents<AI>();
 
-	//thought about making it just a temporary object, but what if I want to add more pickups (fruits, but they are recurring items so..)
-	//or reset the level
-	PickUpManager::GetInstance().Initialize(player);
+	PickUpLoader pickUpLoader{ player };
+	//PickUpLoader::GetInstance().Initialize(player);
 
 #pragma region HUD
 	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
@@ -217,7 +221,7 @@ void Pacman()
 #pragma endregion
 
 #pragma region Observers
-	player->GetComponent<ScoreCounter>()->AddObserver(MessageTypes::SCORE_CHANGE, scoreCounter->GetComponent<ScoreObserver>());
+	player->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<ScoreObserver>());
 #pragma endregion
 }
 

@@ -82,6 +82,14 @@
     <Import Project="..\vld.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -192,12 +200,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="CustomCommands.cpp" />
+    <ClCompile Include="FPSCounter.cpp" />
+    <ClCompile Include="HealthCounter.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PickUpManager.cpp" />
+    <ClCompile Include="Observers.cpp" />
+    <ClCompile Include="PickUp.cpp" />
+    <ClCompile Include="PickUpLoader.cpp" />
+    <ClCompile Include="ScoreCounter.cpp" />
+    <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
-    <ClInclude Include="PickUpManager.h" />
+    <ClInclude Include="CustomCommands.h" />
+    <ClInclude Include="FPSCounter.h" />
+    <ClInclude Include="HealthCounter.h" />
+    <ClInclude Include="Observers.h" />
+    <ClInclude Include="PickUp.h" />
+    <ClInclude Include="PickUpLoader.h" />
+    <ClInclude Include="ScoreCounter.h" />
+    <ClInclude Include="TrashTheCache.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

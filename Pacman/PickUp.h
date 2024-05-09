@@ -1,14 +1,16 @@
 #pragma once
 #include "Subject.h"
+#include "Component.h"
 
 namespace diji
 {
 	enum class SoundId;
 	class GameObject;
+	class Collider;
 	class PickUp final : public Component, public Subject
 	{
 	public:
-		PickUp(GameObject* ownerPtr, const int value);
+		PickUp(GameObject* ownerPtr, GameObject* player, const int value);
 		~PickUp() override = default;
 
 		PickUp(const PickUp& other) = delete;
@@ -23,6 +25,8 @@ namespace diji
 	private:
 		const int m_Value;
 		SoundId m_SoundId;
+		Collider* m_PlayerColliderPtr;
+		Collider* m_OwnerColliderPtr;
 	};
 }
 

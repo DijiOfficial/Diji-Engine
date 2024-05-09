@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
 #include <iostream>
-
+#include <queue>
+#include <mutex>
 namespace diji 
 {
 	enum class SoundId
@@ -18,13 +19,13 @@ namespace diji
 	{
 	public:
 		virtual ~ISoundSystem() = default;
-		virtual void PlaySound(const SoundId sound, const int volume = -1) const = 0;
+		virtual void AddSoundRequest(SoundId sound, int volume) = 0;
 	};
 
 	class NullSoundSystem final : public ISoundSystem
 	{
 	public:
-		void PlaySound(const SoundId, const int) const override { std::cout << "No Sound System available\n"; };
+		void AddSoundRequest(SoundId sound, int volume) override { (void)sound; (void)volume; std::cout << "No Sound System available\n"; };
 	};
 
 	class ServiceLocator final
@@ -33,7 +34,7 @@ namespace diji
 		static ISoundSystem& GetSoundSystem() { return *_ss_instance; };
 		static void RegisterSoundSystem(std::unique_ptr<ISoundSystem>&& ss) 
 		{ 
-			_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss);
+			_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss); //assign null system instead or nothing since its alread null osund
 		};
 
 	private:
@@ -41,9 +42,27 @@ namespace diji
 	};
 
 	class SDLISoundSystem final : public ISoundSystem
-	{
+	{		
 	public:
-		virtual void PlaySound(const SoundId sound, const int volume) const override;
+		SDLISoundSystem() { Start(); };
+		~SDLISoundSystem() { Stop(); };
+		void AddSoundRequest(SoundId sound, int volume) override;
+		
+	private:
+		void PlaySound(const SoundId sound, const int volume) const;
+		std::pair<SoundId, int> GetNextSoundRequest();
+		
+		void Stop();
+		void Start();
+		void ProcessSounds();
+
+		std::jthread m_SoundThread;
+		std::queue<std::pair<SoundId, int>> m_SoundQueue;
+		std::mutex soundMutex_;
+		bool m_IsRunning = false;
+		// Allows threads to synchronize their execution based on certain conditions. 
+		// It provides a way for one thread to notify other threads when a particular condition becomes true, allowing them to proceed with their execution
+		std::condition_variable condition_;
 	};
 
 	class LoggingSoundSystem final : public ISoundSystem
@@ -52,12 +71,11 @@ namespace diji
 		explicit LoggingSoundSystem(std::unique_ptr<ISoundSystem>&& ss) : _real_ss{ std::move(ss) } {};
 		virtual ~LoggingSoundSystem() override = default;
 
-		void PlaySound(const SoundId id, const int volume) const override
-		{
-			_real_ss->PlaySound(id, volume);
-			std::cout << "Playing sound " << static_cast<int>(id) << " at volume " << volume << std::endl;
+		void AddSoundRequest(SoundId sound, int volume) override 
+		{ 
+			_real_ss->AddSoundRequest(sound, volume);
+			std::cout << "Adding sound request " << static_cast<int>(sound) << " at volume " << volume << std::endl;
 		};
-
 	private:
 		std::unique_ptr<ISoundSystem> _real_ss;
 	};

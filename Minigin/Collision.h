@@ -23,7 +23,7 @@ namespace diji
 
 		void UpdateCollider(const Collider* object, const Rectf& collider);
 
-		void IsColliding(Collider* object);
+		std::vector<const Collider*> IsColliding(Collider* object);
 		bool IsCollidingWithWorld(Rectf& shape);
 
 	private:

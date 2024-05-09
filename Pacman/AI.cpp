@@ -5,6 +5,8 @@
 #include "PickUp.h"
 #include "ScoreCounter.h"
 
+#include "Observers.h"
+
 diji::AI::AI(GameObject* ownerPtr)
 	: Component(ownerPtr)
 {
@@ -41,20 +43,19 @@ void diji::AI::Update()
 			break;
 		}
 	}
-
-	Collision::GetInstance().IsColliding(m_ColliderCompPtr);
 }
 
 void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
 {
-	switch (message)
+	auto msg = static_cast<MessageTypesDerived>(message);
+	switch (msg)
 	{
-	case MessageTypes::LEVEL_COLLISION:
+	case MessageTypesDerived::LEVEL_COLLISION:
 	{
 		//std::cout << "AI: Level Collision" << std::endl;
 		break;
 	}
-	case MessageTypes::PICKUP_COLLISION:
+	case MessageTypesDerived::PICKUP_COLLISION:
 	{
 		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
 

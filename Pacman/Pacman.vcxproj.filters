@@ -13,23 +13,89 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{0116e03b-3a93-4939-a69b-5f90ac5246ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{a1770a0e-1330-47c1-827d-be6d5030de1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Inputs">
+      <UniqueIdentifier>{7258c8b3-acc3-4c5f-9da8-f8db6c21a860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Inputs">
+      <UniqueIdentifier>{05b977a5-8455-4b61-96a8-927f7a11bdf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Behaviors">
+      <UniqueIdentifier>{69ce2f23-7f6f-48c5-9d68-67910fbe9f29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Behaviors">
+      <UniqueIdentifier>{ed3019f8-24d0-4cde-8487-e3a8442480f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Observers &amp; Subjects">
+      <UniqueIdentifier>{cf120f81-66db-46bc-a779-b6cf133e1093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Observers &amp; Subjects">
+      <UniqueIdentifier>{45dec983-3f55-41ea-82e2-823ef1d00fd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AI.cpp">
+    <ClCompile Include="PickUpLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PickUpManager.cpp">
+    <ClCompile Include="FPSCounter.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthCounter.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomCommands.cpp">
+      <Filter>Source Files\Inputs</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Source Files\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Observers.cpp">
+      <Filter>Source Files\Observers &amp; Subjects</Filter>
+    </ClCompile>
+    <ClCompile Include="PickUp.cpp">
+      <Filter>Source Files\Observers &amp; Subjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreCounter.cpp">
+      <Filter>Source Files\Observers &amp; Subjects</Filter>
+    </ClCompile>
+    <ClCompile Include="TrashTheCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AI.h">
+    <ClInclude Include="PickUpLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PickUpManager.h">
+    <ClInclude Include="FPSCounter.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthCounter.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomCommands.h">
+      <Filter>Header Files\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Header Files\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Observers.h">
+      <Filter>Header Files\Observers &amp; Subjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUp.h">
+      <Filter>Header Files\Observers &amp; Subjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreCounter.h">
+      <Filter>Header Files\Observers &amp; Subjects</Filter>
+    </ClInclude>
+    <ClInclude Include="TrashTheCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

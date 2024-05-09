@@ -1,7 +1,7 @@
 #include "Collision.h"
 #include "Collider.h"
-#include "PickUp.h"
 
+#include "GameObject.h"
 bool diji::Collision::ParseLevelSVG(const std::string& file, const int yAdjust)
 {
 	return SVGParser::GetVerticesFromSvgFile(file, m_LevelCollider, yAdjust);
@@ -26,26 +26,20 @@ void diji::Collision::UpdateCollider(const Collider* object, const Rectf& collid
 	m_Colliders[object] = collider;
 }
 
-void diji::Collision::IsColliding(Collider* object)
+std::vector<const diji::Collider*> diji::Collision::IsColliding(Collider* object)
 {
-	auto collidersCopy = m_Colliders; //copy because collider may be removed
-	for (auto& pair : collidersCopy)
+	std::vector<const Collider*> collidingObjects;
+	for (auto& pair : m_Colliders)
 	{
 		if (pair.first != object)
 		{
 			if (AreRectsColliding(m_Colliders[object], pair.second))
 			{
-				if (pair.first->GetParent()->HasComponent<PickUp>())
-				{
-					pair.first->HandlePickUp();
-				}
-				else
-				{
-					//object->NotifyCollision(MessageTypes::ENEMY_COLLISION);
-				}
+				collidingObjects.push_back(pair.first);
 			}
 		}
 	}
+	return collidingObjects;
 }
 
 bool diji::Collision::AreRectsColliding(const Rectf& rect1, const Rectf& rect2) const

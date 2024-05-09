@@ -52,9 +52,6 @@
     <ClInclude Include="Components.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="EventQueue.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
     <ClInclude Include="GUI.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
@@ -71,9 +68,6 @@
       <Filter>HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="ISoundSystem.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Music.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
@@ -118,15 +112,6 @@
     <ClInclude Include="Collision.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="FPSCounter.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthCounter.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="PickUp.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
     <ClInclude Include="Render.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
@@ -134,9 +119,6 @@
       <Filter>HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="Rotation.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreCounter.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="SVGParser.h">
@@ -149,9 +131,6 @@
       <Filter>HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="TrashTheCache.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
   </ItemGroup>
@@ -192,9 +171,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventQueue.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
@@ -205,9 +181,6 @@
       <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="ISoundSystem.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Music.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
@@ -222,13 +195,7 @@
     <ClCompile Include="Controller.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameActorCommands.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IObserver.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="Subject.cpp">
@@ -240,15 +207,6 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
-    <ClCompile Include="FPSCounter.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthCounter.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PickUp.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
     <ClCompile Include="Render.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
@@ -256,9 +214,6 @@
       <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="Rotation.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreCounter.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="SVGParser.cpp">
@@ -271,9 +226,6 @@
       <Filter>Sources Files</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TrashTheCache.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,5 @@
 #include "Collider.h"
 #include "Transform.h"
-#include "PickUp.h"
-#include "Render.h"
 
 diji::Collider::Collider(GameObject* ownerPtr, const int width, const int height)
 	: Component(ownerPtr)
@@ -38,11 +36,4 @@ void diji::Collider::Update()
 	m_CollisionBox.bottom = pos.y;
 
 	Collision::GetInstance().UpdateCollider(this, m_CollisionBox);
-}
-
-
-void diji::Collider::HandlePickUp() const
-{
-	GetOwner()->GetComponent<PickUp>()->HandleCollision();
-	GetOwner()->GetComponent<Render>()->DisableRender();
 }

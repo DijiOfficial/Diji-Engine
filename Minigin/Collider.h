@@ -19,7 +19,6 @@ namespace diji
 
 		void Update() override;
 
-		void HandlePickUp() const;
 		Rectf GetCollisionBox() const { return m_CollisionBox; };
 		const GameObject* GetParent() const { return GetOwner(); };
 	private:
