@@ -19,6 +19,7 @@
 #include "ScoreCounter.h"
 #include "HealthCounter.h"
 #include "AI.h"
+#include "PinkAI.h"
 #include "Observers.h"
 
 using namespace diji;
@@ -180,6 +181,14 @@ void Pacman()
 
 	PickUpLoader pickUpLoader{ player };
 	//PickUpLoader::GetInstance().Initialize(player);
+
+	auto Pinky = scene->CreateGameObject();
+	Pinky->AddComponents<Texture>("RedGhost.png", 14, 14);
+	Pinky->AddComponents<Transform>(214, 300);
+	Pinky->AddComponents<Render>(2);
+	Pinky->AddComponents<Collider>(15, 15);
+	Pinky->AddComponents<PinkAI>(player);
+
 
 #pragma region HUD
 	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);

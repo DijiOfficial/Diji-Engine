@@ -68,7 +68,7 @@ diji::Minigin::Minigin(const std::string &dataPath)
 		
 		//1280,
 		//720,	
-		496,
+		452,
 		//640,
 		576,
 		//544,

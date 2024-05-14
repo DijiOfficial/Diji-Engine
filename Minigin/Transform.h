@@ -27,7 +27,7 @@ namespace diji
 		void SetPosition(const float x, const float y, const float z);
 		void SetPosition(const float x, const float y);
 		void SetPosition(glm::vec3 pos) { m_Position = pos; };
-		void SetMovement(Movement& movement) { m_CurrentMovement = movement; };
+		void SetMovement(const Movement& movement) { m_CurrentMovement = movement; };
 		Movement GetMovement() const { return m_CurrentMovement; };
 
 	private:

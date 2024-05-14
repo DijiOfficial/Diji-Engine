@@ -5,6 +5,7 @@
 
 #include "Observers.h"
 #include "Render.h"
+
 diji::PickUp::PickUp(GameObject* ownerPtr, GameObject* player, const int value)
 	: Component(ownerPtr)
 	, m_Value{ value }
@@ -31,18 +32,26 @@ void diji::PickUp::Update()
 	}
 }
 
+#include <iostream>
 void diji::PickUp::HandleCollision()
 {
 	const auto& owner = GetOwner();
 	owner->GetComponent<Render>()->DisableRender();
 	Collision::GetInstance().RemoveCollider(owner->GetComponent<Collider>());
-	
-	//if (ServiceLocator::GetSoundSystem().IsFirstPickUp())
-	//	SoundEventQueue::GetInstance().AddSoundRequest(SoundId::PelletPickUp, -1);
+	ServiceLocator::GetSoundSystem().AddSoundRequest(SoundId::PelletPickUp, -1);
+
+	//if (m_PickUpLoaderPtr->IsFirstPickUp())
+	//{
+	//	ServiceLocator::GetSoundSystem().AddSoundRequest(SoundId::PelletPickUp, -1);
+	//	std::cout << "PelletPickUp\n";
+	//}
 	//else
-		ServiceLocator::GetSoundSystem().AddSoundRequest(SoundId::PelletPickUp2, -1);
+	//{
+	//	ServiceLocator::GetSoundSystem().AddSoundRequest(SoundId::PelletPickUp2, -1);
+	//	std::cout << "PelletPickUp2\n";
+	//}
 	
-	//SoundEventQueue::GetInstance().SwitchPickUpState();
+	//m_PickUpLoaderPtr->SwitchPickUpState();
 
 	Notify(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION));
 }

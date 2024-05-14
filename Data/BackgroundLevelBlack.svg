@@ -7,8 +7,8 @@
    width="226"
    height="248"
    viewBox="0 0 226 248"
-   sodipodi:docname="test.svg"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="BackgroundLevelBlack.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -26,13 +26,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="3.1330645"
-     inkscape:cx="113.14801"
-     inkscape:cy="123.52124"
-     inkscape:window-width="2560"
-     inkscape:window-height="1377"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:zoom="4.4308223"
+     inkscape:cx="71.882819"
+     inkscape:cy="108.89626"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:current-layer="g1" />
   <g
@@ -86,9 +86,9 @@
        d="M 0,108 V 0 H 226 V 108 H 181 V 76 h 40 V 4 H 117 v 32 h -8 V 4 H 5 v 72 h 40 v 32 z"
        id="path13" />
     <path
+       id="path12"
        style="fill:#000000"
-       d="m 85,132 v -32 h 56 v 32 z"
-       id="path12" />
+       d="M 85 100 L 85 132 L 141 132 L 141 100 L 85 100 z M 88.773438 104 L 136.77344 104 L 136.77344 128 L 88.773438 128 L 88.773438 104 z " />
     <path
        style="fill:#000000"
        d="m 157,156 v -32 h 8 v 32 z"

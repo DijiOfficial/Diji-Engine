@@ -207,6 +207,7 @@
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="PickUpLoader.cpp" />
+    <ClCompile Include="PinkAI.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
@@ -218,6 +219,7 @@
     <ClInclude Include="Observers.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpLoader.h" />
+    <ClInclude Include="PinkAI.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="TrashTheCache.h" />
   </ItemGroup>
