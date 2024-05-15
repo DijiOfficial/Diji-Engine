@@ -6,7 +6,8 @@
 #include "ScoreCounter.h"
 
 #include "Observers.h"
-
+#include "TimeSingleton.h"
+#include <iostream>
 diji::AI::AI(GameObject* ownerPtr)
 	: Component(ownerPtr)
 {
@@ -16,33 +17,67 @@ diji::AI::AI(GameObject* ownerPtr)
 	assert(m_TextureCompPtr and "AI Component needs to be initialized aftera Texture");
 	assert(m_TransformCompPtr and "AI Component needs to be initialized aftera Transform");
 	assert(m_ColliderCompPtr and "AI Component needs to be initialized aftera Collider");
+
+	m_TransformCompPtr->SetMovement(m_PreviousMovement);
+	//m_CurrentStateUPtr = std::make_unique<Idle>();
+	//m_CurrentStateUPtr->OnEnter();
 }
 
 void diji::AI::Update()
 {
+	//auto state = m_CurrentStateUPtr->Execute(m_TransformCompPtr, m_ColliderCompPtr);
+	//if (state)
+	//{
+	//	m_CurrentStateUPtr->OnExit();
+	//	m_CurrentStateUPtr = std::move(state);
+	//	m_CurrentStateUPtr->OnEnter();
+	//}
+	//const auto& currentMovement = m_TransformCompPtr->GetMovement();
+	//const auto& shape = CalculateNewPosition(currentMovement);
+}
+
+void diji::AI::FixedUpdate()
+{
 	const auto& currentMovement = m_TransformCompPtr->GetMovement();
-	if (m_PreviousMovement != currentMovement)
+
+	const auto& shape = CalculateNewPosition(currentMovement);
+	if (not Collision::GetInstance().IsCollidingWithWorld(shape))
 	{
-		m_PreviousMovement = currentMovement;
-		switch (currentMovement)
+		m_TransformCompPtr->SetPosition(shape.left, shape.bottom);
+		if (m_PreviousMovement != currentMovement)
 		{
-		case Movement::Right:
-			m_TextureCompPtr->SetRotationAngle(0.f);
-			break;
-		case Movement::Down:
-			m_TextureCompPtr->SetRotationAngle(90.f);
-			break;
-		case Movement::Left:
-			m_TextureCompPtr->SetRotationAngle(180.f);
-			break;
-		case Movement::Up:
-			m_TextureCompPtr->SetRotationAngle(270.f);
-			break;
-		case Movement::Idle:
-		default:
-			break;
+			if (m_PreviousMovement == Movement::Idle)
+				m_TextureCompPtr->ResumeAnimation();
+			if (currentMovement == Movement::Idle)
+				m_TextureCompPtr->PauseAnimation();
+			else
+				m_TextureCompPtr->SetRotationAngle(static_cast<int>(currentMovement) * 90.f);
+
+			m_PreviousMovement = currentMovement;
 		}
 	}
+	else
+	{
+		const auto& oldShape = CalculateNewPosition(m_PreviousMovement);
+
+		if (not Collision::GetInstance().IsCollidingWithWorld(oldShape))
+			m_TransformCompPtr->SetPosition(oldShape.left, oldShape.bottom);
+		else
+		{
+			m_TransformCompPtr->SetMovement(Movement::Idle);
+			// Smooth out collision (testing)
+			//SmoothOutCollision(shape, m_PreviousMovement);
+		}
+	}
+
+	// late update stuff
+	if (currentMovement == Movement::Left)
+		if (shape.left < 0 - shape.width)
+			m_TransformCompPtr->SetPosition(TOTAL_WIDTH, shape.bottom);
+	if (currentMovement == Movement::Right)
+		if (shape.left > TOTAL_WIDTH)
+			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
+
 }
 
 void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
@@ -52,7 +87,7 @@ void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
 	{
 	case MessageTypesDerived::LEVEL_COLLISION:
 	{
-		//std::cout << "AI: Level Collision" << std::endl;
+		std::cout << "AI: Level Collision" << std::endl;
 		break;
 	}
 	case MessageTypesDerived::PICKUP_COLLISION:
@@ -66,4 +101,86 @@ void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
 	default:
 		break;
 	}
+}
+
+const diji::Rectf diji::AI::CalculateNewPosition(Movement movement)
+{
+	auto shape = m_ColliderCompPtr->GetCollisionBox();
+	//const auto& deltaTime = TimeSingleton::GetInstance().GetDeltaTime();
+	switch (movement)
+	{
+	case Movement::Up:
+		//shape.bottom -= m_Speed.y * deltaTime;
+		//--shape.bottom;
+		shape.bottom -= 2;
+		break;
+	case Movement::Down:
+		//shape.bottom += m_Speed.y * deltaTime;
+		//++shape.bottom;
+		shape.bottom += 2;
+		break;
+	case Movement::Left:
+		//shape.left -= m_Speed.x * deltaTime;
+		//--shape.left;
+		shape.left -= 2;
+		break;
+	case Movement::Right:
+		//shape.left += m_Speed.x * deltaTime;
+		//++shape.left;
+		shape.left += 2;
+		break;
+	}
+
+	if (Collision::GetInstance().IsCollidingWithWorld(shape))
+	{
+		switch (movement)
+		{
+		case Movement::Up:
+			++shape.bottom;
+			break;
+		case Movement::Down:
+			--shape.bottom;
+			break;
+		case Movement::Left:
+			++shape.left;
+			break;
+		case Movement::Right:
+			--shape.left;
+			break;
+		}
+	}
+
+	return shape;
+}
+
+void diji::AI::SmoothOutCollision(Rectf& shape, const Movement& movement)
+{
+	float x = std::floor(shape.left);
+	float y = std::floor(shape.bottom);
+	while (true)
+	{
+		Rectf tempShape{ x, y, shape.width, shape.height };
+		if (Collision::GetInstance().IsCollidingWithWorld(tempShape))
+			break;
+		
+		switch (movement)
+		{
+		case Movement::Up:
+			--y;
+			break;
+		case Movement::Down:
+			++y;
+			break;
+		case Movement::Left:
+			--x;
+			break;
+		case Movement::Right:
+			++x;
+			break;
+		}
+	}
+
+	shape.left = x;
+	shape.bottom = y;
+	//m_TransformCompPtr->SetPosition(x, y);
 }
