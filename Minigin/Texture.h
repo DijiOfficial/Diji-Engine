@@ -18,6 +18,7 @@ namespace diji
 		Texture& operator=(Texture&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 
 		void SetTexture(const std::string& filename);
 		Texture2D* GetTexture() const { return m_TexturePtr; };
@@ -28,6 +29,8 @@ namespace diji
 		void SetNrOfFrames(int nrOfFrames) { m_NrOfFrames = nrOfFrames; }
 		void SetRotation(bool canRotate) { m_CanRotate = canRotate; }
 		void SetRotationAngle(float angle) { m_RotationAngle = angle; }
+		void PauseAnimation() { m_IsAnimationPaused = true; }
+		void ResumeAnimation() { m_IsAnimationPaused = false; }
 
 		bool IsAnimated() const { return m_IsAnimated; }
 		int GetWidth() const { return m_Width; }
@@ -47,6 +50,7 @@ namespace diji
 
 		bool m_IsAnimated;
 		bool m_CanRotate = false;
+		bool m_IsAnimationPaused = false;
 	};
 }
 

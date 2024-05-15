@@ -53,7 +53,7 @@ void diji::Texture::SetTexture(const std::string& filename)
 
 void diji::Texture::Update()
 {
-	if (not m_IsAnimated)
+	if (not m_IsAnimated or m_IsAnimationPaused)
 		return;
 
 	m_FrameTime += TimeSingleton::GetInstance().GetDeltaTime();
