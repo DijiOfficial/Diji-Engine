@@ -23,6 +23,7 @@ namespace diji
 		Render& operator=(Render&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 		void RenderFrame() const;
 		void UpdateText();
 		void DisableRender() { m_Render = false; }

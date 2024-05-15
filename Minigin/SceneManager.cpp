@@ -16,6 +16,14 @@ void diji::SceneManager::Update()
 	}
 }
 
+void diji::SceneManager::FixedUpdate()
+{
+	for (auto& scene : m_ScenesUPtrVec)
+	{
+		scene->FixedUpdate();
+	}
+}
+
 void diji::SceneManager::Render()
 {
 	for (const auto& scene : m_ScenesUPtrVec)

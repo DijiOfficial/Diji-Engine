@@ -27,6 +27,7 @@ namespace diji
 		TrashTheCache& operator=(TrashTheCache&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 				
 
 	private:

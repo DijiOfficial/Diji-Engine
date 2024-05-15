@@ -14,6 +14,14 @@ void diji::GameObject::Update()
     }
     if (m_TransformCompPtr)
         UpdateWorldPosition();
+}
+
+void diji::GameObject::FixedUpdate()
+{
+    for (const auto& component : m_ComponentsPtrVec)
+    {
+		component->FixedUpdate();
+	}
 };
 
 void diji::GameObject::Render() const

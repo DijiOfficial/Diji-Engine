@@ -19,6 +19,7 @@ namespace diji
 		Component& operator=(Component&& other) = delete;
 
 		virtual void Update() = 0;
+		virtual void FixedUpdate() = 0;
 
 	protected:
 		explicit Component(GameObject* ownerPtr) : m_OwnerPtr{ ownerPtr } {}

@@ -38,6 +38,14 @@ void diji::Scene::Update()
 	}
 }
 
+void diji::Scene::FixedUpdate()
+{
+	for (auto& object : m_ObjectsUPtrVec)
+	{
+		object->FixedUpdate();
+	}
+}
+
 void diji::Scene::Render() const
 {
 	for (const auto& object : m_ObjectsUPtrVec)

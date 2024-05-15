@@ -179,6 +179,8 @@ void Pacman()
 	player->AddComponents<Collider>(15, 15);
 	player->AddComponents<AI>();
 
+	//todo: pickup need a counter to count pellet pickup
+
 	PickUpLoader pickUpLoader{ player };
 	//PickUpLoader::GetInstance().Initialize(player);
 

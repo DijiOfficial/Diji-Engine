@@ -19,6 +19,7 @@ namespace diji
 		Text& operator=(Text&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 
 		void SetText(const std::string& text);
 		Texture2D* GetTexture() const { return m_TexturePtr.get(); };

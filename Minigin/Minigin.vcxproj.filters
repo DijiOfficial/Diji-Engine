@@ -14,6 +14,48 @@
     <Filter Include="Sources Files">
       <UniqueIdentifier>{3794fcfc-0337-43f5-929a-840b19f12a37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HeaderFiles\Collision">
+      <UniqueIdentifier>{42736e4f-28c4-40ba-a836-24071a13c04b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\RAII Wrappers">
+      <UniqueIdentifier>{78fd39e7-bb3d-49ec-be11-803b73d7c5cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Inputs">
+      <UniqueIdentifier>{ec829de5-284f-4d42-921d-51eec6d072bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Singletons">
+      <UniqueIdentifier>{80023aed-a074-4277-93fc-394e3c4e0c86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Components">
+      <UniqueIdentifier>{467e89b9-469d-4451-a2a8-9332e30e1986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\CoreFiles">
+      <UniqueIdentifier>{85de02a4-bb11-4885-9077-d783d5a3a925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HeaderFiles\Interfaces">
+      <UniqueIdentifier>{f77e128a-4abc-4e72-80b0-715be2644075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\Collision">
+      <UniqueIdentifier>{d809b391-82b5-41c3-ac98-8416b208e02c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\Inputs">
+      <UniqueIdentifier>{9cd36104-009e-4f84-9d69-6c01b5500cad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\Components">
+      <UniqueIdentifier>{d083bff4-feaf-437c-aeed-13df1b65f7dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\CoreFiles">
+      <UniqueIdentifier>{b79b54e0-2631-4ade-b3bb-81d5633460de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\Interfaces">
+      <UniqueIdentifier>{80663b26-26e5-458c-b6d8-cc0cd4bf78a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\RAII Wrappers">
+      <UniqueIdentifier>{963eaee6-7444-40e6-84aa-f4c964291ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources Files\Singletons">
+      <UniqueIdentifier>{8d6408fa-c244-45e1-b3f1-d104d47e2acb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rdParty\imgui\imgui.h">
@@ -46,101 +88,95 @@
     <ClInclude Include="..\3rdParty\imgui\imgui_plot.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Components.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Minigin.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeSingleton.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="ISoundSystem.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundEffect.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="GameActorCommands.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="IObserver.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Render.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Rotation.h">
-      <Filter>HeaderFiles</Filter>
-    </ClInclude>
     <ClInclude Include="SVGParser.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>HeaderFiles\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>HeaderFiles\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>HeaderFiles\RAII Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>HeaderFiles\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>HeaderFiles\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActorCommands.h">
+      <Filter>HeaderFiles\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>HeaderFiles\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>HeaderFiles\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>HeaderFiles\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>HeaderFiles\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffect.h">
+      <Filter>HeaderFiles\RAII Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeSingleton.h">
+      <Filter>HeaderFiles\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>HeaderFiles\RAII Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>HeaderFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>HeaderFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>HeaderFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.h">
+      <Filter>HeaderFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>HeaderFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>HeaderFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Minigin.h">
+      <Filter>HeaderFiles\CoreFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>HeaderFiles\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>HeaderFiles\CoreFiles</Filter>
+    </ClInclude>
     <ClInclude Include="Text.h">
-      <Filter>HeaderFiles</Filter>
+      <Filter>HeaderFiles\Components</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>HeaderFiles</Filter>
+      <Filter>HeaderFiles\Components</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>HeaderFiles</Filter>
+      <Filter>HeaderFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IObserver.h">
+      <Filter>HeaderFiles\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ISoundSystem.h">
+      <Filter>HeaderFiles\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>HeaderFiles\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -165,68 +201,74 @@
     <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Minigin.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ISoundSystem.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundEffect.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Render.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rotation.cpp">
-      <Filter>Sources Files</Filter>
-    </ClCompile>
     <ClCompile Include="SVGParser.cpp">
       <Filter>Sources Files</Filter>
     </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Sources Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Sources Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Sources Files\Inputs</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Sources Files\RAII Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources Files\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>Sources Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Sources Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="ISoundSystem.cpp">
+      <Filter>Sources Files\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Sources Files\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Minigin.cpp">
+      <Filter>Sources Files\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>Sources Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Sources Files\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Sources Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotation.cpp">
+      <Filter>Sources Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Sources Files\CoreFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Sources Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffect.cpp">
+      <Filter>Sources Files\RAII Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Sources Files\Interfaces</Filter>
+    </ClCompile>
     <ClCompile Include="Text.cpp">
-      <Filter>Sources Files</Filter>
+      <Filter>Sources Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Sources Files</Filter>
+      <Filter>Sources Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Sources Files\RAII Wrappers</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Sources Files</Filter>
+      <Filter>Sources Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

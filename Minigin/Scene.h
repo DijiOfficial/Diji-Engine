@@ -16,6 +16,7 @@ namespace diji
 		Scene& operator=(Scene&& other) = delete;
 
 		void Update();
+		void FixedUpdate();
 		void Render() const;
 		
 		GameObject* CreateGameObject();

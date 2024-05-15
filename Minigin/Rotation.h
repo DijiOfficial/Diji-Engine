@@ -31,6 +31,7 @@ namespace diji
         float GetDistanceFromCenter() const { return m_DistanceFromCenter; }
 
         void Update() override;
+        void FixedUpdate() override {};
 
     private:
         GameObject* m_OwnerPtr{};

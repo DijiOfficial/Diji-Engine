@@ -18,6 +18,7 @@ namespace diji
 		Collider& operator=(Collider&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 
 		Rectf GetCollisionBox() const { return m_CollisionBox; };
 		const GameObject* GetParent() const { return GetOwner(); };

@@ -45,6 +45,7 @@ namespace diji
 		PinkAI& operator=(PinkAI&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 
 	private:
 		Transform* m_TransformCompPtr;

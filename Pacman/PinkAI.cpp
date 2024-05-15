@@ -23,6 +23,7 @@ diji::PinkAI::PinkAI(GameObject* ownerPtr, GameObject* player)
 
 void diji::PinkAI::Update()
 {
+	//todo: move this to fixed update
 	auto state = m_CurrentStateUPtr->Execute(m_TransformCompPtr, m_ColliderCompPtr, m_PlayerColliderPtr);
 
 	if (state)

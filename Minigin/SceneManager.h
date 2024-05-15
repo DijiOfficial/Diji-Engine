@@ -16,6 +16,7 @@ namespace diji
 		Scene* CreateScene(const std::string& name);
 
 		void Update();
+		void FixedUpdate();
 		void Render();
 
 		Scene* GetScene(std::string& name) const;

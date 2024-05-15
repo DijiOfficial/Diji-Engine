@@ -18,6 +18,7 @@ namespace diji
 		void Run(const std::function<void()>& load);
 
 	private:
-		const float FIXED_TIME_STEP{ 20.f };
+		static constexpr float FIXED_TIME_STEP{ 1 / 75.75f };
+		//static constexpr float FIXED_TIME_STEP{ 1 / 151.5f };
 	};
 }

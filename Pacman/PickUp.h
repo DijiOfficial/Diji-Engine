@@ -19,6 +19,7 @@ namespace diji
 		PickUp& operator=(PickUp&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 		int GetValue() const { return m_Value; };
 		void HandleCollision();
 

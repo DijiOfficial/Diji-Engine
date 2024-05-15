@@ -23,6 +23,7 @@ namespace diji
 		ScoreCounter& operator=(ScoreCounter&& other) = delete;
 
 		void Update() override {};
+		void FixedUpdate() override {};
 		void IncreaseScore(PointType& pointType);
 		void IncreaseScore(const int score);
 

@@ -22,6 +22,7 @@ namespace diji
 		Transform& operator=(Transform&& other) = delete;
 
 		void Update() override { };
+		void FixedUpdate() override { };
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const float x, const float y, const float z);

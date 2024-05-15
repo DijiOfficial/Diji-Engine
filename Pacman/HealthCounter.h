@@ -18,6 +18,7 @@ namespace diji
 		HealthCounter& operator=(HealthCounter&& other) = delete;
 
 		void Update() override;
+		void FixedUpdate() override {};
 		void DecreaseHealth();
 
 		int GetHealth() const { return m_Health; }
