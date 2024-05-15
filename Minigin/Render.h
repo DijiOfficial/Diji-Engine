@@ -27,6 +27,9 @@ namespace diji
 		void RenderFrame() const;
 		void UpdateText();
 		void DisableRender() { m_Render = false; }
+		void EnableHitbox() { m_DisplayHitbox = true; }
+		void DisableHitbox() { m_DisplayHitbox = false; }
+		void SetRect(const Rectf& rect) { tempRect = rect; }
 
 	private:
 		Texture2D* m_TexturePtr{};
@@ -36,6 +39,8 @@ namespace diji
 
 		int m_Scale{ 1 };
 		bool m_Render{ true };
+		bool m_DisplayHitbox{ false };
+		Rectf tempRect{};
 
 		void DrawPolygon(const std::vector<glm::vec2>& vertices, bool closed = true, float lineWidth = 1.0f) const
 		{

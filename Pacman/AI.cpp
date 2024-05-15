@@ -8,6 +8,7 @@
 #include "Observers.h"
 #include "TimeSingleton.h"
 #include <iostream>
+#include "Render.h"
 diji::AI::AI(GameObject* ownerPtr)
 	: Component(ownerPtr)
 {
@@ -78,6 +79,7 @@ void diji::AI::FixedUpdate()
 		if (shape.left > TOTAL_WIDTH)
 			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
 
+	GetOwner()->GetComponent<Render>()->SetRect(shape);
 }
 
 void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
@@ -151,36 +153,4 @@ const diji::Rectf diji::AI::CalculateNewPosition(Movement movement)
 	}
 
 	return shape;
-}
-
-void diji::AI::SmoothOutCollision(Rectf& shape, const Movement& movement)
-{
-	float x = std::floor(shape.left);
-	float y = std::floor(shape.bottom);
-	while (true)
-	{
-		Rectf tempShape{ x, y, shape.width, shape.height };
-		if (Collision::GetInstance().IsCollidingWithWorld(tempShape))
-			break;
-		
-		switch (movement)
-		{
-		case Movement::Up:
-			--y;
-			break;
-		case Movement::Down:
-			++y;
-			break;
-		case Movement::Left:
-			--x;
-			break;
-		case Movement::Right:
-			++x;
-			break;
-		}
-	}
-
-	shape.left = x;
-	shape.bottom = y;
-	//m_TransformCompPtr->SetPosition(x, y);
 }

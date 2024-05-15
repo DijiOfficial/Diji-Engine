@@ -23,7 +23,7 @@ namespace diji
 
 		//void Initialize(GameObject* player);
 
-		void AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value);
+		void AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const GameObject* pelletCounter);
 	private:
 		//friend class Singleton<PickUpLoader>;
 		//PickUpLoader() = default;

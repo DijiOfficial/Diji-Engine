@@ -66,11 +66,11 @@
     <ClCompile Include="ScoreCounter.cpp">
       <Filter>Source Files\Observers &amp; Subjects</Filter>
     </ClCompile>
-    <ClCompile Include="TrashTheCache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PinkAI.cpp">
       <Filter>Source Files\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="TrashTheCache.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,14 +95,14 @@
     <ClInclude Include="PickUp.h">
       <Filter>Header Files\Observers &amp; Subjects</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreCounter.h">
-      <Filter>Header Files\Observers &amp; Subjects</Filter>
-    </ClInclude>
-    <ClInclude Include="TrashTheCache.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PinkAI.h">
       <Filter>Header Files\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreCounter.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TrashTheCache.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 
 #include "HealthCounter.h"
 #include "ScoreCounter.h"
+#include "PickUp.h"
 
 void diji::HealthObserver::OnNotify(MessageTypes message, Subject* subject)
 {
@@ -33,5 +34,18 @@ void diji::ScoreObserver::OnNotify(MessageTypes message, Subject* subject)
 
 		const int score = scoreCounter->GetScore();
 		SetText(std::format("Score: {}", score));
+	}
+}
+
+void diji::PelletObserver::OnNotify(MessageTypes message, Subject* subject)
+{
+	auto msg = static_cast<MessageTypesDerived>(message);
+	if (msg == MessageTypesDerived::PICKUP_COLLISION)
+	{
+		PickUp* pickup = dynamic_cast<PickUp*>(subject);
+		if (not pickup)
+			return;
+
+		++m_PelletCount;
 	}
 }

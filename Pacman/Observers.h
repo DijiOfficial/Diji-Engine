@@ -1,6 +1,7 @@
 #pragma once
 #include "IObserver.h"
 #include "Text.h"
+#include "Component.h"
 
 namespace diji 
 {
@@ -29,6 +30,21 @@ namespace diji
 		~ScoreObserver() override = default;
 
 		void OnNotify(MessageTypes message, Subject* subject) override;
+	};
+
+	class PelletObserver final : public Component, public IObserver
+	{
+	public:
+		PelletObserver(GameObject* ownerPtr) : Component(ownerPtr) {};
+		~PelletObserver() override = default;
+
+		void OnNotify(MessageTypes message, Subject* subject) override;
+		void Update() override {};
+		void FixedUpdate() override {};
+		int GetPelletCount() const { return m_PelletCount; }
+	
+	private:
+		int m_PelletCount = 0;
 	};
 }
 

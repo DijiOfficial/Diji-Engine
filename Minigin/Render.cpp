@@ -56,6 +56,9 @@ void diji::Render::RenderFrame() const
 	}
 	else
 		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_Scale);
+
+	if(m_DisplayHitbox)
+		Renderer::GetInstance().DrawRect(tempRect);
 }
 
 void diji::Render::UpdateText()

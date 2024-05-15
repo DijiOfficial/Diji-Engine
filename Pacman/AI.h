@@ -51,7 +51,6 @@ namespace diji {
 		//std::unique_ptr<PlayerState> m_CurrentStateUPtr;
 
 		const Rectf CalculateNewPosition(Movement movement);
-		void SmoothOutCollision(Rectf& shape, const Movement& movement);
 	};
 }
 

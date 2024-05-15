@@ -13,7 +13,6 @@ diji::Collider::Collider(GameObject* ownerPtr, const int width, const int height
 	Collision::GetInstance().AddCollider(this, m_CollisionBox);
 }
 
-
 diji::Collider::Collider(GameObject* ownerPtr, const float width, const float height)
 	: Component(ownerPtr)
 {

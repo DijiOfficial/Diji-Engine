@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "Singleton.h"
 
-
+#include "Collision.h"
 namespace diji
 {
 	class Texture2D;
@@ -38,6 +38,20 @@ namespace diji
 					}
 				}
 			}
+		}
+
+		void DrawRect(const Rectf& rect) const
+		{
+			SDL_Rect rect2 = { static_cast<int>(rect.left), static_cast<int>(rect.bottom), static_cast<int>(rect.width), static_cast<int>(rect.height )}; // (x, y, width, height)
+			SDL_SetRenderDrawColor(m_RendererPtr, 0, 255, 0, 255); // Set color to green
+			SDL_RenderDrawRect(m_RendererPtr, &rect2);
+		}
+
+		void DrawRect(const SDL_Rect& rect) const
+		{
+			//SDL_Rect rect2 = { rect.left, rect.bottom, rect.width, rect.height }; // (x, y, width, height)
+			SDL_SetRenderDrawColor(m_RendererPtr, 0, 255, 0, 255); // Set color to green
+			SDL_RenderDrawRect(m_RendererPtr, &rect);
 		}
 
 		SDL_Renderer* GetSDLRenderer() const;

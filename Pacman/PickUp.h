@@ -7,10 +7,11 @@ namespace diji
 	enum class SoundId;
 	class GameObject;
 	class Collider;
+	class PelletObserver;
 	class PickUp final : public Component, public Subject
 	{
 	public:
-		PickUp(GameObject* ownerPtr, GameObject* player, const int value);
+		PickUp(GameObject* ownerPtr, const GameObject* player, const GameObject* pelletCounter, const int value);
 		~PickUp() override = default;
 
 		PickUp(const PickUp& other) = delete;
@@ -28,6 +29,7 @@ namespace diji
 		SoundId m_SoundId;
 		Collider* m_PlayerColliderPtr;
 		Collider* m_OwnerColliderPtr;
+		PelletObserver* m_PelletCounter;
 	};
 }
 
