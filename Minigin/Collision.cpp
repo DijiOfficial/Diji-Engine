@@ -53,7 +53,7 @@ bool diji::Collision::AreRectsColliding(const Rectf& rect1, const Rectf& rect2) 
 	return true;
 }
 
-bool diji::Collision::IsCollidingWithWorld(Rectf& shape)
+bool diji::Collision::IsCollidingWithWorld(const Rectf& shape)
 {
 	//try with only two raycast up down and left right
 	const auto playerShape = shape;
