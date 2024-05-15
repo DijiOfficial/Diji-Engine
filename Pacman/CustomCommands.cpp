@@ -19,33 +19,7 @@ diji::Move::Move(GameObject* actor, Movement movement)
 
 void diji::Move::Execute()
 {
-	const auto& deltaTime = TimeSingleton::GetInstance().GetDeltaTime();
-	auto pos = m_TransformComponentPtr->GetPosition();
-
-	switch (m_Movement)
-	{
-	case Movement::Up:
-		pos.y -= m_Speed.y * deltaTime;
-		break;
-	case Movement::Down:
-		pos.y += m_Speed.y * deltaTime;
-		break;
-	case Movement::Left:
-		pos.x -= m_Speed.x * deltaTime;
-		break;
-	case Movement::Right:
-		pos.x += m_Speed.x * deltaTime;
-		break;
-	}
-
 	m_TransformComponentPtr->SetMovement(m_Movement);
-
-	auto shape = m_CollisionComponentPtr->GetCollisionBox();
-	shape.left = pos.x;
-	shape.bottom = pos.y;
-
-	if (not Collision::GetInstance().IsCollidingWithWorld(shape))
-		m_TransformComponentPtr->SetPosition(pos);
 }
 
 diji::HitCommand::HitCommand(GameObject* actor)
