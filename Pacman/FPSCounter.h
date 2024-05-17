@@ -17,7 +17,7 @@ namespace diji
 		FPSCounter& operator=(FPSCounter&& other) = delete;
 
 		void Update() override;
-		void FixedUpdate() override {};
+		void FixedUpdate() override;
 		float GetFPS() const { return m_Fps; };
 
 	private:
