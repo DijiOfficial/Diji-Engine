@@ -61,6 +61,12 @@ namespace diji
 			SDL_RenderDrawRect(m_RendererPtr, &rect);
 		}
 
+		void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const SDL_Color& color) const
+		{
+			SDL_SetRenderDrawColor(m_RendererPtr, color.r, color.g, color.b, color.a);
+			SDL_RenderDrawLine(m_RendererPtr, static_cast<int>(p1.x), static_cast<int>(p1.y), static_cast<int>(p2.x), static_cast<int>(p2.y));
+		}
+
 		void DrawPolygon(const std::vector<glm::vec2>& points)
 		{
 			SDL_SetRenderDrawColor(m_RendererPtr, 255, 0, 0, 255); // Set color to green
