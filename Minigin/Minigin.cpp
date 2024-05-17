@@ -122,7 +122,7 @@ void diji::Minigin::Run(const std::function<void()>& load)
 		while (lag >= FIXED_TIME_STEP)
 		{
 			sceneManager.FixedUpdate();
-			lag -= deltaTime;
+			lag -= FIXED_TIME_STEP;
 		}
 
 		sceneManager.Update();
