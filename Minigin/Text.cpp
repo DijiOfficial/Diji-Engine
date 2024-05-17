@@ -1,6 +1,7 @@
 #include "Text.h"
 #include "Font.h"
 #include "Render.h"
+#include "Transform.h"
 
 #include <SDL_ttf.h>
 #include <stdexcept>
@@ -10,16 +11,20 @@ diji::Text::Text(GameObject* ownerPtr)
 	, m_Text{ "" }
 	, m_FontPtr{ nullptr }
 	, m_TexturePtr{ nullptr }
+	, m_Color{ 255, 255, 255, 255 }
 	, m_NeedsUpdate{ false }
+	, m_IsCentered{ false }
 {
 }
 
-diji::Text::Text(GameObject* ownerPtr, const std::string& text, Font* font)
+diji::Text::Text(GameObject* ownerPtr, const std::string& text, Font* font, const SDL_Color& color, bool centered)
 	: Component(ownerPtr)
 	, m_Text{ text }
 	, m_FontPtr{ font }
 	, m_TexturePtr{ nullptr }
+	, m_Color{ color }
 	, m_NeedsUpdate{ true }
+	, m_IsCentered{ centered }
 {
 }
 
@@ -27,8 +32,8 @@ void diji::Text::Update()
 {
 	if (m_NeedsUpdate)
 	{
-		const SDL_Color color = { 255, 255, 255, 255 }; // only white text is supported now
-		const auto surf = TTF_RenderText_Blended(m_FontPtr->GetFont(), m_Text.c_str(), color);
+		//const SDL_Color color = { 255, 255, 255, 255 }; // only white text is supported now
+		const auto surf = TTF_RenderText_Blended(m_FontPtr->GetFont(), m_Text.c_str(), m_Color);
 		if (surf == nullptr)
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
@@ -44,6 +49,12 @@ void diji::Text::Update()
 
 		// need to update the pointer in Render this frame, Render update was already called so it has previous pointer information
 		GetOwner()->GetComponent<Render>()->UpdateText();
+
+		if (m_IsCentered)
+		{
+			const auto& pos = GetOwner()->GetComponent<Transform>()->GetPosition();
+			GetOwner()->GetComponent<Transform>()->SetPosition(pos.x - m_TexturePtr->GetSize().x * 0.5f, pos.y);
+		}
 	}
 }
 

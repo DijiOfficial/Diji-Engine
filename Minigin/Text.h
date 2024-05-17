@@ -10,7 +10,7 @@ namespace diji
 	{ 
 	public:
 		Text(GameObject* ownerPtr);
-		Text(GameObject* ownerPtr, const std::string& text, Font* font);
+		Text(GameObject* ownerPtr, const std::string& text, Font* font, const SDL_Color& color = { 255, 255, 255, 255 }, bool centered = false);
 		~Text() override = default;
 
 		Text(const Text& other) = delete;
@@ -29,6 +29,8 @@ namespace diji
 		std::string m_Text;
 		Font* m_FontPtr;
 		std::unique_ptr<Texture2D> m_TexturePtr;
+		SDL_Color m_Color;
 		bool m_NeedsUpdate;
+		bool m_IsCentered;
 	};
 }
