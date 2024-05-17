@@ -25,6 +25,8 @@ namespace diji
 
 		std::vector<const Collider*> IsColliding(Collider* object);
 		bool IsCollidingWithWorld(const Rectf& shape);
+		//temp
+		std::vector<std::vector<glm::vec2>> GetLevelCollider() const { return m_LevelCollider; }
 
 	private:
 		std::map<const Collider*, Rectf> m_Colliders;
