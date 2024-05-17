@@ -18,7 +18,7 @@ namespace diji
 	//                                                           └───────────┘                         
 	class Collider;
 	class Transform;
-
+	enum class Movement;
 	class RedAI final : public GhostAI
 	{
 	public:
@@ -37,6 +37,12 @@ namespace diji
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
+	
+	private:
+		void CalculateDirection(Transform* transform, Collider* collider, Collider* player);
+		glm::vec2 GetTargetTranslation(Movement movement) const;
+		bool m_TempLock = false;
+		int m_LockedFrames = 0;
 	};
 
 	//class ReturnToSpawn final : public GhostState

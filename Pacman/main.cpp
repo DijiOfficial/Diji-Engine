@@ -183,6 +183,7 @@ void Pacman()
 	background->AddComponents<Render>(2);
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
+	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);
 
 	auto player = scene->CreateGameObject();
 	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
@@ -212,7 +213,8 @@ void Pacman()
 	Blinky->AddComponents<Collider>(15, 15);
 	Blinky->AddComponents<RedAI>(player);
 	Blinky->GetComponent<Render>()->EnableHitbox();
-
+	Blinky->GetComponent<Render>()->SetTestBool(true);
+	
 	//make the hud it's own scene?
 #pragma region HUD
 	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
