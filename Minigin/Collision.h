@@ -17,6 +17,7 @@ namespace diji
 	{
 	public:
 		bool ParseLevelSVG(const std::string& file, const int yAdjust);
+		bool ParseIntersectionsSVG(const std::string& file, const int yAdjust);
 		
 		void AddCollider(const Collider* object, const Rectf& collider);
 		void RemoveCollider(const Collider* object);
@@ -25,12 +26,16 @@ namespace diji
 
 		std::vector<const Collider*> IsColliding(Collider* object);
 		bool IsCollidingWithWorld(const Rectf& shape);
+		bool IsCollidingWithWorld(const glm::vec2& point1, const glm::vec2& point2);
+		bool IsCollidingWithIntersection(const Rectf& shape);
+
 		//temp
 		std::vector<std::vector<glm::vec2>> GetLevelCollider() const { return m_LevelCollider; }
 
 	private:
 		std::map<const Collider*, Rectf> m_Colliders;
 		std::vector<std::vector<glm::vec2>> m_LevelCollider;
+		std::vector<std::vector<glm::vec2>> m_Intersections;
 
 		//Also taken from Prog2 Engine credits to Koen Samyn
 		bool Raycast(const std::vector<glm::vec2>& vertices, const glm::vec2& rayP1, const glm::vec2& rayP2) const;

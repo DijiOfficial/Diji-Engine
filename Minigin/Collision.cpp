@@ -7,6 +7,11 @@ bool diji::Collision::ParseLevelSVG(const std::string& file, const int yAdjust)
 	return SVGParser::GetVerticesFromSvgFile(file, m_LevelCollider, yAdjust);
 }
 
+bool diji::Collision::ParseIntersectionsSVG(const std::string& file, const int yAdjust)
+{
+	return SVGParser::GetVerticesFromSvgFile(file, m_Intersections, yAdjust);
+}
+
 void diji::Collision::AddCollider(const Collider* object, const Rectf& collider)
 {
 	//const auto colliders = std::vector<RectI>(1, collider);
@@ -53,6 +58,26 @@ bool diji::Collision::AreRectsColliding(const Rectf& rect1, const Rectf& rect2) 
 	return true;
 }
 
+#include <iostream>
+bool diji::Collision::IsCollidingWithIntersection(const Rectf& shape)
+{
+	glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
+
+	for (const auto& intersectionRow : m_Intersections)
+	{
+		for (const auto& point : intersectionRow)
+		{
+			//std::cout << point.x << ", " << point.y << " center: " << center.x << ", " << center.y << std::endl;
+			if (center == point)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 bool diji::Collision::IsCollidingWithWorld(const Rectf& shape)
 {
 	//try with only two raycast up down and left right
@@ -74,6 +99,16 @@ bool diji::Collision::IsCollidingWithWorld(const Rectf& shape)
 			return true;
 
 		if (Raycast(collisionBox, bottomRight, bottomLeft))
+			return true;
+	}
+	return false;
+}
+
+bool diji::Collision::IsCollidingWithWorld(const glm::vec2& point1, const glm::vec2& point2)
+{
+	for (const auto& collisionBox : m_LevelCollider)
+	{
+		if (Raycast(collisionBox, point1, point2))
 			return true;
 	}
 	return false;
