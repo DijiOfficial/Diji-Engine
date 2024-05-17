@@ -3,6 +3,8 @@
 #include "Texture.h"
 #include "Text.h"
 
+//temp
+#include "Collider.h"
 diji::Render::Render(GameObject* ownerPtr, int scale) 
 	: Render(ownerPtr)
 {
@@ -59,11 +61,39 @@ void diji::Render::RenderFrame() const
 
 	if (m_DisplayHitbox)
 	{
-		Renderer::GetInstance().DrawRect(tempRect);
+		Renderer::GetInstance().DrawRect(GetOwner()->GetComponent<Collider>()->GetCollisionBox());
 		const auto& collision = Collision::GetInstance().GetLevelCollider();
 
 		for (const auto& rect : collision)
 			Renderer::GetInstance().DrawPolygon(rect);
+	}
+
+	if (testBool)
+	{
+		auto test= GetOwner()->GetComponent<Collider>()->GetCollisionBox();
+
+		auto movement = m_TransformCompPtr->GetMovement();
+		glm::vec2 translation{ 0, 0 };
+		switch (movement)
+		{
+		case diji::Movement::Right:
+			translation.x = 16;
+			break;
+		case diji::Movement::Down:
+			translation.y = 16;
+			break;
+		case diji::Movement::Left:
+			translation.x = -16;
+			break;
+		case diji::Movement::Up:
+			translation.y = -16;
+			break;
+		}
+		const glm::vec2 center(test.left + test.width * 0.5f, test.bottom + test.height * 0.5f);
+		const glm::vec2 teste = center + translation;
+
+		Renderer::GetInstance().DrawLine(center, teste, SDL_Color{255,255,255,255});
+
 	}
 }
 

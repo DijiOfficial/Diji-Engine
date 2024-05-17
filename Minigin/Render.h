@@ -30,7 +30,7 @@ namespace diji
 		void EnableHitbox() { m_DisplayHitbox = true; }
 		void DisableHitbox() { m_DisplayHitbox = false; }
 		void SetRect(const Rectf& rect) { tempRect = rect; }
-
+		void SetTestBool(bool test) { testBool = test; }
 	private:
 		Texture2D* m_TexturePtr{};
 		Texture* m_TextureCompPtr{};
@@ -40,6 +40,7 @@ namespace diji
 		int m_Scale{ 1 };
 		bool m_Render{ true };
 		bool m_DisplayHitbox{ false };
+		bool testBool{ false };
 		Rectf tempRect{};
 
 		void DrawPolygon(const std::vector<glm::vec2>& vertices, bool closed = true, float lineWidth = 1.0f) const
