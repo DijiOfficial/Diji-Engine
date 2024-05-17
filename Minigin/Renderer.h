@@ -43,7 +43,7 @@ namespace diji
 		void DrawRect(const Rectf& rect) const
 		{
 			SDL_Rect rect2 = { static_cast<int>(rect.left), static_cast<int>(rect.bottom), static_cast<int>(rect.width), static_cast<int>(rect.height )}; // (x, y, width, height)
-			SDL_SetRenderDrawColor(m_RendererPtr, 0, 255, 0, 255); // Set color to green
+			SDL_SetRenderDrawColor(m_RendererPtr, 255, 0, 0, 255); // Set color to green
 			SDL_RenderDrawRect(m_RendererPtr, &rect2);
 		}
 

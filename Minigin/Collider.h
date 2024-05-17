@@ -10,6 +10,7 @@ namespace diji
 	public:
 		Collider(GameObject* ownerPtr, const float width, const float height);
 		Collider(GameObject* ownerPtr, const int width, const int height);
+		Collider(GameObject* ownerPtr, const int width, const int height, const glm::vec2& offset);
 		~Collider() override = default;
 
 		Collider(const Collider& other) = delete;
@@ -22,9 +23,13 @@ namespace diji
 
 		Rectf GetCollisionBox() const { return m_CollisionBox; };
 		const GameObject* GetParent() const { return GetOwner(); };
+	
 	private:
+		bool m_IsOffsetSet = false;
+		glm::vec2 m_Offset{ 0, 0 };
 		Rectf m_CollisionBox;
 		Transform* m_TransformCompPtr;
+
 	};
 }
 
