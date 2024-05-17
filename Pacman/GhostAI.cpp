@@ -26,7 +26,4 @@ void diji::GhostAI::FixedUpdate()
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
 	}
-
-	const auto& rect = m_ColliderCompPtr->GetCollisionBox();
-	GetOwner()->GetComponent<Render>()->SetRect(rect);
 }

@@ -37,7 +37,6 @@ void diji::PickUpLoader::AddPickUp(const std::string& file, const int width, con
 	pickUp->AddComponents<Collider>(1, 1, glm::vec2{ 2, 2 });
 	pickUp->AddComponents<ScoreCounter>(0);
 	pickUp->AddComponents<PickUp>(m_PlayerPtr, pelletCouter, value);
-	pickUp->GetComponent<Render>()->EnableHitbox();
 
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), pelletCouter->GetComponent<PelletObserver>());

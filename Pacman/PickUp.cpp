@@ -31,8 +31,6 @@ void diji::PickUp::Update()
 			HandleCollision();
 		}
 	}
-
-	GetOwner()->GetComponent<Render>()->SetRect(GetOwner()->GetComponent<Collider>()->GetCollisionBox());
 }
 
 void diji::PickUp::HandleCollision()

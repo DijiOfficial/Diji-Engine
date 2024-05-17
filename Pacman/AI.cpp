@@ -79,9 +79,13 @@ void diji::AI::FixedUpdate()
 		if (shape.left > TOTAL_WIDTH)
 			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
 
-	GetOwner()->GetComponent<Render>()->SetRect(shape);
-
 	//std::cout << "AI: " << shape.left << " " << shape.bottom << std::endl;
+
+	//if (Collision::GetInstance().IsCollidingWithIntersection(shape))
+	//{
+	//	std::cout << "AI: Intersection Collision" << std::endl;
+	//}
+
 }
 
 void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
