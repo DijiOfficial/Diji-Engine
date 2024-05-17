@@ -57,8 +57,14 @@ void diji::Render::RenderFrame() const
 	else
 		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_Scale);
 
-	if(m_DisplayHitbox)
+	if (m_DisplayHitbox)
+	{
 		Renderer::GetInstance().DrawRect(tempRect);
+		const auto& collision = Collision::GetInstance().GetLevelCollider();
+
+		for (const auto& rect : collision)
+			Renderer::GetInstance().DrawPolygon(rect);
+	}
 }
 
 void diji::Render::UpdateText()
