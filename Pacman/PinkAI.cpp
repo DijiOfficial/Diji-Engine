@@ -1,33 +1,28 @@
 #include "PinkAI.h"
-#include "GameObject.h"
 
-#include "Transform.h"
 #include "Collision.h"
 #include "Collider.h"
 #include "TimeSingleton.h"
+#include "Command.h"
+#include "Transform.h"
 
 diji::PinkAI::PinkAI(GameObject* ownerPtr, GameObject* player)
-	: Component(ownerPtr)
-	, m_PlayerColliderPtr{ player->GetComponent<Collider>() }
+	: GhostAI(ownerPtr, player)
 {
-	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
-	m_ColliderCompPtr = ownerPtr->GetComponent<Collider>();
-
-	assert(m_TransformCompPtr and "AI Component needs to be initialized aftera Transform");
-	assert(m_ColliderCompPtr and "AI Component needs to be initialized aftera Collider");
-
-	m_TransformCompPtr->SetMovement(Movement::Up);
-
 	m_CurrentStateUPtr = std::make_unique<Waiting>();
+	m_CurrentStateUPtr->OnEnter(this);
 }
 
-void diji::PinkAI::Update()
+void diji::PinkAI::FixedUpdate()
 {
-	//todo: move this to fixed update
 	auto state = m_CurrentStateUPtr->Execute(m_TransformCompPtr, m_ColliderCompPtr, m_PlayerColliderPtr);
 
 	if (state)
+	{
+		m_CurrentStateUPtr->OnExit(this);
 		m_CurrentStateUPtr = std::move(state);
+		m_CurrentStateUPtr->OnEnter(this);
+	}
 }
 
 std::unique_ptr<diji::GhostState> diji::Waiting::Execute(Transform* transform, Collider* collider, [[maybe_unused]] Collider* player)
@@ -84,57 +79,6 @@ std::unique_ptr<diji::GhostState> diji::Waiting::Execute(Transform* transform, C
 			break;
 		default:
 			break;
-		}
-	}
-
-	return nullptr;
-}
-
-//diji::State::State(Transform* transform, Collider* collider, Collider* player)
-//	: m_TransformCompPtr{ transform }
-//	, m_ColliderCompPtr{ collider }
-//	, m_PlayerColliderPtr{ player }
-//{
-//}
-
-std::unique_ptr<diji::GhostState> diji::EnterMaze::Execute(Transform* transform, [[maybe_unused]] Collider* collider, [[maybe_unused]] Collider* player)
-{
-	//temp code
-	auto pos = transform->GetPosition();
-
-	if (pos.y > 300 && not tempLock)
-	{
-		pos.y -= 1;
-		transform->SetPosition(pos);
-	}
-	else if (pos.y < 300 && not tempLock)
-	{
-		pos.y += 1;
-		transform->SetPosition(pos);
-	}
-	else
-	{
-		if (pos.x < 214)
-		{
-			pos.x += 1;
-			transform->SetPosition(pos);
-		}
-		else if (pos.x > 214)
-		{
-			pos.x -= 1;
-			transform->SetPosition(pos);
-		}
-		else
-		{
-			tempLock = true;
-			pos.y -= 1;
-			transform->SetPosition(pos);
-
-			if (pos.y == 247) // When it has moved 50 pixels
-			{
-				transform->SetMovement(diji::Movement::Right);
-				return std::make_unique<ChasePac>();
-			}
 		}
 	}
 
@@ -224,5 +168,49 @@ std::unique_ptr<diji::GhostState> diji::ReturnToSpawn::Execute(Transform* transf
 			return std::make_unique<EnterMaze>();
 		}
 	}
+	return nullptr;
+}
+
+std::unique_ptr<diji::GhostState> diji::EnterMaze::Execute(Transform* transform, [[maybe_unused]] Collider* collider, [[maybe_unused]] Collider* player)
+{
+	//temp code
+	auto pos = transform->GetPosition();
+
+	if (pos.y > 300 && not tempLock)
+	{
+		pos.y -= 1;
+		transform->SetPosition(pos);
+	}
+	else if (pos.y < 300 && not tempLock)
+	{
+		pos.y += 1;
+		transform->SetPosition(pos);
+	}
+	else
+	{
+		if (pos.x < 214)
+		{
+			pos.x += 1;
+			transform->SetPosition(pos);
+		}
+		else if (pos.x > 214)
+		{
+			pos.x -= 1;
+			transform->SetPosition(pos);
+		}
+		else
+		{
+			tempLock = true;
+			pos.y -= 1;
+			transform->SetPosition(pos);
+
+			if (pos.y == 247) // When it has moved 50 pixels
+			{
+				transform->SetMovement(diji::Movement::Right);
+				return std::make_unique<ChasePac>();
+			}
+		}
+	}
+
 	return nullptr;
 }

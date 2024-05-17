@@ -80,6 +80,8 @@ void diji::AI::FixedUpdate()
 			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
 
 	GetOwner()->GetComponent<Render>()->SetRect(shape);
+
+	//std::cout << "AI: " << shape.left << " " << shape.bottom << std::endl;
 }
 
 void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)

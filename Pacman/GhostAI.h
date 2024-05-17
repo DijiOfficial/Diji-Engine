@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "GhostAI.h"
+#include "Component.h"
 namespace diji
 {
 	//                                                                        If Pac has               
@@ -13,66 +13,55 @@ namespace diji
 	//                                  │                        │ Return To │              │          
 	//                                  └────────────────────────┤   Spawn   ◄──────────────┘          
 	//                                                           └───────────┘                         
-	class Collider;
 	class Transform;
+	class Collider;
 
-	class PinkAI final : public GhostAI
+	class GhostAI;
+	class GhostState
 	{
 	public:
-		PinkAI(GameObject* ownerPtr, GameObject* player);
-		~PinkAI() override = default;
+		//todo: set destructors to noexcept
+		//GhostState(Transform* transform, Collider* collider, Collider* player);
+		GhostState() = default;
+		virtual ~GhostState() = default;
 
-		void Update() override {};
+		GhostState(const GhostState& other) = delete;
+		GhostState(GhostState&& other) = delete;
+		GhostState& operator=(const GhostState& other) = delete;
+		GhostState& operator=(GhostState&& other) = delete;
+
+		virtual void OnEnter([[maybe_unused]] const GhostAI* ghost) = 0;
+		virtual void OnExit([[maybe_unused]] const GhostAI* ghost) = 0;
+		virtual std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) = 0;
+	};
+
+	class GhostAI : public Component
+	{
+	public:
+		GhostAI(GameObject* ownerPtr, GameObject* player);
+		~GhostAI() = default;
+
+		GhostAI(const GhostAI& other) = delete;
+		GhostAI(GhostAI&& other) = delete;
+		GhostAI& operator=(const GhostAI& other) = delete;
+		GhostAI& operator=(GhostAI&& other) = delete;
+
+		void Update() override = 0;
 		void FixedUpdate() override;
+
+		Transform* GetTransform() const { return m_TransformCompPtr; };
+		Collider* GetCollider() const { return m_ColliderCompPtr; };
+		Collider* GetPlayerCollider() const { return m_PlayerColliderPtr; };
+
+	protected:
+		Transform* m_TransformCompPtr;
+		Collider* m_ColliderCompPtr;
+		Collider* m_PlayerColliderPtr;
+
+		std::unique_ptr<GhostState> m_CurrentStateUPtr;
 	};
 
-	class Waiting final : public GhostState
-	{
-	public:
-		using GhostState::GhostState;
-		~Waiting() override = default;
 
-		void OnEnter(const GhostAI*) override {};
-		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-
-	private:
-		float tempTimer = 0.0f;
-	};
-
-	class ChasePac final : public GhostState
-	{
-	public:
-		using GhostState::GhostState;
-		~ChasePac() override = default;
-
-		void OnEnter(const GhostAI*) override {};
-		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-	};
-
-	class ReturnToSpawn final : public GhostState
-	{
-	public:
-		using GhostState::GhostState;
-		~ReturnToSpawn() override = default;
-
-		void OnEnter(const GhostAI*) override {};
-		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-	};
-
-	class EnterMaze final : public GhostState
-	{
-	public:
-		using GhostState::GhostState;
-		~EnterMaze() override = default;
-
-		void OnEnter(const GhostAI*) override {};
-		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-	private:
-		bool tempLock = false;
-	};
+	
 }
 

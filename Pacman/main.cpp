@@ -20,6 +20,7 @@
 #include "HealthCounter.h"
 #include "AI.h"
 #include "PinkAI.h"
+#include "RedAI.h"
 #include "Observers.h"
 
 using namespace diji;
@@ -159,6 +160,20 @@ void Pacman()
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
 #endif
 
+	const glm::vec2 viewport{ 452, 576 };
+
+//#pragma region Menu Scene
+//	const auto& menuScene = SceneManager::GetInstance().CreateScene("Menu");
+//	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+//
+//	auto pushStart = menuScene->CreateGameObject();
+//	pushStart->AddComponents<Text>("PUSH START BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
+//	pushStart->AddComponents<Transform>(viewport.x * 0.5f, viewport.y * 0.5f);
+//	pushStart->AddComponents<Render>();
+//
+//#pragma endregion
+
+
 	auto scene = SceneManager::GetInstance().CreateScene("Pacman");
 	auto& input = InputManager::GetInstance();
 	//Background
@@ -178,18 +193,27 @@ void Pacman()
 	player->AddComponents<ScoreCounter>(0);
 	player->AddComponents<Collider>(15, 15);
 	player->AddComponents<AI>();
+	player->GetComponent<Render>()->EnableHitbox();
 
 	PickUpLoader pickUpLoader{ player };
 	//PickUpLoader::GetInstance().Initialize(player);
 
 	auto Pinky = scene->CreateGameObject();
-	Pinky->AddComponents<Texture>("RedGhost.png", 14, 14);
+	Pinky->AddComponents<Texture>("PinkGhost.png", 14, 14);
 	Pinky->AddComponents<Transform>(214, 300);
 	Pinky->AddComponents<Render>(2);
 	Pinky->AddComponents<Collider>(15, 15);
 	Pinky->AddComponents<PinkAI>(player);
 
+	auto Blinky = scene->CreateGameObject();
+	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15);
+	Blinky->AddComponents<Transform>(213, 247);
+	Blinky->AddComponents<Render>(2);
+	Blinky->AddComponents<Collider>(15, 15);
+	Blinky->AddComponents<RedAI>(player);
+	Blinky->GetComponent<Render>()->EnableHitbox();
 
+	//make the hud it's own scene?
 #pragma region HUD
 	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
 	auto HUD = scene->CreateGameObject();
@@ -232,6 +256,13 @@ void Pacman()
 #pragma region Observers
 	player->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<ScoreObserver>());
 #pragma endregion
+
+
+	auto fpsCounter = scene->CreateGameObject();
+	fpsCounter->AddComponents<Text>("0 FPS", smallFont);
+	fpsCounter->AddComponents<FPSCounter>();
+	fpsCounter->AddComponents<Transform>(0, static_cast<int>(viewport.y - 20));
+	fpsCounter->AddComponents<Render>();
 }
 
 
