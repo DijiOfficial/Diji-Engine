@@ -32,10 +32,10 @@ void diji::SceneManager::Render()
 		scene->Render();
 	}
 	//temp
-	for (int i{}; i < (28 * 34); ++i)
-	{
-		Renderer::GetInstance().DrawRect(Rectf{2+ static_cast<float>(i % 28) * 16, 78 + static_cast<float>((i / 28)) * 16, 16.f, 16.f }, SDL_Color{128,128, 0,255 });
-	}
+	//for (int i{}; i < (28 * 34); ++i)
+	//{
+	//	Renderer::GetInstance().DrawRect(Rectf{2+ static_cast<float>(i % 28) * 16, 78 + static_cast<float>((i / 28)) * 16, 16.f, 16.f }, SDL_Color{128,128, 0,255 });
+	//}
 }
 
 diji::Scene* diji::SceneManager::GetScene(std::string& name) const
