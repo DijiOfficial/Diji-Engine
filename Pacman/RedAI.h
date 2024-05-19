@@ -16,55 +16,31 @@ namespace diji
 	//                                  │                        │ Return To │              │          
 	//                                  └────────────────────────┤   Spawn   ◄──────────────┘          
 	//                                                           └───────────┘                         
-	class Collider;
-	class Transform;
-	enum class Movement;
+	
+	
+	//class Collider;
+	//class Transform;
+	//enum class Movement;
 	class RedAI final : public GhostAI
 	{
 	public:
 		RedAI(GameObject* ownerPtr, GameObject* player);
 		~RedAI() = default;
 
-		void Update() override {};
+		std::unique_ptr<GhostState> GetChaseState() const override { return std::make_unique<RedChase>(); };
+
+		//void Update() override { GhostAI::Update(); };
 	};
 
-	class RedChase final : public GhostState
-	{
-	public:
-		using GhostState::GhostState;
-		~RedChase() override = default;
-
-		void OnEnter(const GhostAI* ghost) override;
-		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-	
-	private:
-		void CalculateDirection(Transform* transform, Collider* collider, Collider* player);
-		glm::vec2 GetTargetTranslation(Movement movement) const;
-		bool m_TempLock = false;
-		int m_LockedFrames = 0;
-	};
-
-	//class ReturnToSpawn final : public GhostState
+	//class RedChase final : public GhostState
 	//{
 	//public:
 	//	using GhostState::GhostState;
-	//	~ReturnToSpawn() override = default;
+	//	~RedChase() override = default;
 
-	//	std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-	//};
-
-	//class EnterMaze final : public GhostState
-	//{
-	//public:
-	//	using GhostState::GhostState;
-	//	~EnterMaze() override = default;
-
-	//	void OnEnter() override {};
-	//	void OnExit() override {};
-	//	std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
-	//private:
-	//	bool tempLock = false;
+	//	void OnEnter(const GhostAI* ghost) override;
+	//	void OnExit(const GhostAI*) override {};
+	//	std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	//};
 }
 
