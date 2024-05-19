@@ -58,6 +58,12 @@ bool SVGParser::GetVerticesFromSvgFile( const std::string& filePath, std::vector
 			vertices[j][i].x *= 2;
 			vertices[j][i].y *= 2;
 			vertices[j][i].y += yAdjust;
+
+			vertices[j][i].x = std::round(vertices[j][i].x);
+			vertices[j][i].y = std::round(vertices[j][i].y);
+			//this has to be a crime
+			//vertices[j][i].x = static_cast<float>(static_cast<int>(vertices[j][i].x + 0.5));
+			//vertices[j][i].y = static_cast<float>(static_cast<int>(vertices[j][i].y + 0.5));
 		}
 	}
 
