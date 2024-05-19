@@ -15,7 +15,7 @@ diji::PinkAI::PinkAI(GameObject* ownerPtr, GameObject* player)
 
 void diji::PinkAI::FixedUpdate()
 {
-	auto state = m_CurrentStateUPtr->Execute(m_TransformCompPtr, m_ColliderCompPtr, m_PlayerColliderPtr);
+	auto state = m_CurrentStateUPtr->Execute(this);
 
 	if (state)
 	{
@@ -25,9 +25,12 @@ void diji::PinkAI::FixedUpdate()
 	}
 }
 
-std::unique_ptr<diji::GhostState> diji::Waiting::Execute(Transform* transform, Collider* collider, [[maybe_unused]] Collider* player)
+std::unique_ptr<diji::GhostState> diji::Waiting::Execute(const GhostAI* ghost)
 {
 	//temp code
+	const auto& transform = ghost->GetTransform();
+	const auto& collider = ghost->GetCollider();
+
 	tempTimer += TimeSingleton::GetInstance().GetDeltaTime();
 	if (tempTimer > 5)
 	{
@@ -85,8 +88,12 @@ std::unique_ptr<diji::GhostState> diji::Waiting::Execute(Transform* transform, C
 	return nullptr;
 }
 
-std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(Transform* transform, Collider* collider, Collider* player)
+std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(const GhostAI* ghost)
 {
+	const auto& transform = ghost->GetTransform();
+	const auto& collider = ghost->GetCollider();
+	const auto& player = ghost->GetPlayerCollider();
+
 	auto movement = transform->GetMovement();
 	auto position = transform->GetPosition();
 
@@ -137,8 +144,11 @@ std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(Transform* transform, 
 	return nullptr;
 }
 
-std::unique_ptr<diji::GhostState> diji::ReturnToSpawn::Execute(Transform* transform, [[maybe_unused]] Collider* collider, [[maybe_unused]] Collider* player)
+std::unique_ptr<diji::GhostState> diji::ReturnToSpawn::Execute(const GhostAI* ghost)
 {
+	//temp code
+	const auto& transform = ghost->GetTransform();
+
 	auto pos = transform->GetPosition();
 
 	if (pos.y > 300)
@@ -171,9 +181,11 @@ std::unique_ptr<diji::GhostState> diji::ReturnToSpawn::Execute(Transform* transf
 	return nullptr;
 }
 
-std::unique_ptr<diji::GhostState> diji::EnterMaze::Execute(Transform* transform, [[maybe_unused]] Collider* collider, [[maybe_unused]] Collider* player)
+std::unique_ptr<diji::GhostState> diji::EnterMaze::Execute(const GhostAI* ghost)
 {
 	//temp code
+	const auto& transform = ghost->GetTransform();
+
 	auto pos = transform->GetPosition();
 
 	if (pos.y > 300 && not tempLock)

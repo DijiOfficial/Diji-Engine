@@ -34,7 +34,7 @@ namespace diji
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 
 	private:
 		float tempTimer = 0.0f;
@@ -48,7 +48,7 @@ namespace diji
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	};
 
 	class ReturnToSpawn final : public GhostState
@@ -59,7 +59,7 @@ namespace diji
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	};
 
 	class EnterMaze final : public GhostState
@@ -70,7 +70,7 @@ namespace diji
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};
-		std::unique_ptr<GhostState> Execute(Transform* transform, Collider* collider, Collider* player) override;
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		bool tempLock = false;
 	};

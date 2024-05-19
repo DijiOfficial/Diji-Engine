@@ -200,6 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="ChaseScatterAlgo.cpp" />
     <ClCompile Include="CustomCommands.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GhostAI.cpp" />
@@ -215,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="ChaseScatterAlgo.h" />
     <ClInclude Include="CustomCommands.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GhostAI.h" />

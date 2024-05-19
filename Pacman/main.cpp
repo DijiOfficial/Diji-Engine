@@ -199,16 +199,23 @@ void Pacman()
 	PickUpLoader pickUpLoader{ player };
 	//PickUpLoader::GetInstance().Initialize(player);
 
-	auto Pinky = scene->CreateGameObject();
-	Pinky->AddComponents<Texture>("PinkGhost.png", 14, 14);
-	Pinky->AddComponents<Transform>(214, 300);
-	Pinky->AddComponents<Render>(2);
-	Pinky->AddComponents<Collider>(15, 15);
-	Pinky->AddComponents<PinkAI>(player);
+	//auto Pinky = scene->CreateGameObject();
+	//Pinky->AddComponents<Texture>("PinkGhost.png", 14, 14);
+	//Pinky->AddComponents<Transform>(214, 300);
+	//Pinky->AddComponents<Render>(2);
+	//Pinky->AddComponents<Collider>(15, 15);
+	//Pinky->AddComponents<PinkAI>(player);
+
+	//auto test = scene->CreateGameObject();
+	//test->AddComponents<Texture>("PinkGhost.png", 14, 14);
+	//test->AddComponents<Transform>(212, 300);
+	//test->AddComponents<Render>(2);
+	//test->AddComponents<Collider>(15, 15);
+	//test->AddComponents<PinkAI>(player);
 
 	auto Blinky = scene->CreateGameObject();
-	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15);
-	Blinky->AddComponents<Transform>(213, 247);
+	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
+	Blinky->AddComponents<Transform>(212, 247);
 	Blinky->AddComponents<Render>(2);
 	Blinky->AddComponents<Collider>(15, 15);
 	Blinky->AddComponents<RedAI>(player);
