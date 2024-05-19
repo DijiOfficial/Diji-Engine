@@ -18,7 +18,7 @@ namespace diji
 	class Collider;
 	enum class Movement;
 	class Texture;
-
+	class AI;
 	class GhostAI;
 	class Chase;
 	class GhostState
@@ -43,7 +43,7 @@ namespace diji
 		void GoToTarget(const GhostAI* ghost, const glm::vec2& target);
 		const glm::vec2 m_SpawnPoint{ 227, 262 };
 		const int m_Step = 1;
-
+		bool m_DisplayDirection = true;
 	private:
 		bool m_TempLock = false;
 		int m_LockedFrames = 0;
@@ -72,6 +72,7 @@ namespace diji
 		Collider* GetCollider() const { return m_ColliderCompPtr; };
 		Collider* GetPlayerCollider() const { return m_PlayerColliderPtr; };
 		Texture* GetTexture() const { return m_TextureCompPtr; };
+		bool GetIsPoweredUp() const;
 		bool GetIsInChaseState() const { return m_ChaseScatterAlgo->IsInChaseState(); };
 		glm::vec2 GetSpawnPoint() const { return m_PersonnalSpawn; };
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
@@ -89,6 +90,7 @@ namespace diji
 		Collider* m_ColliderCompPtr;
 		Collider* m_PlayerColliderPtr;
 		Texture* m_TextureCompPtr;
+		AI* m_PlayerAICompPtr;
 		std::unique_ptr<ChaseScatterAlgo> m_ChaseScatterAlgo = std::make_unique<ChaseScatterAlgo>();
 	};
 
@@ -152,7 +154,7 @@ namespace diji
 		~Frightened() override = default;
 
 		void OnEnter(const GhostAI* ghost) override;
-		void OnExit(const GhostAI*) override {};
+		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	};
 

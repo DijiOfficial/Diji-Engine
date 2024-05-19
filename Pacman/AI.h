@@ -38,6 +38,7 @@ namespace diji {
 		void Update() override;
 		void FixedUpdate() override;
 		void OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject) override;
+		bool GetIsPoweredUp() const { return m_IsPoweredUp; };
 
 	private:
 		Texture* m_TextureCompPtr;
@@ -49,6 +50,8 @@ namespace diji {
 		const float TOTAL_WIDTH = 452;
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		//std::unique_ptr<PlayerState> m_CurrentStateUPtr;
+		bool m_IsPoweredUp = false;
+		float PowerUpTimer = 0.f;
 
 		const Rectf CalculateNewPosition(Movement movement);
 	};

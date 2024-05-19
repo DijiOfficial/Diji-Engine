@@ -18,12 +18,20 @@ diji::PickUpLoader::PickUpLoader(GameObject* player)
 	auto pelletCounter = m_ScenePtr->CreateGameObject();
 	pelletCounter->AddComponents<PelletObserver>();
 
+	int idx = 0;
 	for (const auto& posVec : m_PelletsVec)
 	{
-		for (const auto& pos : posVec)
-		{
-			AddPickUp("bruh.png", 4, 4, pos, 10, pelletCounter);
-		}
+		if (idx == 0)
+			for (const auto& pos : posVec)
+			{
+				AddPickUp("bruh.png", 4, 4, pos, 10, pelletCounter);
+			}
+		else
+			for (const auto& pos : posVec)
+			{
+				AddPowerUp("PowerPellet.png", 8, 8, pos, 50);
+			}
+		++idx;
 	}
 }
 
@@ -35,10 +43,22 @@ void diji::PickUpLoader::AddPickUp(const std::string& file, const int width, con
 	pickUp->AddComponents<Render>(2);
 	//pickUp->AddComponents<Collider>(width, height);
 	pickUp->AddComponents<Collider>(1, 1, glm::vec2{ 2, 2 });
-	pickUp->AddComponents<ScoreCounter>(0);
+	//pickUp->AddComponents<ScoreCounter>(0);
 	pickUp->AddComponents<PickUp>(m_PlayerPtr, pelletCouter, value);
 
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), pelletCouter->GetComponent<PelletObserver>());
 
+}
+
+void diji::PickUpLoader::AddPowerUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value)
+{
+	auto powerUp = m_ScenePtr->CreateGameObject();
+	powerUp->AddComponents<Texture>(file, width, height);
+	powerUp->AddComponents<Transform>(pos.x, pos.y);
+	powerUp->AddComponents<Render>(2);
+	powerUp->AddComponents<Collider>(width, height);
+	powerUp->AddComponents<PickUp>(m_PlayerPtr, value);
+
+	powerUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
 }

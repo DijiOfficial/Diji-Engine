@@ -26,6 +26,16 @@ diji::AI::AI(GameObject* ownerPtr)
 
 void diji::AI::Update()
 {
+
+	if (m_IsPoweredUp)
+	{
+		PowerUpTimer += TimeSingleton::GetInstance().GetDeltaTime();
+		if (PowerUpTimer >= 10.f)
+		{
+			m_IsPoweredUp = false;
+			PowerUpTimer = 0.f;
+		}
+	}
 	//auto state = m_CurrentStateUPtr->Execute(m_TransformCompPtr, m_ColliderCompPtr);
 	//if (state)
 	//{
@@ -104,6 +114,17 @@ void diji::AI::OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject)
 
 		const int value = pickUp->GetValue();
 		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
+		break;
+	}
+	case MessageTypesDerived::POWERUP_COLLISION:
+	{
+		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
+
+		const int value = pickUp->GetValue();
+		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
+
+		m_IsPoweredUp = true;
+		PowerUpTimer = 0.f;
 		break;
 	}
 	default:

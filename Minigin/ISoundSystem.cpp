@@ -24,6 +24,9 @@ namespace diji
         case SoundId::PelletPickUp2:
             soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_2.wav");
             break;
+		case SoundId::PowerPellet:
+			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("power_pellet.wav");
+			break;
         default:
             break;
         }

@@ -2,6 +2,7 @@
 #include "Collider.h"
 #include "Transform.h"
 #include "Texture.h"
+#include "AI.h"
 
 #include "RedAI.h"
 diji::GhostAI::GhostAI(GameObject* ownerPtr, GameObject* player)
@@ -17,6 +18,7 @@ diji::GhostAI::GhostAI(GameObject* ownerPtr, GameObject* player)
 	assert(m_TextureCompPtr and "AI Component needs to be initialized aftera Texture");
 
 	m_TransformCompPtr->SetMovement(Movement::Up);
+	m_PlayerAICompPtr = player->GetComponent<AI>();
 }
 
 void diji::GhostAI::FixedUpdate()
@@ -29,6 +31,11 @@ void diji::GhostAI::FixedUpdate()
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
 	}
+}
+
+bool diji::GhostAI::GetIsPoweredUp() const
+{
+	return m_PlayerAICompPtr->GetIsPoweredUp();
 }
 
 void diji::GhostAI::TurnAround() const
@@ -122,7 +129,8 @@ void diji::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec2&
 	}
 
 	transform->SetMovement(bestDirection);
-	ghost->GetTexture()->SetStartingFrame(static_cast<int>(bestDirection) * 2);
+	if (m_DisplayDirection)
+		ghost->GetTexture()->SetStartingFrame(static_cast<int>(bestDirection) * 2);
 }
 
 glm::vec2 diji::GhostState::GetTargetTranslation(Movement movement) const
@@ -304,6 +312,7 @@ void diji::Scatter::OnEnter(const GhostAI* ghost)
 {
 	m_Target = ghost->GetScatterTarget();
 	ghost->TurnAround();
+	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 }
 
 std::unique_ptr<diji::GhostState> diji::Scatter::Execute(const GhostAI* ghost)
@@ -312,6 +321,9 @@ std::unique_ptr<diji::GhostState> diji::Scatter::Execute(const GhostAI* ghost)
 
 	if (ghost->GetIsInChaseState())
 		return std::make_unique<RedChase>();
+
+	if (ghost->GetIsPoweredUp())
+		return std::make_unique<Frightened>();
 
 	return nullptr;
 }
@@ -323,6 +335,15 @@ void diji::Frightened::OnEnter(const GhostAI* ghost)
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("Frightened.png");
 	texture->SetStartingFrame(0);
+	m_DisplayDirection = false;
+}
+
+void diji::Frightened::OnExit(const GhostAI* ghost)
+{
+	const auto& texture = ghost->GetTexture();
+	texture->SetTexture("RedGhost.png");
+	m_DisplayDirection = true;
+	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 }
 
 std::unique_ptr<diji::GhostState> diji::Frightened::Execute(const GhostAI* ghost)
@@ -351,6 +372,9 @@ std::unique_ptr<diji::GhostState> diji::Frightened::Execute(const GhostAI* ghost
 		}
 	}
 
+	if (not ghost->GetIsPoweredUp())
+		return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
+
 	return nullptr;
 }
 #pragma endregion
@@ -358,6 +382,7 @@ std::unique_ptr<diji::GhostState> diji::Frightened::Execute(const GhostAI* ghost
 void diji::RedChase::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
+	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 }
 
 std::unique_ptr<diji::GhostState> diji::RedChase::Execute(const GhostAI* ghost)
@@ -372,6 +397,9 @@ std::unique_ptr<diji::GhostState> diji::RedChase::Execute(const GhostAI* ghost)
 	//could add the additional check for pellets remaining here
 	if (not ghost->GetIsInChaseState())
 		return std::make_unique<Scatter>();
+
+	if (ghost->GetIsPoweredUp())
+		return std::make_unique<Frightened>();
 
 	return nullptr;
 }

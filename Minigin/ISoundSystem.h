@@ -8,11 +8,12 @@ namespace diji
 	enum class SoundId
 	{
 		InvalidSoundId = -1,
-		None, 
+		None,
 		PacmanDie,
 		PacmanEatFruit,
 		PelletPickUp,
 		PelletPickUp2,
+		PowerPellet,
 	};
 
 	class ISoundSystem

@@ -8,10 +8,12 @@ namespace diji
 	class GameObject;
 	class Collider;
 	class PelletObserver;
+	class Render;
 	class PickUp final : public Component, public Subject
 	{
 	public:
 		PickUp(GameObject* ownerPtr, const GameObject* player, const GameObject* pelletCounter, const int value);
+		PickUp(GameObject* ownerPtr, const GameObject* player, const int value);
 		~PickUp() override = default;
 
 		PickUp(const PickUp& other) = delete;
@@ -30,6 +32,10 @@ namespace diji
 		Collider* m_PlayerColliderPtr;
 		Collider* m_OwnerColliderPtr;
 		PelletObserver* m_PelletCounter;
+		Render* m_RenderCompPtr;
+		bool m_IsPowerUp = false;
+		bool m_IsDisabled = false;
+		int m_PowerUpInvisibleFrames = 0;
 	};
 }
 

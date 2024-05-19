@@ -53,7 +53,7 @@
     <path
        id="rect1"
        style="opacity:0.106796"
-       d="M 8,31 H 208 V 191 H 8 Z"
+       d="m 9,24 h 200 l 0,160 H 9 Z"
        sodipodi:nodetypes="ccccc" />
   </g>
 </svg>

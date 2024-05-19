@@ -12,6 +12,7 @@ namespace diji
 		LEVEL_COLLISION,
 		ENEMY_COLLISION,
 		PICKUP_COLLISION,
+		POWERUP_COLLISION,
 	};
 
 	class HealthObserver final : public Text, public IObserver
