@@ -27,6 +27,7 @@ namespace diji
 		void RenderFrame() const;
 		void UpdateText();
 		void DisableRender() { m_Render = false; }
+		void EnableRender() { m_Render = true; }
 		void EnableHitbox() { m_DisplayHitbox = true; }
 		void DisableHitbox() { m_DisplayHitbox = false; }
 		void SetRect(const Rectf& rect) { tempRect = rect; }
