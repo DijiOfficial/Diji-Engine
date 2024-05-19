@@ -3,7 +3,7 @@
 
 void diji::ChaseScatterAlgo::Update()
 {
-	if (m_CurrentCycle > m_ChaseScatterDuration.size())
+	if (m_CurrentCycle > m_ChaseScatterDuration.size() - 1)
 		return;
 
 	m_TotalElapsedTime += TimeSingleton::GetInstance().GetDeltaTime();
