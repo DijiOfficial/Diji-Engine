@@ -22,15 +22,17 @@ namespace diji
 
 		void SetTexture(const std::string& filename);
 		Texture2D* GetTexture() const { return m_TexturePtr; };
-
+		//todo: clean up getter setters
 		void SetWidth(int width) { m_Width = width; }
 		void SetHeight(int height) { m_Height = height; }
 		void SetAnimated() { m_IsAnimated = true; }
 		void SetNrOfFrames(int nrOfFrames) { m_NrOfFrames = nrOfFrames; }
 		void SetRotation(bool canRotate) { m_CanRotate = canRotate; }
+		void SetCurrentFrame(int frame) { m_Frame = frame; }
 		void SetRotationAngle(float angle) { m_RotationAngle = angle; }
 		void PauseAnimation() { m_IsAnimationPaused = true; }
 		void ResumeAnimation() { m_IsAnimationPaused = false; }
+		void SetStartingFrame(int frame);
 
 		bool IsAnimated() const { return m_IsAnimated; }
 		int GetWidth() const { return m_Width; }
@@ -45,8 +47,9 @@ namespace diji
 		int m_Height;
 		int m_NrOfFrames;
 		int m_Frame;
+		int m_StartingFrame = 0;
 		float m_FrameTime;
-		float m_RotationAngle;
+		float m_RotationAngle = 0;
 
 		bool m_IsAnimated;
 		bool m_CanRotate = false;

@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "TimeSingleton.h"
+#include "Render.h"
 
 diji::Texture::Texture(GameObject* ownerPtr)
 	: Component(ownerPtr)
@@ -49,6 +50,20 @@ diji::Texture::Texture(GameObject* ownerPtr, const std::string& filename, int wi
 void diji::Texture::SetTexture(const std::string& filename)
 {
 	m_TexturePtr = ResourceManager::GetInstance().LoadTexture(filename);
+	if (GetOwner()->HasComponent<Render>())
+		GetOwner()->GetComponent<Render>()->UpdateTexture(m_TexturePtr);
+}
+
+void diji::Texture::SetStartingFrame(int frame)
+{
+	if (frame > m_StartingFrame)
+	{
+		m_Frame += frame;
+		if ((m_Frame - frame) >= m_NrOfFrames)
+			m_Frame = m_StartingFrame;
+	}
+
+	m_StartingFrame = frame;
 }
 
 void diji::Texture::Update()
@@ -61,7 +76,7 @@ void diji::Texture::Update()
 	{
 		++m_Frame;
 		m_FrameTime = 0;
-		if (m_Frame >= m_NrOfFrames)
-			m_Frame = 0;
+		if ((m_Frame - m_StartingFrame) >= m_NrOfFrames)
+			m_Frame = m_StartingFrame;
 	}
 }

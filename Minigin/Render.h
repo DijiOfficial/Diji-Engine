@@ -31,6 +31,8 @@ namespace diji
 		void DisableHitbox() { m_DisplayHitbox = false; }
 		void SetRect(const Rectf& rect) { tempRect = rect; }
 		void SetTestBool(bool test) { testBool = test; }
+		
+		void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
 	private:
 		Texture2D* m_TexturePtr{};
 		Texture* m_TextureCompPtr{};
