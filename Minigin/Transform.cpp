@@ -17,3 +17,20 @@ void diji::Transform::CheckRenderComponent()
 {
 	assert(!GetOwner()->HasComponent<Render>() and "Transform Component needs to be initialized before Render");
 }
+
+glm::vec3 diji::Transform::GetMovementVector(const int value) const
+{
+	switch (m_CurrentMovement)
+	{
+	case Movement::Up:
+		return glm::vec3(0, -value, 0);
+	case Movement::Down:
+		return glm::vec3(0, value, 0);
+	case Movement::Left:
+		return glm::vec3(-value, 0, 0);
+	case Movement::Right:
+		return glm::vec3(value, 0, 0);
+	default:
+		return glm::vec3(0, 0, 0);
+	}
+}
