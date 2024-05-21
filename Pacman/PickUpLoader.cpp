@@ -8,12 +8,13 @@
 #include "PickUp.h"
 #include "ScoreCounter.h"
 #include "GhostAI.h"
-diji::PickUpLoader::PickUpLoader(const GameObject* player, const std::vector<GameObject*>& gameObjects)
+
+pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects)
 {
-	SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
+	diji::SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
 
 	//todo: Get Level scene
-	m_ScenePtr = SceneManager::GetInstance().CreateScene("PickUpLoader");
+	m_ScenePtr = diji::SceneManager::GetInstance().CreateScene("PickUpLoader");
 	m_PlayerPtr = player;
 
 	auto pelletCounter = m_ScenePtr->CreateGameObject();
@@ -36,34 +37,34 @@ diji::PickUpLoader::PickUpLoader(const GameObject* player, const std::vector<Gam
 	}
 }
 
-void diji::PickUpLoader::AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const GameObject* pelletCouter)
+void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCouter)
 {
 	auto pickUp = m_ScenePtr->CreateGameObject();
-	pickUp->AddComponents<Texture>(file, width, height);
-	pickUp->AddComponents<Transform>(pos.x, pos.y);
-	pickUp->AddComponents<Render>(2);
+	pickUp->AddComponents<diji::Texture>(file, width, height);
+	pickUp->AddComponents<diji::Transform>(pos.x, pos.y);
+	pickUp->AddComponents<diji::Render>(2);
 	//pickUp->AddComponents<Collider>(width, height);
-	pickUp->AddComponents<Collider>(1, 1, glm::vec2{ 2, 2 });
+	pickUp->AddComponents<diji::Collider>(1, 1, glm::vec2{ 2, 2 });
 	//pickUp->AddComponents<ScoreCounter>(0);
 	pickUp->AddComponents<PickUp>(m_PlayerPtr, pelletCouter, value);
 
-	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
-	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), pelletCouter->GetComponent<PelletObserver>());
+	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
+	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), pelletCouter->GetComponent<PelletObserver>());
 
 }
 
-void diji::PickUpLoader::AddPowerUp(const std::vector<GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value)
+void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value)
 {
 	auto powerUp = m_ScenePtr->CreateGameObject();
-	powerUp->AddComponents<Texture>(file, width, height);
-	powerUp->AddComponents<Transform>(pos.x, pos.y);
-	powerUp->AddComponents<Render>(2);
-	powerUp->AddComponents<Collider>(width, height);
+	powerUp->AddComponents<diji::Texture>(file, width, height);
+	powerUp->AddComponents<diji::Transform>(pos.x, pos.y);
+	powerUp->AddComponents<diji::Render>(2);
+	powerUp->AddComponents<diji::Collider>(width, height);
 	powerUp->AddComponents<PickUp>(m_PlayerPtr, value);
 
-	powerUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
+	powerUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
 	for (const auto& object : gameObjects)
 	{
-		powerUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<GhostAI>());
+		powerUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<GhostAI>());
 	}
 }

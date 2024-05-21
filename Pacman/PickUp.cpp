@@ -6,31 +6,31 @@
 #include "Observers.h"
 #include "Render.h"
 
-diji::PickUp::PickUp(GameObject* ownerPtr, const GameObject* player, const GameObject* pelletCounter, const int value)
+pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* pelletCounter, const int value)
 	: Component(ownerPtr)
 	, m_Value{ value }
 {
 	if (value == 10)
-		m_SoundId = SoundId::PelletPickUp;
+		m_SoundId = diji::SoundId::PelletPickUp;
 	else if (value == 50)
-		m_SoundId = SoundId::PowerPellet;
+		m_SoundId = diji::SoundId::PowerPellet;
 	else
-		m_SoundId = SoundId::InvalidSoundId;
+		m_SoundId = diji::SoundId::InvalidSoundId;
 
-	m_PlayerColliderPtr = player->GetComponent<Collider>();
-	m_OwnerColliderPtr = ownerPtr->GetComponent<Collider>();
-	m_RenderCompPtr = ownerPtr->GetComponent<Render>();
-	
+	m_PlayerColliderPtr = player->GetComponent<diji::Collider>();
+	m_OwnerColliderPtr = ownerPtr->GetComponent<diji::Collider>();
+	m_RenderCompPtr = ownerPtr->GetComponent<diji::Render>();
+
 	m_PelletCounter = pelletCounter ? pelletCounter->GetComponent<PelletObserver>() : nullptr;
 }
 
-diji::PickUp::PickUp(GameObject* ownerPtr, const GameObject* player, const int value) 
+pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const int value)
 	: PickUp(ownerPtr, player, nullptr, value)
 {
 	m_IsPowerUp = { true };
 }
 
-void diji::PickUp::Update()
+void pacman::PickUp::Update()
 {
 	if (m_IsDisabled)
 		return;
@@ -50,7 +50,7 @@ void diji::PickUp::Update()
 	}
 
 	//this is rather slow, possible optimisation?
-	const auto& colliders = Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
+	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{
 		if (collider == m_PlayerColliderPtr)
@@ -61,28 +61,28 @@ void diji::PickUp::Update()
 	}
 }
 
-void diji::PickUp::HandleCollision()
+void pacman::PickUp::HandleCollision()
 {
 	m_IsDisabled = true;
 	const auto& owner = GetOwner();
 	m_RenderCompPtr->DisableRender();
-	Collision::GetInstance().RemoveCollider(owner->GetComponent<Collider>());
+	diji::Collision::GetInstance().RemoveCollider(owner->GetComponent<diji::Collider>());
 
 	switch (m_SoundId)
 	{
 	case diji::SoundId::PelletPickUp:
 		if ((m_PelletCounter->GetPelletCount() & 1) == 0)
-			ServiceLocator::GetSoundSystem().AddSoundRequest(SoundId::PelletPickUp, -1);
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PelletPickUp, -1);
 		else
-			ServiceLocator::GetSoundSystem().AddSoundRequest(SoundId::PelletPickUp2, -1);
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PelletPickUp2, -1);
 		
-		Notify(static_cast<MessageTypes>(MessageTypesDerived::PICKUP_COLLISION));
+		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION));
 		break;
 
 	case diji::SoundId::PowerPellet:
-		ServiceLocator::GetSoundSystem().AddSoundRequest(m_SoundId, -1); 
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(m_SoundId, -1);
 		
-		Notify(static_cast<MessageTypes>(MessageTypesDerived::POWERUP_COLLISION));
+		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION));
 		break;
 	}
 	

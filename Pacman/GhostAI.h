@@ -5,6 +5,14 @@
 
 namespace diji
 {
+	class Transform;
+	class Collider;
+	enum class Movement;
+	class Texture;
+}
+
+namespace pacman
+{
 	//                                                                        If Pac has               
 	// ┌─────────┐Complex Algortihm┌────────────┐ Is inside Maze ┌───────────┐ power up┌──────────┐    
 	// │ Waiting ├─────────────────► Enter Maze ├────────────────► Chase Pac ◄─────────► Flee Pac │    
@@ -16,13 +24,11 @@ namespace diji
 	//                                  │                        │ Return To │              │          
 	//                                  └────────────────────────┤   Spawn   ◄──────────────┘          
 	//                                                           └───────────┘                         
-	class Transform;
-	class Collider;
-	enum class Movement;
-	class Texture;
+	
 	class AI;
 	class GhostAI;
 	class Chase;
+	
 	class GhostState
 	{
 	public:
@@ -52,11 +58,12 @@ namespace diji
 		int m_LockedFrames = 0;
 
 		void CalculateDirection(const GhostAI* ghost, const glm::vec2& target);
-		glm::vec2 GetTargetTranslation(Movement movement) const;
+		glm::vec2 GetTargetTranslation(diji::Movement movement) const;
 
-		Movement ChooseRandomDirection(const std::map<diji::Movement, bool>& possibleDirections) const;
+		diji::Movement ChooseRandomDirection(const std::map<diji::Movement, bool>& possibleDirections) const;
 	};
-	class GhostAI : public Component, public IObserver
+
+	class GhostAI : public diji::Component, public diji::IObserver
 	{
 	public:
 		~GhostAI() = default;
@@ -68,14 +75,14 @@ namespace diji
 
 		void Update() override { m_ChaseScatterAlgo->Update(); };
 		void FixedUpdate() override;
-		void OnNotify(MessageTypes message, Subject*) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 
 		virtual std::unique_ptr<GhostState> GetChaseState() const = 0;
 
-		Transform* GetTransform() const { return m_TransformCompPtr; };
-		Collider* GetCollider() const { return m_ColliderCompPtr; };
-		Collider* GetPlayerCollider() const { return m_PlayerColliderPtr; };
-		Texture* GetTexture() const { return m_TextureCompPtr; };
+		diji::Transform* GetTransform() const { return m_TransformCompPtr; };
+		diji::Collider* GetCollider() const { return m_ColliderCompPtr; };
+		diji::Collider* GetPlayerCollider() const { return m_PlayerColliderPtr; };
+		diji::Texture* GetTexture() const { return m_TextureCompPtr; };
 		bool GetIsInChaseState() const { return m_ChaseScatterAlgo->IsInChaseState(); };
 		glm::vec2 GetSpawnPoint() const { return m_PersonnalSpawn; };
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
@@ -87,17 +94,17 @@ namespace diji
 
 		void TurnAround() const;
 	protected:
-		GhostAI(GameObject* ownerPtr, GameObject* player);
+		GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player);
 
 		std::unique_ptr<GhostState> m_CurrentStateUPtr;
 		glm::vec2 m_PersonnalSpawn{ 0, 0 };
 		glm::vec2 m_ScatterTarget{ 0, 0 };
 
 	private:
-		Transform* m_TransformCompPtr;
-		Collider* m_ColliderCompPtr;
-		Collider* m_PlayerColliderPtr;
-		Texture* m_TextureCompPtr;
+		diji::Transform* m_TransformCompPtr;
+		diji::Collider* m_ColliderCompPtr;
+		diji::Collider* m_PlayerColliderPtr;
+		diji::Texture* m_TextureCompPtr;
 		AI* m_PlayerAICompPtr;
 		std::unique_ptr<ChaseScatterAlgo> m_ChaseScatterAlgo = std::make_unique<ChaseScatterAlgo>();
 		mutable bool m_LockPowerUp = false;

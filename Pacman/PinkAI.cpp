@@ -6,14 +6,14 @@
 #include "Command.h"
 #include "Transform.h"
 
-diji::PinkAI::PinkAI(GameObject* ownerPtr, GameObject* player)
+pacman::PinkAI::PinkAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: GhostAI(ownerPtr, player)
 {
 	m_CurrentStateUPtr = std::make_unique<Waiting>();
 	m_CurrentStateUPtr->OnEnter(this);
 }
 
-void diji::PinkAI::FixedUpdate()
+void pacman::PinkAI::FixedUpdate()
 {
 	auto state = m_CurrentStateUPtr->Execute(this);
 
@@ -25,13 +25,13 @@ void diji::PinkAI::FixedUpdate()
 	}
 }
 
-std::unique_ptr<diji::GhostState> diji::Waiting::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::Waiting::Execute(const GhostAI* ghost)
 {
 	//temp code
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
 
-	tempTimer += TimeSingleton::GetInstance().GetDeltaTime();
+	tempTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
 	if (tempTimer > 5)
 	{
 		//return std::make_unique<EnterMaze>(m_TransformCompPtr, m_ColliderCompPtr, m_PlayerColliderPtr);
@@ -62,7 +62,7 @@ std::unique_ptr<diji::GhostState> diji::Waiting::Execute(const GhostAI* ghost)
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not Collision::GetInstance().IsCollidingWithWorld(shape))
+	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape))
 		transform->SetPosition(position);
 	else
 	{
@@ -88,7 +88,7 @@ std::unique_ptr<diji::GhostState> diji::Waiting::Execute(const GhostAI* ghost)
 	return nullptr;
 }
 
-std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::ChasePac::Execute(const GhostAI* ghost)
 {
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
@@ -113,7 +113,7 @@ std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(const GhostAI* ghost)
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not Collision::GetInstance().IsCollidingWithWorld(shape))
+	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape))
 		transform->SetPosition(position);
 	else
 	{
@@ -131,7 +131,7 @@ std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(const GhostAI* ghost)
 		}
 	}
 
-	const auto& test = Collision::GetInstance().IsColliding(collider);
+	const auto& test = diji::Collision::GetInstance().IsColliding(collider);
 
 	for (const auto& colliders : test)
 	{
@@ -144,7 +144,7 @@ std::unique_ptr<diji::GhostState> diji::ChasePac::Execute(const GhostAI* ghost)
 	return nullptr;
 }
 
-std::unique_ptr<diji::GhostState> diji::ReturnToSpawn::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::ReturnToSpawn::Execute(const GhostAI* ghost)
 {
 	//temp code
 	const auto& transform = ghost->GetTransform();
@@ -181,7 +181,7 @@ std::unique_ptr<diji::GhostState> diji::ReturnToSpawn::Execute(const GhostAI* gh
 	return nullptr;
 }
 
-std::unique_ptr<diji::GhostState> diji::EnterMaze::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::EnterMaze::Execute(const GhostAI* ghost)
 {
 	//temp code
 	const auto& transform = ghost->GetTransform();

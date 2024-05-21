@@ -71,35 +71,35 @@ void load()
 	player->AddComponents<Texture>("pacmanSpriteSheet.png", 13, 13, 4);
 	player->AddComponents<Transform>(330, 250);
 	player->AddComponents<Render>();
-	player->AddComponents<HealthCounter>(3);
-	player->AddComponents<ScoreCounter>(0);
+	player->AddComponents<pacman::HealthCounter>(3);
+	player->AddComponents<pacman::ScoreCounter>(0);
 
 	//Player2
 	auto player2 = scene->CreateGameObject();
 	player2->AddComponents<Texture>("redGhost.png", 13, 13);
 	player2->AddComponents<Transform>(300, 250);
 	player2->AddComponents<Render>();
-	player2->AddComponents<HealthCounter>(3);
-	player2->AddComponents<ScoreCounter>(0);
+	player2->AddComponents<pacman::HealthCounter>(3);
+	player2->AddComponents<pacman::ScoreCounter>(0);
 #pragma endregion
 
 #pragma region Controlls
 	auto& input = InputManager::GetInstance();
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
-	input.BindCommand<HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
-	input.BindCommand<ScoreCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_Z, player, PointType::PickUp);
-	input.BindCommand<ScoreCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_X, player, PointType::Enemy);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
+	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
+	input.BindCommand<pacman::ScoreCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_Z, player, pacman::PointType::PickUp);
+	input.BindCommand<pacman::ScoreCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_X, player, pacman::PointType::Enemy);
 
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player2, Movement::Up);
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
-	input.BindCommand<HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player2);
-	input.BindCommand<ScoreCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::A, player2, PointType::PickUp);
-	input.BindCommand<ScoreCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::B, player2, PointType::Enemy);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player2, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
+	input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player2);
+	input.BindCommand<pacman::ScoreCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::A, player2, pacman::PointType::PickUp);
+	input.BindCommand<pacman::ScoreCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::B, player2, pacman::PointType::Enemy);
 #pragma endregion
 
 #pragma region HUD
@@ -121,34 +121,34 @@ void load()
 
 	auto livesCounter = scene->CreateGameObject();
 	livesCounter->AddComponents<Transform>(0, 60);
-	livesCounter->AddComponents<HealthObserver>("# lives: 3", smallFont);
+	livesCounter->AddComponents<pacman::HealthObserver>("# lives: 3", smallFont);
 	livesCounter->AddComponents<Render>();
 	livesCounter->SetParent(HUD, false);
 
 	auto scoreCounter = scene->CreateGameObject();
 	scoreCounter->AddComponents<Transform>(0, 80);
-	scoreCounter->AddComponents<ScoreObserver>("Score: 0", smallFont);
+	scoreCounter->AddComponents<pacman::ScoreObserver>("Score: 0", smallFont);
 	scoreCounter->AddComponents<Render>();
 	scoreCounter->SetParent(HUD, false);
 
 	auto livesCounter2 = scene->CreateGameObject();
 	livesCounter2->AddComponents<Transform>(0, 100);
-	livesCounter2->AddComponents<HealthObserver>("# lives: 3", smallFont);
+	livesCounter2->AddComponents<pacman::HealthObserver>("# lives: 3", smallFont);
 	livesCounter2->AddComponents<Render>();
 	livesCounter2->SetParent(HUD, false);
 
 	auto scoreCounter2 = scene->CreateGameObject();
 	scoreCounter2->AddComponents<Transform>(0, 120);
-	scoreCounter2->AddComponents<ScoreObserver>("Score: 0", smallFont);
+	scoreCounter2->AddComponents<pacman::ScoreObserver>("Score: 0", smallFont);
 	scoreCounter2->AddComponents<Render>();
 	scoreCounter2->SetParent(HUD, false);
 #pragma endregion
 
 #pragma region Observers
-	player->GetComponent<HealthCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<HealthObserver>());
-	player2->GetComponent<HealthCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::HEALTH_CHANGE), livesCounter2->GetComponent<HealthObserver>());
-	player->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<ScoreObserver>());
-	player2->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter2->GetComponent<ScoreObserver>());
+	player->GetComponent<pacman::HealthCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<pacman::HealthObserver>());
+	player2->GetComponent<pacman::HealthCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::HEALTH_CHANGE), livesCounter2->GetComponent<pacman::HealthObserver>());
+	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
+	player2->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter2->GetComponent<pacman::ScoreObserver>());
 #pragma endregion
 }
 
@@ -162,16 +162,16 @@ void Pacman()
 
 	const glm::vec2 viewport{ 452, 576 };
 
-//#pragma region Menu Scene
-//	const auto& menuScene = SceneManager::GetInstance().CreateScene("Menu");
-//	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
-//
-//	auto pushStart = menuScene->CreateGameObject();
-//	pushStart->AddComponents<Text>("PUSH START BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
-//	pushStart->AddComponents<Transform>(viewport.x * 0.5f, viewport.y * 0.5f);
-//	pushStart->AddComponents<Render>();
-//
-//#pragma endregion
+	//#pragma region Menu Scene
+	//	const auto& menuScene = SceneManager::GetInstance().CreateScene("Menu");
+	//	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+	//
+	//	auto pushStart = menuScene->CreateGameObject();
+	//	pushStart->AddComponents<Text>("PUSH START BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
+	//	pushStart->AddComponents<Transform>(viewport.x * 0.5f, viewport.y * 0.5f);
+	//	pushStart->AddComponents<Render>();
+	//
+	//#pragma endregion
 
 
 	auto scene = SceneManager::GetInstance().CreateScene("Pacman");
@@ -190,10 +190,10 @@ void Pacman()
 	player->GetComponent<Texture>()->SetRotation(true);
 	player->AddComponents<Transform>(214, 439);
 	player->AddComponents<Render>(2);
-	player->AddComponents<HealthCounter>(3);
-	player->AddComponents<ScoreCounter>(0);
+	player->AddComponents<pacman::HealthCounter>(3);
+	player->AddComponents<pacman::ScoreCounter>(0);
 	player->AddComponents<Collider>(15, 15);
-	player->AddComponents<AI>();
+	player->AddComponents<pacman::AI>();
 	player->GetComponent<Render>()->EnableHitbox();
 
 	//auto Pinky = scene->CreateGameObject();
@@ -215,13 +215,13 @@ void Pacman()
 	Blinky->AddComponents<Transform>(212, 247);
 	Blinky->AddComponents<Render>(2);
 	Blinky->AddComponents<Collider>(15, 15);
-	Blinky->AddComponents<RedAI>(player);
+	Blinky->AddComponents<pacman::RedAI>(player);
 	Blinky->GetComponent<Render>()->EnableHitbox();
 	Blinky->GetComponent<Render>()->SetTestBool(true);
 	
 	const std::vector<GameObject*> ghosts = { Blinky };
 
-	PickUpLoader pickUpLoader{ player, ghosts };
+	pacman::PickUpLoader pickUpLoader{ player, ghosts };
 	//PickUpLoader::GetInstance().Initialize(player);
 
 	//make the hud it's own scene?
@@ -244,28 +244,28 @@ void Pacman()
 
 	auto scoreCounter = scene->CreateGameObject();
 	scoreCounter->AddComponents<Transform>(0, 40);
-	scoreCounter->AddComponents<ScoreObserver>("Score: 0", smallFont);
+	scoreCounter->AddComponents<pacman::ScoreObserver>("Score: 0", smallFont);
 	scoreCounter->AddComponents<Render>();
 	scoreCounter->SetParent(HUD, false);
 #pragma endregion
 
 
 #pragma region Commands
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
-	input.BindCommand<Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
-	input.BindCommand<HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
+	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
 
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
-	input.BindCommand<Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
-	input.BindCommand<HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
+	input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
 #pragma endregion
 
 #pragma region Observers
-	player->GetComponent<ScoreCounter>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<ScoreObserver>());
+	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
 #pragma endregion
 
 

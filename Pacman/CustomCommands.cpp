@@ -6,41 +6,41 @@
 #include "ScoreCounter.h"
 #include "Collider.h"
 
-diji::Move::Move(GameObject* actor, Movement movement)
+pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
 {
-	m_TransformComponentPtr = GetGameActor()->GetComponent<Transform>();
-	m_CollisionComponentPtr = GetGameActor()->GetComponent<Collider>();
+	m_TransformComponentPtr = GetGameActor()->GetComponent<diji::Transform>();
+	m_CollisionComponentPtr = GetGameActor()->GetComponent<diji::Collider>();
 
 	assert(m_TransformComponentPtr and "Move Command need to be initialized after GameObject Transform Component");
 	assert(m_CollisionComponentPtr and "Move Command need to be initialized after GameObject Collision Component");
 }
 
-void diji::Move::Execute()
+void pacman::Move::Execute()
 {
 	m_TransformComponentPtr->SetMovement(m_Movement);
 }
 
-diji::HitCommand::HitCommand(GameObject* actor)
+pacman::HitCommand::HitCommand(diji::GameObject* actor)
 	: GameActorCommands{ actor }
 {
 	m_HealthComponentPtr = GetGameActor()->GetComponent<HealthCounter>();
 }
 
-void diji::HitCommand::Execute()
+void pacman::HitCommand::Execute()
 {
 	m_HealthComponentPtr->DecreaseHealth();
 }
 
-diji::ScoreCommand::ScoreCommand(GameObject* actorPtr, PointType point)
+pacman::ScoreCommand::ScoreCommand(diji::GameObject* actorPtr, PointType point)
 	: GameActorCommands{ actorPtr }
 	, m_PointType{ point }
 {
 	m_ScoreComponentPtr = GetGameActor()->GetComponent<ScoreCounter>();
 }
 
-void diji::ScoreCommand::Execute()
+void pacman::ScoreCommand::Execute()
 {
 	m_ScoreComponentPtr->IncreaseScore(m_PointType);
 }

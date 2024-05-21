@@ -1,13 +1,13 @@
 #include "TrashTheCache.h"
 
-diji::TrashTheCache::TrashTheCache(GameObject* ownerPtr, int id)
+test::TrashTheCache::TrashTheCache(diji::GameObject* ownerPtr, int id)
 	: Component(ownerPtr)
 	, m_ID{ id }
 {
 	InitializePlot();
 }
 
-void diji::TrashTheCache::Update()
+void test::TrashTheCache::Update()
 {
 	ImGui::Begin(std::format("Exercise {}", m_ID).c_str());
 
@@ -28,7 +28,7 @@ void diji::TrashTheCache::Update()
 	ImGui::End();
 }
 
-void diji::TrashTheCache::InitializePlot()
+void test::TrashTheCache::InitializePlot()
 {
 	m_PlotConfig.values.xs = x_data;
 	m_PlotConfig.values.ys = 0;
@@ -53,7 +53,7 @@ void diji::TrashTheCache::InitializePlot()
 	m_PlotConfig3.values.colors = colors;
 }
 
-void diji::TrashTheCache::Exercice1()
+void test::TrashTheCache::Exercice1()
 {
 	ImGui::InputInt("# samples", &m_SampleCount);
 
@@ -72,7 +72,7 @@ void diji::TrashTheCache::Exercice1()
 		ImGui::Plot("plot", m_PlotConfig);
 }
 
-void diji::TrashTheCache::Exercice2()
+void test::TrashTheCache::Exercice2()
 {
 	ImGui::InputInt("# samples", &m_SampleCount);
 
@@ -118,7 +118,7 @@ void diji::TrashTheCache::Exercice2()
 	}
 }
 
-void diji::TrashTheCache::SetMaxPlotValue(ImGui::PlotConfig& plotConfig, const std::vector<float>& results)
+void test::TrashTheCache::SetMaxPlotValue(ImGui::PlotConfig& plotConfig, const std::vector<float>& results)
 {
 	plotConfig.values.ys = results.data();
 	const auto maxElement = std::max_element(results.begin(), results.end());

@@ -3,7 +3,7 @@
 #include "Text.h"
 #include "Component.h"
 
-namespace diji 
+namespace pacman 
 {
 	enum class MessageTypesDerived
 	{
@@ -15,31 +15,31 @@ namespace diji
 		POWERUP_COLLISION,
 	};
 
-	class HealthObserver final : public Text, public IObserver
+	class HealthObserver final : public diji::Text, public diji::IObserver
 	{
 	public:
 		using Text::Text;
 		~HealthObserver() override = default;
 
-		void OnNotify(MessageTypes message, Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 	};
 
-	class ScoreObserver final : public Text, public IObserver
+	class ScoreObserver final : public diji::Text, public diji::IObserver
 	{
 	public:
 		using Text::Text;
 		~ScoreObserver() override = default;
 
-		void OnNotify(MessageTypes message, Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 	};
 
-	class PelletObserver final : public Component, public IObserver
+	class PelletObserver final : public diji::Component, public diji::IObserver
 	{
 	public:
-		PelletObserver(GameObject* ownerPtr) : Component(ownerPtr) {};
+		PelletObserver(diji::GameObject* ownerPtr) : Component(ownerPtr) {};
 		~PelletObserver() override = default;
 
-		void OnNotify(MessageTypes message, Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 		void Update() override {};
 		void FixedUpdate() override {};
 		int GetPelletCount() const { return m_PelletCount; }

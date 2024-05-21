@@ -7,7 +7,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 // needs threading
-namespace diji
+namespace test
 {
 	template<typename T, typename = std::void_t<>>
 	struct has_ID_member : std::false_type {};
@@ -15,10 +15,10 @@ namespace diji
 	template<typename T>
 	struct has_ID_member<T, std::void_t<decltype(std::declval<T>().ID)>> : std::true_type {};
 
-	class TrashTheCache final : public Component
+	class TrashTheCache final : public diji::Component
 	{
 	public:
-		TrashTheCache(GameObject* ownerPtr, int id);
+		TrashTheCache(diji::GameObject* ownerPtr, int id);
 		~TrashTheCache() override = default;
 
 		TrashTheCache(const TrashTheCache& other) = delete;

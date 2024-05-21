@@ -2,18 +2,22 @@
 #include "Command.h"
 #include "IObserver.h"
 
-namespace diji {
+namespace diji
+{
 	class Texture;
 	class Transform;
 	class Collider;
 	struct Rectf;
+}
+
+namespace pacman {
 	
 	class GhostAI;
 
-	class AI final : public Component, public IObserver
+	class AI final : public diji::Component, public diji::IObserver
 	{
 	public:
-		AI(GameObject* ownerPtr);
+		AI(diji::GameObject* ownerPtr);
 		~AI() override = default;
 
 		AI(const AI& other) = delete;
@@ -23,23 +27,23 @@ namespace diji {
 
 		void Update() override;
 		void FixedUpdate() override;
-		void OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
 		bool GetIsPoweredUp() const { return m_IsPoweredUp; };
 
 		static constexpr float TOTAL_WIDTH = 452;
 	private:
-		Texture* m_TextureCompPtr;
-		Transform* m_TransformCompPtr;
-		Collider* m_ColliderCompPtr;
-		Movement m_PreviousMovement = Movement::Right;
-		Movement m_SavedMovement = Movement::Right;
+		diji::Texture* m_TextureCompPtr;
+		diji::Transform* m_TransformCompPtr;
+		diji::Collider* m_ColliderCompPtr;
+		diji::Movement m_PreviousMovement = diji::Movement::Right;
+		diji::Movement m_SavedMovement = diji::Movement::Right;
 
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		//std::unique_ptr<PlayerState> m_CurrentStateUPtr;
 		bool m_IsPoweredUp = false;
 		float PowerUpTimer = 0.f;
 
-		const Rectf CalculateNewPosition(Movement movement);
+		const diji::Rectf CalculateNewPosition(diji::Movement movement);
 	};
 }
 

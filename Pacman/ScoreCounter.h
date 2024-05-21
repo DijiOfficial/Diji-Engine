@@ -2,7 +2,7 @@
 #include "Subject.h"
 #include "Component.h"
 
-namespace diji
+namespace pacman
 {
 	enum class PointType
 	{
@@ -11,10 +11,10 @@ namespace diji
 		Pellet = 10
 	};
 
-	class ScoreCounter final : public Component, public Subject
+	class ScoreCounter final : public diji::Component, public diji::Subject
 	{
 	public:
-		ScoreCounter(GameObject* ownerPtr, int score);
+		ScoreCounter(diji::GameObject* ownerPtr, int score);
 		~ScoreCounter() override = default;
 
 		ScoreCounter(const ScoreCounter& other) = delete;

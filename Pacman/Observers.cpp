@@ -4,7 +4,7 @@
 #include "ScoreCounter.h"
 #include "PickUp.h"
 
-void diji::HealthObserver::OnNotify(MessageTypes message, Subject* subject)
+void pacman::HealthObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (msg == MessageTypesDerived::HEALTH_CHANGE)
@@ -23,7 +23,7 @@ void diji::HealthObserver::OnNotify(MessageTypes message, Subject* subject)
 	}
 }
 
-void diji::ScoreObserver::OnNotify(MessageTypes message, Subject* subject)
+void pacman::ScoreObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (msg == MessageTypesDerived::SCORE_CHANGE)
@@ -37,7 +37,7 @@ void diji::ScoreObserver::OnNotify(MessageTypes message, Subject* subject)
 	}
 }
 
-void diji::PelletObserver::OnNotify(MessageTypes message, Subject* subject)
+void pacman::PelletObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (msg == MessageTypesDerived::PICKUP_COLLISION)

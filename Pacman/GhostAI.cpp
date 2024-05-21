@@ -6,24 +6,25 @@
 #include "Observers.h"
 
 #include "RedAI.h"
-diji::GhostAI::GhostAI(GameObject* ownerPtr, GameObject* player)
+
+pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: Component(ownerPtr)
-	, m_PlayerColliderPtr{ player->GetComponent<Collider>() }
+	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
 {
 	//todo: start function for everything this is old now
-	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
-	m_ColliderCompPtr = ownerPtr->GetComponent<Collider>();
-	m_TextureCompPtr = ownerPtr->GetComponent<Texture>();
+	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
+	m_ColliderCompPtr = ownerPtr->GetComponent<diji::Collider>();
+	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
 
 	assert(m_TransformCompPtr and "AI Component needs to be initialized aftera Transform");
 	assert(m_ColliderCompPtr and "AI Component needs to be initialized aftera Collider");
 	assert(m_TextureCompPtr and "AI Component needs to be initialized aftera Texture");
 
-	m_TransformCompPtr->SetMovement(Movement::Up);
+	m_TransformCompPtr->SetMovement(diji::Movement::Up);
 	m_PlayerAICompPtr = player->GetComponent<AI>();
 }
 
-void diji::GhostAI::FixedUpdate()
+void pacman::GhostAI::FixedUpdate()
 {
 	auto state = m_CurrentStateUPtr->Execute(this);
 
@@ -37,15 +38,15 @@ void diji::GhostAI::FixedUpdate()
 	//todo: late Update
 	auto currentMovement = m_TransformCompPtr->GetMovement();
 	auto shape = m_ColliderCompPtr->GetCollisionBox();
-	if (currentMovement == Movement::Left)
+	if (currentMovement == diji::Movement::Left)
 		if (shape.left < 0 - shape.width)
 			m_TransformCompPtr->SetPosition(AI::TOTAL_WIDTH, shape.bottom);
-	if (currentMovement == Movement::Right)
+	if (currentMovement == diji::Movement::Right)
 		if (shape.left > AI::TOTAL_WIDTH)
 			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
 }
 
-void diji::GhostAI::OnNotify(MessageTypes message, Subject*)
+void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject*)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
 	switch (msg)
@@ -57,22 +58,22 @@ void diji::GhostAI::OnNotify(MessageTypes message, Subject*)
 	}
 }
 
-bool diji::GhostAI::GetIsPoweredUp() const
+bool pacman::GhostAI::GetIsPoweredUp() const
 {
 	return m_PlayerAICompPtr->GetIsPoweredUp();
 }
 
-void diji::GhostAI::TurnAround() const
+void pacman::GhostAI::TurnAround() const
 {
 	m_TransformCompPtr->SetMovement(static_cast<diji::Movement>((static_cast<int>(m_TransformCompPtr->GetMovement()) + 2) % 4));
 }
 #pragma region GhostState
-void diji::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& target)
+void pacman::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& target)
 {
 	const auto& collider = ghost->GetCollider();
 	const auto& shape = collider->GetCollisionBox();
 
-	if (Collision::GetInstance().IsCollidingWithIntersection(shape) and not m_TempLock)
+	if (diji::Collision::GetInstance().IsCollidingWithIntersection(shape) and not m_TempLock)
 	{
 		CalculateDirection(ghost, target);
 		m_TempLock = true;
@@ -88,7 +89,7 @@ void diji::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& target)
 	}
 }
 
-void diji::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec2& target)
+void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec2& target)
 {
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
@@ -115,14 +116,14 @@ void diji::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec2&
 		const glm::vec2 nextTilePosition = center + GetTargetTranslation(direction);
 
 
-		if (Collision::GetInstance().IsCollidingWithWorld(center, nextTilePosition))
+		if (diji::Collision::GetInstance().IsCollidingWithWorld(center, nextTilePosition))
 			canMove = false;
 	}
 
 	//check the remaining directions to determine the closest one
 	//I could use a bool passed in the arguments to change between Frightened and other States
 	//but I still need to pass a target and no other state has a target of { 0, 0 }
-	Movement bestDirection = Movement::Idle;
+	diji::Movement bestDirection = diji::Movement::Idle;
 	
 	if (target == glm::vec2{ 0 , 0 }) //Frightened
 		bestDirection = ChooseRandomDirection(possibleDirections);
@@ -157,7 +158,7 @@ void diji::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec2&
 		ghost->GetTexture()->SetStartingFrame(static_cast<int>(bestDirection) * 2);
 }
 
-glm::vec2 diji::GhostState::GetTargetTranslation(Movement movement) const
+glm::vec2 pacman::GhostState::GetTargetTranslation(diji::Movement movement) const
 {
 	glm::vec2 translation{ 0, 0 };
 	switch (movement)
@@ -179,7 +180,7 @@ glm::vec2 diji::GhostState::GetTargetTranslation(Movement movement) const
 	return translation;
 }
 
-void diji::GhostState::GoToTarget(const GhostAI* ghost, const glm::vec2& target)
+void pacman::GhostState::GoToTarget(const GhostAI* ghost, const glm::vec2& target)
 {
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
@@ -192,11 +193,11 @@ void diji::GhostState::GoToTarget(const GhostAI* ghost, const glm::vec2& target)
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
+	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
 		transform->SetPosition(position);
 }
 
-diji::Movement diji::GhostState::ChooseRandomDirection(const std::map<diji::Movement, bool>& possibleDirections) const
+diji::Movement pacman::GhostState::ChooseRandomDirection(const std::map<diji::Movement, bool>& possibleDirections) const
 {
 	std::vector<diji::Movement> availableDirections;
 	for (const auto& [direction, canMove] : possibleDirections)
@@ -210,14 +211,14 @@ diji::Movement diji::GhostState::ChooseRandomDirection(const std::map<diji::Move
 }
 #pragma endregion
 #pragma region Eaten
-void diji::Eaten::OnEnter(const GhostAI* ghost)
+void pacman::Eaten::OnEnter(const GhostAI* ghost)
 {
 	m_NextStateUPtr = std::make_unique<Respawn>();
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("GhostEaten.png");
 }
 
-std::unique_ptr<diji::GhostState> diji::Eaten::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::Eaten::Execute(const GhostAI* ghost)
 {
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
@@ -228,7 +229,7 @@ std::unique_ptr<diji::GhostState> diji::Eaten::Execute(const GhostAI* ghost)
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not Collision::GetInstance().IsCollidingWithWorld(shape))
+	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape))
 		transform->SetPosition(position);
 	else
 		return nullptr;
@@ -242,7 +243,7 @@ std::unique_ptr<diji::GhostState> diji::Eaten::Execute(const GhostAI* ghost)
 }
 #pragma endregion
 #pragma region Respawn
-void diji::Respawn::OnExit(const GhostAI* ghost)
+void pacman::Respawn::OnExit(const GhostAI* ghost)
 {
 	const auto& texture = ghost->GetTexture();
 	//todo: have ghost hold a texture string
@@ -253,29 +254,29 @@ void diji::Respawn::OnExit(const GhostAI* ghost)
 	texture->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
 }
 
-std::unique_ptr<diji::GhostState> diji::Respawn::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)
 {
 	const auto& transform = ghost->GetTransform();
 
 	glm::vec3 currentPosition = transform->GetPosition();
-	Movement currentMovement = Movement::Idle;
+	diji::Movement currentMovement = diji::Movement::Idle;
 
 	if (currentPosition.y < m_PersonnalSpawn.y)
 	{
 		currentPosition.y += m_Step;
-		currentMovement = Movement::Down;
+		currentMovement = diji::Movement::Down;
 	}
 	else
 	{
 		if (currentPosition.x < m_PersonnalSpawn.x)
 		{
 			currentPosition.x += m_Step;
-			currentMovement = Movement::Right;
+			currentMovement = diji::Movement::Right;
 		}
 		else if (currentPosition.x > m_PersonnalSpawn.x)
 		{
 			currentPosition.x -= m_Step;
-			currentMovement = Movement::Left;
+			currentMovement = diji::Movement::Left;
 		}
 	}
 
@@ -291,36 +292,36 @@ std::unique_ptr<diji::GhostState> diji::Respawn::Execute(const GhostAI* ghost)
 }
 #pragma endregion
 #pragma region Exit Maze
-void diji::ExitMaze::OnExit(const GhostAI* ghost)
+void pacman::ExitMaze::OnExit(const GhostAI* ghost)
 {
-	ghost->GetTransform()->SetMovement(Movement::Left);
-	ghost->GetTexture()->SetStartingFrame(static_cast<int>(Movement::Left) * 2);
+	ghost->GetTransform()->SetMovement(diji::Movement::Left);
+	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Left) * 2);
 	ghost->SetIsPoweredUpLock();
 }
 
-std::unique_ptr<diji::GhostState> diji::ExitMaze::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::ExitMaze::Execute(const GhostAI* ghost)
 {
 	const auto& transform = ghost->GetTransform();
 
 	glm::vec3 currentPosition = transform->GetPosition();
-	Movement currentMovement = Movement::Idle;
+	diji::Movement currentMovement = diji::Movement::Idle;
 
 	if (currentPosition.x < m_OutsidePosition.x)
 	{
 		currentPosition.x += m_Step;
-		currentMovement = Movement::Right;
+		currentMovement = diji::Movement::Right;
 	}
 	else if (currentPosition.x > m_OutsidePosition.x)
 	{
 		currentPosition.x -= m_Step;
-		currentMovement = Movement::Left;
+		currentMovement = diji::Movement::Left;
 	}
 	else
 	{
 		if (currentPosition.y > m_OutsidePosition.y)
 		{
 			currentPosition.y -= m_Step;
-			currentMovement = Movement::Up;
+			currentMovement = diji::Movement::Up;
 		}
 		else
 			return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
@@ -333,14 +334,14 @@ std::unique_ptr<diji::GhostState> diji::ExitMaze::Execute(const GhostAI* ghost)
 }
 #pragma endregion
 #pragma region Scatter
-void diji::Scatter::OnEnter(const GhostAI* ghost)
+void pacman::Scatter::OnEnter(const GhostAI* ghost)
 {
 	m_Target = ghost->GetScatterTarget();
 	ghost->TurnAround();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 }
 
-std::unique_ptr<diji::GhostState> diji::Scatter::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::Scatter::Execute(const GhostAI* ghost)
 {
 	GoToTarget(ghost, m_Target);
 
@@ -356,7 +357,7 @@ std::unique_ptr<diji::GhostState> diji::Scatter::Execute(const GhostAI* ghost)
 }
 #pragma endregion
 #pragma region Frightened
-void diji::Frightened::OnEnter(const GhostAI* ghost)
+void pacman::Frightened::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
 	const auto& texture = ghost->GetTexture();
@@ -365,7 +366,7 @@ void diji::Frightened::OnEnter(const GhostAI* ghost)
 	m_DisplayDirection = false;
 }
 
-void diji::Frightened::OnExit(const GhostAI* ghost)
+void pacman::Frightened::OnExit(const GhostAI* ghost)
 {
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("RedGhost.png");
@@ -373,7 +374,7 @@ void diji::Frightened::OnExit(const GhostAI* ghost)
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 }
 
-std::unique_ptr<diji::GhostState> diji::Frightened::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* ghost)
 {
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
@@ -387,10 +388,10 @@ std::unique_ptr<diji::GhostState> diji::Frightened::Execute(const GhostAI* ghost
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
+	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
 		transform->SetPosition(position);
 
-	const auto& test = Collision::GetInstance().IsColliding(collider);
+	const auto& test = diji::Collision::GetInstance().IsColliding(collider);
 	for (const auto& colliders : test)
 	{
 		if (colliders == player)
@@ -406,13 +407,13 @@ std::unique_ptr<diji::GhostState> diji::Frightened::Execute(const GhostAI* ghost
 }
 #pragma endregion
 #pragma region Chase
-void diji::RedChase::OnEnter(const GhostAI* ghost)
+void pacman::RedChase::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 }
 
-std::unique_ptr<diji::GhostState> diji::RedChase::Execute(const GhostAI* ghost)
+std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* ghost)
 {
 	const auto& player = ghost->GetPlayerCollider();
 

@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GhostAI.h"
-namespace diji
+
+namespace pacman
 {
 	//                                                                        If Pac has               
 	// ┌─────────┐Complex Algortihm┌────────────┐ Is inside Maze ┌───────────┐ power up┌──────────┐    
@@ -13,13 +14,11 @@ namespace diji
 	//                                  │                        │ Return To │              │          
 	//                                  └────────────────────────┤   Spawn   ◄──────────────┘          
 	//                                                           └───────────┘                         
-	class Collider;
-	class Transform;
 
 	class PinkAI final : public GhostAI
 	{
 	public:
-		PinkAI(GameObject* ownerPtr, GameObject* player);
+		PinkAI(diji::GameObject* ownerPtr, diji::GameObject* player);
 		~PinkAI() override = default;
 
 		void Update() override {};

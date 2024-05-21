@@ -2,14 +2,12 @@
 #include "Subject.h"
 #include "Component.h"
 
-namespace diji
+namespace pacman
 {
-	class Text;
-
-	class HealthCounter final : public Component, public Subject
+	class HealthCounter final : public diji::Component, public diji::Subject
 	{
 	public:
-		HealthCounter(GameObject* ownerPtr, int health);
+		HealthCounter(diji::GameObject* ownerPtr, int health);
 		~HealthCounter() override = default;
 
 		HealthCounter(const HealthCounter& other) = delete;
@@ -17,7 +15,7 @@ namespace diji
 		HealthCounter& operator=(const HealthCounter& other) = delete;
 		HealthCounter& operator=(HealthCounter&& other) = delete;
 
-		void Update() override;
+		void Update() override {};
 		void FixedUpdate() override {};
 		void DecreaseHealth();
 
