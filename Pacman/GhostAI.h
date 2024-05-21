@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Component.h"
 #include "ChaseScatterAlgo.h"
+#include "IObserver.h"
+
 namespace diji
 {
 	//                                                                        If Pac has               
@@ -25,6 +27,7 @@ namespace diji
 	{
 	public:
 		//todo: set destructors to noexcept
+		//todo: seperate ghost AI and ghost state
 		//GhostState(Transform* transform, Collider* collider, Collider* player);
 		GhostState() = default;
 		virtual ~GhostState() = default;
@@ -53,7 +56,7 @@ namespace diji
 
 		Movement ChooseRandomDirection(const std::map<diji::Movement, bool>& possibleDirections) const;
 	};
-	class GhostAI : public Component
+	class GhostAI : public Component, public IObserver
 	{
 	public:
 		~GhostAI() = default;
@@ -65,6 +68,7 @@ namespace diji
 
 		void Update() override { m_ChaseScatterAlgo->Update(); };
 		void FixedUpdate() override;
+		void OnNotify(MessageTypes message, Subject*) override;
 
 		virtual std::unique_ptr<GhostState> GetChaseState() const = 0;
 
@@ -72,10 +76,14 @@ namespace diji
 		Collider* GetCollider() const { return m_ColliderCompPtr; };
 		Collider* GetPlayerCollider() const { return m_PlayerColliderPtr; };
 		Texture* GetTexture() const { return m_TextureCompPtr; };
-		bool GetIsPoweredUp() const;
 		bool GetIsInChaseState() const { return m_ChaseScatterAlgo->IsInChaseState(); };
 		glm::vec2 GetSpawnPoint() const { return m_PersonnalSpawn; };
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
+
+		//todo remove this with the new observer
+		bool GetIsPoweredUp() const;
+		void SetIsPoweredUpLock() const { m_LockPowerUp = GetIsPoweredUp(); };
+		bool GetIsPoweredUpLock() const { return m_LockPowerUp; };
 
 		void TurnAround() const;
 	protected:
@@ -92,6 +100,7 @@ namespace diji
 		Texture* m_TextureCompPtr;
 		AI* m_PlayerAICompPtr;
 		std::unique_ptr<ChaseScatterAlgo> m_ChaseScatterAlgo = std::make_unique<ChaseScatterAlgo>();
+		mutable bool m_LockPowerUp = false;
 	};
 
 	class Eaten final : public GhostState

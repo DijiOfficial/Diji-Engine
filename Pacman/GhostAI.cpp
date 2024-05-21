@@ -3,12 +3,14 @@
 #include "Transform.h"
 #include "Texture.h"
 #include "AI.h"
+#include "Observers.h"
 
 #include "RedAI.h"
 diji::GhostAI::GhostAI(GameObject* ownerPtr, GameObject* player)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<Collider>() }
 {
+	//todo: start function for everything this is old now
 	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
 	m_ColliderCompPtr = ownerPtr->GetComponent<Collider>();
 	m_TextureCompPtr = ownerPtr->GetComponent<Texture>();
@@ -30,6 +32,28 @@ void diji::GhostAI::FixedUpdate()
 		m_CurrentStateUPtr->OnExit(this);
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
+	}
+
+	//todo: late Update
+	auto currentMovement = m_TransformCompPtr->GetMovement();
+	auto shape = m_ColliderCompPtr->GetCollisionBox();
+	if (currentMovement == Movement::Left)
+		if (shape.left < 0 - shape.width)
+			m_TransformCompPtr->SetPosition(AI::TOTAL_WIDTH, shape.bottom);
+	if (currentMovement == Movement::Right)
+		if (shape.left > AI::TOTAL_WIDTH)
+			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
+}
+
+void diji::GhostAI::OnNotify(MessageTypes message, Subject*)
+{
+	auto msg = static_cast<MessageTypesDerived>(message);
+	switch (msg)
+	{
+	case MessageTypesDerived::POWERUP_COLLISION:
+		if (m_LockPowerUp)
+			m_LockPowerUp = false;
+		break;
 	}
 }
 
@@ -271,6 +295,7 @@ void diji::ExitMaze::OnExit(const GhostAI* ghost)
 {
 	ghost->GetTransform()->SetMovement(Movement::Left);
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(Movement::Left) * 2);
+	ghost->SetIsPoweredUpLock();
 }
 
 std::unique_ptr<diji::GhostState> diji::ExitMaze::Execute(const GhostAI* ghost)
@@ -322,8 +347,10 @@ std::unique_ptr<diji::GhostState> diji::Scatter::Execute(const GhostAI* ghost)
 	if (ghost->GetIsInChaseState())
 		return std::make_unique<RedChase>();
 
-	if (ghost->GetIsPoweredUp())
+	if (ghost->GetIsPoweredUp() and not ghost->GetIsPoweredUpLock())
 		return std::make_unique<Frightened>();
+	else if (not ghost->GetIsPoweredUp() and ghost->GetIsPoweredUpLock())
+		ghost->SetIsPoweredUpLock();
 
 	return nullptr;
 }
@@ -398,8 +425,10 @@ std::unique_ptr<diji::GhostState> diji::RedChase::Execute(const GhostAI* ghost)
 	if (not ghost->GetIsInChaseState())
 		return std::make_unique<Scatter>();
 
-	if (ghost->GetIsPoweredUp())
+	if (ghost->GetIsPoweredUp() and not ghost->GetIsPoweredUpLock())
 		return std::make_unique<Frightened>();
+	else if (not ghost->GetIsPoweredUp() and ghost->GetIsPoweredUpLock())
+		ghost->SetIsPoweredUpLock();
 
 	return nullptr;
 }

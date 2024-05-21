@@ -7,22 +7,8 @@ namespace diji {
 	class Transform;
 	class Collider;
 	struct Rectf;
-	//class PlayerState
-	//{
-	//public:
-	//	PlayerState() = default;
-	//	virtual ~PlayerState() = default;
-
-	//	PlayerState(const PlayerState& other) = delete;
-	//	PlayerState(PlayerState&& other) = delete;
-	//	PlayerState& operator=(const PlayerState& other) = delete;
-	//	PlayerState& operator=(PlayerState&& other) = delete;
-
-	//	virtual std::unique_ptr<PlayerState> Execute(Transform* transform, Collider* collider) = 0;
-
-	//	virtual void OnEnter() = 0;
-	//	virtual void OnExit() = 0;
-	//};
+	
+	class GhostAI;
 
 	class AI final : public Component, public IObserver
 	{
@@ -40,6 +26,7 @@ namespace diji {
 		void OnNotify(MessageTypes message, [[maybe_unused]] Subject* subject) override;
 		bool GetIsPoweredUp() const { return m_IsPoweredUp; };
 
+		static constexpr float TOTAL_WIDTH = 452;
 	private:
 		Texture* m_TextureCompPtr;
 		Transform* m_TransformCompPtr;
@@ -47,7 +34,6 @@ namespace diji {
 		Movement m_PreviousMovement = Movement::Right;
 		Movement m_SavedMovement = Movement::Right;
 
-		const float TOTAL_WIDTH = 452;
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		//std::unique_ptr<PlayerState> m_CurrentStateUPtr;
 		bool m_IsPoweredUp = false;

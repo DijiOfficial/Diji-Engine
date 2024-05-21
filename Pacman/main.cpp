@@ -196,9 +196,6 @@ void Pacman()
 	player->AddComponents<AI>();
 	player->GetComponent<Render>()->EnableHitbox();
 
-	PickUpLoader pickUpLoader{ player };
-	//PickUpLoader::GetInstance().Initialize(player);
-
 	//auto Pinky = scene->CreateGameObject();
 	//Pinky->AddComponents<Texture>("PinkGhost.png", 14, 14);
 	//Pinky->AddComponents<Transform>(214, 300);
@@ -222,6 +219,11 @@ void Pacman()
 	Blinky->GetComponent<Render>()->EnableHitbox();
 	Blinky->GetComponent<Render>()->SetTestBool(true);
 	
+	const std::vector<GameObject*> ghosts = { Blinky };
+
+	PickUpLoader pickUpLoader{ player, ghosts };
+	//PickUpLoader::GetInstance().Initialize(player);
+
 	//make the hud it's own scene?
 #pragma region HUD
 	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);

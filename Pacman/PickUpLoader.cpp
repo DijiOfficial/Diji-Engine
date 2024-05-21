@@ -7,11 +7,12 @@
 #include "AI.h"
 #include "PickUp.h"
 #include "ScoreCounter.h"
-
-diji::PickUpLoader::PickUpLoader(GameObject* player)
+#include "GhostAI.h"
+diji::PickUpLoader::PickUpLoader(const GameObject* player, const std::vector<GameObject*>& gameObjects)
 {
 	SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
 
+	//todo: Get Level scene
 	m_ScenePtr = SceneManager::GetInstance().CreateScene("PickUpLoader");
 	m_PlayerPtr = player;
 
@@ -29,7 +30,7 @@ diji::PickUpLoader::PickUpLoader(GameObject* player)
 		else
 			for (const auto& pos : posVec)
 			{
-				AddPowerUp("PowerPellet.png", 8, 8, pos, 50);
+				AddPowerUp(gameObjects, "PowerPellet.png", 8, 8, pos, 50);
 			}
 		++idx;
 	}
@@ -51,7 +52,7 @@ void diji::PickUpLoader::AddPickUp(const std::string& file, const int width, con
 
 }
 
-void diji::PickUpLoader::AddPowerUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value)
+void diji::PickUpLoader::AddPowerUp(const std::vector<GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value)
 {
 	auto powerUp = m_ScenePtr->CreateGameObject();
 	powerUp->AddComponents<Texture>(file, width, height);
@@ -61,4 +62,8 @@ void diji::PickUpLoader::AddPowerUp(const std::string& file, const int width, co
 	powerUp->AddComponents<PickUp>(m_PlayerPtr, value);
 
 	powerUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
+	for (const auto& object : gameObjects)
+	{
+		powerUp->GetComponent<PickUp>()->AddObserver(static_cast<MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<GhostAI>());
+	}
 }

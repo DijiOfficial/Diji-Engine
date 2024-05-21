@@ -36,15 +36,6 @@ void diji::AI::Update()
 			PowerUpTimer = 0.f;
 		}
 	}
-	//auto state = m_CurrentStateUPtr->Execute(m_TransformCompPtr, m_ColliderCompPtr);
-	//if (state)
-	//{
-	//	m_CurrentStateUPtr->OnExit();
-	//	m_CurrentStateUPtr = std::move(state);
-	//	m_CurrentStateUPtr->OnEnter();
-	//}
-	//const auto& currentMovement = m_TransformCompPtr->GetMovement();
-	//const auto& shape = CalculateNewPosition(currentMovement);
 }
 
 void diji::AI::FixedUpdate()
