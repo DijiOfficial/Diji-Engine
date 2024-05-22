@@ -1,12 +1,11 @@
 #pragma once
 #include "Singleton.h"
-
-#include <memory>
-#include <unordered_map>
 #include "Texture2D.h"
 #include "Font.h"
 #include "SoundEffect.h"
-//#include "Music.h"
+
+#include <memory>
+#include <unordered_map>
 
 namespace diji
 {

@@ -228,9 +228,6 @@
     <ClCompile Include="ISoundSystem.cpp">
       <Filter>Sources Files\Interfaces</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Sources Files\CoreFiles</Filter>
-    </ClCompile>
     <ClCompile Include="Minigin.cpp">
       <Filter>Sources Files\CoreFiles</Filter>
     </ClCompile>
@@ -269,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Sources Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameActorCommands.cpp">
+      <Filter>Sources Files\Inputs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

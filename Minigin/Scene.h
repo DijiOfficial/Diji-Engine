@@ -1,5 +1,7 @@
 #pragma once
-#include "SceneManager.h"
+#include <vector>
+#include <string>
+#include <memory>
 
 namespace diji 
 {
@@ -17,6 +19,7 @@ namespace diji
 
 		void Update();
 		void FixedUpdate();
+		void Init();
 		void Render() const;
 		
 		GameObject* CreateGameObject();

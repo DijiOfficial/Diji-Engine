@@ -1,13 +1,9 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <memory>
 #include "Singleton.h"
+#include "Scene.h"
 
 namespace diji
 {
-	class Scene;
-
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
@@ -17,6 +13,7 @@ namespace diji
 
 		void Update();
 		void FixedUpdate();
+		void Init();
 		void Render();
 
 		Scene* GetScene(std::string& name) const;

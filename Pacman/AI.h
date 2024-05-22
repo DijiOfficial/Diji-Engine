@@ -1,6 +1,8 @@
 #pragma once
-#include "Command.h"
+#include "Component.h"
 #include "IObserver.h"
+#include "Command.h"
+#include <glm/glm.hpp>
 
 namespace diji
 {
@@ -25,6 +27,7 @@ namespace pacman {
 		AI& operator=(const AI& other) = delete;
 		AI& operator=(AI&& other) = delete;
 
+		void Init() override;
 		void Update() override;
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;

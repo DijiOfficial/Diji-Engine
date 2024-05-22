@@ -1,14 +1,14 @@
 #pragma once
-#include "IObserver.h"
 #include "Singleton.h"
 
 #include <forward_list>
 #include <unordered_map>
-#include <memory>
-
 
 namespace diji
 {
+	class IObserver;
+	enum class MessageTypes;
+
 	class Subject
 	{
 	public:

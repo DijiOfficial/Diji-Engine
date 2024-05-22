@@ -1,5 +1,5 @@
-#include <SDL.h>
 #include "Texture2D.h"
+#include <SDL.h>
 
 diji::Texture2D::~Texture2D()
 {

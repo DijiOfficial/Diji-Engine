@@ -107,6 +107,8 @@ void diji::Minigin::Run(const std::function<void()>& load)
 	bool doContinue = true;
 	float lag = 0.0f;
 
+	sceneManager.Init();
+
 	while (doContinue)
 	{
 		GUI::GetInstance().NewFrame();

@@ -1,10 +1,11 @@
 #include "Text.h"
+
 #include "Font.h"
 #include "Render.h"
 #include "Transform.h"
-
+#include "Renderer.h"
+#include "GameObject.h"
 #include <SDL_ttf.h>
-#include <stdexcept>
 
 diji::Text::Text(GameObject* ownerPtr)
 	: Component(ownerPtr)

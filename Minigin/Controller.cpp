@@ -2,7 +2,6 @@
 #include "windows.h"
 #include <XInput.h>
 #include "Controller.h"
-#include <cassert>
 
 #include <iostream>
 class diji::Controller::XInput
@@ -16,10 +15,6 @@ class diji::Controller::XInput
 			ZeroMemory(&state, sizeof(XINPUT_STATE));
 			DWORD dwResult = XInputGetState(controllerIdx, &state);
 
-			//if (dwResult != ERROR_SUCCESS)
-			//{
-			//	assert("Controller not connected");
-			//}
 			if (dwResult != ERROR_SUCCESS)
 			{
 				switch (dwResult)

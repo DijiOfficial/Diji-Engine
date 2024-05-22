@@ -4,16 +4,14 @@
 #endif
 #endif
 
-
 #include "Minigin.h"
-#include "Scene.h"
+#include "ResourceManager.h"
+#include "SceneManager.h"
 #include "Components.h"
 #include "PickUpLoader.h"
 #include "InputManager.h"
-#include "Subject.h"
 #include "ISoundSystem.h"
 #include "Collision.h"
-
 #include "CustomCommands.h"
 #include "FPSCounter.h"
 #include "ScoreCounter.h"

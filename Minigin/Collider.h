@@ -18,6 +18,7 @@ namespace diji
 		Collider& operator=(const Collider& other) = delete;
 		Collider& operator=(Collider&& other) = delete;
 
+		void Init() override;
 		void Update() override;
 		void FixedUpdate() override {};
 
@@ -27,8 +28,8 @@ namespace diji
 	private:
 		bool m_IsOffsetSet = false;
 		glm::vec2 m_Offset{ 0, 0 };
-		Rectf m_CollisionBox;
 		Transform* m_TransformCompPtr;
+		Rectf m_CollisionBox;
 
 	};
 }

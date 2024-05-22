@@ -1,10 +1,7 @@
 #pragma once
+#include "Collider.h"
+#include "Render.h"
+#include "Rotation.h"
+#include "Text.h"
 #include "Texture.h"
 #include "Transform.h"
-#include "Text.h"
-#include "Render.h"
-#include "TimeSingleton.h" 
-#include "Rotation.h"
-#include "Collider.h"
-
-#include <type_traits>

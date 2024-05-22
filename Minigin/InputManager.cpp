@@ -1,11 +1,9 @@
-#include <SDL.h>
 #include "InputManager.h"
 #include "GUI.h"
+#include <SDL.h>
 
-#include <cassert>
-#include <SDL_scancode.h>
 #include <SDL_gamecontroller.h>
-
+#include <format>
 bool diji::InputManager::ProcessInput()
 {
 	SDL_Event e;

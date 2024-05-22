@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include <iostream>
 #include <queue>
 #include <mutex>
 namespace diji 
@@ -26,7 +25,7 @@ namespace diji
 	class NullSoundSystem final : public ISoundSystem
 	{
 	public:
-		void AddSoundRequest(SoundId sound, int volume) override { (void)sound; (void)volume; std::cout << "No Sound System available\n"; };
+		void AddSoundRequest(SoundId, int) override;
 	};
 
 	class ServiceLocator final
@@ -35,7 +34,7 @@ namespace diji
 		static ISoundSystem& GetSoundSystem() { return *_ss_instance; };
 		static void RegisterSoundSystem(std::unique_ptr<ISoundSystem>&& ss) 
 		{ 
-			_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss); //assign null system instead or nothing since its alread null osund
+			_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss);
 		};
 
 	private:
@@ -45,16 +44,14 @@ namespace diji
 	class SDLISoundSystem final : public ISoundSystem
 	{		
 	public:
-		SDLISoundSystem() { Start(); };
-		~SDLISoundSystem() { Stop(); };
+		SDLISoundSystem();
+		~SDLISoundSystem();
 		void AddSoundRequest(SoundId sound, int volume) override;
 		
 	private:
 		void PlaySound(const SoundId sound, const int volume) const;
 		std::pair<SoundId, int> GetNextSoundRequest();
-		
-		void Stop();
-		void Start();
+	
 		void ProcessSounds();
 
 		std::jthread m_SoundThread;
@@ -72,11 +69,7 @@ namespace diji
 		explicit LoggingSoundSystem(std::unique_ptr<ISoundSystem>&& ss) : _real_ss{ std::move(ss) } {};
 		virtual ~LoggingSoundSystem() override = default;
 
-		void AddSoundRequest(SoundId sound, int volume) override 
-		{ 
-			_real_ss->AddSoundRequest(sound, volume);
-			std::cout << "Adding sound request " << static_cast<int>(sound) << " at volume " << volume << std::endl;
-		};
+		void AddSoundRequest(SoundId sound, int volume) override;
 	private:
 		std::unique_ptr<ISoundSystem> _real_ss;
 	};

@@ -4,24 +4,28 @@
 #include "Texture.h"
 #include "AI.h"
 #include "Observers.h"
-
+#include "GameObject.h"
 #include "RedAI.h"
 
 pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
 {
-	//todo: start function for everything this is old now
+	m_TransformCompPtr = nullptr;
+	m_ColliderCompPtr = nullptr;
+	m_TextureCompPtr = nullptr;
+
+	m_PlayerAICompPtr = player->GetComponent<AI>();
+}
+
+void pacman::GhostAI::Init()
+{
+	const auto& ownerPtr = GetOwner();
 	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
 	m_ColliderCompPtr = ownerPtr->GetComponent<diji::Collider>();
 	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
 
-	assert(m_TransformCompPtr and "AI Component needs to be initialized aftera Transform");
-	assert(m_ColliderCompPtr and "AI Component needs to be initialized aftera Collider");
-	assert(m_TextureCompPtr and "AI Component needs to be initialized aftera Texture");
-
 	m_TransformCompPtr->SetMovement(diji::Movement::Up);
-	m_PlayerAICompPtr = player->GetComponent<AI>();
 }
 
 void pacman::GhostAI::FixedUpdate()

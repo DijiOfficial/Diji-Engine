@@ -1,6 +1,5 @@
 #pragma once
 #include "Singleton.h"
-
 #include "SVGParser.h"
 #include <map>
 

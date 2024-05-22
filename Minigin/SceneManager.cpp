@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "SceneManager.h"
 
 diji::SceneManager::SceneManager()
 {
@@ -21,6 +21,14 @@ void diji::SceneManager::FixedUpdate()
 	for (auto& scene : m_ScenesUPtrVec)
 	{
 		scene->FixedUpdate();
+	}
+}
+
+void diji::SceneManager::Init()
+{
+for (auto& scene : m_ScenesUPtrVec)
+	{
+		scene->Init();
 	}
 }
 

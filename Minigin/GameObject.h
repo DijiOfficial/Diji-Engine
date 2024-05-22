@@ -1,18 +1,12 @@
 #pragma once
 #include "Component.h"
-//maybe put all that in component.h
+
 #include <vector>
 #include <memory>
-#include <chrono>
 #include <glm/glm.hpp>
-#include <algorithm>
-#include <numeric>
-#include <format>
-#include <concepts>
 
 namespace diji
 {
-	class Component;
 	class Transform;
 	class Render;
 
@@ -20,7 +14,7 @@ namespace diji
 	{
 	public:
 		GameObject() = default;
-		~GameObject();
+		~GameObject() = default;
 
 		template<typename... Args>
 		GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested
@@ -32,6 +26,7 @@ namespace diji
 
 		void Update();
 		void FixedUpdate();
+		void Init();
 		void Render() const;
 
 #pragma region Components

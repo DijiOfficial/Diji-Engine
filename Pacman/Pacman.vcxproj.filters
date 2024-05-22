@@ -60,17 +60,11 @@
     <ClCompile Include="Observers.cpp">
       <Filter>Source Files\Observers &amp; Subjects</Filter>
     </ClCompile>
-    <ClCompile Include="PickUp.cpp">
-      <Filter>Source Files\Observers &amp; Subjects</Filter>
-    </ClCompile>
     <ClCompile Include="PinkAI.cpp">
       <Filter>Source Files\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="TrashTheCache.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ChaseScatterAlgo.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GhostAI.cpp">
       <Filter>Source Files\Behaviors</Filter>
@@ -80,6 +74,12 @@
     </ClCompile>
     <ClCompile Include="ScoreCounter.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PickUp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaseScatterAlgo.cpp">
+      <Filter>Source Files\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +101,6 @@
     <ClInclude Include="Observers.h">
       <Filter>Header Files\Observers &amp; Subjects</Filter>
     </ClInclude>
-    <ClInclude Include="PickUp.h">
-      <Filter>Header Files\Observers &amp; Subjects</Filter>
-    </ClInclude>
     <ClInclude Include="PinkAI.h">
       <Filter>Header Files\Behaviors</Filter>
     </ClInclude>
@@ -113,13 +110,16 @@
     <ClInclude Include="TrashTheCache.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ChaseScatterAlgo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GhostAI.h">
       <Filter>Header Files\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="RedAI.h">
+      <Filter>Header Files\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaseScatterAlgo.h">
       <Filter>Header Files\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>

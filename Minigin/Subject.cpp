@@ -1,4 +1,5 @@
 #include "Subject.h"
+#include "IObserver.h"
 
 void diji::Subject::AddObserver(MessageTypes message, IObserver* observer)
 {

@@ -15,6 +15,7 @@ namespace pacman
 		HealthCounter& operator=(const HealthCounter& other) = delete;
 		HealthCounter& operator=(HealthCounter&& other) = delete;
 
+		void Init() override {};
 		void Update() override {};
 		void FixedUpdate() override {};
 		void DecreaseHealth();

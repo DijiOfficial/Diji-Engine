@@ -1,6 +1,9 @@
 #include "Texture.h"
+
 #include "TimeSingleton.h"
 #include "Render.h"
+#include "ResourceManager.h"
+#include "GameObject.h"
 
 diji::Texture::Texture(GameObject* ownerPtr)
 	: Component(ownerPtr)

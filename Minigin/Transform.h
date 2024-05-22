@@ -1,18 +1,19 @@
 #pragma once
-//i'm not sure if this counts as coupling
-//I can avoid it by putting structs and enum classes in a separate file
-#include "Command.h"
+#include "Component.h"
+#include <glm/glm.hpp>
 
 namespace diji
 {
+	enum class Movement;
+
 	class Transform final : public Component
 	{
 	public:
-		Transform(GameObject* ownerPtr) : Component(ownerPtr) { CheckRenderComponent(); SetPosition(0, 0, 0); };
-		Transform(GameObject* ownerPtr, const float x, const float y, const float z) : Component(ownerPtr) { CheckRenderComponent(); SetPosition(x, y, z); };
-		Transform(GameObject* ownerPtr, const float x, const float y) : Component(ownerPtr) { CheckRenderComponent(); SetPosition(x, y); };
-		Transform(GameObject* ownerPtr, int x, int y, int z) : Component(ownerPtr) { CheckRenderComponent(); SetPosition(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); };
-		Transform(GameObject* ownerPtr, int x, int y) : Component(ownerPtr) { CheckRenderComponent(); SetPosition(static_cast<float>(x), static_cast<float>(y)); };
+		Transform(GameObject* ownerPtr) : Component(ownerPtr) { SetPosition(0, 0, 0); };
+		Transform(GameObject* ownerPtr, const float x, const float y, const float z) : Component(ownerPtr) { SetPosition(x, y, z); };
+		Transform(GameObject* ownerPtr, const float x, const float y) : Component(ownerPtr) { SetPosition(x, y); };
+		Transform(GameObject* ownerPtr, int x, int y, int z) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); };
+		Transform(GameObject* ownerPtr, int x, int y) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y)); };
 		~Transform() override = default;
 
 
@@ -21,8 +22,9 @@ namespace diji
 		Transform& operator=(const Transform& other) = delete;
 		Transform& operator=(Transform&& other) = delete;
 
-		void Update() override { };
-		void FixedUpdate() override { };
+		void Init() override {};
+		void Update() override {};
+		void FixedUpdate() override {};
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const float x, const float y, const float z);
@@ -34,7 +36,6 @@ namespace diji
 
 	private:
 		glm::vec3 m_Position;
-		Movement m_CurrentMovement = Movement::Idle;
-		void CheckRenderComponent();
+		Movement m_CurrentMovement;
 	};
 }

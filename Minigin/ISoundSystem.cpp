@@ -1,6 +1,7 @@
 #include "ISoundSystem.h"
 #include "ResourceManager.h"
 #include "SoundEffect.h"
+#include <iostream>
 
 namespace diji 
 {
@@ -38,6 +39,23 @@ namespace diji
         }
 	}
 
+	SDLISoundSystem::SDLISoundSystem()
+	{
+		if (!m_IsRunning)
+		{
+			m_IsRunning = true;
+			m_SoundThread = std::jthread([this]() { ProcessSounds(); });
+		}
+	}
+
+	SDLISoundSystem::~SDLISoundSystem()
+	{
+		if (m_IsRunning)
+		{
+			m_IsRunning = false;
+			condition_.notify_one();
+		}
+	}
 
 	void SDLISoundSystem::AddSoundRequest(SoundId sound, int volume)
 	{
@@ -68,29 +86,22 @@ namespace diji
 		return request;
 	}
 
-	void SDLISoundSystem::Start()
-	{
-		if (!m_IsRunning)
-		{
-			m_IsRunning = true;
-			m_SoundThread = std::jthread([this]() { ProcessSounds(); });
-		}
-	}
-
-	void SDLISoundSystem::Stop()
-	{
-		if (m_IsRunning)
-		{
-			m_IsRunning = false;
-			condition_.notify_one();
-		}
-	}
-
 	void SDLISoundSystem::ProcessSounds() 	{
 		while (m_IsRunning)
 		{
 			auto request = GetNextSoundRequest();
 			PlaySound(request.first, request.second);
 		}
+	}
+
+	void NullSoundSystem::AddSoundRequest(SoundId, int)
+	{
+		std::cout << "No Sound System available\n";
+	}
+
+	void LoggingSoundSystem::AddSoundRequest(SoundId sound, int volume)
+	{
+		_real_ss->AddSoundRequest(sound, volume);
+		std::cout << "Adding sound request " << static_cast<int>(sound) << " at volume " << volume << std::endl;
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
-#include <vector>
-#include <glm/glm.hpp>
 #include "Scene.h"
+#include <glm/glm.hpp>
 
 class diji::GameObject;
 namespace pacman

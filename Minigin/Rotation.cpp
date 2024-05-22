@@ -1,6 +1,8 @@
 #include "Rotation.h"
+
 #include "TimeSingleton.h"
 #include "Transform.h"
+#include "GameObject.h"
 
 diji::Rotation::Rotation(GameObject* ownerPtr) 
     : Component(ownerPtr)
@@ -10,7 +12,6 @@ diji::Rotation::Rotation(GameObject* ownerPtr)
     , m_RotationSpeed{ 0.0f }
     , m_DistanceFromCenter{ 0.0f }
 {
-    assert(ownerPtr->GetComponent<Transform>() and "Transform Component needs to be initialized before Rotation Component");
 }
 
 diji::Rotation::Rotation(GameObject* ownerPtr, float rotationSpeed, float distanceFromCenter)
@@ -20,10 +21,12 @@ diji::Rotation::Rotation(GameObject* ownerPtr, float rotationSpeed, float distan
     , m_RotationAngle{ 0.0f }
     , m_RotationSpeed{ rotationSpeed }
     , m_DistanceFromCenter{ distanceFromCenter }
+{ 
+}
+
+void diji::Rotation::Init()
 {
-    assert(ownerPtr->GetComponent<Transform>() and "Transform Component needs to be initialized before Rotation Component");
- 
-    SetCenter(ownerPtr->GetComponent<Transform>()->GetPosition());
+    SetCenter(GetOwner()->GetComponent<Transform>()->GetPosition());
 }
 
 void diji::Rotation::Update()

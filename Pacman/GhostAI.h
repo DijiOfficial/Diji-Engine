@@ -3,6 +3,11 @@
 #include "ChaseScatterAlgo.h"
 #include "IObserver.h"
 
+#include <map>
+#include <glm/vec2.hpp>
+#include <memory>
+//temp
+//#include "ResourceManager.h"
 namespace diji
 {
 	class Transform;
@@ -29,6 +34,7 @@ namespace pacman
 	class GhostAI;
 	class Chase;
 	
+	//todo: seperate ghost AI and ghost state
 	class GhostState
 	{
 	public:
@@ -73,6 +79,7 @@ namespace pacman
 		GhostAI& operator=(const GhostAI& other) = delete;
 		GhostAI& operator=(GhostAI&& other) = delete;
 
+		void Init() override;
 		void Update() override { m_ChaseScatterAlgo->Update(); };
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, diji::Subject*) override;

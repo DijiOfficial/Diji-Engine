@@ -1,9 +1,11 @@
 #pragma once
-#include "GameObject.h"
+#include "Component.h"
+#include <glm/glm.hpp>
 
 namespace diji
 {
     class Transform;
+    class GameObject;
 
     class Rotation final : public Component
     {
@@ -30,6 +32,7 @@ namespace diji
         void SetDistanceFromCenter(float distance) { m_DistanceFromCenter = distance; }
         float GetDistanceFromCenter() const { return m_DistanceFromCenter; }
 
+        void Init() override;
         void Update() override;
         void FixedUpdate() override {};
 

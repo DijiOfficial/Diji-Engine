@@ -3,7 +3,7 @@
 #include "HealthCounter.h"
 #include "ScoreCounter.h"
 #include "PickUp.h"
-
+#include <format>
 void pacman::HealthObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);

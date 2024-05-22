@@ -4,25 +4,26 @@
 #include "Collider.h"
 #include "PickUp.h"
 #include "ScoreCounter.h"
-
+#include "GameObject.h"
 #include "Observers.h"
 #include "TimeSingleton.h"
-#include <iostream>
-#include "Render.h"
 
 pacman::AI::AI(diji::GameObject* ownerPtr)
 	: Component(ownerPtr)
 {
+	m_TextureCompPtr = nullptr;
+	m_TransformCompPtr = nullptr;
+	m_ColliderCompPtr = nullptr;
+}
+
+void pacman::AI::Init()
+{
+	const auto& ownerPtr = GetOwner();
 	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
 	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
 	m_ColliderCompPtr = ownerPtr->GetComponent<diji::Collider>();
-	assert(m_TextureCompPtr and "AI Component needs to be initialized aftera Texture");
-	assert(m_TransformCompPtr and "AI Component needs to be initialized aftera Transform");
-	assert(m_ColliderCompPtr and "AI Component needs to be initialized aftera Collider");
 
 	m_TransformCompPtr->SetMovement(m_PreviousMovement);
-	//m_CurrentStateUPtr = std::make_unique<Idle>();
-	//m_CurrentStateUPtr->OnEnter();
 }
 
 void pacman::AI::Update()
@@ -97,7 +98,7 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	{
 	case MessageTypesDerived::LEVEL_COLLISION:
 	{
-		std::cout << "AI: Level Collision" << std::endl;
+		//std::cout << "AI: Level Collision" << std::endl;
 		break;
 	}
 	case MessageTypesDerived::PICKUP_COLLISION:

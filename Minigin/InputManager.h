@@ -2,11 +2,14 @@
 #include "Singleton.h"
 #include "Controller.h"
 #include "GameActorCommands.h"
+#include "GameObject.h"
 
 #include <map>
 #include <variant>
+#include <unordered_map>
+#include <SDL_scancode.h>
 
-namespace diji 
+namespace diji
 {
 	enum class KeyState
 	{

@@ -46,6 +46,14 @@ void diji::Scene::FixedUpdate()
 	}
 }
 
+void diji::Scene::Init()
+{
+	for (const auto& object : m_ObjectsUPtrVec)
+	{
+		object->Init();
+	}
+}
+
 void diji::Scene::Render() const
 {
 	for (const auto& object : m_ObjectsUPtrVec)

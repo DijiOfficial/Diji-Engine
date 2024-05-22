@@ -1,6 +1,6 @@
-#include <stdexcept>
-#include <SDL_ttf.h>
 #include "Font.h"
+#include <SDL_ttf.h>
+#include <stdexcept>
 
 TTF_Font* diji::Font::GetFont() const {
 	return m_FontPtr;

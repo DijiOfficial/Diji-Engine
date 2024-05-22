@@ -21,7 +21,6 @@ namespace pacman
 		PinkAI(diji::GameObject* ownerPtr, diji::GameObject* player);
 		~PinkAI() override = default;
 
-		void Update() override {};
 		void FixedUpdate() override;
 	};
 

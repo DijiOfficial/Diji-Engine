@@ -6,9 +6,8 @@
 #include "Observers.h"
 #include "AI.h"
 #include "PickUp.h"
-#include "ScoreCounter.h"
 #include "GhostAI.h"
-
+#include "SceneManager.h"
 pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects)
 {
 	diji::SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);

@@ -1,5 +1,9 @@
 #pragma once
-#include "GameObject.h"
+#include "Component.h"
+#include "Texture2D.h"
+#include <SDL.h>
+#include <string>
+#include <memory>
 
 namespace diji 
 {
@@ -18,6 +22,7 @@ namespace diji
 		Text& operator=(const Text& other) = delete;
 		Text& operator=(Text&& other) = delete;
 
+		void Init() override {};
 		void Update() override;
 		void FixedUpdate() override {};
 

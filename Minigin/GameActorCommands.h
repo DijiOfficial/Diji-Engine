@@ -3,10 +3,12 @@
 
 namespace diji
 {
+	class GameObject;
+
 	class GameActorCommands : public Command
 	{
 	public:
-		explicit GameActorCommands(GameObject* actor) : m_ActorPtr(actor) {};
+		explicit GameActorCommands(GameObject* actor);
 		~GameActorCommands() override = default;
 
 	protected:

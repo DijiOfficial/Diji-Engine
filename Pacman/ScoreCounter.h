@@ -22,6 +22,7 @@ namespace pacman
 		ScoreCounter& operator=(const ScoreCounter& other) = delete;
 		ScoreCounter& operator=(ScoreCounter&& other) = delete;
 
+		void Init() override {};
 		void Update() override {};
 		void FixedUpdate() override {};
 		void IncreaseScore(PointType& pointType);

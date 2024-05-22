@@ -1,16 +1,13 @@
 #include "Collider.h"
 #include "Transform.h"
+#include "GameObject.h"
 
 diji::Collider::Collider(GameObject* ownerPtr, const int width, const int height)
 	: Component(ownerPtr)
 {
-	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
-	assert(m_TransformCompPtr and "GameObject must have a Transform component to have a Collider component");
+	m_TransformCompPtr = nullptr;
+	m_CollisionBox = { 0, 0, static_cast<float>(width * 2), static_cast<float>(height * 2) };
 
-	const auto& pos = m_TransformCompPtr->GetPosition();
-	m_CollisionBox = { pos.x, pos.y, static_cast<float>(width * 2), static_cast<float>(height * 2)};
-
-	Collision::GetInstance().AddCollider(this, m_CollisionBox);
 }
 
 diji::Collider::Collider(GameObject* ownerPtr, const int width, const int height, const glm::vec2& offset)
@@ -18,23 +15,24 @@ diji::Collider::Collider(GameObject* ownerPtr, const int width, const int height
 	, m_IsOffsetSet{ true }
 	, m_Offset{ offset }
 {
-	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
-	assert(m_TransformCompPtr and "GameObject must have a Transform component to have a Collider component");
-
-	const auto& pos = m_TransformCompPtr->GetPosition();
-	m_CollisionBox = { pos.x + offset.x, pos.y + offset.y, static_cast<float>(width), static_cast<float>(height) };
-
-	Collision::GetInstance().AddCollider(this, m_CollisionBox);
+	m_TransformCompPtr = nullptr;
+	m_CollisionBox = { 0, 0, static_cast<float>(width * 2), static_cast<float>(height * 2) };
 }
 
 diji::Collider::Collider(GameObject* ownerPtr, const float width, const float height)
 	: Component(ownerPtr)
 {
-	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
-	assert(m_TransformCompPtr and "GameObject must have a Transform component to have a Collider component");
+	m_TransformCompPtr = nullptr;
+	m_CollisionBox = { 0, 0, width * 2, height * 2 };
+}
+
+void diji::Collider::Init()
+{
+	m_TransformCompPtr = GetOwner()->GetComponent<Transform>();
 
 	const auto& pos = m_TransformCompPtr->GetPosition();
-	m_CollisionBox = { pos.x, pos.y, width * 2, height * 2};
+	m_CollisionBox.left = pos.x + m_Offset.x;
+	m_CollisionBox.bottom = pos.y + m_Offset.y;
 
 	Collision::GetInstance().AddCollider(this, m_CollisionBox);
 }

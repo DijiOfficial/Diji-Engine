@@ -5,7 +5,10 @@
 #include <imgui_plot.h>
 #include <backends/imgui_impl_sdl2.h>
 #include <backends/imgui_impl_opengl3.h>
-
+#include <algorithm>
+#include <numeric>
+#include <chrono>
+#include <format>
 // needs threading
 namespace test
 {
@@ -26,6 +29,7 @@ namespace test
 		TrashTheCache& operator=(const TrashTheCache& other) = delete;
 		TrashTheCache& operator=(TrashTheCache&& other) = delete;
 
+		void Init() override {};
 		void Update() override;
 		void FixedUpdate() override {};
 				

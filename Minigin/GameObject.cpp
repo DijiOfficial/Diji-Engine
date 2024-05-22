@@ -1,10 +1,8 @@
 #include "GameObject.h"
+
 #include "Render.h"
 #include "Transform.h"
-
-diji::GameObject::~GameObject()
-{
-};
+#include <algorithm>
 
 void diji::GameObject::Update()
 {
@@ -21,6 +19,14 @@ void diji::GameObject::FixedUpdate()
     for (const auto& component : m_ComponentsPtrVec)
     {
 		component->FixedUpdate();
+	}
+}
+
+void diji::GameObject::Init()
+{
+	for (const auto& component : m_ComponentsPtrVec)
+	{
+		component->Init();
 	}
 };
 

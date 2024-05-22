@@ -40,6 +40,8 @@ namespace pacman
 		~PelletObserver() override = default;
 
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+
+		void Init() override {};
 		void Update() override {};
 		void FixedUpdate() override {};
 		int GetPelletCount() const { return m_PelletCount; }

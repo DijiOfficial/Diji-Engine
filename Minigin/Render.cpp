@@ -1,9 +1,14 @@
 #include "Render.h"
+
 #include "Transform.h"
 #include "Texture.h"
 #include "Text.h"
+#include "Renderer.h"
+#include "GameObject.h"
 
 //temp
+#include "Command.h"
+#include "Collision.h"
 #include "Collider.h"
 diji::Render::Render(GameObject* ownerPtr, int scale) 
 	: Render(ownerPtr)
@@ -11,29 +16,27 @@ diji::Render::Render(GameObject* ownerPtr, int scale)
 	m_Scale = scale;
 }
 
-diji::Render::Render(GameObject* ownerPtr) 
+diji::Render::Render(GameObject* ownerPtr)
 	: Component(ownerPtr)
-{ 
-	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
+{
+	m_TransformCompPtr = nullptr;
+	m_TextureCompPtr = nullptr;
+	m_TextCompPtr = nullptr;
+	m_TexturePtr = nullptr;
+}
 
+void diji::Render::Init()
+{
+	const auto& ownerPtr = GetOwner();
+
+	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
 	m_TextureCompPtr = ownerPtr->GetComponent<Texture>();
 	m_TextCompPtr = ownerPtr->GetComponent<Text>();
-	
-	if (not (m_TextureCompPtr or m_TextCompPtr))
-	{
-		if (m_TextCompPtr)
-			assert(m_TextureCompPtr and "Texture Component needs to be initialized before Render");
-		assert(m_TextCompPtr and "Text Component needs to be initialized before Render");
-	}
 
 	if (m_TextureCompPtr)
 		m_TexturePtr = m_TextureCompPtr->GetTexture();
 	else
 		m_TexturePtr = m_TextCompPtr->GetTexture();
-};
-
-void diji::Render::Update()
-{
 }
 
 void diji::Render::RenderFrame() const
@@ -100,4 +103,4 @@ void diji::Render::RenderFrame() const
 void diji::Render::UpdateText()
 { 
 	m_TexturePtr = m_TextCompPtr->GetTexture(); 
-};
+}

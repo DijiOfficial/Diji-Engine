@@ -1,7 +1,7 @@
 #include "FPSCounter.h"
 #include "Text.h"
 #include "TimeSingleton.h"
-
+#include "GameObject.h"
 #include <format>
 
 diji::FPSCounter::FPSCounter(GameObject* ownerPtr) 
@@ -10,11 +10,13 @@ diji::FPSCounter::FPSCounter(GameObject* ownerPtr)
     , m_Fps{ 0 }
     , m_ElapsedTime{ 0 } 
 { 
-    m_TextComponentPtr = ownerPtr->GetComponent<Text>(); 
-
-    assert(m_TextComponentPtr and "Text Component needs to be initialized before FPSCounter");
+    m_TextComponentPtr = nullptr;
 };
 
+void diji::FPSCounter::Init()
+{
+    m_TextComponentPtr = GetOwner()->GetComponent<Text>();
+}
 
 void diji::FPSCounter::Update()
 {
@@ -31,21 +33,4 @@ void diji::FPSCounter::Update()
 
     if (m_Fps != tempFps)
         m_TextComponentPtr->SetText(std::format("{:.1f} FPS", m_Fps));
-}
-
-void diji::FPSCounter::FixedUpdate()
-{
-    //const double tempFps = m_Fps;
-    //m_ElapsedTime += TimeSingleton::GetInstance().GetDeltaTime();
-    //++m_FrameCount;
-
-    //if (m_ElapsedTime >= REFRESH_RATE)
-    //{
-    //    m_Fps = static_cast<float>(m_FrameCount / m_ElapsedTime);
-    //    m_FrameCount = 0;
-    //    m_ElapsedTime = 0;
-    //}
-
-    //if (m_Fps != tempFps)
-    //    m_TextComponentPtr->SetText(std::format("{:.1f} FPS", m_Fps));
 }

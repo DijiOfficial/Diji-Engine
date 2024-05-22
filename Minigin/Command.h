@@ -1,7 +1,4 @@
 #pragma once
-#include "GameObject.h"
-#include <glm/glm.hpp>
-
 namespace diji
 {
 	enum class Movement

@@ -1,8 +1,12 @@
 #pragma once
-#include "GameObject.h"
+#include "Component.h"
+#include <string>
 
 namespace diji
 {
+	class Texture2D;
+	class GameObject;
+
 	class Texture final : public Component
 	{
 	public:
@@ -17,6 +21,7 @@ namespace diji
 		Texture& operator=(const Texture& other) = delete;
 		Texture& operator=(Texture&& other) = delete;
 
+		void Init() override {};
 		void Update() override;
 		void FixedUpdate() override {};
 
@@ -41,6 +46,7 @@ namespace diji
 		bool CanRotate() const { return m_CanRotate; }
 		float GetRotationAngle() const { return m_RotationAngle; }
 
+		//todo: clean up
 	private:
 		Texture2D* m_TexturePtr;
 		int m_Width;

@@ -1,9 +1,4 @@
 #pragma once
-#include "Renderer.h"
-#include "ResourceManager.h"
-
-#include <string>
-
 namespace diji 
 {
 	class GameObject;
@@ -18,6 +13,7 @@ namespace diji
 		Component& operator=(const Component& other) = delete;
 		Component& operator=(Component&& other) = delete;
 
+		virtual void Init() = 0;
 		virtual void Update() = 0;
 		virtual void FixedUpdate() = 0;
 

@@ -1,11 +1,11 @@
 #pragma once
 #include "GameActorCommands.h"
-#include <map>
-
-namespace diji 
+#include <glm/glm.hpp>
+namespace diji
 {
 	class Transform;
 	class Collider;
+	class GameObject;
 }
 
 namespace pacman

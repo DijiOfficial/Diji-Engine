@@ -26,6 +26,7 @@ namespace pacman
 
 		std::unique_ptr<GhostState> GetChaseState() const override { return std::make_unique<RedChase>(); };
 
+		void Init() override;
 		//void Update() override { GhostAI::Update(); };
 	};
 }

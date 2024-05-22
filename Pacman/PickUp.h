@@ -25,6 +25,7 @@ namespace pacman
 		PickUp& operator=(const PickUp& other) = delete;
 		PickUp& operator=(PickUp&& other) = delete;
 
+		void Init() override;
 		void Update() override;
 		void FixedUpdate() override {};
 		int GetValue() const { return m_Value; };
