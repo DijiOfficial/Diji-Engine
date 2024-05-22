@@ -4,7 +4,6 @@
 namespace diji
 {
 	class Transform;
-	class Collider;
 	class GameObject;
 }
 
@@ -26,7 +25,6 @@ namespace pacman
 		const glm::vec2 m_Speed = { 160.f, 160.f }; //sets speed as universal, may change it to get it from the actor
 		diji::Movement m_Movement;
 		diji::Transform* m_TransformComponentPtr;
-		diji::Collider* m_CollisionComponentPtr;
 	};
 
 	class HitCommand final : public diji::GameActorCommands

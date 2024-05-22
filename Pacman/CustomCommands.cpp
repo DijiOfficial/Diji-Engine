@@ -3,7 +3,6 @@
 #include "Transform.h"
 #include "HealthCounter.h"
 #include "ScoreCounter.h"
-#include "Collider.h"
 #include "GameObject.h"
 
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
@@ -12,11 +11,7 @@ pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 {
 	//todo: see if can add Init function
 	m_TransformComponentPtr = GetGameActor()->GetComponent<diji::Transform>();
-	//todo: verify if collider is needed
-	m_CollisionComponentPtr = GetGameActor()->GetComponent<diji::Collider>();
-
 	assert(m_TransformComponentPtr and "Move Command need to be initialized after GameObject Transform Component");
-	assert(m_CollisionComponentPtr and "Move Command need to be initialized after GameObject Collision Component");
 }
 
 void pacman::Move::Execute()
