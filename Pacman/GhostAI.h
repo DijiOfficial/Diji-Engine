@@ -31,7 +31,6 @@ namespace pacman
 	//                                  └────────────────────────┤   Spawn   ◄──────────────┘          
 	//                                                           └───────────┘                         
 	
-	class AI;
 	class GhostState;
 
 	class GhostAI : public diji::Component, public diji::IObserver
@@ -45,7 +44,7 @@ namespace pacman
 		GhostAI& operator=(GhostAI&& other) = delete;
 
 		void Init() override;
-		void Update() override { m_ChaseScatterAlgo->Update(); };
+		void Update() override;
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 
@@ -59,10 +58,8 @@ namespace pacman
 		glm::vec2 GetSpawnPoint() const { return m_PersonnalSpawn; };
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
 
-		//todo remove this with the new observer
-		bool GetIsPoweredUp() const;
-		void SetIsPoweredUpLock() const { m_LockPowerUp = GetIsPoweredUp(); };
-		bool GetIsPoweredUpLock() const { return m_LockPowerUp; };
+		bool IsFrightened() const { return m_IsFrightened; };
+		void ClearFrightened() const { m_IsFrightened = false; m_PowerUpTimer = 0.f; };
 
 		void TurnAround() const;
 	protected:
@@ -77,9 +74,9 @@ namespace pacman
 		diji::Collider* m_ColliderCompPtr;
 		diji::Collider* m_PlayerColliderPtr;
 		diji::Texture* m_TextureCompPtr;
-		AI* m_PlayerAICompPtr;
 		std::unique_ptr<ChaseScatterAlgo> m_ChaseScatterAlgo = std::make_unique<ChaseScatterAlgo>();
-		mutable bool m_LockPowerUp = false;
+		mutable bool m_IsFrightened = false;
+		mutable float m_PowerUpTimer = 0.f;
 	};
 
 	class RedAI final : public GhostAI

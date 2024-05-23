@@ -28,10 +28,9 @@ namespace pacman {
 		AI& operator=(AI&& other) = delete;
 
 		void Init() override;
-		void Update() override;
+		void Update() override {};
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
-		bool GetIsPoweredUp() const { return m_IsPoweredUp; };
 
 		static constexpr float TOTAL_WIDTH = 452;
 	private:
@@ -42,10 +41,6 @@ namespace pacman {
 		diji::Movement m_SavedMovement = diji::Movement::Right;
 
 		const glm::vec2 m_Speed = { 160.f, 160.f };
-		//std::unique_ptr<PlayerState> m_CurrentStateUPtr;
-		bool m_IsPoweredUp = false;
-		float PowerUpTimer = 0.f;
-
 		const diji::Rectf CalculateNewPosition(diji::Movement movement);
 	};
 }

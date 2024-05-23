@@ -236,7 +236,7 @@ void pacman::ExitMaze::OnExit(const GhostAI* ghost)
 {
 	ghost->GetTransform()->SetMovement(diji::Movement::Left);
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Left) * 2);
-	ghost->SetIsPoweredUpLock();
+	ghost->ClearFrightened();
 }
 
 std::unique_ptr<pacman::GhostState> pacman::ExitMaze::Execute(const GhostAI* ghost)
@@ -288,10 +288,8 @@ std::unique_ptr<pacman::GhostState> pacman::Scatter::Execute(const GhostAI* ghos
 	if (ghost->GetIsInChaseState())
 		return std::make_unique<RedChase>();
 
-	if (ghost->GetIsPoweredUp() and not ghost->GetIsPoweredUpLock())
+	if (ghost->IsFrightened())
 		return std::make_unique<Frightened>();
-	else if (not ghost->GetIsPoweredUp() and ghost->GetIsPoweredUpLock())
-		ghost->SetIsPoweredUpLock();
 
 	return nullptr;
 }
@@ -340,7 +338,7 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 		}
 	}
 
-	if (not ghost->GetIsPoweredUp())
+	if (not ghost->IsFrightened())
 		return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
 
 	return nullptr;
@@ -366,11 +364,9 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 	if (not ghost->GetIsInChaseState())
 		return std::make_unique<Scatter>();
 
-	if (ghost->GetIsPoweredUp() and not ghost->GetIsPoweredUpLock())
+	if (ghost->IsFrightened())
 		return std::make_unique<Frightened>();
-	else if (not ghost->GetIsPoweredUp() and ghost->GetIsPoweredUpLock())
-		ghost->SetIsPoweredUpLock();
-
+	
 	return nullptr;
 }
 #pragma endregion

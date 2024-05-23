@@ -2,10 +2,11 @@
 #include "Collider.h"
 #include "Transform.h"
 #include "Texture.h"
-#include "AI.h"
 #include "Observers.h"
 #include "GameObject.h"
 #include "GhostStates.h"
+#include "TimeSingleton.h"
+#include "AI.h"
 
 pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: Component(ownerPtr)
@@ -15,7 +16,6 @@ pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	m_ColliderCompPtr = nullptr;
 	m_TextureCompPtr = nullptr;
 
-	m_PlayerAICompPtr = player->GetComponent<AI>();
 }
 
 void pacman::GhostAI::Init()
@@ -26,6 +26,21 @@ void pacman::GhostAI::Init()
 	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
 
 	m_TransformCompPtr->SetMovement(diji::Movement::Up);
+}
+
+void pacman::GhostAI::Update()
+{
+	m_ChaseScatterAlgo->Update();
+
+	if (m_IsFrightened)
+	{
+		m_PowerUpTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
+		if (m_PowerUpTimer >= 10.f)
+		{
+			m_IsFrightened = false;
+			m_PowerUpTimer = 0.f;
+		}
+	}
 }
 
 void pacman::GhostAI::FixedUpdate()
@@ -56,15 +71,10 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject*)
 	switch (msg)
 	{
 	case MessageTypesDerived::POWERUP_COLLISION:
-		if (m_LockPowerUp)
-			m_LockPowerUp = false;
+		m_IsFrightened = true;
+		m_PowerUpTimer = 0.f;
 		break;
 	}
-}
-
-bool pacman::GhostAI::GetIsPoweredUp() const
-{
-	return m_PlayerAICompPtr->GetIsPoweredUp();
 }
 
 void pacman::GhostAI::TurnAround() const

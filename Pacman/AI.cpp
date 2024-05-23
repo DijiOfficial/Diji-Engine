@@ -26,20 +26,6 @@ void pacman::AI::Init()
 	m_TransformCompPtr->SetMovement(m_PreviousMovement);
 }
 
-void pacman::AI::Update()
-{
-
-	if (m_IsPoweredUp)
-	{
-		PowerUpTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
-		if (PowerUpTimer >= 10.f)
-		{
-			m_IsPoweredUp = false;
-			PowerUpTimer = 0.f;
-		}
-	}
-}
-
 void pacman::AI::FixedUpdate()
 {
 	const auto& currentMovement = m_TransformCompPtr->GetMovement();
@@ -102,22 +88,12 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 		break;
 	}
 	case MessageTypesDerived::PICKUP_COLLISION:
-	{
-		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
-
-		const int value = pickUp->GetValue();
-		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
-		break;
-	}
 	case MessageTypesDerived::POWERUP_COLLISION:
 	{
 		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
 
 		const int value = pickUp->GetValue();
 		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
-
-		m_IsPoweredUp = true;
-		PowerUpTimer = 0.f;
 		break;
 	}
 	default:
