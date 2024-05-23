@@ -87,6 +87,7 @@ pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 {
 	m_PersonnalSpawn = { 212, 300 };
 	m_ScatterTarget = { 450, 60 };
+	m_TexturePath = "RedGhost.png";
 
 	m_CurrentStateUPtr = std::make_unique<Scatter>();
 }

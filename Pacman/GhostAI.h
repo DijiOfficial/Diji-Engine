@@ -16,20 +16,27 @@ namespace diji
 
 namespace pacman
 {
-	//                                                            ┌─────────┐
-	//															  │ Scatter │
-	//															  └───▲─────┘  
-	//                                                                │       If Pac has               
-	// ┌─────────┐Complex Algortihm┌────────────┐ Is inside Maze ┌────▲──────┐ power up┌──────────┐    
-	// │ Waiting ├─────────────────► Enter Maze ├────────────────► Chase Pac ◄─────────► Flee Pac │    
-	// └─────────┘                 └────▲───────┘                └───────────┘         └────┬─────┘    
-	//                                  │                                                   │          
-	//                                  │                                                   │          
-	//                                  │                                                   │ If Killed
-	//                                  │                        ┌───────────┐              │          
-	//                                  │                        │ Return To │              │          
-	//                                  └────────────────────────┤   Spawn   ◄──────────────┘          
-	//                                                           └───────────┘                         
+	//                                                                      If Power                
+	//                                    If In Chase Mode    ┌───────┐   Pellet Eaten              
+	//                               ┌────────────────────────► Chase ◄──────────────────┐          
+	//                               │                        └───▲───┘   Power Ran Out  │          
+	//                               │                            │                      │          
+	//                               │                            │                      │          
+	//                               │                          If│Time            ┌─────▼──────┐   
+	//                               │                          To│Switch          │ Frightened ├──┐
+	//                               │                            │                └─────▲──────┘  │
+	//                               │                            │                      │         │
+	//               Complex         │            If In           │         If Power     │         │
+	// ┌─────────┐  Algorithm  ┌─────┴──────┐  Scatter Mode  ┌────▼────┐  Pellet Eaten   │         │
+	// │ Waiting ├─────────────► Enter Maze ├────────────────► Scatter ◄─────────────────┘         │
+	// └─────────┘             └─────▲──────┘                └─────────┘  Power Ran Out            │
+	//                               │                                                             │
+	//                      Personnal│Spawn                                                        │
+	//                         Is Reached                                                          │
+	//                               │                                                             │
+	//                          ┌────┴────┐  If Spawn Reached  ┌───────┐    If Player Collision    │
+	//                          │ Respawn ◄────────────────────┤ Eaten ◄───────────────────────────┘
+	//                          └─────────┘                    └───────┘                            
 	
 	class GhostState;
 
@@ -60,6 +67,7 @@ namespace pacman
 
 		bool IsFrightened() const { return m_IsFrightened; };
 		void ClearFrightened() const { m_IsFrightened = false; m_PowerUpTimer = 0.f; };
+		void SetGhostTexture() const { m_TextureCompPtr->SetTexture(m_TexturePath); };
 
 		void TurnAround() const;
 	protected:
@@ -68,6 +76,7 @@ namespace pacman
 		std::unique_ptr<GhostState> m_CurrentStateUPtr;
 		glm::vec2 m_PersonnalSpawn{ 0, 0 };
 		glm::vec2 m_ScatterTarget{ 0, 0 };
+		std::string m_TexturePath;
 
 	private:
 		diji::Transform* m_TransformCompPtr;

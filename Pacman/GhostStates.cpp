@@ -185,13 +185,8 @@ std::unique_ptr<pacman::GhostState> pacman::Eaten::Execute(const GhostAI* ghost)
 void pacman::Respawn::OnEnter(const GhostAI* ghost) { m_PersonnalSpawn = ghost->GetSpawnPoint(); };
 void pacman::Respawn::OnExit(const GhostAI* ghost)
 {
-	const auto& texture = ghost->GetTexture();
-	//todo: have ghost hold a texture string
-	if (const RedAI* redAI = dynamic_cast<const RedAI*>(ghost))
-	{
-		texture->SetTexture("RedGhost.png");
-	}
-	texture->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
+	ghost->SetGhostTexture();
+	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)
