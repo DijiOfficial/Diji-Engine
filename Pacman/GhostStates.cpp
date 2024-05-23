@@ -52,6 +52,15 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 		if (!canMove)
 			continue;
 
+		if (direction == diji::Movement::Up)
+		{
+			if (std::find(m_BlockedIntersections.begin(), m_BlockedIntersections.end(), center) != m_BlockedIntersections.end())
+			{
+				canMove = false;
+				continue;
+			}
+		}
+
 		const glm::vec2 nextTilePosition = center + GetTargetTranslation(direction);
 
 

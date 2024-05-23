@@ -2,6 +2,7 @@
 #include <memory>
 #include <map>
 #include <glm/vec2.hpp>
+#include <array>
 
 namespace diji
 {
@@ -34,6 +35,7 @@ namespace pacman
 		const int m_Step = 1;
 		bool m_DisplayDirection = true;
 	private:
+		static constexpr std::array<glm::vec2, 4> m_BlockedIntersections = { {{202, 262}, {250, 262}, {202, 454}, {250, 454}} };
 		bool m_TempLock = false;
 		int m_LockedFrames = 0;
 
