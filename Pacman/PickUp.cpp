@@ -63,12 +63,13 @@ void pacman::PickUp::Update()
 		if (collider == m_PlayerColliderPtr)
 		{
 			const auto& playerBox = m_PlayerColliderPtr->GetCollisionBox();
-			const glm::vec2 center = { playerBox.left + playerBox.width * 0.5f, playerBox.bottom + playerBox.height * 0.5f };
+			const glm::vec2 playerCenter = { playerBox.left + playerBox.width * 0.5f, playerBox.bottom + playerBox.height * 0.5f };
 
 			const auto& pelletBox = m_OwnerColliderPtr->GetCollisionBox();
+			const glm::vec2 pelletCenter = { pelletBox.left + pelletBox.width * 0.5f, pelletBox.bottom + pelletBox.height * 0.5f };
 
-			const float deltaX = center.x - pelletBox.left;
-			const float deltaY = center.y - pelletBox.bottom;
+			const float deltaX = playerCenter.x - pelletCenter.x;
+			const float deltaY = playerCenter.y - pelletCenter.y;
 			const float distance = deltaX * deltaX + deltaY * deltaY;
 
 			if (distance <= 64.f)
