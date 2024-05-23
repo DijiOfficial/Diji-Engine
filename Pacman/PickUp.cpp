@@ -2,7 +2,6 @@
 #include "Collider.h"
 #include "GameObject.h"
 #include "ISoundSystem.h"
-
 #include "Observers.h"
 #include "Render.h"
 
@@ -57,13 +56,25 @@ void pacman::PickUp::Update()
 	}
 
 	//this is rather slow, possible optimisation?
+	//todo: check collisions on late update
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{
 		if (collider == m_PlayerColliderPtr)
 		{
-			//todo: check if the player is within 16px of the pellet
-			HandleCollision();
+			const auto& playerBox = m_PlayerColliderPtr->GetCollisionBox();
+			const glm::vec2 center = { playerBox.left + playerBox.width * 0.5f, playerBox.bottom + playerBox.height * 0.5f };
+
+			const auto& pelletBox = m_OwnerColliderPtr->GetCollisionBox();
+
+			const float deltaX = center.x - pelletBox.left;
+			const float deltaY = center.y - pelletBox.bottom;
+			const float distance = deltaX * deltaX + deltaY * deltaY;
+
+			if (distance <= 64.f)
+				HandleCollision();
+
+			break;
 		}
 	}
 }
