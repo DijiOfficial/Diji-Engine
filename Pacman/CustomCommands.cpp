@@ -9,7 +9,6 @@ pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
 {
-	//todo: see if can add Init function
 	m_TransformComponentPtr = GetGameActor()->GetComponent<diji::Transform>();
 	assert(m_TransformComponentPtr and "Move Command need to be initialized after GameObject Transform Component");
 }
