@@ -302,17 +302,24 @@ void pacman::Frightened::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
 	const auto& texture = ghost->GetTexture();
+	//todo: check why ghost is gone for 1 frame
 	texture->SetTexture("Frightened.png");
+	texture->SetNrOfFrames(2);
 	texture->SetStartingFrame(0);
 	m_DisplayDirection = false;
+	m_IsUpdated = false;
 }
 
 void pacman::Frightened::OnExit(const GhostAI* ghost)
 {
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("RedGhost.png");
+	texture->SetNrOfFrames(2);
+	texture->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 	m_DisplayDirection = true;
-	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
+	m_IsUpdated = false;
+
+	texture->DisableFlickerAnimation();
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* ghost)
@@ -331,6 +338,13 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 
 	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
 		transform->SetPosition(position);
+
+	if (not m_IsUpdated and ghost->IsPowerAlmostOver())
+	{
+		ghost->GetTexture()->SetNrOfFrames(4);
+		ghost->GetTexture()->EnableFlickerAnimation();
+		m_IsUpdated = true;
+	}
 
 	const auto& test = diji::Collision::GetInstance().IsColliding(collider);
 	for (const auto& colliders : test)

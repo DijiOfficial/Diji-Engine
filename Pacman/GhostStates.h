@@ -104,6 +104,8 @@ namespace pacman
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	private:
+		bool m_IsUpdated = false;
 	};
 
 	class Chase : public GhostState

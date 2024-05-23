@@ -38,7 +38,9 @@ namespace diji
 		void PauseAnimation() { m_IsAnimationPaused = true; }
 		void ResumeAnimation() { m_IsAnimationPaused = false; }
 		void SetStartingFrame(int frame);
-
+		void EnableFlickerAnimation() { m_FlickerAnimation = true; }
+		void DisableFlickerAnimation() { m_FlickerAnimation = false; }
+		
 		bool IsAnimated() const { return m_IsAnimated; }
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
@@ -60,6 +62,7 @@ namespace diji
 		bool m_IsAnimated = false;
 		bool m_CanRotate = false;
 		bool m_IsAnimationPaused = false;
+		bool m_FlickerAnimation = false;
 	};
 }
 

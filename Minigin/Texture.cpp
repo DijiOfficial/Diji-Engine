@@ -72,7 +72,11 @@ void diji::Texture::Update()
 	m_FrameTime += TimeSingleton::GetInstance().GetDeltaTime();
 	if (m_FrameTime >= 0.3f / m_NrOfFrames)
 	{
+		if (m_FlickerAnimation)
+			m_Frame += static_cast<int>(m_NrOfFrames * 0.5f);
+		
 		++m_Frame;
+
 		m_FrameTime = 0;
 		if ((m_Frame - m_StartingFrame) >= m_NrOfFrames)
 			m_Frame = m_StartingFrame;
