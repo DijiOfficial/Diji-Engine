@@ -21,8 +21,8 @@ namespace diji
 		float GetFPS() const { return m_Fps; };
 
 	private:
-		Text* m_TextComponentPtr;
 		const float REFRESH_RATE = 0.1f;
+		Text* m_TextComponentPtr;
 		int m_FrameCount;
 		float m_Fps;
 		float m_ElapsedTime;

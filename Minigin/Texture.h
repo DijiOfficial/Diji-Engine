@@ -21,19 +21,19 @@ namespace diji
 		Texture& operator=(const Texture& other) = delete;
 		Texture& operator=(Texture&& other) = delete;
 
-		void Init() override {};
+		void Init() override;
 		void Update() override;
 		void FixedUpdate() override {};
 
 		void SetTexture(const std::string& filename);
-		Texture2D* GetTexture() const { return m_TexturePtr; };
-		//todo: clean up getter setters
+		Texture2D* GetTexturePtr() const { return m_TexturePtr; };
+
 		void SetWidth(int width) { m_Width = width; }
 		void SetHeight(int height) { m_Height = height; }
 		void SetAnimated() { m_IsAnimated = true; }
-		void SetNrOfFrames(int nrOfFrames) { m_NrOfFrames = nrOfFrames; }
+		void SetNrOfFrames(int nrOfFrames) { if (nrOfFrames >= 0) m_NrOfFrames = nrOfFrames; }
 		void SetRotation(bool canRotate) { m_CanRotate = canRotate; }
-		void SetCurrentFrame(int frame) { m_Frame = frame; }
+		void SetCurrentFrame(int frame) { if (frame >= 0) m_Frame = frame; }
 		void SetRotationAngle(float angle) { m_RotationAngle = angle; }
 		void PauseAnimation() { m_IsAnimationPaused = true; }
 		void ResumeAnimation() { m_IsAnimationPaused = false; }
@@ -46,18 +46,18 @@ namespace diji
 		bool CanRotate() const { return m_CanRotate; }
 		float GetRotationAngle() const { return m_RotationAngle; }
 
-		//todo: clean up
 	private:
 		Texture2D* m_TexturePtr;
+		std::string m_FilePath;
 		int m_Width;
 		int m_Height;
-		int m_NrOfFrames;
-		int m_Frame;
+		int m_NrOfFrames = 0;
+		int m_Frame = 0;
 		int m_StartingFrame = 0;
-		float m_FrameTime;
+		float m_FrameTime = 0;
 		float m_RotationAngle = 0;
 
-		bool m_IsAnimated;
+		bool m_IsAnimated = false;
 		bool m_CanRotate = false;
 		bool m_IsAnimationPaused = false;
 	};

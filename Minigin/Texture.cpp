@@ -8,39 +8,28 @@
 diji::Texture::Texture(GameObject* ownerPtr)
 	: Component(ownerPtr)
 	, m_TexturePtr{ nullptr }
+	, m_FilePath{ "" }
 	, m_Width{ 0 }
 	, m_Height{ 0 }
-	, m_NrOfFrames{ 0 }
-	, m_Frame{ 0 }
-	, m_FrameTime{ 0 }
-	, m_IsAnimated{ false }
 {
 }
 
 diji::Texture::Texture(GameObject* ownerPtr, const std::string& filename)
 	: Component(ownerPtr)
 	, m_TexturePtr{ nullptr }
+	, m_FilePath{ filename }
 	, m_Width{ 0 }
 	, m_Height{ 0 }
-	, m_NrOfFrames{ 0 }
-	, m_Frame{ 0 }
-	, m_FrameTime{ 0 }
-	, m_IsAnimated{ false }
 {
-		SetTexture(filename);
 }
 
 diji::Texture::Texture(GameObject* ownerPtr, const std::string& filename, int width, int height)
 	: Component(ownerPtr)
 	, m_TexturePtr{ nullptr }
+	, m_FilePath{ filename }
 	, m_Width{ width }
 	, m_Height{ height }
-	, m_NrOfFrames{ 0 }
-	, m_Frame{ 0 }
-	, m_FrameTime{ 0 }
-	, m_IsAnimated{ false }
 {
-	SetTexture(filename);
 }
 
 diji::Texture::Texture(GameObject* ownerPtr, const std::string& filename, int width, int height, int frames)
@@ -67,6 +56,12 @@ void diji::Texture::SetStartingFrame(int frame)
 	}
 
 	m_StartingFrame = frame;
+}
+
+void diji::Texture::Init()
+{
+	if (not m_FilePath.empty())
+		SetTexture(m_FilePath);
 }
 
 void diji::Texture::Update()

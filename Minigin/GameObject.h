@@ -92,13 +92,13 @@ namespace diji
 		void SetLocalPosition(const glm::vec3& pos);
 
 	private:
-		bool m_PositionIsDirty{ false };
-		glm::vec3 m_LocalPosition{ 0 ,0 ,0 };
-		GameObject* m_ParentPtr{ nullptr };
-		Transform* m_TransformCompPtr{ nullptr };
-		diji::Render* m_RenderCompPtr{ nullptr };
-		std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec{};
-		std::vector<GameObject*> m_ChildrenPtrVec{};
+		bool m_PositionIsDirty = false;
+		glm::vec3 m_LocalPosition = { 0 ,0 ,0 };
+		GameObject* m_ParentPtr = nullptr;
+		Transform* m_TransformCompPtr = nullptr;
+		diji::Render* m_RenderCompPtr = nullptr;
+		std::vector<std::unique_ptr<Component>> m_ComponentsPtrVec;
+		std::vector<GameObject*> m_ChildrenPtrVec;
 
 		bool IsChildOf(GameObject* potentialChild) const;
 		void SetPositionDirty();

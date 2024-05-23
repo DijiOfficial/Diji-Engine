@@ -31,9 +31,9 @@ void pacman::HitCommand::Execute()
 
 pacman::ScoreCommand::ScoreCommand(diji::GameObject* actorPtr, PointType point)
 	: GameActorCommands{ actorPtr }
+    , m_ScoreComponentPtr{ actorPtr->GetComponent<ScoreCounter>() }
 	, m_PointType{ point }
 {
-	m_ScoreComponentPtr = GetGameActor()->GetComponent<ScoreCounter>();
 }
 
 void pacman::ScoreCommand::Execute()

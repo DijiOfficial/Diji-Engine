@@ -152,7 +152,6 @@ diji::Movement pacman::GhostState::ChooseRandomDirection(const std::map<diji::Mo
 #pragma region Eaten
 void pacman::Eaten::OnEnter(const GhostAI* ghost)
 {
-	m_NextStateUPtr = std::make_unique<Respawn>();
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("GhostEaten.png");
 }
@@ -176,7 +175,7 @@ std::unique_ptr<pacman::GhostState> pacman::Eaten::Execute(const GhostAI* ghost)
 	const glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
 
 	if (center == m_SpawnPoint)
-		return std::move(m_NextStateUPtr);
+		return std::make_unique<Respawn>();
 
 	return nullptr;
 }

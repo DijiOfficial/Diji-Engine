@@ -1,6 +1,11 @@
 #include "Transform.h"
 #include "Command.h"
 
+void diji::Transform::Init()
+{
+	m_CurrentMovement = Movement::Idle;
+}
+
 void diji::Transform::SetPosition(const float x, const float y, const float z)
 {
 	m_Position.x = x;

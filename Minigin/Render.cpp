@@ -20,9 +20,9 @@ diji::Render::Render(GameObject* ownerPtr)
 	: Component(ownerPtr)
 {
 	m_TransformCompPtr = nullptr;
+	m_TexturePtr = nullptr;
 	m_TextureCompPtr = nullptr;
 	m_TextCompPtr = nullptr;
-	m_TexturePtr = nullptr;
 }
 
 void diji::Render::Init()
@@ -34,7 +34,7 @@ void diji::Render::Init()
 	m_TextCompPtr = ownerPtr->GetComponent<Text>();
 
 	if (m_TextureCompPtr)
-		m_TexturePtr = m_TextureCompPtr->GetTexture();
+		m_TexturePtr = m_TextureCompPtr->GetTexturePtr();
 	else
 		m_TexturePtr = m_TextCompPtr->GetTexture();
 }

@@ -6,11 +6,11 @@
 
 diji::FPSCounter::FPSCounter(GameObject* ownerPtr) 
     : Component(ownerPtr)
+    , m_TextComponentPtr{ nullptr }
     , m_FrameCount{ 0 }
     , m_Fps{ 0 }
     , m_ElapsedTime{ 0 } 
 { 
-    m_TextComponentPtr = nullptr;
 };
 
 void diji::FPSCounter::Init()

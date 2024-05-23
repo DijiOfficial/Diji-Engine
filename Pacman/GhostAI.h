@@ -74,19 +74,19 @@ namespace pacman
 	protected:
 		GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player);
 
-		std::unique_ptr<GhostState> m_CurrentStateUPtr;
-		glm::vec2 m_PersonnalSpawn{ 0, 0 };
-		glm::vec2 m_ScatterTarget{ 0, 0 };
-		std::string m_TexturePath;
+		std::unique_ptr<GhostState> m_CurrentStateUPtr = nullptr;
+		glm::vec2 m_PersonnalSpawn = { 0, 0 };
+		glm::vec2 m_ScatterTarget = { 0, 0 };
+		std::string m_TexturePath = "";
 
 	private:
-		diji::Transform* m_TransformCompPtr;
-		diji::Collider* m_ColliderCompPtr;
 		diji::Collider* m_PlayerColliderPtr;
+		diji::Collider* m_ColliderCompPtr;
+		diji::Transform* m_TransformCompPtr;
 		diji::Texture* m_TextureCompPtr;
 		std::unique_ptr<ChaseScatterAlgo> m_ChaseScatterAlgo = std::make_unique<ChaseScatterAlgo>();
-		mutable bool m_IsFrightened = false;
 		mutable float m_PowerUpTimer = 0.f;
+		mutable bool m_IsFrightened = false;
 	};
 
 	class RedAI final : public GhostAI

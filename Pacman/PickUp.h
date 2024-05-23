@@ -32,15 +32,15 @@ namespace pacman
 		void HandleCollision();
 
 	private:
+		int m_PowerUpInvisibleFrames = 0;
 		const int m_Value;
 		diji::SoundId m_SoundId;
+		PelletObserver* m_PelletCounter;
 		diji::Collider* m_PlayerColliderPtr;
 		diji::Collider* m_OwnerColliderPtr;
-		PelletObserver* m_PelletCounter;
 		diji::Render* m_RenderCompPtr;
 		bool m_IsPowerUp = false;
 		bool m_IsDisabled = false;
-		int m_PowerUpInvisibleFrames = 0;
 	};
 }
 

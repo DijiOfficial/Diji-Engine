@@ -10,6 +10,6 @@ namespace diji
         void SetDeltaTime(float deltaTime) { m_DeltaTime = deltaTime; }
 
     private:
-        float m_DeltaTime{ 0.0f };
+        float m_DeltaTime = 0.0f;
     };
 }

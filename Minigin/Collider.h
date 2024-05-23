@@ -2,7 +2,6 @@
 #include "Component.h"
 #include "Collision.h"
 
-//todo: verify list iniutialize order
 namespace diji 
 {
 	class Transform;

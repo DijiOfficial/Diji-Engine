@@ -34,14 +34,14 @@ namespace diji
 		
 		void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
 	private:
+		Transform* m_TransformCompPtr;
 		Texture2D* m_TexturePtr;
 		Texture* m_TextureCompPtr;
 		Text* m_TextCompPtr;
-		Transform* m_TransformCompPtr;
 
-		int m_Scale{ 1 };
-		bool m_Render{ true };
-		bool m_DisplayHitbox{ false };
-		bool testBool{ false };
+		int m_Scale = 1;
+		bool m_Render = true;
+		bool m_DisplayHitbox = false;
+		bool testBool = false;
 	};
 }

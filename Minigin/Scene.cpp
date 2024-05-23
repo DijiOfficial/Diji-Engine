@@ -5,9 +5,13 @@
 
 unsigned int diji::Scene::m_IdCounter = 0;
 
-diji::Scene::Scene(const std::string& name) : m_Name(name) {}
+diji::Scene::Scene(const std::string& name) 
+	: m_Name(name) 
+{}
 
-diji::Scene::~Scene() = default;
+diji::Scene::~Scene()
+{
+};
 
 diji::GameObject* diji::Scene::CreateGameObject()
 {

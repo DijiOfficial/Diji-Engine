@@ -101,10 +101,10 @@ namespace test
 			}
 		}
 	
-		int m_SampleCount{ 10 };
+		int m_SampleCount = 10;
 		int m_ID;
-		bool m_IsFirstBenchmarkDone{ false };
-		bool m_IsSecondBenchmarkDone{ false };
+		bool m_IsFirstBenchmarkDone = false;
+		bool m_IsSecondBenchmarkDone = false;
 		const float* list[2];
 
 		const ImU32 colors[2]{ 0xFFFF0000, 0xFF0000FF };

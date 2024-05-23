@@ -16,17 +16,16 @@ pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* playe
 	else
 		m_SoundId = diji::SoundId::InvalidSoundId;
 	
+	m_PelletCounter = pelletCounter ? pelletCounter->GetComponent<PelletObserver>() : nullptr;
+	m_PlayerColliderPtr = player->GetComponent<diji::Collider>();
 	m_OwnerColliderPtr = nullptr;
 	m_RenderCompPtr = nullptr;
-	
-	m_PlayerColliderPtr = player->GetComponent<diji::Collider>();
-	m_PelletCounter = pelletCounter ? pelletCounter->GetComponent<PelletObserver>() : nullptr;
 }
 
 pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const int value)
 	: PickUp(ownerPtr, player, nullptr, value)
 {
-	m_IsPowerUp = { true };
+	m_IsPowerUp = true;
 }
 
 void pacman::PickUp::Init()

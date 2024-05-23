@@ -12,8 +12,8 @@ pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
 {
-	m_TransformCompPtr = nullptr;
 	m_ColliderCompPtr = nullptr;
+	m_TransformCompPtr = nullptr;
 	m_TextureCompPtr = nullptr;
 
 }
@@ -21,8 +21,8 @@ pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 void pacman::GhostAI::Init()
 {
 	const auto& ownerPtr = GetOwner();
-	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
 	m_ColliderCompPtr = ownerPtr->GetComponent<diji::Collider>();
+	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
 	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
 
 	m_TransformCompPtr->SetMovement(diji::Movement::Up);

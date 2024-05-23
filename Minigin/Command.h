@@ -24,7 +24,5 @@ namespace diji
 		Command& operator=(Command&& other) = delete;
 
 		virtual void Execute() = 0;
-	
-	private:
 	};
 }

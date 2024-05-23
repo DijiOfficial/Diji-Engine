@@ -30,7 +30,7 @@ namespace pacman
 	protected:
 		void SeekTarget(const GhostAI* ghost, const glm::vec2& target);
 		void GoToTarget(const GhostAI* ghost, const glm::vec2& target);
-		const glm::vec2 m_SpawnPoint{ 227, 262 };
+		const glm::vec2 m_SpawnPoint = { 227, 262 };
 		const int m_Step = 1;
 		bool m_DisplayDirection = true;
 	private:
@@ -52,8 +52,6 @@ namespace pacman
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
-	private:
-		std::unique_ptr<GhostState> m_NextStateUPtr;
 	};
 
 	class Respawn final : public GhostState
@@ -66,7 +64,7 @@ namespace pacman
 		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
-		glm::vec2 m_PersonnalSpawn{ 0, 0 };
+		glm::vec2 m_PersonnalSpawn = { 0, 0 };
 	};
 
 	class ExitMaze final : public GhostState
@@ -79,8 +77,7 @@ namespace pacman
 		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
-		const glm::vec2 m_OutsidePosition{ 212, 247 };
-		std::unique_ptr<GhostState> m_NextStateUPtr;
+		const glm::vec2 m_OutsidePosition = { 212, 247 };
 	};
 
 	class Scatter final : public GhostState
@@ -93,7 +90,7 @@ namespace pacman
 		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
-		glm::vec2 m_Target{ 0, 0 };
+		glm::vec2 m_Target = { 0, 0 };
 	};
 
 	class Frightened final : public GhostState

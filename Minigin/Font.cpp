@@ -6,7 +6,7 @@ TTF_Font* diji::Font::GetFont() const {
 	return m_FontPtr;
 }
 
-diji::Font::Font(const std::string& fullPath, unsigned int size) : m_FontPtr(nullptr)
+diji::Font::Font(const std::string& fullPath, unsigned int size) 
 {
 	m_FontPtr = TTF_OpenFont(fullPath.c_str(), size);
 	if (m_FontPtr == nullptr) 

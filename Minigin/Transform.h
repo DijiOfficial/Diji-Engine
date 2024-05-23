@@ -22,7 +22,7 @@ namespace diji
 		Transform& operator=(const Transform& other) = delete;
 		Transform& operator=(Transform&& other) = delete;
 
-		void Init() override {};
+		void Init() override;
 		void Update() override {};
 		void FixedUpdate() override {};
 

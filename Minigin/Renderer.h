@@ -17,10 +17,8 @@ namespace diji
 		void Render() const;
 		void Destroy();
 
-		//void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, const float x, const float y, int scale = 1);
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height) const;
-		//void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, int scale) const;
 		void RenderRotatedTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, float angle, int scale = 1) const;
 
@@ -95,9 +93,9 @@ namespace diji
 		void SetBackgroundColor(const SDL_Color& color) { m_ClearColor = color; }
 
 	private:
-		SDL_Renderer* m_RendererPtr{};
-		SDL_Window* m_WindowPtr{};
-		SDL_Color m_ClearColor{};
+		SDL_Window* m_WindowPtr = nullptr;
+		SDL_Renderer* m_RendererPtr = nullptr;
+		SDL_Color m_ClearColor = { 0, 0, 0, 0 };
 	};
 }
 
