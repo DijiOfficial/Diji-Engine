@@ -19,7 +19,6 @@ namespace pacman
 	{
 	public:
 		PinkAI(diji::GameObject* ownerPtr, diji::GameObject* player);
-		~PinkAI() override = default;
 
 		void FixedUpdate() override;
 	};
@@ -42,7 +41,6 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~ChasePac() override = default;
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};
@@ -53,7 +51,6 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~ReturnToSpawn() override = default;
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};
@@ -64,7 +61,6 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~EnterMaze() override = default;
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI*) override {};

@@ -12,7 +12,7 @@ namespace diji
 	{
 	public:
 		explicit Font(const std::string& fullPath, unsigned int size);
-		~Font();
+		~Font() noexcept;
 
 		Font(const Font &) = delete;
 		Font(Font &&) = delete;

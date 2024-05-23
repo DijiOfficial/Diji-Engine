@@ -15,7 +15,7 @@ namespace pacman
 	{
 	public:
 		ScoreCounter(diji::GameObject* ownerPtr, int score);
-		~ScoreCounter() override = default;
+		~ScoreCounter() noexcept override = default;
 
 		ScoreCounter(const ScoreCounter& other) = delete;
 		ScoreCounter(ScoreCounter&& other) = delete;

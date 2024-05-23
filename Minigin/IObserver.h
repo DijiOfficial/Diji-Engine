@@ -10,7 +10,7 @@ namespace diji
 	{
 	public:
 		IObserver() = default;
-		virtual ~IObserver() = default;
+		virtual ~IObserver() noexcept = default;
 
 		IObserver(const IObserver& other) = delete;
 		IObserver(IObserver&& other) = delete;

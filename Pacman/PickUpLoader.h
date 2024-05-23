@@ -12,7 +12,7 @@ namespace pacman
 	{
 	public:
 		PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects);
-		~PickUpLoader() = default;
+		~PickUpLoader() noexcept = default;
 
 
 		PickUpLoader(const PickUpLoader& other) = delete;

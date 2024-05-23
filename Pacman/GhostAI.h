@@ -5,6 +5,7 @@
 
 #include <glm/vec2.hpp>
 #include <memory>
+#include <string>
 
 namespace diji
 {
@@ -43,7 +44,7 @@ namespace pacman
 	class GhostAI : public diji::Component, public diji::IObserver
 	{
 	public:
-		~GhostAI() = default;
+		~GhostAI() noexcept = default;
 
 		GhostAI(const GhostAI& other) = delete;
 		GhostAI(GhostAI&& other) = delete;
@@ -67,7 +68,7 @@ namespace pacman
 
 		bool IsFrightened() const { return m_IsFrightened; };
 		void ClearFrightened() const { m_IsFrightened = false; m_PowerUpTimer = 0.f; };
-		void SetGhostTexture() const { m_TextureCompPtr->SetTexture(m_TexturePath); };
+		void SetGhostTexture() const;
 
 		void TurnAround() const;
 	protected:
@@ -92,7 +93,7 @@ namespace pacman
 	{
 	public:
 		RedAI(diji::GameObject* ownerPtr, diji::GameObject* player);
-		~RedAI() = default;
+		~RedAI() noexcept = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;
 

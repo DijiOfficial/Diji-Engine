@@ -19,7 +19,7 @@ namespace pacman
 	{
 	public:
 		using Text::Text;
-		~HealthObserver() override = default;
+		~HealthObserver() noexcept override = default;
 
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 	};
@@ -28,7 +28,7 @@ namespace pacman
 	{
 	public:
 		using Text::Text;
-		~ScoreObserver() override = default;
+		~ScoreObserver() noexcept override = default;
 
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 	};
@@ -37,7 +37,7 @@ namespace pacman
 	{
 	public:
 		PelletObserver(diji::GameObject* ownerPtr) : Component(ownerPtr) {};
-		~PelletObserver() override = default;
+		~PelletObserver() noexcept override = default;
 
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 

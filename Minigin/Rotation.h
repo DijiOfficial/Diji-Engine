@@ -14,6 +14,7 @@ namespace diji
     public:
         Rotation(GameObject* ownerPtr);
         Rotation(GameObject* ownerPtr, float rotationSpeed, float distanceFromCenter);
+        ~Rotation() noexcept override = default;
 
         Rotation(const Rotation& other) = delete;
         Rotation(Rotation&& other) = delete;

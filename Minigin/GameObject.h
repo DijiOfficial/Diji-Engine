@@ -14,7 +14,7 @@ namespace diji
 	{
 	public:
 		GameObject() = default;
-		~GameObject() = default;
+		~GameObject() noexcept = default;
 
 		template<typename... Args>
 		GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested

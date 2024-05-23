@@ -11,8 +11,5 @@ namespace diji
 
     private:
         float m_DeltaTime{ 0.0f };
-
-        friend class Singleton<TimeSingleton>;
-        TimeSingleton() = default;
     };
 }

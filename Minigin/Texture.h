@@ -14,7 +14,7 @@ namespace diji
 		Texture(GameObject* ownerPtr, const std::string& filename);
 		Texture(GameObject* ownerPtr, const std::string& filename, int width, int height);
 		Texture(GameObject* ownerPtr, const std::string& filename, int width, int height, int frames);
-		~Texture() override = default;
+		~Texture() noexcept override = default;
 
 		Texture(const Texture& other) = delete;
 		Texture(Texture&& other) = delete;

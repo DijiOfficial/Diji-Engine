@@ -6,7 +6,7 @@ namespace pacman
 	{
 	public:
 		ChaseScatterAlgo() = default;
-		~ChaseScatterAlgo() = default;
+		~ChaseScatterAlgo() noexcept = default;
 
 		ChaseScatterAlgo(const ChaseScatterAlgo& other) = delete;
 		ChaseScatterAlgo(ChaseScatterAlgo&& other) = delete;

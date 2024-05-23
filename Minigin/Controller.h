@@ -25,7 +25,7 @@ namespace diji
 		};
 
 		Controller(int controllerIdx);
-		~Controller();
+		~Controller() noexcept;
 
 		Controller(const Controller& other) = delete;
 		Controller(Controller&& other) = delete;

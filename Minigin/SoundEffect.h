@@ -7,7 +7,7 @@ namespace diji
 	{
 	public:
 		explicit SoundEffect(Mix_Chunk* sound);
-		~SoundEffect();
+		~SoundEffect() noexcept;
 
 		SoundEffect(const SoundEffect&) = delete;
 		SoundEffect(SoundEffect&&) = delete;

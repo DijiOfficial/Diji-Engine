@@ -8,7 +8,7 @@ namespace diji
 	{
 	public:
 		FPSCounter(GameObject* ownerPtr);
-		~FPSCounter() override = default;
+		~FPSCounter() noexcept override = default;
 
 		FPSCounter(const FPSCounter& other) = delete;
 		FPSCounter(FPSCounter&& other) = delete;

@@ -8,7 +8,7 @@ namespace diji
 	{
 	public:
 		explicit Minigin(const std::string& dataPath);
-		~Minigin();
+		~Minigin() noexcept;
 
 		Minigin(const Minigin& other) = delete;
 		Minigin(Minigin&& other) = delete;

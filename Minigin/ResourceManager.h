@@ -20,8 +20,6 @@ namespace diji
 		SoundEffect* LoadSoundEffect(const std::string& file);
 
 	private:
-		friend class Singleton<ResourceManager>;
-		ResourceManager() = default;
 		std::string m_DataPath;
 
 		std::unordered_map<std::string, std::unique_ptr<Texture2D>> m_TexturesUPtrUMap;

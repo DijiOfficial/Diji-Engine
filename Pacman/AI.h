@@ -20,7 +20,7 @@ namespace pacman {
 	{
 	public:
 		AI(diji::GameObject* ownerPtr);
-		~AI() override = default;
+		~AI() noexcept override = default;
 
 		AI(const AI& other) = delete;
 		AI(AI&& other) = delete;

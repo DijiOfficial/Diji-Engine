@@ -6,7 +6,7 @@ namespace diji
 	class Component
 	{
 	public:
-		virtual ~Component() = default;
+		virtual ~Component() noexcept = default;
 
 		Component(const Component& other) = delete;
 		Component(Component&& other) = delete;

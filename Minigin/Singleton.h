@@ -5,7 +5,7 @@ namespace diji
 	class Singleton
 	{
 	public:
-		virtual ~Singleton() = default;
+		virtual ~Singleton() noexcept = default;
 
 		Singleton(const Singleton& other) = delete;
 		Singleton(Singleton&& other) = delete;

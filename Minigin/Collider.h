@@ -12,7 +12,7 @@ namespace diji
 		Collider(GameObject* ownerPtr, const float width, const float height);
 		Collider(GameObject* ownerPtr, const int width, const int height);
 		Collider(GameObject* ownerPtr, const int width, const int height, const glm::vec2& offset);
-		~Collider() override = default;
+		~Collider() noexcept override = default;
 
 		Collider(const Collider& other) = delete;
 		Collider(Collider&& other) = delete;

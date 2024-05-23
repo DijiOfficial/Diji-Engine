@@ -9,7 +9,7 @@ namespace diji
 	{
 	public:
 		explicit GameActorCommands(GameObject* actor);
-		~GameActorCommands() override = default;
+		~GameActorCommands() noexcept override = default;
 
 	protected:
 		GameObject* GetGameActor() const { return m_ActorPtr; }

@@ -77,6 +77,11 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject*)
 	}
 }
 
+void pacman::GhostAI::SetGhostTexture() const
+{
+	m_TextureCompPtr->SetTexture(m_TexturePath);
+}
+
 void pacman::GhostAI::TurnAround() const
 {
 	m_TransformCompPtr->SetMovement(static_cast<diji::Movement>((static_cast<int>(m_TransformCompPtr->GetMovement()) + 2) % 4));

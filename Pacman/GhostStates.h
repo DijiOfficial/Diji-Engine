@@ -15,9 +15,8 @@ namespace pacman
 	class GhostState
 	{
 	public:
-		//todo: set destructors to noexcept
 		GhostState() = default;
-		virtual ~GhostState() = default;
+		virtual ~GhostState() noexcept = default;
 
 		GhostState(const GhostState& other) = delete;
 		GhostState(GhostState&& other) = delete;
@@ -48,7 +47,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~Eaten() override = default;
+		~Eaten() noexcept = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override {};
@@ -61,7 +60,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~Respawn() override = default;
+		~Respawn() noexcept = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI* ghost) override;
@@ -74,7 +73,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~ExitMaze() override = default;
+		~ExitMaze() noexcept = default;
 
 		void OnEnter(const GhostAI*) override {};
 		void OnExit(const GhostAI* ghost) override;
@@ -88,7 +87,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~Scatter() override = default;
+		~Scatter() noexcept = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override {};
@@ -101,7 +100,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~Frightened() override = default;
+		~Frightened() noexcept = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI* ghost) override;
@@ -112,7 +111,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		virtual ~Chase() override = default;
+		~Chase() noexcept = default;
 
 		virtual void OnEnter(const GhostAI*) override = 0;
 		virtual void OnExit(const GhostAI*) override = 0;
@@ -123,7 +122,7 @@ namespace pacman
 	{
 	public:
 		using Chase::Chase;
-		~RedChase() override = default;
+		~RedChase() noexcept = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override {};

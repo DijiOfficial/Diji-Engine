@@ -14,7 +14,7 @@ namespace diji
 		Transform(GameObject* ownerPtr, const float x, const float y) : Component(ownerPtr) { SetPosition(x, y); };
 		Transform(GameObject* ownerPtr, int x, int y, int z) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); };
 		Transform(GameObject* ownerPtr, int x, int y) : Component(ownerPtr) { SetPosition(static_cast<float>(x), static_cast<float>(y)); };
-		~Transform() override = default;
+		~Transform() noexcept override = default;
 
 
 		Transform(const Transform& other) = delete;

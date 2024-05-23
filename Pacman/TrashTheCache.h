@@ -22,7 +22,7 @@ namespace test
 	{
 	public:
 		TrashTheCache(diji::GameObject* ownerPtr, int id);
-		~TrashTheCache() override = default;
+		~TrashTheCache() noexcept override = default;
 
 		TrashTheCache(const TrashTheCache& other) = delete;
 		TrashTheCache(TrashTheCache&& other) = delete;

@@ -1,13 +1,5 @@
 #include "SceneManager.h"
 
-diji::SceneManager::SceneManager()
-{
-}
-
-diji::SceneManager::~SceneManager()
-{
-}
-
 void diji::SceneManager::Update()
 {
 	for(auto& scene : m_ScenesUPtrVec)

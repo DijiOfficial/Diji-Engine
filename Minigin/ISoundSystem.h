@@ -18,7 +18,7 @@ namespace diji
 	class ISoundSystem
 	{
 	public:
-		virtual ~ISoundSystem() = default;
+		virtual ~ISoundSystem() noexcept = default;
 		virtual void AddSoundRequest(SoundId sound, int volume) = 0;
 	};
 
@@ -45,7 +45,7 @@ namespace diji
 	{		
 	public:
 		SDLISoundSystem();
-		~SDLISoundSystem();
+		~SDLISoundSystem() noexcept;
 		void AddSoundRequest(SoundId sound, int volume) override;
 		
 	private:
@@ -67,7 +67,7 @@ namespace diji
 	{
 	public:
 		explicit LoggingSoundSystem(std::unique_ptr<ISoundSystem>&& ss) : _real_ss{ std::move(ss) } {};
-		virtual ~LoggingSoundSystem() override = default;
+		virtual ~LoggingSoundSystem() noexcept override = default;
 
 		void AddSoundRequest(SoundId sound, int volume) override;
 	private:

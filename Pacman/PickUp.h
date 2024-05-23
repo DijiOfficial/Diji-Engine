@@ -18,7 +18,7 @@ namespace pacman
 	public:
 		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* pelletCounter, const int value);
 		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const int value);
-		~PickUp() override = default;
+		~PickUp() noexcept override = default;
 
 		PickUp(const PickUp& other) = delete;
 		PickUp(PickUp&& other) = delete;

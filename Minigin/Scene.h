@@ -10,7 +10,7 @@ namespace diji
 	{
 	public:
 		explicit Scene(const std::string& name);
-		~Scene();
+		~Scene() noexcept;
 
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;

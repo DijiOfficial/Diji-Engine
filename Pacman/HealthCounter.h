@@ -8,7 +8,7 @@ namespace pacman
 	{
 	public:
 		HealthCounter(diji::GameObject* ownerPtr, int health);
-		~HealthCounter() override = default;
+		~HealthCounter() noexcept override = default;
 
 		HealthCounter(const HealthCounter& other) = delete;
 		HealthCounter(HealthCounter&& other) = delete;

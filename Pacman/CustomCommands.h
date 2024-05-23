@@ -17,7 +17,7 @@ namespace pacman
 	{
 	public:
 		Move(diji::GameObject* actor, diji::Movement movement);
-		~Move() override = default;
+		~Move() noexcept override = default;
 
 		void Execute() override;
 
@@ -32,7 +32,7 @@ namespace pacman
 
 	public:
 		HitCommand(diji::GameObject* actor);
-		~HitCommand() override = default;
+		~HitCommand() noexcept override = default;
 
 		void Execute() override;
 
@@ -45,7 +45,7 @@ namespace pacman
 
 	public:
 		ScoreCommand(diji::GameObject* actorPtr, PointType point);
-		~ScoreCommand() override = default;
+		~ScoreCommand() noexcept override = default;
 
 		void Execute() override;
 

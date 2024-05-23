@@ -13,7 +13,7 @@ namespace diji
 	{
 	public:
 		Subject() = default;
-		virtual ~Subject() = default;
+		virtual ~Subject() noexcept = default;
 
 		Subject(const Subject& other) = default;
 		Subject(Subject&& other) = default;

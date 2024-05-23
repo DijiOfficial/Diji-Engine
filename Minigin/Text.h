@@ -15,7 +15,7 @@ namespace diji
 	public:
 		Text(GameObject* ownerPtr);
 		Text(GameObject* ownerPtr, const std::string& text, Font* font, const SDL_Color& color = { 255, 255, 255, 255 }, bool centered = false);
-		~Text() override = default;
+		~Text() noexcept override = default;
 
 		Text(const Text& other) = delete;
 		Text(Text&& other) = delete;
