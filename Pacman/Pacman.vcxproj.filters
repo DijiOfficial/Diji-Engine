@@ -69,9 +69,6 @@
     <ClCompile Include="GhostAI.cpp">
       <Filter>Source Files\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="RedAI.cpp">
-      <Filter>Source Files\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="ScoreCounter.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -79,6 +76,9 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="ChaseScatterAlgo.cpp">
+      <Filter>Source Files\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostStates.cpp">
       <Filter>Source Files\Behaviors</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,13 +113,13 @@
     <ClInclude Include="GhostAI.h">
       <Filter>Header Files\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="RedAI.h">
-      <Filter>Header Files\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="PickUp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="ChaseScatterAlgo.h">
+      <Filter>Header Files\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostStates.h">
       <Filter>Header Files\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>

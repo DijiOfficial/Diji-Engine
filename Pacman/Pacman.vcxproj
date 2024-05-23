@@ -204,13 +204,13 @@
     <ClCompile Include="CustomCommands.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GhostAI.cpp" />
+    <ClCompile Include="GhostStates.cpp" />
     <ClCompile Include="HealthCounter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="PickUpLoader.cpp" />
     <ClCompile Include="PinkAI.cpp" />
-    <ClCompile Include="RedAI.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
@@ -220,12 +220,12 @@
     <ClInclude Include="CustomCommands.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GhostAI.h" />
+    <ClInclude Include="GhostStates.h" />
     <ClInclude Include="HealthCounter.h" />
     <ClInclude Include="Observers.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpLoader.h" />
     <ClInclude Include="PinkAI.h" />
-    <ClInclude Include="RedAI.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="TrashTheCache.h" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "GhostAI.h"
-
+#include "GhostStates.h"
 namespace pacman
 {
 	//                                                                        If Pac has               

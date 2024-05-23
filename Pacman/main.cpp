@@ -18,7 +18,6 @@
 #include "HealthCounter.h"
 #include "AI.h"
 #include "PinkAI.h"
-#include "RedAI.h"
 #include "Observers.h"
 
 using namespace diji;
