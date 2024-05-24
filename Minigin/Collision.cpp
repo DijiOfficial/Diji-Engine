@@ -57,7 +57,6 @@ bool diji::Collision::AreRectsColliding(const Rectf& rect1, const Rectf& rect2) 
 	return true;
 }
 
-#include <iostream>
 bool diji::Collision::IsCollidingWithIntersection(const Rectf& shape)
 {
 	glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
@@ -66,7 +65,6 @@ bool diji::Collision::IsCollidingWithIntersection(const Rectf& shape)
 	{
 		for (const auto& point : intersectionRow)
 		{
-			//std::cout << point.x << ", " << point.y << " center: " << center.x << ", " << center.y << std::endl;
 			if (center == point)
 			{
 				return true;
@@ -75,6 +73,22 @@ bool diji::Collision::IsCollidingWithIntersection(const Rectf& shape)
 	}
 
 	return false;
+}
+
+glm::vec2 diji::Collision::GetCollidingWithIntersectionRectf(const Rectf& shape)
+{
+	glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
+
+	for (const auto& intersectionRow : m_Intersections)
+	{
+		for (const auto& point : intersectionRow)
+		{
+			if (glm::distance(center, point) <= 4.0f)
+				return point;
+		}
+	}
+
+	return { 0, 0 };
 }
 
 bool diji::Collision::IsCollidingWithWorld(const Rectf& shape)
