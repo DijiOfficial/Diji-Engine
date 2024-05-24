@@ -29,10 +29,11 @@ namespace diji
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(const float x, const float y, const float z);
 		void SetPosition(const float x, const float y);
-		void SetPosition(glm::vec3 pos) { m_Position = pos; };
+		void SetPosition(const glm::vec3 pos) { m_Position = pos; };
+		void SetPosition(const glm::vec2 pos) { m_Position.x = pos.x; m_Position.y = pos.y; };
 		void SetMovement(const Movement& movement) { m_CurrentMovement = movement; };
 		Movement GetMovement() const { return m_CurrentMovement; };
-		glm::vec3 GetMovementVector(const int value) const;
+		glm::vec3 GetMovementVector(const float value) const;
 
 	private:
 		glm::vec3 m_Position;

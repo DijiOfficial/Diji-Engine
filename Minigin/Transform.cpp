@@ -18,7 +18,7 @@ void diji::Transform::SetPosition(const float x, const float y)
 	SetPosition(x, y, 0.f);
 }
 
-glm::vec3 diji::Transform::GetMovementVector(const int value) const
+glm::vec3 diji::Transform::GetMovementVector(const float value) const
 {
 	switch (m_CurrentMovement)
 	{
