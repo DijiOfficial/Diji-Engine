@@ -53,7 +53,6 @@ void pacman::GhostAI::FixedUpdate()
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
 	}
-
 	//todo: late Update
 	auto currentMovement = m_TransformCompPtr->GetMovement();
 	auto shape = m_ColliderCompPtr->GetCollisionBox();
@@ -73,8 +72,21 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject*)
 	case MessageTypesDerived::POWERUP_COLLISION:
 		m_IsFrightened = true;
 		m_PowerUpTimer = 0.f;
+
+		m_TextureCompPtr->SetNrOfFrames(2);
+		m_TextureCompPtr->DisableFlickerAnimation();
+
+		if (auto frightenedState = dynamic_cast<Frightened*>(m_CurrentStateUPtr.get()))
+			frightenedState->ResetUpdate();
+
 		break;
 	}
+}
+
+void pacman::GhostAI::ClearFrightened() const
+{
+	m_IsFrightened = false;
+	m_PowerUpTimer = 0.f; 
 }
 
 void pacman::GhostAI::SetGhostTexture() const
@@ -87,11 +99,39 @@ void pacman::GhostAI::TurnAround() const
 	m_TransformCompPtr->SetMovement(static_cast<diji::Movement>((static_cast<int>(m_TransformCompPtr->GetMovement()) + 2) % 4));
 }
 
+//const diji::Rectf pacman::GhostAI::CalculateNewPosition(diji::Movement movement, const GhostAI* ghost)
+//{
+//	auto shape = m_ColliderCompPtr->GetCollisionBox() + ghost->GetTransform()->GetMovementVector(2.f);
+//
+//	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+//	{
+//		shape.left = std::round(shape.left);
+//		shape.bottom = std::round(shape.bottom);
+//		switch (movement)
+//		{
+//		case diji::Movement::Up:
+//			++shape.bottom;
+//			break;
+//		case diji::Movement::Down:
+//			--shape.bottom;
+//			break;
+//		case diji::Movement::Left:
+//			++shape.left;
+//			break;
+//		case diji::Movement::Right:
+//			--shape.left;
+//			break;
+//		}
+//	}
+//
+//	return shape;
+//}
+
 pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: GhostAI(ownerPtr, player)
 {
 	m_PersonnalSpawn = { 212, 300 };
-	m_ScatterTarget = { 450, 60 };
+	m_ScatterTarget = { 432, 0 };
 	m_TexturePath = "RedGhost.png";
 
 	m_CurrentStateUPtr = std::make_unique<Scatter>();

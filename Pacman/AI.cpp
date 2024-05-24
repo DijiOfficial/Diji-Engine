@@ -101,6 +101,7 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	}
 }
 
+//todo: clean up
 const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
 {
 	auto shape = m_ColliderCompPtr->GetCollisionBox();
@@ -131,6 +132,8 @@ const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
 
 	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
 	{
+		shape.left = std::round(shape.left);
+		shape.bottom = std::round(shape.bottom);
 		switch (movement)
 		{
 		case diji::Movement::Up:
@@ -150,3 +153,36 @@ const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
 
 	return shape;
 }
+
+//const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
+//{
+//	//auto shape = m_ColliderCompPtr->GetCollisionBox() + m_TransformCompPtr->GetMovementVector(2.f);
+//
+//	const auto position = m_TransformCompPtr->GetPosition() + m_TransformCompPtr->GetMovementVector(2.f);
+//	auto shape = m_ColliderCompPtr->GetCollisionBox();
+//	shape.left = position.x;
+//	shape.bottom = position.y;
+//
+//	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+//	{
+//		shape.left = std::round(shape.left);
+//		shape.bottom = std::round(shape.bottom);
+//		switch (movement)
+//		{
+//		case diji::Movement::Up:
+//			++shape.bottom;
+//			break;
+//		case diji::Movement::Down:
+//			--shape.bottom;
+//			break;
+//		case diji::Movement::Left:
+//			++shape.left;
+//			break;
+//		case diji::Movement::Right:
+//			--shape.left;
+//			break;
+//		}
+//	}
+//
+//	return shape;
+//}

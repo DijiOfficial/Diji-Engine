@@ -10,12 +10,20 @@
 void pacman::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& target)
 {
 	const auto& collider = ghost->GetCollider();
-	const auto& shape = collider->GetCollisionBox();
+	auto shape = collider->GetCollisionBox();
 
-	if (diji::Collision::GetInstance().IsCollidingWithIntersection(shape) and not m_TempLock)
+	shape.left = std::round(shape.left);
+	shape.bottom = std::round(shape.bottom);
+	
+	if (not m_TempLock)
 	{
-		CalculateDirection(ghost, target);
-		m_TempLock = true;
+		const auto& pos = diji::Collision::GetInstance().GetCollidingWithIntersectionRectf(shape);
+		if (pos != glm::vec2{ 0, 0 })
+		{
+			ghost->GetTransform()->SetPosition(pos.x - shape.width * 0.5f, pos.y - shape.height * 0.5f);
+			CalculateDirection(ghost, target);
+			m_TempLock = true;
+		}
 	}
 	else if (m_TempLock)
 	{
@@ -33,6 +41,7 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
 	const auto& shape = collider->GetCollisionBox();
+	const auto& updatedPos = transform->GetPosition();
 	std::map<diji::Movement, bool> possibleDirections =
 	{
 		{ diji::Movement::Up, true },
@@ -45,7 +54,7 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 	possibleDirections[static_cast<diji::Movement>((static_cast<int>(transform->GetMovement()) + 2) % 4)] = false;
 
 	//remove directions that are blocked
-	const glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
+	const glm::vec2 center(updatedPos.x + shape.width * 0.5f, updatedPos.y + shape.height * 0.5f);
 
 	for (auto& [direction, canMove] : possibleDirections)
 	{
@@ -141,7 +150,7 @@ void pacman::GhostState::GoToTarget(const GhostAI* ghost, const glm::vec2& targe
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
+	//if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
 		transform->SetPosition(position);
 }
 
@@ -163,6 +172,12 @@ void pacman::Eaten::OnEnter(const GhostAI* ghost)
 {
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("GhostEaten.png");
+	std::swap(m_Step, m_EatenSpeed);
+}
+
+void pacman::Eaten::OnExit(const GhostAI*)
+{
+	std::swap(m_Step, m_EatenSpeed);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Eaten::Execute(const GhostAI* ghost)
@@ -183,18 +198,24 @@ std::unique_ptr<pacman::GhostState> pacman::Eaten::Execute(const GhostAI* ghost)
 
 	const glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
 
-	if (center == m_SpawnPoint)
+	if (glm::distance(center, m_SpawnPoint) <= 2.f)
 		return std::make_unique<Respawn>();
 
 	return nullptr;
 }
 #pragma endregion
 #pragma region Respawn
-void pacman::Respawn::OnEnter(const GhostAI* ghost) { m_PersonnalSpawn = ghost->GetSpawnPoint(); };
+void pacman::Respawn::OnEnter(const GhostAI* ghost) 
+{ 
+	m_PersonnalSpawn = ghost->GetSpawnPoint();
+	std::swap(m_Step, m_RespawnSpeed);
+};
+
 void pacman::Respawn::OnExit(const GhostAI* ghost)
 {
 	ghost->SetGhostTexture();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
+	std::swap(m_Step, m_RespawnSpeed);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)
@@ -222,8 +243,12 @@ std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghos
 			currentMovement = diji::Movement::Left;
 		}
 	}
+	
+	if (glm::distance(glm::vec2{ currentPosition.x, currentPosition .y }, m_PersonnalSpawn) <= 2.f)
+		transform->SetPosition(m_PersonnalSpawn);
+	else
+		transform->SetPosition(currentPosition);
 
-	transform->SetPosition(currentPosition);
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(currentMovement) * 2);
 
 	if (currentPosition.x == m_PersonnalSpawn.x and currentPosition.y == m_PersonnalSpawn.y)
@@ -266,8 +291,11 @@ std::unique_ptr<pacman::GhostState> pacman::ExitMaze::Execute(const GhostAI* gho
 			currentPosition.y -= m_Step;
 			currentMovement = diji::Movement::Up;
 		}
-		else
+		else if (glm::distance(glm::vec2{ currentPosition.x, currentPosition.y }, m_OutsidePosition) <= 2.f)
+		{
+			transform->SetPosition(m_OutsidePosition);
 			return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
+		}
 	}
 
 	transform->SetPosition(currentPosition);
@@ -308,6 +336,7 @@ void pacman::Frightened::OnEnter(const GhostAI* ghost)
 	texture->SetStartingFrame(0);
 	m_DisplayDirection = false;
 	m_IsUpdated = false;
+	std::swap(m_Step, m_FrightSpeed);
 }
 
 void pacman::Frightened::OnExit(const GhostAI* ghost)
@@ -316,10 +345,10 @@ void pacman::Frightened::OnExit(const GhostAI* ghost)
 	texture->SetTexture("RedGhost.png");
 	texture->SetNrOfFrames(2);
 	texture->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
+	texture->DisableFlickerAnimation();
 	m_DisplayDirection = true;
 	m_IsUpdated = false;
-
-	texture->DisableFlickerAnimation();
+	std::swap(m_Step, m_FrightSpeed);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* ghost)
@@ -336,7 +365,7 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 	shape.left = position.x;
 	shape.bottom = position.y;
 
-	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
+	//if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
 		transform->SetPosition(position);
 
 	if (not m_IsUpdated and ghost->IsPowerAlmostOver())
@@ -359,6 +388,10 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 		return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
 
 	return nullptr;
+}
+
+void pacman::Frightened::SwitchSpeed()
+{
 }
 #pragma endregion
 #pragma region Chase

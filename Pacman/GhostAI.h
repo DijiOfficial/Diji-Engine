@@ -13,6 +13,7 @@ namespace diji
 	class Collider;
 	enum class Movement;
 	class Texture;
+	struct Rectf;
 }
 
 namespace pacman
@@ -40,7 +41,6 @@ namespace pacman
 	//                          └─────────┘                    └───────┘                            
 	
 	class GhostState;
-
 	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there), add sound when eating ghost, make sure fright sound is continously played when ghost is frightened, adjust sppeds, pause entities when pacman eats ghost
 	//todo: slow down ghost when in tunnel, add running soung in eaten mode, check for excact scatter target position?
 	//todo: audio order goes as follow -> pellet powerup audio, if eaten audio -> eaten audio, when finished play eayeball audio while going to spawn, if respawn then audio -> pellet powerup audio
@@ -72,7 +72,7 @@ namespace pacman
 
 		bool IsFrightened() const { return m_IsFrightened; };
 		bool IsPowerAlmostOver() const { return m_PowerUpTimer >= 7.f; };
-		void ClearFrightened() const { m_IsFrightened = false; m_PowerUpTimer = 0.f; };
+		void ClearFrightened() const;
 		void SetGhostTexture() const;
 
 		void TurnAround() const;

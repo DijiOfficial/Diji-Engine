@@ -28,11 +28,12 @@ namespace pacman
 		virtual void OnExit([[maybe_unused]] const GhostAI* ghost) = 0;
 		virtual std::unique_ptr<GhostState> Execute([[maybe_unused]] const GhostAI* ghost) = 0;
 
+		//todo:adjust speeds based on level and special speed for Blinky based on dots remaining
 	protected:
 		void SeekTarget(const GhostAI* ghost, const glm::vec2& target);
 		void GoToTarget(const GhostAI* ghost, const glm::vec2& target);
 		const glm::vec2 m_SpawnPoint = { 227, 262 };
-		const int m_Step = 1;
+		float m_Step = 1.875f;
 		bool m_DisplayDirection = true;
 	private:
 		static constexpr std::array<glm::vec2, 4> m_BlockedIntersections = { {{202, 262}, {250, 262}, {202, 454}, {250, 454}} };
@@ -52,8 +53,11 @@ namespace pacman
 		~Eaten() noexcept = default;
 
 		void OnEnter(const GhostAI* ghost) override;
-		void OnExit(const GhostAI*) override {};
+		void OnExit(const GhostAI*) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	private:
+		float m_EatenSpeed = 3.25f;
+
 	};
 
 	class Respawn final : public GhostState
@@ -67,6 +71,7 @@ namespace pacman
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		glm::vec2 m_PersonnalSpawn = { 0, 0 };
+		float m_RespawnSpeed = 3.25f;
 	};
 
 	class ExitMaze final : public GhostState
@@ -104,8 +109,12 @@ namespace pacman
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+
+		void ResetUpdate() { m_IsUpdated = false; }
+		void SwitchSpeed();
 	private:
 		bool m_IsUpdated = false;
+		float m_FrightSpeed = 1.25f;
 	};
 
 	class Chase : public GhostState
