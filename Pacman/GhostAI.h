@@ -41,9 +41,9 @@ namespace pacman
 	//                          └─────────┘                    └───────┘                            
 	
 	class GhostState;
-	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there), add sound when eating ghost
-	//todo: slow down ghost when in tunnel, add running soung in eaten mode
-	//todo: audio order goes as follow -> pellet powerup audio, if eaten audio -> eaten audio, when finished play eayeball audio while going to spawn, if respawn then audio -> pellet powerup audio
+	//todo: adjust teleportation tointersections based on speed, so frightened mode doesnt look so laggy
+	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there)
+	//todo: slow down ghost when in tunnel, test audio cases with multiple ghosts
 	//todo: disable state?
 	class GhostAI : public diji::Component, public diji::IObserver
 	{

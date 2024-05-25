@@ -1,6 +1,8 @@
 #include "ISoundSystem.h"
 #include "ResourceManager.h"
 #include "SoundEffect.h"
+#include "Music.h"
+
 #include <iostream>
 
 namespace diji 
@@ -11,6 +13,8 @@ namespace diji
 	void SDLISoundSystem::PlaySound(const SoundId sound, const int volume) const
 	{
         SoundEffect* soundEffect = nullptr;
+		Music* music = nullptr;
+		bool repeat = false;
 
         switch (sound)
         {
@@ -27,10 +31,18 @@ namespace diji
             soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_2.wav");
             break;
 		case SoundId::PowerPellet:
-			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("power_pellet.wav");
+			music = ResourceManager::GetInstance().LoadMusic("power_pellet.wav");
+			repeat = true;
 			break;
 		case SoundId::EatGhost:
 			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("eat_ghost.wav");
+			break;
+		case SoundId::Music:
+			music = ResourceManager::GetInstance().LoadMusic("siren_1.wav");
+			repeat = true;
+			break;
+		case SoundId::GhostEaten:
+			music = ResourceManager::GetInstance().LoadMusic("retreating.wav");
 			break;
         default:
             break;
@@ -41,6 +53,12 @@ namespace diji
             soundEffect->SetVolume(volume);
             soundEffect->Play();
         }
+
+		if (music)
+		{
+			music->Play(repeat);
+			music->SetVolume(volume);
+		}
 	}
 
 	SDLISoundSystem::SDLISoundSystem()

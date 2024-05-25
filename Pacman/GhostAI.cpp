@@ -8,6 +8,7 @@
 #include "TimeSingleton.h"
 #include "AI.h"
 #include "GhostCollision.h"
+#include "ISoundSystem.h"
 pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
@@ -51,6 +52,7 @@ void pacman::GhostAI::Update()
 		{
 			m_IsFrightened = false;
 			m_PowerUpTimer = 0.f;
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 		}
 	}
 }
@@ -120,6 +122,7 @@ void pacman::GhostAI::ClearFrightened() const
 {
 	m_IsFrightened = false;
 	m_PowerUpTimer = 0.f; 
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 }
 
 void pacman::GhostAI::SetGhostTexture() const

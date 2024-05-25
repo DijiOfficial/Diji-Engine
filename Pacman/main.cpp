@@ -157,7 +157,6 @@ void Pacman()
 #else
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
 #endif
-
 	const glm::vec2 viewport{ 452, 576 };
 
 	//#pragma region Menu Scene
@@ -275,6 +274,8 @@ void Pacman()
 	fpsCounter->AddComponents<FPSCounter>();
 	fpsCounter->AddComponents<Transform>(0, static_cast<int>(viewport.y - 20));
 	fpsCounter->AddComponents<Render>();
+
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 }
 
 

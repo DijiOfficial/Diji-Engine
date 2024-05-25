@@ -14,6 +14,8 @@ namespace diji
 		PelletPickUp2,
 		PowerPellet,
 		EatGhost,
+		Music,
+		GhostEaten,
 	};
 
 	class ISoundSystem

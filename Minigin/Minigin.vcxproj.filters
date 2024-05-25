@@ -175,6 +175,9 @@
     <ClInclude Include="Subject.h">
       <Filter>HeaderFiles\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>HeaderFiles\RAII Wrappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
@@ -269,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="GameActorCommands.cpp">
       <Filter>Sources Files\Inputs</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>Sources Files\RAII Wrappers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

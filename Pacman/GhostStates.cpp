@@ -174,6 +174,7 @@ void pacman::Eaten::OnEnter(const GhostAI* ghost)
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("GhostEaten.png");
 	std::swap(m_Step, m_EatenSpeed);
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::GhostEaten, -1);
 }
 
 void pacman::Eaten::OnExit(const GhostAI*)
@@ -217,6 +218,7 @@ void pacman::Respawn::OnExit(const GhostAI* ghost)
 	ghost->SetGhostTexture();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
 	std::swap(m_Step, m_RespawnSpeed);
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PowerPellet, -1);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)

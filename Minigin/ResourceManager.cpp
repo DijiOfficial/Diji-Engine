@@ -55,7 +55,6 @@ diji::Font* diji::ResourceManager::LoadFont(const std::string& file, unsigned in
     Font* fontPtr = font.get();
     m_FontsUPtrUMap.emplace(fullPath, std::make_pair(size, std::move(font)));
 
-	// I wonder if I could just return LoadFont(fullPath, size) here
     return fontPtr;
 }
 
@@ -69,7 +68,6 @@ diji::SoundEffect* diji::ResourceManager::LoadSoundEffect(const std::string& fil
 		return it->second.get();
 	}
 
-	//Thread this
 	auto sound = Mix_LoadWAV(fullPath.c_str());
 	if (sound == nullptr)
 	{
@@ -79,4 +77,25 @@ diji::SoundEffect* diji::ResourceManager::LoadSoundEffect(const std::string& fil
 	// Store it if it's not already loaded
 	m_SoundEffectsUPtrUMap[fullPath] = std::make_unique<SoundEffect>(sound);
 	return m_SoundEffectsUPtrUMap[fullPath].get();
+}
+
+diji::Music* diji::ResourceManager::LoadMusic(const std::string& file)
+{
+	// check if sound is already loaded
+	const auto fullPath = m_DataPath + "Audio/" + file;
+	const auto it = m_MusicUPtrUMap.find(fullPath);
+	if (it != m_MusicUPtrUMap.cend())
+	{
+		return it->second.get();
+	}
+
+	auto music = Mix_LoadMUS(fullPath.c_str());
+	if (music == nullptr)
+	{
+		throw std::runtime_error(std::string("Failed to load music: ") + SDL_GetError());
+	}
+
+	// Store it if it's not already loaded
+	m_MusicUPtrUMap[fullPath] = std::make_unique<Music>(music);
+	return m_MusicUPtrUMap[fullPath].get();
 }

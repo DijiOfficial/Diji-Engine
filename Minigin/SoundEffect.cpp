@@ -19,7 +19,8 @@ Mix_Chunk* diji::SoundEffect::GetSoundEffect() const
 
 void diji::SoundEffect::Play() const
 {
-	Mix_PlayChannel(-1, m_MixChunkPtr, 0);
+	if (m_MixChunkPtr)
+		Mix_PlayChannel(-1, m_MixChunkPtr, 0);
 }
 
 void diji::SoundEffect::SetVolume(const int volume) const
