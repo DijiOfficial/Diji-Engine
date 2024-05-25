@@ -7,6 +7,7 @@ namespace diji
 {
 	std::unique_ptr<ISoundSystem> ServiceLocator::_ss_instance{ std::make_unique<NullSoundSystem>() };
 
+	//todo: move this to pacman
 	void SDLISoundSystem::PlaySound(const SoundId sound, const int volume) const
 	{
         SoundEffect* soundEffect = nullptr;
@@ -27,6 +28,9 @@ namespace diji
             break;
 		case SoundId::PowerPellet:
 			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("power_pellet.wav");
+			break;
+		case SoundId::EatGhost:
+			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("eat_ghost.wav");
 			break;
         default:
             break;

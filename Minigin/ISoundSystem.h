@@ -13,6 +13,7 @@ namespace diji
 		PelletPickUp,
 		PelletPickUp2,
 		PowerPellet,
+		EatGhost,
 	};
 
 	class ISoundSystem
