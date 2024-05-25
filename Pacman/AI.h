@@ -28,7 +28,7 @@ namespace pacman {
 		AI& operator=(AI&& other) = delete;
 
 		void Init() override;
-		void Update() override {};
+		void Update() override;
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
 
@@ -42,6 +42,8 @@ namespace pacman {
 
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		const diji::Rectf CalculateNewPosition(diji::Movement movement);
+		bool m_PauseAI = false;
+		float m_PauseTime = 0.f;
 	};
 }
 

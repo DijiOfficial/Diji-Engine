@@ -138,5 +138,20 @@ namespace pacman
 		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	};
+
+	class Dying final : public GhostState
+	{
+	public:
+		//todo: pass the points to the constructor and onEnter change texture to the right points
+		using GhostState::GhostState;
+		~Dying() noexcept = default;
+
+		void OnEnter(const GhostAI*) override;
+		void OnExit(const GhostAI*) override {};
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	
+	private:
+		const int points = 0;
+	};
 }
 

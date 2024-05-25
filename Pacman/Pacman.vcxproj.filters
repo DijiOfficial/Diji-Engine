@@ -81,6 +81,9 @@
     <ClCompile Include="GhostStates.cpp">
       <Filter>Source Files\Behaviors</Filter>
     </ClCompile>
+    <ClCompile Include="GhostCollision.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PickUpLoader.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="GhostStates.h">
       <Filter>Header Files\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostCollision.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

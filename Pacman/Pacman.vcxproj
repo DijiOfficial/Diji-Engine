@@ -212,6 +212,7 @@
     <ClCompile Include="PickUpLoader.cpp" />
     <ClCompile Include="PinkAI.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
+    <ClCompile Include="GhostCollision.cpp" />
     <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +228,7 @@
     <ClInclude Include="PickUpLoader.h" />
     <ClInclude Include="PinkAI.h" />
     <ClInclude Include="ScoreCounter.h" />
+    <ClInclude Include="GhostCollision.h" />
     <ClInclude Include="TrashTheCache.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

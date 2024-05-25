@@ -26,8 +26,24 @@ void pacman::AI::Init()
 	m_TransformCompPtr->SetMovement(m_PreviousMovement);
 }
 
+void pacman::AI::Update()
+{
+	if (not m_PauseAI)
+		return;
+
+	m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
+	if (m_PauseTime >= 2.f)
+	{
+		m_PauseAI = false;
+		m_PauseTime = 0.f;
+	}
+}
+
 void pacman::AI::FixedUpdate()
 {
+	if (m_PauseAI)
+		return;
+
 	const auto& currentMovement = m_TransformCompPtr->GetMovement();
 
 	const auto& shape = CalculateNewPosition(currentMovement);
@@ -53,11 +69,7 @@ void pacman::AI::FixedUpdate()
 		if (not diji::Collision::GetInstance().IsCollidingWithWorld(oldShape))
 			m_TransformCompPtr->SetPosition(oldShape.left, oldShape.bottom);
 		else
-		{
 			m_TransformCompPtr->SetMovement(diji::Movement::Idle);
-			// Smooth out collision (testing)
-			//SmoothOutCollision(shape, m_PreviousMovement);
-		}
 	}
 
 	// late update stuff
@@ -76,7 +88,7 @@ void pacman::AI::FixedUpdate()
 	//}
 
 }
-
+#include <iostream>
 void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
@@ -94,6 +106,13 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 
 		const int value = pickUp->GetValue();
 		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
+		break;
+	}
+	case MessageTypesDerived::ENEMY_COLLISION:
+	{
+		//todo: add score and check if powerup is active or not
+		m_PauseAI = true;
+		std::cout << "AI: Ghost Collision" << std::endl;
 		break;
 	}
 	default:

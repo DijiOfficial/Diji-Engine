@@ -17,7 +17,7 @@ namespace diji
 }
 
 namespace pacman
-{
+{ //todo: add the dying state
 	//                                                                      If Power                
 	//                                    If In Chase Mode    ┌───────┐   Pellet Eaten              
 	//                               ┌────────────────────────► Chase ◄──────────────────┐          
@@ -41,8 +41,8 @@ namespace pacman
 	//                          └─────────┘                    └───────┘                            
 	
 	class GhostState;
-	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there), add sound when eating ghost, make sure fright sound is continously played when ghost is frightened, adjust sppeds, pause entities when pacman eats ghost
-	//todo: slow down ghost when in tunnel, add running soung in eaten mode, check for excact scatter target position?
+	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there), add sound when eating ghost
+	//todo: slow down ghost when in tunnel, add running soung in eaten mode
 	//todo: audio order goes as follow -> pellet powerup audio, if eaten audio -> eaten audio, when finished play eayeball audio while going to spawn, if respawn then audio -> pellet powerup audio
 	//todo: disable state?
 	class GhostAI : public diji::Component, public diji::IObserver
@@ -58,7 +58,7 @@ namespace pacman
 		void Init() override;
 		void Update() override;
 		void FixedUpdate() override;
-		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 
 		virtual std::unique_ptr<GhostState> GetChaseState() const = 0;
 
@@ -69,12 +69,13 @@ namespace pacman
 		bool GetIsInChaseState() const { return m_ChaseScatterAlgo->IsInChaseState(); };
 		glm::vec2 GetSpawnPoint() const { return m_PersonnalSpawn; };
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
+		GhostState* GetCurrentState() const { return m_CurrentStateUPtr.get(); };
 
 		bool IsFrightened() const { return m_IsFrightened; };
 		bool IsPowerAlmostOver() const { return m_PowerUpTimer >= 7.f; };
 		void ClearFrightened() const;
 		void SetGhostTexture() const;
-
+		bool IsUpdatePaused() const { return m_UpdateIsPaused; };
 		void TurnAround() const;
 	protected:
 		GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player);
@@ -92,6 +93,8 @@ namespace pacman
 		std::unique_ptr<ChaseScatterAlgo> m_ChaseScatterAlgo = std::make_unique<ChaseScatterAlgo>();
 		mutable float m_PowerUpTimer = 0.f;
 		mutable bool m_IsFrightened = false;
+		bool m_UpdateIsPaused = false;
+		float m_PausedTimer = 0.f;
 	};
 
 	class RedAI final : public GhostAI
@@ -104,6 +107,39 @@ namespace pacman
 
 		void Init() override;
 	};
-	
+
+	class Pinky final : public GhostAI
+	{
+	public:
+		Pinky(diji::GameObject* ownerPtr, diji::GameObject* player);
+		~Pinky() noexcept = default;
+
+		std::unique_ptr<GhostState> GetChaseState() const override;
+
+		void Init() override;
+	};
+
+	class Inky final : public GhostAI
+	{
+	public:
+		Inky(diji::GameObject* ownerPtr, diji::GameObject* player);
+		~Inky() noexcept = default;
+
+		std::unique_ptr<GhostState> GetChaseState() const override;
+
+		void Init() override;
+	};
+
+	class Clyde final : public GhostAI
+	{
+	public:
+		Clyde(diji::GameObject* ownerPtr, diji::GameObject* player);
+		~Clyde() noexcept = default;
+
+		std::unique_ptr<GhostState> GetChaseState() const override;
+
+		void Init() override;
+	};
+
 }
 

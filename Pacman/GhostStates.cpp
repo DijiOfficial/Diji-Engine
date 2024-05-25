@@ -5,6 +5,7 @@
 #include "Command.h"
 #include "Transform.h"
 #include "Texture.h"
+#include "ISoundSystem.h"
 
 #pragma region GhostState
 void pacman::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& target)
@@ -355,7 +356,6 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 {
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
-	const auto& player = ghost->GetPlayerCollider();
 
 	SeekTarget(ghost, glm::vec2{ 0, 0 });
 
@@ -375,14 +375,14 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 		m_IsUpdated = true;
 	}
 
-	const auto& test = diji::Collision::GetInstance().IsColliding(collider);
-	for (const auto& colliders : test)
-	{
-		if (colliders == player)
-		{
-			return std::make_unique<Eaten>();
-		}
-	}
+	//const auto& test = diji::Collision::GetInstance().IsColliding(collider);
+	//for (const auto& colliders : test)
+	//{
+	//	if (colliders == player)
+	//	{
+	//		return std::make_unique<Eaten>();
+	//	}
+	//}
 
 	if (not ghost->IsFrightened())
 		return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
@@ -420,3 +420,13 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 	return nullptr;
 }
 #pragma endregion
+
+void pacman::Dying::OnEnter(const GhostAI*)
+{
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::EatGhost, -1);
+}
+
+std::unique_ptr<pacman::GhostState> pacman::Dying::Execute(const GhostAI* ghost)
+{
+	return ghost->IsUpdatePaused() ? nullptr : std::make_unique<Eaten>();
+}

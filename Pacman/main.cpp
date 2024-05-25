@@ -19,6 +19,7 @@
 #include "AI.h"
 #include "PinkAI.h"
 #include "Observers.h"
+#include "GhostCollision.h"
 
 using namespace diji;
 void load()
@@ -213,6 +214,7 @@ void Pacman()
 	Blinky->AddComponents<Render>(2);
 	Blinky->AddComponents<Collider>(15, 15);
 	Blinky->AddComponents<pacman::RedAI>(player);
+	Blinky->AddComponents<pacman::GhostCollision>(player);
 	Blinky->GetComponent<Render>()->EnableHitbox();
 	Blinky->GetComponent<Render>()->SetTestBool(true);
 	
@@ -263,6 +265,8 @@ void Pacman()
 
 #pragma region Observers
 	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
+	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::GhostAI>());
 #pragma endregion
 
 
