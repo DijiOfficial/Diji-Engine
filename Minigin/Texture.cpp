@@ -48,12 +48,9 @@ void diji::Texture::SetTexture(const std::string& filename)
 
 void diji::Texture::SetStartingFrame(int frame)
 {
-	if (frame > m_StartingFrame)
-	{
-		m_Frame += frame;
-		if ((m_Frame - frame) >= m_NrOfFrames)
-			m_Frame = m_StartingFrame;
-	}
+	m_Frame = frame;
+		if (frame ^ 1)
+			++m_Frame;
 
 	m_StartingFrame = frame;
 }

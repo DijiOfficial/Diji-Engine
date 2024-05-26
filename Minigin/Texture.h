@@ -45,6 +45,7 @@ namespace diji
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
 		int GetFrame() const { return m_Frame; }
+		int GetNrOfFrames() const { return m_NrOfFrames; }
 		bool CanRotate() const { return m_CanRotate; }
 		float GetRotationAngle() const { return m_RotationAngle; }
 
