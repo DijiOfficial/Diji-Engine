@@ -8,16 +8,13 @@
 #include "PickUp.h"
 #include "GhostAI.h"
 #include "SceneManager.h"
-pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects)
+pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter)
 {
 	diji::SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
 
 	//todo: Get Level scene
 	m_ScenePtr = diji::SceneManager::GetInstance().CreateScene("PickUpLoader");
 	m_PlayerPtr = player;
-
-	auto pelletCounter = m_ScenePtr->CreateGameObject();
-	pelletCounter->AddComponents<PelletObserver>();
 
 	int idx = 0;
 	for (const auto& posVec : m_PelletsVec)

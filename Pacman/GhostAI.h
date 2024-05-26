@@ -2,9 +2,8 @@
 #include "Component.h"
 #include "ChaseScatterAlgo.h"
 #include "IObserver.h"
+#include "GhostStates.h"
 
-#include <glm/vec2.hpp>
-#include <memory>
 #include <string>
 
 namespace diji
@@ -17,7 +16,8 @@ namespace diji
 }
 
 namespace pacman
-{ //todo: add the dying state
+{ 
+	//todo: add the dying state
 	//                                                                      If Power                
 	//                                    If In Chase Mode    ┌───────┐   Pellet Eaten              
 	//                               ┌────────────────────────► Chase ◄──────────────────┐          
@@ -40,11 +40,11 @@ namespace pacman
 	//                          │ Respawn ◄────────────────────┤ Eaten ◄───────────────────────────┘
 	//                          └─────────┘                    └───────┘                            
 	
-	class GhostState;
-	//todo: adjust teleportation tointersections based on speed, so frightened mode doesnt look so laggy
+	class PelletObserver;
 	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there)
-	//todo: slow down ghost when in tunnel, test audio cases with multiple ghosts
-	//todo: disable state?
+	//todo: test audio cases with multiple ghosts
+	//todo: ghosts can be eaten when coming out the maze?
+
 	class GhostAI : public diji::Component, public diji::IObserver
 	{
 	public:
@@ -70,6 +70,7 @@ namespace pacman
 		glm::vec2 GetSpawnPoint() const { return m_PersonnalSpawn; };
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
 		GhostState* GetCurrentState() const { return m_CurrentStateUPtr.get(); };
+		int GetPelletCount() const;
 
 		bool IsFrightened() const { return m_IsFrightened; };
 		bool IsPowerAlmostOver() const { return m_PowerUpTimer >= 7.f; };
@@ -78,7 +79,7 @@ namespace pacman
 		bool IsUpdatePaused() const { return m_UpdateIsPaused; };
 		void TurnAround() const;
 	protected:
-		GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player);
+		GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter);
 
 		std::unique_ptr<GhostState> m_CurrentStateUPtr = nullptr;
 		glm::vec2 m_PersonnalSpawn = { 0, 0 };
@@ -87,6 +88,7 @@ namespace pacman
 
 	private:
 		diji::Collider* m_PlayerColliderPtr;
+		const pacman::PelletObserver* m_PelletCounterPtr;
 		diji::Collider* m_ColliderCompPtr;
 		diji::Transform* m_TransformCompPtr;
 		diji::Texture* m_TextureCompPtr;
@@ -95,12 +97,13 @@ namespace pacman
 		mutable bool m_IsFrightened = false;
 		bool m_UpdateIsPaused = false;
 		float m_PausedTimer = 0.f;
+		const float m_TunnelSpeed = 0.9375f;
 	};
 
 	class RedAI final : public GhostAI
 	{
 	public:
-		RedAI(diji::GameObject* ownerPtr, diji::GameObject* player);
+		RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter);
 		~RedAI() noexcept = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;
@@ -111,7 +114,7 @@ namespace pacman
 	class Pinky final : public GhostAI
 	{
 	public:
-		Pinky(diji::GameObject* ownerPtr, diji::GameObject* player);
+		Pinky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter);
 		~Pinky() noexcept = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;
@@ -122,7 +125,7 @@ namespace pacman
 	class Inky final : public GhostAI
 	{
 	public:
-		Inky(diji::GameObject* ownerPtr, diji::GameObject* player);
+		Inky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter);
 		~Inky() noexcept = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;
@@ -133,7 +136,7 @@ namespace pacman
 	class Clyde final : public GhostAI
 	{
 	public:
-		Clyde(diji::GameObject* ownerPtr, diji::GameObject* player);
+		Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter);
 		~Clyde() noexcept = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;

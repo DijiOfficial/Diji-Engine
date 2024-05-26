@@ -9,14 +9,16 @@
 #include "AI.h"
 #include "GhostCollision.h"
 #include "ISoundSystem.h"
-pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player)
+
+#pragma region GhostAI
+pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
+	, m_PelletCounterPtr{ pelletCounter->GetComponent<PelletObserver>() }
 {
 	m_ColliderCompPtr = nullptr;
 	m_TransformCompPtr = nullptr;
 	m_TextureCompPtr = nullptr;
-
 }
 
 void pacman::GhostAI::Init()
@@ -25,8 +27,6 @@ void pacman::GhostAI::Init()
 	m_ColliderCompPtr = ownerPtr->GetComponent<diji::Collider>();
 	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
 	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
-
-	m_TransformCompPtr->SetMovement(diji::Movement::Up);
 }
 
 void pacman::GhostAI::Update()
@@ -43,6 +43,10 @@ void pacman::GhostAI::Update()
 			return;
 	}
 
+	//todo: magic mumber removal?
+	const auto& pos = m_TransformCompPtr->GetPosition();
+	m_CurrentStateUPtr->SetInTunnel(pos.y == 295 and (pos.x <= 90 or pos.x >= 360));
+
 	m_ChaseScatterAlgo->Update();
 
 	if (m_IsFrightened)
@@ -56,7 +60,7 @@ void pacman::GhostAI::Update()
 		}
 	}
 }
-
+#include <iostream>
 void pacman::GhostAI::FixedUpdate()
 {
 	if (m_UpdateIsPaused and 
@@ -70,6 +74,7 @@ void pacman::GhostAI::FixedUpdate()
 
 	if (state)
 	{
+		std::cout << "State change\n";
 		m_CurrentStateUPtr->OnExit(this);
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
@@ -118,6 +123,11 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject* subjec
 	}
 }
 
+int pacman::GhostAI::GetPelletCount() const
+{
+	return m_PelletCounterPtr->GetPelletCount();
+}
+
 void pacman::GhostAI::ClearFrightened() const
 {
 	m_IsFrightened = false;
@@ -162,9 +172,10 @@ void pacman::GhostAI::TurnAround() const
 //
 //	return shape;
 //}
-
-pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player)
-	: GhostAI(ownerPtr, player)
+#pragma endregion
+#pragma region Blinky
+pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
+	: GhostAI(ownerPtr, player, pelletCounter)
 {
 	m_PersonnalSpawn = { 212, 300 };
 	m_ScatterTarget = { 432, 0 };
@@ -184,60 +195,66 @@ void pacman::RedAI::Init()
 	GetTransform()->SetMovement(diji::Movement::Right);
 	m_CurrentStateUPtr->OnEnter(this);
 }
-
-pacman::Pinky::Pinky(diji::GameObject* ownerPtr, diji::GameObject* player)
-	: GhostAI(ownerPtr, player)
+#pragma endregion
+#pragma region Pinky
+pacman::Pinky::Pinky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
+	: GhostAI(ownerPtr, player, pelletCounter)
 {
-	m_PersonnalSpawn = { 212, 252 };
+	m_PersonnalSpawn = { 212, 300 };
 	m_ScatterTarget = { 0, 0 };
 	m_TexturePath = "Pinky.png";
 
-	m_CurrentStateUPtr = std::make_unique<Scatter>();
+	m_CurrentStateUPtr = std::make_unique<Waiting>(15);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Pinky::GetChaseState() const
 {
-	return std::unique_ptr<GhostState>();
+	return std::make_unique<PinkyChase>();
 }
 
 void pacman::Pinky::Init()
 {
+	GhostAI::Init();
+	GetTransform()->SetMovement(diji::Movement::Up);
+	m_CurrentStateUPtr->OnEnter(this);
 }
-
-pacman::Inky::Inky(diji::GameObject* ownerPtr, diji::GameObject* player)
-	: GhostAI(ownerPtr, player)
+#pragma endregion
+pacman::Inky::Inky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
+	: GhostAI(ownerPtr, player, pelletCounter)
 {
-	m_PersonnalSpawn = { 180, 252 };
+	m_PersonnalSpawn = { 180, 300 };
 	m_ScatterTarget = { 432, 480 };
 	m_TexturePath = "Inky.png";
 
-	m_CurrentStateUPtr = std::make_unique<Scatter>();
+	m_CurrentStateUPtr = std::make_unique<Waiting>(17);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Inky::GetChaseState() const
 {
-	return std::unique_ptr<GhostState>();
+	return std::make_unique<pacman::RedChase>();
 }
 
 void pacman::Inky::Init()
 {
+	GhostAI::Init();
 }
 
-pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player)
-	: GhostAI(ownerPtr, player)
+pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
+	: GhostAI(ownerPtr, player, pelletCounter)
 {
-	m_PersonnalSpawn = { 244, 252 };
+	m_PersonnalSpawn = { 244, 300 };
 	m_ScatterTarget = { 0, 480 };
 	m_TexturePath = "Clyde.png";
 
-	m_CurrentStateUPtr = std::make_unique<Scatter>();
+	m_CurrentStateUPtr = std::make_unique<Waiting>(32);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Clyde::GetChaseState() const
 {
-	return std::unique_ptr<GhostState>();
+	return std::make_unique<pacman::RedChase>();
 }
 
 void pacman::Clyde::Init()
 {
+	GhostAI::Init();
 }

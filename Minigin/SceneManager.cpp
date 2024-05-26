@@ -36,7 +36,7 @@ void diji::SceneManager::Render()
 	//{
 	//	Renderer::GetInstance().DrawRect(Rectf{2+ static_cast<float>(i % 28) * 16, 78 + static_cast<float>((i / 28)) * 16, 16.f, 16.f }, SDL_Color{128,128, 0,255 });
 	//}
-	Renderer::GetInstance().DrawCircle(450, 60, 5);
+	Renderer::GetInstance().DrawCircle(0, 0, 5);
 }
 
 diji::Scene* diji::SceneManager::GetScene(std::string& name) const

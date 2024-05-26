@@ -28,6 +28,8 @@ namespace pacman
 		virtual void OnExit([[maybe_unused]] const GhostAI* ghost) = 0;
 		virtual std::unique_ptr<GhostState> Execute([[maybe_unused]] const GhostAI* ghost) = 0;
 
+		void SetInTunnel(bool inTunnel) { m_IsInTunnel = inTunnel; };
+		
 		//todo:adjust speeds based on level and special speed for Blinky based on dots remaining
 	protected:
 		void SeekTarget(const GhostAI* ghost, const glm::vec2& target);
@@ -38,12 +40,30 @@ namespace pacman
 	private:
 		static constexpr std::array<glm::vec2, 4> m_BlockedIntersections = { {{202, 262}, {250, 262}, {202, 454}, {250, 454}} };
 		bool m_TempLock = false;
+		bool m_IsInTunnel = false;
 		int m_LockedFrames = 0;
+		const float m_TunnelSpeed = 0.9375f;
 
 		void CalculateDirection(const GhostAI* ghost, const glm::vec2& target);
 		glm::vec2 GetTargetTranslation(diji::Movement movement) const;
 
 		diji::Movement ChooseRandomDirection(const std::map<diji::Movement, bool>& possibleDirections) const;
+	};
+
+	class Waiting final : public GhostState
+	{
+	public:
+		Waiting(const int pellets);
+		~Waiting() noexcept = default;
+
+		void OnEnter(const GhostAI* ghost) override;
+		void OnExit(const GhostAI*) override;
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+
+	private:
+		const int m_PelletsNeeded;
+		bool m_IsGoingUp = true;
+		float m_WaitSpeed = 1.0f;
 	};
 
 	class Eaten final : public GhostState
@@ -57,7 +77,6 @@ namespace pacman
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		float m_EatenSpeed = 3.25f;
-
 	};
 
 	class Respawn final : public GhostState
@@ -80,11 +99,12 @@ namespace pacman
 		using GhostState::GhostState;
 		~ExitMaze() noexcept = default;
 
-		void OnEnter(const GhostAI*) override {};
+		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
-		const glm::vec2 m_OutsidePosition = { 212, 247 };
+		const glm::vec2 m_OutsidePosition = { 212.f, 247.f };
+		float m_RespawnSpeed = 0.8f;
 	};
 
 	class Scatter final : public GhostState
@@ -123,7 +143,7 @@ namespace pacman
 		using GhostState::GhostState;
 		~Chase() noexcept = default;
 
-		virtual void OnEnter(const GhostAI*) override = 0;
+		virtual void OnEnter(const GhostAI* ghost) override;
 		virtual void OnExit(const GhostAI*) override = 0;
 		virtual std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override = 0;
 	};
@@ -134,9 +154,20 @@ namespace pacman
 		using Chase::Chase;
 		~RedChase() noexcept = default;
 
-		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	};
+
+	class PinkyChase final : public Chase
+	{
+	public:
+		using Chase::Chase;
+		~PinkyChase() noexcept = default;
+
+		void OnExit(const GhostAI*) override {};
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	private:
+		const float m_TargetDistance = 64.f;
 	};
 
 	class Dying final : public GhostState

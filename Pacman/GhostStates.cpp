@@ -18,7 +18,8 @@ void pacman::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& targe
 	
 	if (not m_TempLock)
 	{
-		const auto& pos = diji::Collision::GetInstance().GetCollidingWithIntersectionRectf(shape);
+		const float speed = m_IsInTunnel ? m_TunnelSpeed : m_Step;
+		const auto& pos = diji::Collision::GetInstance().GetCollidingWithIntersectionRectf(shape, speed);
 		if (pos != glm::vec2{ 0, 0 })
 		{
 			ghost->GetTransform()->SetPosition(pos.x - shape.width * 0.5f, pos.y - shape.height * 0.5f);
@@ -83,7 +84,7 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 	//but I still need to pass a target and no other state has a target of { 0, 0 }
 	diji::Movement bestDirection = diji::Movement::Idle;
 
-	if (target == glm::vec2{ 0 , 0 }) //Frightened
+	if (target == glm::vec2{ -1 , -1 }) //Frightened
 		bestDirection = ChooseRandomDirection(possibleDirections);
 	else
 	{
@@ -145,7 +146,8 @@ void pacman::GhostState::GoToTarget(const GhostAI* ghost, const glm::vec2& targe
 
 	SeekTarget(ghost, target);
 
-	const auto position = transform->GetPosition() + transform->GetMovementVector(m_Step);
+	const float movement = m_IsInTunnel ? m_TunnelSpeed : m_Step;
+	const auto position = transform->GetPosition() + transform->GetMovementVector(movement);
 
 	auto shape = collider->GetCollisionBox();
 	shape.left = position.x;
@@ -263,11 +265,17 @@ std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghos
 }
 #pragma endregion
 #pragma region Exit Maze
+void pacman::ExitMaze::OnEnter(const GhostAI* ghost)
+{
+	std::swap(m_Step, m_RespawnSpeed);
+	ghost->GetTexture()->SetCurrentFrame(0);
+}
 void pacman::ExitMaze::OnExit(const GhostAI* ghost)
 {
 	ghost->GetTransform()->SetMovement(diji::Movement::Left);
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Left) * 2);
 	ghost->ClearFrightened();
+	std::swap(m_Step, m_RespawnSpeed);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::ExitMaze::Execute(const GhostAI* ghost)
@@ -333,10 +341,10 @@ void pacman::Frightened::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
 	const auto& texture = ghost->GetTexture();
-	//todo: check why ghost is gone for 1 frame
 	texture->SetTexture("Frightened.png");
 	texture->SetNrOfFrames(2);
 	texture->SetStartingFrame(0);
+	texture->SetCurrentFrame(0);
 	m_DisplayDirection = false;
 	m_IsUpdated = false;
 	std::swap(m_Step, m_FrightSpeed);
@@ -344,8 +352,8 @@ void pacman::Frightened::OnEnter(const GhostAI* ghost)
 
 void pacman::Frightened::OnExit(const GhostAI* ghost)
 {
+	ghost->SetGhostTexture();
 	const auto& texture = ghost->GetTexture();
-	texture->SetTexture("RedGhost.png");
 	texture->SetNrOfFrames(2);
 	texture->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
 	texture->DisableFlickerAnimation();
@@ -359,7 +367,7 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
 
-	SeekTarget(ghost, glm::vec2{ 0, 0 });
+	SeekTarget(ghost, glm::vec2{ -1, -1 });
 
 	const auto position = transform->GetPosition() + transform->GetMovementVector(m_Step);
 
@@ -377,15 +385,6 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 		m_IsUpdated = true;
 	}
 
-	//const auto& test = diji::Collision::GetInstance().IsColliding(collider);
-	//for (const auto& colliders : test)
-	//{
-	//	if (colliders == player)
-	//	{
-	//		return std::make_unique<Eaten>();
-	//	}
-	//}
-
 	if (not ghost->IsFrightened())
 		return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
 
@@ -397,7 +396,7 @@ void pacman::Frightened::SwitchSpeed()
 }
 #pragma endregion
 #pragma region Chase
-void pacman::RedChase::OnEnter(const GhostAI* ghost)
+void pacman::Chase::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
@@ -421,8 +420,33 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 	
 	return nullptr;
 }
-#pragma endregion
 
+std::unique_ptr<pacman::GhostState> pacman::PinkyChase::Execute(const GhostAI* ghost)
+{
+	const auto& player = ghost->GetPlayerCollider();
+	const auto& transform = ghost->GetTransform();
+
+	const auto& playerPos = player->GetCollisionBox();
+	const glm::vec2 center(playerPos.left + playerPos.width * 0.5f, playerPos.bottom + playerPos.height * 0.5f);
+	glm::vec2 target = center + transform->Get2DMovementVector(m_TargetDistance);
+
+	const auto& playerDirection = transform->GetMovement();
+	if (playerDirection == diji::Movement::Up)
+		target.x -= m_TargetDistance;
+
+	GoToTarget(ghost, target);
+
+	if (not ghost->GetIsInChaseState())
+		return std::make_unique<Scatter>();
+
+	if (ghost->IsFrightened())
+		return std::make_unique<Frightened>();
+
+	return nullptr;
+}
+
+#pragma endregion
+#pragma region Dying
 void pacman::Dying::OnEnter(const GhostAI*)
 {
 	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::EatGhost, -1);
@@ -432,3 +456,56 @@ std::unique_ptr<pacman::GhostState> pacman::Dying::Execute(const GhostAI* ghost)
 {
 	return ghost->IsUpdatePaused() ? nullptr : std::make_unique<Eaten>();
 }
+#pragma endregion
+#pragma region Waiting
+pacman::Waiting::Waiting(const int pellets)
+	: m_PelletsNeeded{ pellets }
+{
+}
+
+void pacman::Waiting::OnEnter(const GhostAI* ghost)
+{
+	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
+	std::swap(m_Step, m_WaitSpeed);
+
+}
+
+void pacman::Waiting::OnExit(const GhostAI*)
+{
+	std::swap(m_Step, m_WaitSpeed);
+}
+
+std::unique_ptr<pacman::GhostState> pacman::Waiting::Execute(const GhostAI* ghost)
+{
+	const auto& transform = ghost->GetTransform();
+	const auto& texture = ghost->GetTexture();
+	glm::vec3 currentPosition = transform->GetPosition();
+
+	constexpr float upperBound = 300.0f - 16.0f;
+	constexpr float lowerBound = 300.0f + 2.0f;
+
+	if (m_IsGoingUp)
+	{
+		if (currentPosition.y > upperBound)
+			currentPosition.y -= m_Step; 
+		else
+		{
+			m_IsGoingUp = false; 
+			texture->SetStartingFrame(static_cast<int>(diji::Movement::Down) * 2);
+		}
+	}
+	else
+	{
+		if (currentPosition.y < lowerBound)
+			currentPosition.y += m_Step;
+		else
+		{
+			m_IsGoingUp = true;
+			texture->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
+		}
+	}
+
+	transform->SetPosition(currentPosition);
+	return (ghost->GetPelletCount() >= m_PelletsNeeded) ? std::make_unique<pacman::ExitMaze>() : nullptr;
+}
+#pragma endregion

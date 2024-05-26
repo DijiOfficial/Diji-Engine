@@ -17,7 +17,8 @@
 #include "ScoreCounter.h"
 #include "HealthCounter.h"
 #include "AI.h"
-#include "PinkAI.h"
+//#include "PinkAI.h"
+#include "GhostAI.h"
 #include "Observers.h"
 #include "GhostCollision.h"
 
@@ -182,6 +183,9 @@ void Pacman()
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
 	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);
 
+	auto pelletCounter = scene->CreateGameObject();
+	pelletCounter->AddComponents<pacman::PelletObserver>();
+
 	auto player = scene->CreateGameObject();
 	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
 	player->GetComponent<Texture>()->SetRotation(true);
@@ -193,33 +197,29 @@ void Pacman()
 	player->AddComponents<pacman::AI>();
 	player->GetComponent<Render>()->EnableHitbox();
 
-	//auto Pinky = scene->CreateGameObject();
-	//Pinky->AddComponents<Texture>("PinkGhost.png", 14, 14);
-	//Pinky->AddComponents<Transform>(214, 300);
-	//Pinky->AddComponents<Render>(2);
-	//Pinky->AddComponents<Collider>(15, 15);
-	//Pinky->AddComponents<PinkAI>(player);
-
-	//auto test = scene->CreateGameObject();
-	//test->AddComponents<Texture>("PinkGhost.png", 14, 14);
-	//test->AddComponents<Transform>(212, 300);
-	//test->AddComponents<Render>(2);
-	//test->AddComponents<Collider>(15, 15);
-	//test->AddComponents<PinkAI>(player);
-
-	auto Blinky = scene->CreateGameObject();
-	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
-	Blinky->AddComponents<Transform>(212, 247);
-	Blinky->AddComponents<Render>(2);
-	Blinky->AddComponents<Collider>(15, 15);
-	Blinky->AddComponents<pacman::RedAI>(player);
-	Blinky->AddComponents<pacman::GhostCollision>(player);
-	Blinky->GetComponent<Render>()->EnableHitbox();
-	Blinky->GetComponent<Render>()->SetTestBool(true);
+	//auto Blinky = scene->CreateGameObject();
+	//Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
+	//Blinky->AddComponents<Transform>(212, 247);
+	//Blinky->AddComponents<Render>(2);
+	//Blinky->AddComponents<Collider>(15, 15);
+	//Blinky->AddComponents<pacman::RedAI>(player, pelletCounter);
+	//Blinky->AddComponents<pacman::GhostCollision>(player);
+	//Blinky->GetComponent<Render>()->EnableHitbox();
+	//Blinky->GetComponent<Render>()->SetTestBool(true);
 	
-	const std::vector<GameObject*> ghosts = { Blinky };
+	auto Pinky = scene->CreateGameObject();
+	Pinky->AddComponents<Texture>("Pinky.png", 15, 15, 2);
+	Pinky->AddComponents<Transform>(212, 300);
+	Pinky->AddComponents<Render>(2);
+	Pinky->AddComponents<Collider>(15, 15);
+	Pinky->AddComponents<pacman::Pinky>(player, pelletCounter);
+	Pinky->AddComponents<pacman::GhostCollision>(player);
+	Pinky->GetComponent<Render>()->SetTestBool(true);
 
-	pacman::PickUpLoader pickUpLoader{ player, ghosts };
+	const std::vector<GameObject*> ghosts = { Pinky };
+	//const std::vector<GameObject*> ghosts = { Blinky, Pinky };
+
+	pacman::PickUpLoader pickUpLoader{ player, ghosts, pelletCounter };
 	//PickUpLoader::GetInstance().Initialize(player);
 
 	//make the hud it's own scene?
@@ -264,8 +264,12 @@ void Pacman()
 
 #pragma region Observers
 	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
-	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
-	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::GhostAI>());
+	//Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	//Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::GhostAI>());
+
+	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Pinky->GetComponent<pacman::GhostAI>());
+
 #pragma endregion
 
 

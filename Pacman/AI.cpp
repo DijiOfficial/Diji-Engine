@@ -38,9 +38,9 @@ void pacman::AI::Update()
 		m_PauseTime = 0.f;
 	}
 }
-
 void pacman::AI::FixedUpdate()
 {
+
 	if (m_PauseAI)
 		return;
 
