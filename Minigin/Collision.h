@@ -27,7 +27,7 @@ namespace diji
 		bool IsCollidingWithWorld(const Rectf& shape);
 		bool IsCollidingWithWorld(const glm::vec2& point1, const glm::vec2& point2);
 		bool IsCollidingWithIntersection(const Rectf& shape);
-		glm::vec2 GetCollidingWithIntersectionRectf(const Rectf& shape);
+		glm::vec2 GetCollidingWithIntersectionRectf(const Rectf& shape, const float speed);
 		//temp
 		std::vector<std::vector<glm::vec2>> GetLevelCollider() const { return m_LevelCollider; }
 

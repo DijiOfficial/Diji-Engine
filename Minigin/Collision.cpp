@@ -75,7 +75,7 @@ bool diji::Collision::IsCollidingWithIntersection(const Rectf& shape)
 	return false;
 }
 
-glm::vec2 diji::Collision::GetCollidingWithIntersectionRectf(const Rectf& shape)
+glm::vec2 diji::Collision::GetCollidingWithIntersectionRectf(const Rectf& shape, const float speed)
 {
 	glm::vec2 center(shape.left + shape.width * 0.5f, shape.bottom + shape.height * 0.5f);
 
@@ -83,7 +83,8 @@ glm::vec2 diji::Collision::GetCollidingWithIntersectionRectf(const Rectf& shape)
 	{
 		for (const auto& point : intersectionRow)
 		{
-			if (glm::distance(center, point) <= 4.0f)
+			const int checkDistance = speed < 1.5f ? 2 : 4;
+			if (glm::distance(center, point) <= checkDistance)
 				return point;
 		}
 	}
