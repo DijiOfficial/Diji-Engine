@@ -36,7 +36,7 @@ void pacman::GhostCollision::Update()
 			const float deltaY = playerCenter.y - pelletCenter.y;
 			const float distance = deltaX * deltaX + deltaY * deltaY;
 
-			if (distance <= 128.f)
+			if (distance <= 250.f)
 			{
 				const auto& currentState = GetOwner()->GetComponent<GhostAI>()->GetCurrentState();
 				if (dynamic_cast<const pacman::Respawn*>(currentState) == nullptr &&
