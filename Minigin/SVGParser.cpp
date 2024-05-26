@@ -319,7 +319,6 @@ bool SVGParser::GetAttributeValue( const std::string& svgText, const std::string
 // Skips any optional commas in the stream
 // SVG has a really funky format,
 // not sure this code works for all cases.
-// TODO: Test cases!
 void SVGParser::SkipSvgComma( std::stringstream& svgStream, bool isRequired )
 {
 	while ( true )

@@ -24,7 +24,6 @@ namespace diji
 		// Skips any optional commas in the stream
 		// SVG has a really funky format,
 		// not sure this code works for all cases.
-		// TODO: Test cases!
 		static void SkipSvgComma(std::stringstream& stream, bool isRequired);
 		static float ReadSvgValue(std::stringstream& stream, float defaultValue);
 		static float ReadSvgValue(std::stringstream& stream, bool separatorRequired);
