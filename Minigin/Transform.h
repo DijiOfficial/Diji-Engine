@@ -34,7 +34,7 @@ namespace diji
 		void SetMovement(const Movement& movement) { m_CurrentMovement = movement; };
 		Movement GetMovement() const { return m_CurrentMovement; };
 		glm::vec3 GetMovementVector(const float value) const;
-
+		glm::vec2 Get2DMovementVector(const float value) const;
 	private:
 		glm::vec3 m_Position;
 		Movement m_CurrentMovement;
