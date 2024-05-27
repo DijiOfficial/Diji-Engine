@@ -148,33 +148,6 @@ void pacman::GhostAI::TurnAround() const
 	m_TransformCompPtr->SetMovement(static_cast<diji::Movement>((static_cast<int>(m_TransformCompPtr->GetMovement()) + 2) % 4));
 }
 
-//const diji::Rectf pacman::GhostAI::CalculateNewPosition(diji::Movement movement, const GhostAI* ghost)
-//{
-//	auto shape = m_ColliderCompPtr->GetCollisionBox() + ghost->GetTransform()->GetMovementVector(2.f);
-//
-//	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
-//	{
-//		shape.left = std::round(shape.left);
-//		shape.bottom = std::round(shape.bottom);
-//		switch (movement)
-//		{
-//		case diji::Movement::Up:
-//			++shape.bottom;
-//			break;
-//		case diji::Movement::Down:
-//			--shape.bottom;
-//			break;
-//		case diji::Movement::Left:
-//			++shape.left;
-//			break;
-//		case diji::Movement::Right:
-//			--shape.left;
-//			break;
-//		}
-//	}
-//
-//	return shape;
-//}
 #pragma endregion
 #pragma region Blinky
 pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
@@ -222,6 +195,7 @@ void pacman::Pinky::Init()
 	m_CurrentStateUPtr->OnEnter(this);
 }
 #pragma endregion
+#pragma region Inky
 pacman::Inky::Inky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers, const diji::GameObject* blinky)
 	: GhostAI(ownerPtr, player, pelletCounter, timers)
 {
@@ -244,7 +218,8 @@ void pacman::Inky::Init()
 	GetTransform()->SetMovement(diji::Movement::Up);
 	m_CurrentStateUPtr->OnEnter(this);
 }
-
+#pragma endregion
+#pragma region Clyde
 pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
 	: GhostAI(ownerPtr, player, pelletCounter, timers)
 {
@@ -260,10 +235,10 @@ std::unique_ptr<pacman::GhostState> pacman::Clyde::GetChaseState() const
 	return std::make_unique<pacman::ClydeChase>();
 }
 
-//todo: it's repeating code
 void pacman::Clyde::Init()
 {
 	GhostAI::Init();
 	GetTransform()->SetMovement(diji::Movement::Up);
 	m_CurrentStateUPtr->OnEnter(this);
 }
+#pragma endregion

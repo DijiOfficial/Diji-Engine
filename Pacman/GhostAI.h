@@ -16,32 +16,30 @@ namespace diji
 
 namespace pacman
 { 
-	//todo: add the dying state
-	//                                                                      If Power                
-	//                                    If In Chase Mode    ┌───────┐   Pellet Eaten              
-	//                               ┌────────────────────────► Chase ◄──────────────────┐          
-	//                               │                        └───▲───┘   Power Ran Out  │          
-	//                               │                            │                      │          
-	//                               │                            │                      │          
-	//                               │                          If│Time            ┌─────▼──────┐   
-	//                               │                          To│Switch          │ Frightened ├──┐
-	//                               │                            │                └─────▲──────┘  │
-	//                               │                            │                      │         │
-	//               Complex         │            If In           │         If Power     │         │
-	// ┌─────────┐  Algorithm  ┌─────┴──────┐  Scatter Mode  ┌────▼────┐  Pellet Eaten   │         │
-	// │ Waiting ├─────────────► Enter Maze ├────────────────► Scatter ◄─────────────────┘         │
-	// └─────────┘             └─────▲──────┘                └─────────┘  Power Ran Out            │
-	//                               │                                                             │
-	//                      Personnal│Spawn                                                        │
-	//                         Is Reached                                                          │
-	//                               │                                                             │
-	//                          ┌────┴────┐  If Spawn Reached  ┌───────┐    If Player Collision    │
-	//                          │ Respawn ◄────────────────────┤ Eaten ◄───────────────────────────┘
-	//                          └─────────┘                    └───────┘                            
+	//                                                                      If Power                         
+	//                                    If In Chase Mode    ┌───────┐   Pellet Eaten                       
+	//                               ┌────────────────────────► Chase ◄──────────────────┐                   
+	//                               │                        └───▲───┘   Power Ran Out  │                   
+	//                               │                            │                      │                   
+	//                               │                            │                      │                   
+	//                               │                          If│Time            ┌─────▼──────┐            
+	//                               │                          To│Switch          │ Frightened ├──┐         
+	//                               │                            │                └─────▲──────┘  │         
+	//                               │                            │                      │         │         
+	//               Complex         │            If In           │         If Power     │         │         
+	// ┌─────────┐  Algorithm  ┌─────┴──────┐  Scatter Mode  ┌────▼────┐  Pellet Eaten   │         │         
+	// │ Waiting ├─────────────► Enter Maze ├────────────────► Scatter ◄─────────────────┘         │If       
+	// └─────────┘             └─────▲──────┘                └─────────┘  Power Ran Out            │Colliding
+	//                               │                                                             │With     
+	//                      Personnal│Spawn                                                        │Player   
+	//                         Is Reached                                                          │         
+	//                               │                                  Update Paused For          │         
+	//                          ┌────┴────┐  If Spawn Reached  ┌───────┐  For 2 Seconds ┌───────┐  │         
+	//                          │ Respawn ◄────────────────────┤ Eaten ◄────────────────┤ Dying ◄──┘         
+	//                          └─────────┘                    └───────┘                └───────┘            
 	
 	class PelletObserver;
 	class GhostsTimers;
-	//todo: add points whgen eating ghosts(probably better when all 4ghosts are there)
 	//todo: test audio cases with multiple ghosts
 	class GhostAI : public diji::Component, public diji::IObserver
 	{
@@ -90,8 +88,7 @@ namespace pacman
 	private:
 		diji::Collider* m_PlayerColliderPtr;
 		diji::Transform* m_PlayerTransformPtr;
-		//todo why is this const?
-		const PelletObserver* m_PelletCounterPtr;
+		PelletObserver* m_PelletCounterPtr;
 		GhostsTimers* m_GhostsTimerPtr;
 		diji::Collider* m_ColliderCompPtr;
 		diji::Transform* m_TransformCompPtr;

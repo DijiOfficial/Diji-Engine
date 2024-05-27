@@ -30,7 +30,6 @@ namespace pacman
 
 		void SetInTunnel(bool inTunnel) { m_IsInTunnel = inTunnel; };
 		
-		//todo:adjust speeds based on level and special speed for Blinky based on dots remaining
 	protected:
 		void SeekTarget(const GhostAI* ghost, const glm::vec2& target);
 		void GoToTarget(const GhostAI* ghost, const glm::vec2& target);
