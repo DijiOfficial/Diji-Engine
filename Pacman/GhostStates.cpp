@@ -476,6 +476,25 @@ std::unique_ptr<pacman::GhostState> pacman::InkyChase::Execute(const GhostAI* gh
 	return nullptr;
 }
 
+std::unique_ptr<pacman::GhostState> pacman::ClydeChase::Execute(const GhostAI* ghost)
+{
+	const auto& player = ghost->GetPlayerCollider();
+	const auto& colliderRect = ghost->GetCollider()->GetCollisionBox();
+	const auto& playerPos = player->GetCollisionBox();
+	const glm::vec2 playerCenter(playerPos.left + playerPos.width * 0.5f, playerPos.bottom + playerPos.height * 0.5f);
+	const glm::vec2 clydeCenter(colliderRect.left + colliderRect.width * 0.5f, colliderRect.bottom + colliderRect.height * 0.5f);
+
+	glm::vec2 target = glm::distance(playerCenter, clydeCenter) >= 128.f ? playerCenter : ghost->GetScatterTarget();
+	GoToTarget(ghost, target);
+
+	if (not ghost->GetIsInChaseState())
+		return std::make_unique<Scatter>();
+
+	if (ghost->IsFrightened())
+		return std::make_unique<Frightened>();
+
+	return nullptr;
+}
 #pragma endregion
 #pragma region Dying
 void pacman::Dying::OnEnter(const GhostAI* ghost)

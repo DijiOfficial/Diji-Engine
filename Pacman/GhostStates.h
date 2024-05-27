@@ -182,6 +182,18 @@ namespace pacman
 		const float m_TargetDistance = 32.f;
 	};
 
+	class ClydeChase final : public Chase
+	{
+	public:
+		using Chase::Chase;
+		~ClydeChase() noexcept = default;
+
+		void OnExit(const GhostAI*) override {};
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	private:
+		const float m_TargetDistance = 128.f;
+	};
+
 	class Dying final : public GhostState
 	{
 	public:

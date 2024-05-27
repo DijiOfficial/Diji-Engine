@@ -257,10 +257,13 @@ pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const
 
 std::unique_ptr<pacman::GhostState> pacman::Clyde::GetChaseState() const
 {
-	return std::make_unique<pacman::RedChase>();
+	return std::make_unique<pacman::ClydeChase>();
 }
 
+//todo: it's repeating code
 void pacman::Clyde::Init()
 {
 	GhostAI::Init();
+	GetTransform()->SetMovement(diji::Movement::Up);
+	m_CurrentStateUPtr->OnEnter(this);
 }

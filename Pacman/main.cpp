@@ -208,7 +208,6 @@ void Pacman()
 	Blinky->AddComponents<Collider>(15, 15);
 	Blinky->AddComponents<pacman::RedAI>(player, pelletCounter, GhostTimers);
 	Blinky->AddComponents<pacman::GhostCollision>(player);
-	Blinky->GetComponent<Render>()->SetTestBool(true);
 
 	auto Pinky = scene->CreateGameObject();
 	Pinky->AddComponents<Texture>("Pinky.png", 15, 15, 2);
@@ -217,7 +216,6 @@ void Pacman()
 	Pinky->AddComponents<Collider>(15, 15);
 	Pinky->AddComponents<pacman::Pinky>(player, pelletCounter, GhostTimers);
 	Pinky->AddComponents<pacman::GhostCollision>(player);
-	Pinky->GetComponent<Render>()->SetTestBool(true);
 
 	auto Inky = scene->CreateGameObject();
 	Inky->AddComponents<Texture>("Inky.png", 15, 15, 2);
@@ -226,10 +224,16 @@ void Pacman()
 	Inky->AddComponents<Collider>(15, 15);
 	Inky->AddComponents<pacman::Inky>(player, pelletCounter, GhostTimers, Blinky);
 	Inky->AddComponents<pacman::GhostCollision>(player);
-	Inky->GetComponent<Render>()->SetTestBool(true);	
 
-	//const std::vector<GameObject*> ghosts = { Pinky };
-	const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky };
+	auto Clyde = scene->CreateGameObject();
+	Clyde->AddComponents<Texture>("Clyde.png", 15, 15, 2);
+	Clyde->AddComponents<Transform>(244, 300);
+	Clyde->AddComponents<Render>(2);
+	Clyde->AddComponents<Collider>(15, 15);
+	Clyde->AddComponents<pacman::Clyde>(player, pelletCounter, GhostTimers);
+	Clyde->AddComponents<pacman::GhostCollision>(player);
+
+	const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
 
 	pacman::PickUpLoader pickUpLoader{ player, ghosts, pelletCounter };
 	//PickUpLoader::GetInstance().Initialize(player);
@@ -284,6 +288,9 @@ void Pacman()
 
 	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Inky->GetComponent<pacman::Inky>());
+
+	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Clyde->GetComponent<pacman::Clyde>());
 #pragma endregion
 
 
