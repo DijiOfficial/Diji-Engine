@@ -249,7 +249,7 @@ std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghos
 		}
 	}
 	
-	if (glm::distance(glm::vec2{ currentPosition.x, currentPosition .y }, m_PersonnalSpawn) <= 2.f)
+	if (glm::distance(glm::vec2{ currentPosition.x, currentPosition .y }, m_PersonnalSpawn) <= 3.f)
 		transform->SetPosition(m_PersonnalSpawn);
 	else
 		transform->SetPosition(currentPosition);

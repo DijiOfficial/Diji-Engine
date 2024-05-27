@@ -33,7 +33,7 @@ namespace pacman
 		int m_CurrentCycle = 0;
 		float m_TotalElapsedTime = 0.0f;
 		float m_PauseTimer = 0.0f;
-		std::vector<float> m_ChaseScatterDuration = { 7.0f, 200.0f, 7.0f, 20.0f, 5.0f, 20.0f, 5.0f };
+		std::vector<float> m_ChaseScatterDuration = { 7.0f, 20.0f, 7.0f, 20.0f, 5.0f, 20.0f, 5.0f };
 	};
 }
 
