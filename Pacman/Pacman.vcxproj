@@ -200,7 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
-    <ClCompile Include="ChaseScatterAlgo.cpp" />
+    <ClCompile Include="GhostsAlgorithm.cpp" />
     <ClCompile Include="CustomCommands.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GhostAI.cpp" />
@@ -210,14 +210,13 @@
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="PickUpLoader.cpp" />
-    <ClCompile Include="PinkAI.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="GhostCollision.cpp" />
     <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
-    <ClInclude Include="ChaseScatterAlgo.h" />
+    <ClInclude Include="GhostsAlgorithm.h" />
     <ClInclude Include="CustomCommands.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GhostAI.h" />
@@ -226,7 +225,6 @@
     <ClInclude Include="Observers.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpLoader.h" />
-    <ClInclude Include="PinkAI.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="GhostCollision.h" />
     <ClInclude Include="TrashTheCache.h" />

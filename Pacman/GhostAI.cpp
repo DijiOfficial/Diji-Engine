@@ -9,12 +9,15 @@
 #include "AI.h"
 #include "GhostCollision.h"
 #include "ISoundSystem.h"
+#include "GhostsAlgorithm.h"
 
 #pragma region GhostAI
-pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
+pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
+	, m_PlayerTransformPtr{ player->GetComponent<diji::Transform>() }
 	, m_PelletCounterPtr{ pelletCounter->GetComponent<PelletObserver>() }
+	, m_GhostsTimerPtr{ timers->GetComponent<GhostsTimers>() }
 {
 	m_ColliderCompPtr = nullptr;
 	m_TransformCompPtr = nullptr;
@@ -31,24 +34,13 @@ void pacman::GhostAI::Init()
 
 void pacman::GhostAI::Update()
 {
-	if (m_UpdateIsPaused)
-	{
-		m_PausedTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
-		if (m_PausedTimer >= 2.f)
-		{
-			m_UpdateIsPaused = false;
-			m_PausedTimer = 0.f;
-		}
-		else
-			return;
-	}
-
+	if (m_GhostsTimerPtr->IsPaused())
+		return;
+	
 	//todo: magic mumber removal?
 	const auto& pos = m_TransformCompPtr->GetPosition();
 	m_CurrentStateUPtr->SetInTunnel(pos.y == 295 and (pos.x <= 90 or pos.x >= 360));
-
-	m_ChaseScatterAlgo->Update();
-
+	
 	if (m_IsFrightened)
 	{
 		m_PowerUpTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
@@ -56,14 +48,13 @@ void pacman::GhostAI::Update()
 		{
 			m_IsFrightened = false;
 			m_PowerUpTimer = 0.f;
-			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 		}
 	}
 }
-#include <iostream>
+
 void pacman::GhostAI::FixedUpdate()
 {
-	if (m_UpdateIsPaused and 
+	if (m_GhostsTimerPtr->IsPaused() and
 		dynamic_cast<const pacman::Respawn*>(m_CurrentStateUPtr.get()) == nullptr and
 		dynamic_cast<const pacman::Eaten*>(m_CurrentStateUPtr.get()) == nullptr)
 	{
@@ -74,7 +65,6 @@ void pacman::GhostAI::FixedUpdate()
 
 	if (state)
 	{
-		std::cout << "State change\n";
 		m_CurrentStateUPtr->OnExit(this);
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
@@ -110,18 +100,25 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject* subjec
 		if (not m_IsFrightened)
 			break;
 
-		if (subject == GetOwner()->GetComponent<GhostCollision>())
+		m_GhostsTimerPtr->Pause();
+
+		constexpr int EATEN_GHOST_POINTS = 200;
+		const auto& ghost = GetOwner()->GetComponent<GhostCollision>();
+		if (subject == ghost)
 		{
-			m_UpdateIsPaused = true;
-			m_PausedTimer = 0.f;
 			m_CurrentStateUPtr->OnExit(this);
-			m_CurrentStateUPtr = std::make_unique<Dying>(); // give it the points texture
+			m_CurrentStateUPtr = std::make_unique<Dying>(static_cast<int>(std::pow(2, ghost->GetGhostsEaten()) * EATEN_GHOST_POINTS));
 			m_CurrentStateUPtr->OnEnter(this);
 		}
 		
 		break;
 	}
 }
+
+bool pacman::GhostAI::GetIsInChaseState() const
+{
+	return m_GhostsTimerPtr->IsInChaseState();
+};
 
 int pacman::GhostAI::GetPelletCount() const
 {
@@ -132,12 +129,18 @@ void pacman::GhostAI::ClearFrightened() const
 {
 	m_IsFrightened = false;
 	m_PowerUpTimer = 0.f; 
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
+	//todo: this stops fright audio after eating only one ghost
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1); 
 }
 
 void pacman::GhostAI::SetGhostTexture() const
 {
 	m_TextureCompPtr->SetTexture(m_TexturePath);
+}
+
+bool pacman::GhostAI::IsUpdatePaused() const
+{
+	return m_GhostsTimerPtr->IsPaused();
 }
 
 void pacman::GhostAI::TurnAround() const
@@ -174,8 +177,8 @@ void pacman::GhostAI::TurnAround() const
 //}
 #pragma endregion
 #pragma region Blinky
-pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
-	: GhostAI(ownerPtr, player, pelletCounter)
+pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
+	: GhostAI(ownerPtr, player, pelletCounter, timers)
 {
 	m_PersonnalSpawn = { 212, 300 };
 	m_ScatterTarget = { 432, 0 };
@@ -197,14 +200,14 @@ void pacman::RedAI::Init()
 }
 #pragma endregion
 #pragma region Pinky
-pacman::Pinky::Pinky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
-	: GhostAI(ownerPtr, player, pelletCounter)
+pacman::Pinky::Pinky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
+	: GhostAI(ownerPtr, player, pelletCounter, timers)
 {
 	m_PersonnalSpawn = { 212, 300 };
 	m_ScatterTarget = { 0, 0 };
 	m_TexturePath = "Pinky.png";
 
-	m_CurrentStateUPtr = std::make_unique<Waiting>(15);
+	m_CurrentStateUPtr = std::make_unique<Waiting>(7);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Pinky::GetChaseState() const
@@ -219,28 +222,31 @@ void pacman::Pinky::Init()
 	m_CurrentStateUPtr->OnEnter(this);
 }
 #pragma endregion
-pacman::Inky::Inky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
-	: GhostAI(ownerPtr, player, pelletCounter)
+pacman::Inky::Inky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers, const diji::GameObject* blinky)
+	: GhostAI(ownerPtr, player, pelletCounter, timers)
 {
 	m_PersonnalSpawn = { 180, 300 };
 	m_ScatterTarget = { 432, 480 };
 	m_TexturePath = "Inky.png";
 
 	m_CurrentStateUPtr = std::make_unique<Waiting>(17);
+	m_BlinkyTransformPtr = blinky->GetComponent<diji::Transform>();
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Inky::GetChaseState() const
 {
-	return std::make_unique<pacman::RedChase>();
+	return std::make_unique<pacman::InkyChase>();
 }
 
 void pacman::Inky::Init()
 {
 	GhostAI::Init();
+	GetTransform()->SetMovement(diji::Movement::Up);
+	m_CurrentStateUPtr->OnEnter(this);
 }
 
-pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter)
-	: GhostAI(ownerPtr, player, pelletCounter)
+pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
+	: GhostAI(ownerPtr, player, pelletCounter, timers)
 {
 	m_PersonnalSpawn = { 244, 300 };
 	m_ScatterTarget = { 0, 480 };

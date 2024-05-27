@@ -81,7 +81,7 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 
 	//check the remaining directions to determine the closest one
 	//I could use a bool passed in the arguments to change between Frightened and other States
-	//but I still need to pass a target and no other state has a target of { 0, 0 }
+	//but I still need to pass a target and no other state has a target of { -1, -1 }
 	diji::Movement bestDirection = diji::Movement::Idle;
 
 	if (target == glm::vec2{ -1 , -1 }) //Frightened
@@ -269,12 +269,12 @@ void pacman::ExitMaze::OnEnter(const GhostAI* ghost)
 {
 	std::swap(m_Step, m_RespawnSpeed);
 	ghost->GetTexture()->SetCurrentFrame(0);
+	ghost->ClearFrightened();
 }
 void pacman::ExitMaze::OnExit(const GhostAI* ghost)
 {
 	ghost->GetTransform()->SetMovement(diji::Movement::Left);
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Left) * 2);
-	ghost->ClearFrightened();
 	std::swap(m_Step, m_RespawnSpeed);
 }
 
@@ -328,7 +328,7 @@ std::unique_ptr<pacman::GhostState> pacman::Scatter::Execute(const GhostAI* ghos
 	GoToTarget(ghost, m_Target);
 
 	if (ghost->GetIsInChaseState())
-		return std::make_unique<RedChase>();
+		return ghost->GetChaseState();
 
 	if (ghost->IsFrightened())
 		return std::make_unique<Frightened>();
@@ -344,7 +344,6 @@ void pacman::Frightened::OnEnter(const GhostAI* ghost)
 	texture->SetTexture("Frightened.png");
 	texture->SetNrOfFrames(2);
 	texture->SetStartingFrame(0);
-	texture->SetCurrentFrame(0);
 	m_DisplayDirection = false;
 	m_IsUpdated = false;
 	std::swap(m_Step, m_FrightSpeed);
@@ -424,14 +423,14 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 std::unique_ptr<pacman::GhostState> pacman::PinkyChase::Execute(const GhostAI* ghost)
 {
 	const auto& player = ghost->GetPlayerCollider();
-	const auto& transform = ghost->GetTransform();
+	const auto& transform = ghost->GetPlayerTransform();
 
 	const auto& playerPos = player->GetCollisionBox();
 	const glm::vec2 center(playerPos.left + playerPos.width * 0.5f, playerPos.bottom + playerPos.height * 0.5f);
 	glm::vec2 target = center + transform->Get2DMovementVector(m_TargetDistance);
 
-	const auto& playerDirection = transform->GetMovement();
-	if (playerDirection == diji::Movement::Up)
+	const auto& playerDirection = transform->GetLookingDirection();
+	if (playerDirection == diji::Movement::Up or (playerDirection == diji::Movement::Idle and transform->GetLastMovement() == diji::Movement::Up))
 		target.x -= m_TargetDistance;
 
 	GoToTarget(ghost, target);
@@ -445,11 +444,62 @@ std::unique_ptr<pacman::GhostState> pacman::PinkyChase::Execute(const GhostAI* g
 	return nullptr;
 }
 
+std::unique_ptr<pacman::GhostState> pacman::InkyChase::Execute(const GhostAI* ghost)
+{
+	constexpr int GHOST_WIDTH = 15;
+	constexpr int GHOST_HEIGHT = 15;
+
+	const auto& player = ghost->GetPlayerCollider();
+	const auto& transform = ghost->GetPlayerTransform();
+
+	const auto& playerPos = player->GetCollisionBox();
+	const glm::vec2 center(playerPos.left + playerPos.width * 0.5f, playerPos.bottom + playerPos.height * 0.5f);
+	glm::vec2 target = center + transform->Get2DMovementVector(m_TargetDistance);
+
+	const auto& playerDirection = transform->GetLookingDirection();
+	if (playerDirection == diji::Movement::Up or (playerDirection == diji::Movement::Idle and transform->GetLastMovement() == diji::Movement::Up))
+		target.x -= m_TargetDistance;
+
+	const glm::vec3& blinkyPos = ghost->GetSecondGhostTransform()->GetPosition();
+	const glm::vec2& blinkyCenter = glm::vec2{ blinkyPos.x + GHOST_WIDTH, blinkyPos.y + GHOST_HEIGHT };
+	const glm::vec2 targetToBlinky = blinkyCenter - target;
+	const glm::vec2 newTarget = target - targetToBlinky;
+
+	GoToTarget(ghost, newTarget);
+
+	if (not ghost->GetIsInChaseState())
+		return std::make_unique<Scatter>();
+
+	if (ghost->IsFrightened())
+		return std::make_unique<Frightened>();
+
+	return nullptr;
+}
+
 #pragma endregion
 #pragma region Dying
-void pacman::Dying::OnEnter(const GhostAI*)
+void pacman::Dying::OnEnter(const GhostAI* ghost)
 {
 	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::EatGhost, -1);
+	const auto& texture = ghost->GetTexture();
+	texture->SetTexture(std::to_string(m_Points) + ".png");
+	texture->SetNrOfFrames(1);
+	texture->PauseAnimation();
+	texture->SetCurrentFrame(0);
+
+	if (m_Points == 1600)
+		texture->SetWidth(16);
+}
+
+void pacman::Dying::OnExit(const GhostAI* ghost)
+{
+	const auto& texture = ghost->GetTexture();
+
+	texture->SetNrOfFrames(2);
+	texture->ResumeAnimation();
+
+	if (m_Points == 1600)
+		texture->SetWidth(15);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Dying::Execute(const GhostAI* ghost)

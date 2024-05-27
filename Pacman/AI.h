@@ -32,6 +32,7 @@ namespace pacman {
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
 
+		int GetGhostsEaten() const { return m_GhostsEaten; }
 		static constexpr float TOTAL_WIDTH = 452;
 	private:
 		diji::Texture* m_TextureCompPtr;
@@ -43,7 +44,12 @@ namespace pacman {
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		const diji::Rectf CalculateNewPosition(diji::Movement movement);
 		bool m_PauseAI = false;
+		//bool m_IsPoweredUp = false;
+		//float m_PowerUpTimer = 0.f;
 		float m_PauseTime = 0.f;
+		int m_GhostsEaten = 0;
+
+		bool IsGhostFrightened() const;
 	};
 }
 

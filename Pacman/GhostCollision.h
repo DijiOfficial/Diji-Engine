@@ -10,6 +10,7 @@ namespace diji
 namespace pacman
 {
 	class GhostState;
+	class AI;
 
 	class GhostCollision final : public diji::Component, public diji::Subject
 	{
@@ -22,10 +23,11 @@ namespace pacman
 		void FixedUpdate() override {};
 
 		GhostState* GetCurrentState();
-
+		int GetGhostsEaten() const;
 	private:
 		diji::Collider* m_PlayerColliderPtr;
 		diji::Collider* m_OwnerColliderPtr;
+		AI* m_PlayerAIPtr;
 	};
 }
 

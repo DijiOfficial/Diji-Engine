@@ -5,11 +5,13 @@
 #include "Observers.h"
 #include "GhostAI.h"
 #include "GhostStates.h"
+#include "AI.h"
 
 pacman::GhostCollision::GhostCollision(diji::GameObject* ownerPtr, const diji::GameObject* player)
 	: Component(ownerPtr)
 	, m_PlayerColliderPtr{ player->GetComponent<diji::Collider>() }
 	, m_OwnerColliderPtr{ nullptr }
+	, m_PlayerAIPtr{ player->GetComponent<AI>() }
 {
 };
 
@@ -55,4 +57,9 @@ void pacman::GhostCollision::Update()
 pacman::GhostState* pacman::GhostCollision::GetCurrentState()
 {
 	return GetOwner()->GetComponent<GhostAI>()->GetCurrentState();
+}
+
+int pacman::GhostCollision::GetGhostsEaten() const
+{
+	return m_PlayerAIPtr->GetGhostsEaten();
 }

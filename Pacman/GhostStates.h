@@ -104,7 +104,7 @@ namespace pacman
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		const glm::vec2 m_OutsidePosition = { 212.f, 247.f };
-		float m_RespawnSpeed = 0.8f;
+		float m_RespawnSpeed = 1.f;
 	};
 
 	class Scatter final : public GhostState
@@ -170,19 +170,30 @@ namespace pacman
 		const float m_TargetDistance = 64.f;
 	};
 
+	class InkyChase final : public Chase
+	{
+	public:
+		using Chase::Chase;
+		~InkyChase() noexcept = default;
+
+		void OnExit(const GhostAI*) override {};
+		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
+	private:
+		const float m_TargetDistance = 32.f;
+	};
+
 	class Dying final : public GhostState
 	{
 	public:
-		//todo: pass the points to the constructor and onEnter change texture to the right points
-		using GhostState::GhostState;
+		Dying(int points) : m_Points{ points } {};
 		~Dying() noexcept = default;
 
-		void OnEnter(const GhostAI*) override;
-		void OnExit(const GhostAI*) override {};
+		void OnEnter(const GhostAI* ghost) override;
+		void OnExit(const GhostAI* ghost) override;
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	
 	private:
-		const int points = 0;
+		const int m_Points = 0;
 	};
 }
 

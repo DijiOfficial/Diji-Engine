@@ -60,9 +60,6 @@
     <ClCompile Include="Observers.cpp">
       <Filter>Source Files\Observers &amp; Subjects</Filter>
     </ClCompile>
-    <ClCompile Include="PinkAI.cpp">
-      <Filter>Source Files\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="TrashTheCache.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -75,13 +72,13 @@
     <ClCompile Include="PickUp.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ChaseScatterAlgo.cpp">
-      <Filter>Source Files\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="GhostStates.cpp">
       <Filter>Source Files\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="GhostCollision.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostsAlgorithm.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,9 +101,6 @@
     <ClInclude Include="Observers.h">
       <Filter>Header Files\Observers &amp; Subjects</Filter>
     </ClInclude>
-    <ClInclude Include="PinkAI.h">
-      <Filter>Header Files\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreCounter.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -119,13 +113,13 @@
     <ClInclude Include="PickUp.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ChaseScatterAlgo.h">
-      <Filter>Header Files\Behaviors</Filter>
-    </ClInclude>
     <ClInclude Include="GhostStates.h">
       <Filter>Header Files\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="GhostCollision.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostsAlgorithm.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

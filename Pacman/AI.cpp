@@ -7,6 +7,9 @@
 #include "GameObject.h"
 #include "Observers.h"
 #include "TimeSingleton.h"
+#include "Render.h"
+#include "ISoundSystem.h"
+#include "GhostAI.h"
 
 pacman::AI::AI(diji::GameObject* ownerPtr)
 	: Component(ownerPtr)
@@ -28,19 +31,34 @@ void pacman::AI::Init()
 
 void pacman::AI::Update()
 {
-	if (not m_PauseAI)
-		return;
-
-	m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
-	if (m_PauseTime >= 2.f)
+	if (m_PauseAI)
 	{
-		m_PauseAI = false;
-		m_PauseTime = 0.f;
+		m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
+		if (m_PauseTime >= 2.f)
+		{
+			m_PauseAI = false;
+			m_PauseTime = 0.f;
+			GetOwner()->GetComponent<diji::Render>()->EnableRender();
+		}
+		else
+			return;
 	}
+
+	//if (m_IsPoweredUp)
+	//{
+	//	m_PowerUpTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
+	//	if (m_PowerUpTimer >= 10.f)
+	//	{
+	//		m_IsPoweredUp = false;
+	//		m_PowerUpTimer = 0.f;
+	//		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
+	//	}
+	//}
+
+	
 }
 void pacman::AI::FixedUpdate()
 {
-
 	if (m_PauseAI)
 		return;
 
@@ -61,6 +79,9 @@ void pacman::AI::FixedUpdate()
 
 			m_PreviousMovement = currentMovement;
 		}
+
+		if (currentMovement != diji::Movement::Idle)
+			m_TransformCompPtr->SetLookingDirection(currentMovement);
 	}
 	else
 	{
@@ -70,8 +91,10 @@ void pacman::AI::FixedUpdate()
 			m_TransformCompPtr->SetPosition(oldShape.left, oldShape.bottom);
 		else
 			m_TransformCompPtr->SetMovement(diji::Movement::Idle);
-	}
 
+		if (m_PreviousMovement != diji::Movement::Idle)
+			m_TransformCompPtr->SetLookingDirection(m_PreviousMovement);
+	}
 	// late update stuff
 	if (currentMovement == diji::Movement::Left)
 		if (shape.left < 0 - shape.width)
@@ -88,19 +111,19 @@ void pacman::AI::FixedUpdate()
 	//}
 
 }
+
 #include <iostream>
 void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
 	switch (msg)
 	{
-	case MessageTypesDerived::LEVEL_COLLISION:
+	case MessageTypesDerived::POWERUP_COLLISION:
 	{
-		//std::cout << "AI: Level Collision" << std::endl;
-		break;
+		m_GhostsEaten = 0;
+		[[fallthrough]];
 	}
 	case MessageTypesDerived::PICKUP_COLLISION:
-	case MessageTypesDerived::POWERUP_COLLISION:
 	{
 		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
 
@@ -110,9 +133,18 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	}
 	case MessageTypesDerived::ENEMY_COLLISION:
 	{
-		//todo: add score and check if powerup is active or not
-		m_PauseAI = true;
-		std::cout << "AI: Ghost Collision" << std::endl;
+		constexpr int EATEN_GHOST_POINTS = 200;
+
+		if (IsGhostFrightened())
+		{
+			m_PauseAI = true;
+			GetOwner()->GetComponent<diji::Render>()->DisableRender();
+			const int value = EATEN_GHOST_POINTS * static_cast<int>(std::pow(2, m_GhostsEaten));
+			GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
+			++m_GhostsEaten;
+		}
+		else
+			std::cout << "Game Over" << std::endl;
 		break;
 	}
 	default:
@@ -171,6 +203,48 @@ const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
 	}
 
 	return shape;
+}
+
+bool pacman::AI::IsGhostFrightened() const //super convoluted way of checking if the ghost is frightened, If ghost is subject I could dynamic cast it in the Notify
+{
+	auto colliders = diji::Collision::GetInstance().IsColliding(m_ColliderCompPtr);
+	colliders.erase(std::remove_if(colliders.begin(), colliders.end(),
+		[](const auto& collider)
+		{
+			return !collider->GetParent()->HasComponent<GhostAI>();
+		}), colliders.end());
+
+	if (colliders.empty())
+		return false;
+
+	if (colliders.size() == 1)
+	{
+		auto ghostAI = colliders.front()->GetParent()->GetComponent<GhostAI>();
+		return ghostAI->IsFrightened();
+	}
+
+	const auto& playerCollider = m_ColliderCompPtr->GetCollisionBox();
+	glm::vec2 playerCenter(playerCollider.left + playerCollider.width * 0.5f, playerCollider.bottom + playerCollider.height * 0.5f);
+
+	auto closestCollider = colliders.front();
+	float minDistance = std::numeric_limits<float>::max();
+
+	for (const auto& collider : colliders)
+	{
+		const auto& ghostCollider = collider->GetCollisionBox();
+		glm::vec2 ghostCenter(ghostCollider.left + ghostCollider.width * 0.5f, ghostCollider.bottom + ghostCollider.height * 0.5f);
+
+		const float distance = glm::distance(playerCenter, ghostCenter);
+
+		if (distance < minDistance)
+		{
+			minDistance = distance;
+			closestCollider = collider;
+		}
+	}
+
+	auto ghostAI = closestCollider->GetParent()->GetComponent<GhostAI>();
+	return ghostAI->IsFrightened();
 }
 
 //const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
