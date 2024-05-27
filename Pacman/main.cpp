@@ -235,6 +235,17 @@ void Pacman()
 
 	const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
 
+	//Set the ghosts aware of each other
+	const auto& BlinkyAI = Blinky->GetComponent<pacman::RedAI>();
+	const auto& PinkyAI = Pinky->GetComponent<pacman::Pinky>();
+	const auto& InkyAI = Inky->GetComponent<pacman::Inky>();
+	const auto& ClydeAI = Clyde->GetComponent<pacman::Clyde>();
+	const std::vector<pacman::GhostAI*> ghostAIs = { BlinkyAI, PinkyAI, InkyAI, ClydeAI };
+	BlinkyAI->SetGhostsVector(ghostAIs);
+	PinkyAI->SetGhostsVector(ghostAIs);
+	InkyAI->SetGhostsVector(ghostAIs);
+	ClydeAI->SetGhostsVector(ghostAIs);
+
 	pacman::PickUpLoader pickUpLoader{ player, ghosts, pelletCounter };
 	//PickUpLoader::GetInstance().Initialize(player);
 

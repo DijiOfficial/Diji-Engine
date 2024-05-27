@@ -48,6 +48,7 @@ void pacman::GhostAI::Update()
 		{
 			m_IsFrightened = false;
 			m_PowerUpTimer = 0.f;
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 		}
 	}
 }
@@ -129,8 +130,6 @@ void pacman::GhostAI::ClearFrightened() const
 {
 	m_IsFrightened = false;
 	m_PowerUpTimer = 0.f; 
-	//todo: this stops fright audio after eating only one ghost
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1); 
 }
 
 void pacman::GhostAI::SetGhostTexture() const

@@ -94,6 +94,7 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 		{
 			if (!canMove) continue;
 
+			//todo not necessary
 			const glm::vec2 newPosition = center + GetTargetTranslation(direction);
 			const float distance = glm::distance(newPosition, target);
 
@@ -220,7 +221,22 @@ void pacman::Respawn::OnExit(const GhostAI* ghost)
 	ghost->SetGhostTexture();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(diji::Movement::Up) * 2);
 	std::swap(m_Step, m_RespawnSpeed);
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PowerPellet, -1);
+
+	//check if other ghosts are still eaten
+	bool otherGhostEaten = false;
+	for (const auto& ai : ghost->GetGhostsAI())
+	{
+		if (ai != ghost and dynamic_cast<Eaten*>(ai->GetCurrentState()))
+			otherGhostEaten = true;
+	}
+	
+	if (ghost->IsLastGhostEaten())
+	{
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
+		ghost->SetIsLastGhostEaten(false);
+	}
+	else if(not otherGhostEaten)
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PowerPellet, -1);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)
@@ -518,7 +534,10 @@ void pacman::Dying::OnExit(const GhostAI* ghost)
 	texture->ResumeAnimation();
 
 	if (m_Points == 1600)
+	{
 		texture->SetWidth(15);
+		ghost->SetIsLastGhostEaten(true);
+	}
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Dying::Execute(const GhostAI* ghost)
