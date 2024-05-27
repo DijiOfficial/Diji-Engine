@@ -59,6 +59,7 @@ void pacman::AI::Update()
 }
 void pacman::AI::FixedUpdate()
 {
+	//todo: fix collision not always working
 	if (m_PauseAI)
 		return;
 
