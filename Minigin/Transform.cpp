@@ -4,6 +4,8 @@
 void diji::Transform::Init()
 {
 	m_CurrentMovement = Movement::Idle;
+	m_LastMovement = Movement::Idle;
+	m_LookingDirection = Movement::Idle;
 }
 
 void diji::Transform::SetPosition(const float x, const float y, const float z)
@@ -20,7 +22,14 @@ void diji::Transform::SetPosition(const float x, const float y)
 
 glm::vec3 diji::Transform::GetMovementVector(const float value) const
 {
-	switch (m_CurrentMovement)
+	Movement movement = m_CurrentMovement == Movement::Idle ? m_LastMovement : m_CurrentMovement;
+	if (m_LookingDirection != Movement::Idle)
+		movement = m_LookingDirection;
+
+	if (movement == Movement::Idle)
+		return glm::vec3(0, 0, 0);
+
+	switch (movement)
 	{
 	case Movement::Up:
 		return glm::vec3(0, -value, 0);
@@ -37,7 +46,14 @@ glm::vec3 diji::Transform::GetMovementVector(const float value) const
 
 glm::vec2 diji::Transform::Get2DMovementVector(const float value) const
 {
-	switch (m_CurrentMovement)
+	Movement movement = m_CurrentMovement == Movement::Idle ? m_LastMovement : m_CurrentMovement;
+	if (m_LookingDirection != Movement::Idle)
+		movement = m_LookingDirection;
+
+	if (movement == Movement::Idle)
+		return glm::vec3(0, 0, 0);
+
+	switch (movement)
 	{
 	case Movement::Up:
 		return glm::vec2(0, -value);
