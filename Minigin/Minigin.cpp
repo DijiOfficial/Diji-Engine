@@ -66,12 +66,9 @@ diji::Minigin::Minigin(const std::string &dataPath)
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		
-		//1280,
-		//720,	
 		452,
-		//640,
-		576,
-		//544,
+		//576,
+		608,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
