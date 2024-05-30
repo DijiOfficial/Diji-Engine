@@ -205,6 +205,7 @@
     <ClCompile Include="GhostAI.cpp" />
     <ClCompile Include="GhostStates.cpp" />
     <ClCompile Include="HealthCounter.cpp" />
+    <ClCompile Include="LevelIntro.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PickUp.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="GhostAI.h" />
     <ClInclude Include="GhostStates.h" />
     <ClInclude Include="HealthCounter.h" />
+    <ClInclude Include="LevelIntro.h" />
     <ClInclude Include="Observers.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="PickUpLoader.h" />

@@ -23,6 +23,7 @@
 #include "GhostCollision.h"
 #include "GhostsAlgorithm.h"
 #include "GameState.h"
+#include "LevelIntro.h"
 
 using namespace diji;
 void load()
@@ -160,7 +161,7 @@ void Pacman()
 #else
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
 #endif
-	const glm::vec2 viewport{ 452, 576 };
+	constexpr glm::vec2 viewport{ 452, 608 };
 
 	//#pragma region Menu Scene
 	//	const auto& menuScene = SceneManager::GetInstance().CreateScene("Menu");
@@ -184,6 +185,27 @@ void Pacman()
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
 	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);
+
+#pragma region LevelIntro
+	const auto& font = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
+	auto levelIntro = scene->CreateGameObject();
+	levelIntro->AddComponents<Transform>(viewport.x * 0.5f, 250.f);
+	levelIntro->AddComponents<pacman::LevelIntro>();
+
+	auto PlayerText = scene->CreateGameObject();
+	PlayerText->AddComponents<Transform>(0, 0);
+	PlayerText->AddComponents<Text>("PLAYER ONE", font, SDL_Color{ 6, 232, 244, 255 }, 1);
+	PlayerText->AddComponents<pacman::IntroTextObserver>(pacman::MessageTypesDerived::LEVEL_BEGIN);
+	PlayerText->AddComponents<Render>();
+	PlayerText->SetParent(levelIntro, false);
+
+	auto readyText = scene->CreateGameObject();
+	readyText->AddComponents<Transform>(0, 96);
+	readyText->AddComponents<Text>("READY!", font, SDL_Color{ 255, 255, 0, 255 }, 1);
+	readyText->AddComponents<pacman::IntroTextObserver>(pacman::MessageTypesDerived::LEVEL_START);
+	readyText->AddComponents<Render>();
+	readyText->SetParent(levelIntro, false);
+#pragma endregion
 
 	auto pelletCounter = scene->CreateGameObject();
 	pelletCounter->AddComponents<pacman::PelletObserver>();
@@ -302,6 +324,9 @@ void Pacman()
 #pragma endregion
 
 #pragma region Observers
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), PlayerText->GetComponent<pacman::IntroTextObserver>());
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), readyText->GetComponent<pacman::IntroTextObserver>());
+
 	player->GetComponent<pacman::HealthCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<pacman::PacmanHealthObserver>());
 	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
@@ -323,8 +348,6 @@ void Pacman()
 	fpsCounter->AddComponents<FPSCounter>();
 	fpsCounter->AddComponents<Transform>(0, static_cast<int>(viewport.y - 20));
 	fpsCounter->AddComponents<Render>();
-
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 }
 
 

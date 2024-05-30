@@ -6,6 +6,7 @@
 namespace diji
 {
 	class Texture;
+	class Render;
 }
 
 namespace pacman 
@@ -18,6 +19,8 @@ namespace pacman
 		ENEMY_COLLISION,
 		PICKUP_COLLISION,
 		POWERUP_COLLISION,
+		LEVEL_BEGIN,
+		LEVEL_START,
 	};
 
 	class HealthObserver final : public diji::Text, public diji::IObserver
@@ -70,6 +73,23 @@ namespace pacman
 	
 	private:
 		int m_PelletCount = 0;
+	};
+
+	class IntroTextObserver final : public diji::Component, public diji::IObserver
+	{
+	public:
+		IntroTextObserver(diji::GameObject* ownerPtr, MessageTypesDerived message);
+		~IntroTextObserver() noexcept override = default;
+
+		virtual void Init();
+		virtual void Update() {};
+		virtual void FixedUpdate() {};
+
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+
+	private:
+		MessageTypesDerived m_Message;
+		diji::Render* m_RenderCompPtr = nullptr;
 	};
 }
 

@@ -44,6 +44,10 @@ namespace diji
 		case SoundId::GhostEaten:
 			music = ResourceManager::GetInstance().LoadMusic("retreating.wav");
 			break;
+		case SoundId::GameStart:
+			music = ResourceManager::GetInstance().LoadMusic("game_start.wav");
+			repeat = true;
+			break;
         default:
             break;
         }

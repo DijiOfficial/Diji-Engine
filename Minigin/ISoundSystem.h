@@ -16,6 +16,7 @@ namespace diji
 		EatGhost,
 		Music,
 		GhostEaten,
+		GameStart,
 	};
 
 	class ISoundSystem

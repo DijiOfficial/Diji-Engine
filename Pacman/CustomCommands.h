@@ -9,6 +9,7 @@ namespace diji
 
 namespace pacman
 {
+	//todo: remove iostreram include
 	class HealthCounter;
 	class ScoreCounter;
 	enum class PointType;
