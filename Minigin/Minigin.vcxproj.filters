@@ -151,9 +151,6 @@
     <ClInclude Include="Minigin.h">
       <Filter>HeaderFiles\CoreFiles</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>HeaderFiles\Singletons</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>HeaderFiles\CoreFiles</Filter>
     </ClInclude>
@@ -177,6 +174,12 @@
     </ClInclude>
     <ClInclude Include="Music.h">
       <Filter>HeaderFiles\RAII Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSCounter.h">
+      <Filter>HeaderFiles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>HeaderFiles\Singletons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -249,9 +252,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Sources Files\CoreFiles</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Sources Files\Singletons</Filter>
-    </ClCompile>
     <ClCompile Include="SoundEffect.cpp">
       <Filter>Sources Files\RAII Wrappers</Filter>
     </ClCompile>
@@ -275,6 +275,12 @@
     </ClCompile>
     <ClCompile Include="Music.cpp">
       <Filter>Sources Files\RAII Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSCounter.cpp">
+      <Filter>Sources Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Sources Files\Singletons</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

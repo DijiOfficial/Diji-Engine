@@ -12,10 +12,9 @@ pacman::HealthCounter::HealthCounter(diji::GameObject* ownerPtr, int health)
 
 void pacman::HealthCounter::DecreaseHealth()
 {
-	m_Health--;
+	--m_Health;
 
     Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::HEALTH_CHANGE));
 
-    if (m_Health == 0)
-        diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanDie, 100);
+    diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanDie, -1);
 }

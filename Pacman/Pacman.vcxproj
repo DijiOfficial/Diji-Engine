@@ -202,7 +202,6 @@
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="GhostsAlgorithm.cpp" />
     <ClCompile Include="CustomCommands.cpp" />
-    <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GhostAI.cpp" />
     <ClCompile Include="GhostStates.cpp" />
     <ClCompile Include="HealthCounter.cpp" />
@@ -216,9 +215,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GhostsAlgorithm.h" />
     <ClInclude Include="CustomCommands.h" />
-    <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GhostAI.h" />
     <ClInclude Include="GhostStates.h" />
     <ClInclude Include="HealthCounter.h" />

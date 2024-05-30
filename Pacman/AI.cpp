@@ -60,6 +60,7 @@ void pacman::AI::Update()
 void pacman::AI::FixedUpdate()
 {
 	//todo: fix collision not always working
+	//todo: make state machine for AI
 	if (m_PauseAI)
 		return;
 

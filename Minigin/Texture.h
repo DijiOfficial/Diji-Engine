@@ -28,8 +28,8 @@ namespace diji
 		void SetTexture(const std::string& filename);
 		Texture2D* GetTexturePtr() const { return m_TexturePtr; };
 
-		void SetWidth(int width) { m_Width = width; }
-		void SetHeight(int height) { m_Height = height; }
+		void SetWidth(int width);
+		void SetHeight(int height);
 		void SetAnimated() { m_IsAnimated = true; }
 		void SetNrOfFrames(int nrOfFrames) { if (nrOfFrames >= 0) m_NrOfFrames = nrOfFrames; }
 		void SetRotation(bool canRotate) { m_CanRotate = canRotate; }

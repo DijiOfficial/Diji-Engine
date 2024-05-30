@@ -22,6 +22,7 @@
 #include "Observers.h"
 #include "GhostCollision.h"
 #include "GhostsAlgorithm.h"
+#include "GameState.h"
 
 using namespace diji;
 void load()
@@ -36,7 +37,7 @@ void load()
 	//auto& ss = ServiceLocator::GetSoundSystem();
 	//ss.PlaySound(SoundId::PacmanDie, -1);
 
-	auto scene = SceneManager::GetInstance().CreateScene("Demo");
+	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::DEMO));
 
 #pragma region Base
 	//Background
@@ -172,8 +173,8 @@ void Pacman()
 	//
 	//#pragma endregion
 
-
-	auto scene = SceneManager::GetInstance().CreateScene("Pacman");
+	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::LEVEL));
+	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::LEVEL));
 	auto& input = InputManager::GetInstance();
 	//Background
 	auto background = scene->CreateGameObject();
@@ -192,15 +193,22 @@ void Pacman()
 	player->GetComponent<Texture>()->SetRotation(true);
 	player->AddComponents<Transform>(214, 439);
 	player->AddComponents<Render>(2);
-	player->AddComponents<pacman::HealthCounter>(3);
+	player->AddComponents<pacman::HealthCounter>(5);
 	player->AddComponents<pacman::ScoreCounter>(0);
 	player->AddComponents<Collider>(15, 15);
 	player->AddComponents<pacman::AI>();
 	//player->GetComponent<Render>()->EnableHitbox();
 
+	auto livesCounter = scene->CreateGameObject();
+	livesCounter->AddComponents<Texture>("Lives.png", 80, 11, 1);
+	livesCounter->GetComponent<Texture>()->PauseAnimation();
+	livesCounter->AddComponents<Transform>(32, 581);
+	livesCounter->AddComponents<pacman::PacmanHealthObserver>();
+	livesCounter->AddComponents<Render>(2);
+
 	auto GhostTimers = scene->CreateGameObject();
 	GhostTimers->AddComponents<pacman::GhostsTimers>();
-
+#pragma region Ghosts
 	auto Blinky = scene->CreateGameObject();
 	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
 	Blinky->AddComponents<Transform>(212, 247);
@@ -245,7 +253,7 @@ void Pacman()
 	PinkyAI->SetGhostsVector(ghostAIs);
 	InkyAI->SetGhostsVector(ghostAIs);
 	ClydeAI->SetGhostsVector(ghostAIs);
-
+#pragma endregion
 	pacman::PickUpLoader pickUpLoader{ player, ghosts, pelletCounter };
 	//PickUpLoader::GetInstance().Initialize(player);
 
@@ -287,9 +295,14 @@ void Pacman()
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 	input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
+
+
+	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
+
 #pragma endregion
 
 #pragma region Observers
+	player->GetComponent<pacman::HealthCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<pacman::PacmanHealthObserver>());
 	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::RedAI>());

@@ -46,6 +46,18 @@ void diji::Texture::SetTexture(const std::string& filename)
 		GetOwner()->GetComponent<Render>()->UpdateTexture(m_TexturePtr);
 }
 
+void diji::Texture::SetWidth(int width)
+{
+	m_Width = width;
+	GetOwner()->GetComponent<Render>()->UpdateTexture(m_TexturePtr);
+}
+
+void diji::Texture::SetHeight(int height)
+{
+	m_Height = height;
+	GetOwner()->GetComponent<Render>()->UpdateTexture(m_TexturePtr);
+}
+
 void diji::Texture::SetStartingFrame(int frame)
 {
 	m_Frame = frame;

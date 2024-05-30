@@ -226,6 +226,7 @@
     <ClInclude Include="Components.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GameActorCommands.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GUI.h" />
@@ -236,12 +237,12 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Rotation.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SVGParser.h" />
     <ClInclude Include="Text.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GameActorCommands.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GUI.cpp" />
@@ -272,12 +274,12 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SVGParser.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />

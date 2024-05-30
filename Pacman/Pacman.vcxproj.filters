@@ -45,9 +45,6 @@
     <ClCompile Include="PickUpLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FPSCounter.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="HealthCounter.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -86,9 +83,6 @@
     <ClInclude Include="PickUpLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FPSCounter.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="HealthCounter.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -121,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="GhostsAlgorithm.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

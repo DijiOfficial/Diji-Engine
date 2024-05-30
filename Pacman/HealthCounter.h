@@ -2,6 +2,7 @@
 #include "Subject.h"
 #include "Component.h"
 
+#include <iostream>
 namespace pacman
 {
 	class HealthCounter final : public diji::Component, public diji::Subject
