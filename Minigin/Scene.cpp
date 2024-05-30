@@ -1,13 +1,6 @@
 #include "Scene.h"
-#include "GameObject.h"
 
 #include <algorithm>
-
-unsigned int diji::Scene::m_IdCounter = 0;
-
-diji::Scene::Scene(const std::string& name) 
-	: m_Name(name) 
-{}
 
 diji::Scene::~Scene()
 {

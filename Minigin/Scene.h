@@ -1,15 +1,12 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <memory>
+#include "GameObject.h"
 
 namespace diji 
 {
-	class GameObject;
 	class Scene final
 	{
 	public:
-		explicit Scene(const std::string& name);
+		Scene() = default;
 		~Scene() noexcept;
 
 		Scene(const Scene& other) = delete;
@@ -25,14 +22,8 @@ namespace diji
 		GameObject* CreateGameObject();
 		void Remove(GameObject* object);
 		void RemoveAll();
-
-		std::string GetName() const { return m_Name; };
 	
-	private: 
-
-		std::string m_Name;
+	private:
 		std::vector<std::unique_ptr<GameObject>> m_ObjectsUPtrVec;
-
-		static unsigned int m_IdCounter; 
 	};
 }
