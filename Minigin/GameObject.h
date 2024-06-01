@@ -42,7 +42,7 @@ namespace diji
 				m_TransformCompPtr = dynamic_cast<Transform*>(m_ComponentsPtrVec.back().get());
 				m_LocalPosition = GetWorldPosition();
 			}
-			else if constexpr (std::is_same_v<T, diji::Render>)
+			else if constexpr (std::is_base_of_v<diji::Render, T>)
 			{
 				m_RenderCompPtr = dynamic_cast<diji::Render*>(m_ComponentsPtrVec.back().get());
 			}
