@@ -13,6 +13,7 @@ namespace pacman
 	class HealthCounter;
 	class ScoreCounter;
 	enum class PointType;
+	class EnterName;
 
 	class Move final : public diji::GameActorCommands
 	{
@@ -39,6 +40,20 @@ namespace pacman
 
 	private:
 		HealthCounter* m_HealthComponentPtr;
+	};
+
+	class NameChangeCommand final : public diji::GameActorCommands
+	{ 
+	public:
+		NameChangeCommand(diji::GameObject* actor, diji::Movement movement);
+		~NameChangeCommand() noexcept override = default;
+
+		void Execute() override;
+
+	private:
+		EnterName* m_NameComp;
+		diji::Movement m_Movement;
+
 	};
 
 	class ScoreCommand final : public diji::GameActorCommands

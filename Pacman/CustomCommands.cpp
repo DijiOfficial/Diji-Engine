@@ -4,7 +4,9 @@
 #include "HealthCounter.h"
 #include "ScoreCounter.h"
 #include "GameObject.h"
-
+#include "EnterName.h"
+#include "SceneManager.h"
+#include "GameState.h"
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
@@ -15,7 +17,8 @@ pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 
 void pacman::Move::Execute()
 {
-	m_TransformComponentPtr->SetMovement(m_Movement);
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() == static_cast<int>(GameState::LEVEL)) //todo: add other valid states
+		m_TransformComponentPtr->SetMovement(m_Movement);
 }
 
 pacman::HitCommand::HitCommand(diji::GameObject* actor)
@@ -39,4 +42,17 @@ pacman::ScoreCommand::ScoreCommand(diji::GameObject* actorPtr, PointType point)
 void pacman::ScoreCommand::Execute()
 {
 	m_ScoreComponentPtr->IncreaseScore(m_PointType);
+}
+
+pacman::NameChangeCommand::NameChangeCommand(diji::GameObject* actor, diji::Movement movement)
+	: GameActorCommands{ actor }
+	, m_Movement{ movement }
+{
+	m_NameComp = GetGameActor()->GetComponent<EnterName>();
+}
+
+void pacman::NameChangeCommand::Execute()
+{
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() == static_cast<int>(GameState::GAMEOVER))
+		m_NameComp->MoveLetter(m_Movement);
 }
