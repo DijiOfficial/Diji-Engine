@@ -60,7 +60,7 @@ namespace diji
 			SDL_RenderDrawRect(m_RendererPtr, &rect);
 		}
 
-		void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const SDL_Color& color) const
+		void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const SDL_Color& color = { 255, 255, 255, 255 }) const
 		{
 			SDL_SetRenderDrawColor(m_RendererPtr, color.r, color.g, color.b, color.a);
 			SDL_RenderDrawLine(m_RendererPtr, static_cast<int>(p1.x), static_cast<int>(p1.y), static_cast<int>(p2.x), static_cast<int>(p2.y));
