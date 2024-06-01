@@ -37,7 +37,11 @@ void pacman::ScoreObserver::OnNotify(diji::MessageTypes message, diji::Subject* 
 			return;
 
 		const int score = scoreCounter->GetScore();
-		SetText(std::format("Score: {}", score));
+		const int numDigits = score > 0 ? static_cast<int>(std::log10(score)) + 1 : 1;
+		const int numSpaces = std::max(0, 7 - numDigits);
+		const std::string formattedScore = std::format("{:>{}}", score, numSpaces + numDigits);
+
+		SetText(formattedScore);
 	}
 }
 
@@ -97,4 +101,34 @@ void pacman::IntroTextObserver::OnNotify(diji::MessageTypes message, diji::Subje
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (static_cast<int>(msg) == static_cast<int>(m_Message))
 		m_RenderCompPtr->DisableRender();
+}
+
+pacman::HighScoreObserver::HighScoreObserver(diji::GameObject* ownerPtr, std::string text, diji::Font* font, const SDL_Color& color, bool isCentered)
+	: Text(ownerPtr, text, font, color, isCentered)
+{
+	//todo: load highscore from file
+	const int numDigits = m_CurrentHighScore > 0 ? static_cast<int>(std::log10(m_CurrentHighScore)) + 1 : 1;
+	const int numSpaces = std::max(0, 7 - numDigits);
+	const std::string formattedScore = std::format("{:>{}}", m_CurrentHighScore, numSpaces + numDigits);
+}
+
+void pacman::HighScoreObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
+{
+	auto msg = static_cast<MessageTypesDerived>(message);
+	if (msg == MessageTypesDerived::SCORE_CHANGE)
+	{
+		ScoreCounter* scoreCounter = dynamic_cast<ScoreCounter*>(subject);
+		if (not scoreCounter)
+			return;
+		
+		const int score = scoreCounter->GetScore();
+		if (score <= m_CurrentHighScore)
+			return;
+
+		const int numDigits = score > 0 ? static_cast<int>(std::log10(score)) + 1 : 1;
+		const int numSpaces = std::max(0, 7 - numDigits);
+		const std::string formattedScore = std::format("{:>{}}", score, numSpaces + numDigits);
+
+		SetText(formattedScore);
+	}
 }

@@ -151,7 +151,6 @@ void PacmanMenu()
 	versus->AddComponents<Render>(2);
 	versus->SetParent(menuUI, false);
 
-
 	auto pushStart = menuScene->CreateGameObject();
 	pushStart->AddComponents<Text>("PUSH ENTER BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
 	pushStart->AddComponents<Transform>(0, 120);
@@ -272,27 +271,35 @@ void Pacman()
 
 	//make the hud it's own scene?
 #pragma region HUD
-	auto smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	const auto& smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	const auto& textFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
+
 	auto HUD = scene->CreateGameObject();
 	HUD->AddComponents<Transform>(10, 10);
 
-	auto controllerInfo = scene->CreateGameObject();
-	controllerInfo->AddComponents<Transform>(0, 0);
-	controllerInfo->AddComponents<Text>("Use the D-Pad to move Pacman, X to inflict damage", smallFont);
-	controllerInfo->AddComponents<Render>();
-	controllerInfo->SetParent(HUD, false);
-
-	auto controlsInfo = scene->CreateGameObject();
-	controlsInfo->AddComponents<Transform>(0, 20);
-	controlsInfo->AddComponents<Text>("Use the WASD to move Pacman, C to inflict damage", smallFont);
-	controlsInfo->AddComponents<Render>();
-	controlsInfo->SetParent(HUD, false);
-
 	auto scoreCounter = scene->CreateGameObject();
-	scoreCounter->AddComponents<Transform>(0, 40);
-	scoreCounter->AddComponents<pacman::ScoreObserver>("Score: 0", smallFont);
+	scoreCounter->AddComponents<Transform>(-5, 20);
+	scoreCounter->AddComponents<pacman::ScoreObserver>("     00", textFont);
 	scoreCounter->AddComponents<Render>();
 	scoreCounter->SetParent(HUD, false);
+
+	auto playerText = scene->CreateGameObject();
+	playerText->AddComponents<Transform>(65, 0);
+	playerText->AddComponents<Text>("1UP", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	playerText->AddComponents<Render>();
+	playerText->SetParent(HUD, false);
+
+	auto highScoreText = scene->CreateGameObject();
+	highScoreText->AddComponents<Transform>(viewport.x * 0.5f - 10, 0.f);
+	highScoreText->AddComponents<Text>("HIGH SCORE", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	highScoreText->AddComponents<Render>();
+	highScoreText->SetParent(HUD, false);
+
+	auto highScoreDisplay = scene->CreateGameObject();
+	highScoreDisplay->AddComponents<Transform>(viewport.x * 0.5f - 75.f, 20.f);
+	highScoreDisplay->AddComponents<pacman::HighScoreObserver>("  ", textFont, SDL_Color{ 255, 255, 255, 255 }, false);
+	highScoreDisplay->AddComponents<Render>();
+	highScoreDisplay->SetParent(HUD, false);	
 
 	auto livesCounter = scene->CreateGameObject();
 	livesCounter->AddComponents<Texture>("Lives.png", 80, 11, 1);
@@ -301,7 +308,6 @@ void Pacman()
 	livesCounter->AddComponents<pacman::PacmanHealthObserver>();
 	livesCounter->AddComponents<Render>(2);
 #pragma endregion
-
 
 #pragma region Commands
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
@@ -336,6 +342,7 @@ void Pacman()
 
 	player->GetComponent<pacman::HealthCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<pacman::PacmanHealthObserver>());
 	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
+	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), highScoreDisplay->GetComponent<pacman::HighScoreObserver>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), player->GetComponent<pacman::AI>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), player->GetComponent<pacman::AI>());
 	

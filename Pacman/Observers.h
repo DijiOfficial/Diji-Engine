@@ -7,6 +7,7 @@ namespace diji
 {
 	class Texture;
 	class Render;
+	class Font;
 }
 
 namespace pacman 
@@ -57,6 +58,18 @@ namespace pacman
 		~ScoreObserver() noexcept override = default;
 
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+	};
+
+	class HighScoreObserver final : public diji::Text, public diji::IObserver
+	{
+	public:
+		HighScoreObserver(diji::GameObject* ownerPtr, const std::string text, diji::Font* font, const SDL_Color& color, bool isCentered);
+		~HighScoreObserver() noexcept override = default;
+
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+
+	private:
+		int m_CurrentHighScore = 0;
 	};
 
 	class PelletObserver final : public diji::Component, public diji::IObserver
