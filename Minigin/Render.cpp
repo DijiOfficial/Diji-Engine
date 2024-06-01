@@ -16,10 +16,10 @@ diji::Render::Render(GameObject* ownerPtr, int scale)
 }
 
 diji::Render::Render(GameObject* ownerPtr, ShapeInfo shape)
-	: Component(ownerPtr)
-	, m_ShapeInfo{ shape }
-	, m_IsShape{ true }
+	: Render(ownerPtr)
 {
+	m_ShapeInfo = { shape };
+	m_IsShape = { true };
 }
 
 diji::Render::Render(GameObject* ownerPtr)

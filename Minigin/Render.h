@@ -17,7 +17,7 @@ namespace diji
 		int lineWidth = 1;
 	};
 
-	class Render final : public Component
+	class Render : public Component
 	{
 	public:
 		Render(GameObject* ownerPtr);
@@ -34,8 +34,8 @@ namespace diji
 		void Update() override {};
 		void FixedUpdate() override {};
 
-		void RenderFrame() const;
-		void UpdateText();
+		virtual void RenderFrame() const;
+		virtual void UpdateText();
 		void DisableRender() { m_Render = false; }
 		void EnableRender() { m_Render = true; }
 		void EnableHitbox() { m_DisplayHitbox = true; }
