@@ -40,7 +40,9 @@ namespace diji
 		void SetStartingFrame(int frame);
 		void EnableFlickerAnimation() { m_FlickerAnimation = true; }
 		void DisableFlickerAnimation() { m_FlickerAnimation = false; }
-		
+		void SetAnimationTime(float time) { m_AnimationTime = time; }
+		void ResetFrameTime() { m_FrameTime = 0; }
+
 		bool IsAnimated() const { return m_IsAnimated; }
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
@@ -59,6 +61,7 @@ namespace diji
 		int m_StartingFrame = 0;
 		float m_FrameTime = 0;
 		float m_RotationAngle = 0;
+		float m_AnimationTime = 0.3f;
 
 		bool m_IsAnimated = false;
 		bool m_CanRotate = false;

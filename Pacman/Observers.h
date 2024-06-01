@@ -21,6 +21,7 @@ namespace pacman
 		POWERUP_COLLISION,
 		LEVEL_BEGIN,
 		LEVEL_START,
+		LEVEL_END
 	};
 
 	class HealthObserver final : public diji::Text, public diji::IObserver

@@ -1,6 +1,7 @@
 #pragma once
 #include "Subject.h"
 #include "Component.h"
+#include "IObserver.h"
 
 namespace diji 
 {
@@ -13,7 +14,7 @@ namespace diji
 namespace pacman
 {
 	class PelletObserver;
-	class PickUp final : public diji::Component, public diji::Subject
+	class PickUp final : public diji::Component, public diji::Subject, public diji::IObserver
 	{
 	public:
 		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* pelletCounter, const int value);
@@ -28,6 +29,7 @@ namespace pacman
 		void Init() override;
 		void Update() override;
 		void FixedUpdate() override {};
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 		int GetValue() const { return m_Value; };
 		void HandleCollision();
 

@@ -10,6 +10,7 @@
 #include "GhostCollision.h"
 #include "ISoundSystem.h"
 #include "GhostsAlgorithm.h"
+#include "Render.h"
 
 #pragma region GhostAI
 pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
@@ -24,6 +25,32 @@ pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, c
 	m_TextureCompPtr = nullptr;
 }
 
+void pacman::GhostAI::Reset()
+{
+	m_CurrentStateUPtr->OnExit(this);
+	const int respawnPellets = m_PelletCounterPtr->GetPelletCount() + m_PelletsNeededForRespawn;
+	m_CurrentStateUPtr = std::make_unique<Waiting>(respawnPellets);
+	m_TransformCompPtr->SetPosition(m_PersonnalSpawn);
+	if (m_TexturePath == "RedGhost.png")
+	{
+		constexpr glm::ivec2 BLINKY_SPAWN = { 212, 247 };
+		m_TransformCompPtr->SetPosition(BLINKY_SPAWN);
+		m_TransformCompPtr->SetMovement(diji::Movement::Right);
+		m_CurrentStateUPtr = std::make_unique<Scatter>();
+	}
+	m_TextureCompPtr->SetTexture(m_TexturePath);
+	m_PowerUpTimer = 0.f;
+	m_IsFrightened = false;
+	m_IsLastGhostEaten = false;
+	m_PlayerDeathTimer = 0.f;
+	m_IsPlayerKilled = false;
+	m_GhostsTimerPtr->Pause();
+	m_CurrentStateUPtr->OnEnter(this);//todo: necesarry?
+	GetOwner()->GetComponent<diji::Render>()->EnableRender();
+	//Reset the collider to avoid collision in the next frame
+	m_ColliderCompPtr->Update();
+}
+
 void pacman::GhostAI::Init()
 {
 	const auto& ownerPtr = GetOwner();
@@ -34,6 +61,23 @@ void pacman::GhostAI::Init()
 
 void pacman::GhostAI::Update()
 {
+	if (m_IsPlayerKilled)
+	{
+		constexpr float TOTAL_WAIT = 2.54f;
+		m_PlayerDeathTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
+		if (m_PlayerDeathTimer >= 1.f)
+			GetOwner()->GetComponent<diji::Render>()->DisableRender();
+
+		if (m_PlayerDeathTimer < TOTAL_WAIT)
+		 return;
+
+		for (const auto& ghost : m_GhostsPtrs)
+		{
+			ghost->Reset();
+		}
+		m_GhostsTimerPtr->Pause();
+	}
+
 	if (m_GhostsTimerPtr->IsPaused())
 		return;
 	
@@ -55,6 +99,11 @@ void pacman::GhostAI::Update()
 
 void pacman::GhostAI::FixedUpdate()
 {
+	if (m_IsPlayerKilled)
+	{
+		return;
+	}
+
 	if (m_GhostsTimerPtr->IsPaused() and
 		dynamic_cast<const pacman::Respawn*>(m_CurrentStateUPtr.get()) == nullptr and
 		dynamic_cast<const pacman::Eaten*>(m_CurrentStateUPtr.get()) == nullptr)
@@ -86,6 +135,13 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject* subjec
 	auto msg = static_cast<MessageTypesDerived>(message);
 	switch (msg)
 	{
+	case MessageTypesDerived::LEVEL_END:
+		Reset();
+		break;
+	case MessageTypesDerived::LEVEL_BEGIN:
+		GetOwner()->GetComponent<diji::Render>()->EnableRender();
+		break;
+
 	case MessageTypesDerived::POWERUP_COLLISION:
 		m_IsFrightened = true;
 		m_PowerUpTimer = 0.f;
@@ -98,8 +154,17 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject* subjec
 
 		break;
 	case MessageTypesDerived::ENEMY_COLLISION:
-		if (not m_IsFrightened)
+		if (m_IsPlayerKilled)
 			break;
+
+		if (not m_IsFrightened)
+		{
+			for (const auto& ghost : m_GhostsPtrs)
+			{
+				ghost->SetGhostKilledPlayer();
+			}
+			break;
+		}
 
 		m_GhostsTimerPtr->Pause();
 
@@ -146,7 +211,6 @@ void pacman::GhostAI::TurnAround() const
 {
 	m_TransformCompPtr->SetMovement(static_cast<diji::Movement>((static_cast<int>(m_TransformCompPtr->GetMovement()) + 2) % 4));
 }
-
 #pragma endregion
 #pragma region Blinky
 pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers)
@@ -156,6 +220,7 @@ pacman::RedAI::RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const
 	m_ScatterTarget = { 432, 0 };
 	m_TexturePath = "RedGhost.png";
 
+	m_PelletsNeededForRespawn = 0;
 	m_CurrentStateUPtr = std::make_unique<Scatter>();
 }
 
@@ -178,8 +243,9 @@ pacman::Pinky::Pinky(diji::GameObject* ownerPtr, diji::GameObject* player, const
 	m_PersonnalSpawn = { 212, 300 };
 	m_ScatterTarget = { 0, 0 };
 	m_TexturePath = "Pinky.png";
+	m_PelletsNeededForRespawn = 7;
 
-	m_CurrentStateUPtr = std::make_unique<Waiting>(7);
+	m_CurrentStateUPtr = std::make_unique<Waiting>(m_PelletsNeededForRespawn);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Pinky::GetChaseState() const
@@ -201,8 +267,9 @@ pacman::Inky::Inky(diji::GameObject* ownerPtr, diji::GameObject* player, const d
 	m_PersonnalSpawn = { 180, 300 };
 	m_ScatterTarget = { 432, 480 };
 	m_TexturePath = "Inky.png";
+	m_PelletsNeededForRespawn = 17;
 
-	m_CurrentStateUPtr = std::make_unique<Waiting>(17);
+	m_CurrentStateUPtr = std::make_unique<Waiting>(m_PelletsNeededForRespawn);
 	m_BlinkyTransformPtr = blinky->GetComponent<diji::Transform>();
 }
 
@@ -225,8 +292,9 @@ pacman::Clyde::Clyde(diji::GameObject* ownerPtr, diji::GameObject* player, const
 	m_PersonnalSpawn = { 244, 300 };
 	m_ScatterTarget = { 0, 480 };
 	m_TexturePath = "Clyde.png";
+	m_PelletsNeededForRespawn = 32;
 
-	m_CurrentStateUPtr = std::make_unique<Waiting>(32);
+	m_CurrentStateUPtr = std::make_unique<Waiting>(m_PelletsNeededForRespawn);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Clyde::GetChaseState() const

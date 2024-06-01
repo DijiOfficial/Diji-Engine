@@ -10,6 +10,7 @@
 #include "Render.h"
 #include "ISoundSystem.h"
 #include "GhostAI.h"
+#include "HealthCounter.h"
 
 pacman::AI::AI(diji::GameObject* ownerPtr)
 	: Component(ownerPtr)
@@ -31,6 +32,33 @@ void pacman::AI::Init()
 
 void pacman::AI::Update()
 {
+	if (m_IsDying)
+	{
+		constexpr float TOTAL_WAIT = 2.54f;
+
+		m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
+		if (m_PauseTime >= 1.f and m_playeDeath)
+		{
+			m_TextureCompPtr->SetTexture("PacmanDeathSprite.png");
+			m_TextureCompPtr->SetNrOfFrames(13);
+			m_TextureCompPtr->SetCurrentFrame(0);
+			m_TextureCompPtr->ResetFrameTime();
+			m_TextureCompPtr->SetAnimationTime(1.54f);
+			m_TextureCompPtr->SetRotationAngle(0);
+			m_TextureCompPtr->ResumeAnimation();
+
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanDie, -1);
+			m_playeDeath = false;
+		}
+		if (not m_playeDeath and m_PauseTime >= TOTAL_WAIT)
+		{
+			Reset();
+			GetOwner()->GetComponent<pacman::HealthCounter>()->DecreaseHealth();
+		}
+		return;
+	}
+
+
 	if (m_PauseAI)
 	{
 		m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
@@ -39,23 +67,12 @@ void pacman::AI::Update()
 			m_PauseAI = false;
 			m_PauseTime = 0.f;
 			GetOwner()->GetComponent<diji::Render>()->EnableRender();
+			//todo: this should be in a state exit
+			m_TextureCompPtr->ResumeAnimation();
 		}
 		else
 			return;
-	}
-
-	//if (m_IsPoweredUp)
-	//{
-	//	m_PowerUpTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
-	//	if (m_PowerUpTimer >= 10.f)
-	//	{
-	//		m_IsPoweredUp = false;
-	//		m_PowerUpTimer = 0.f;
-	//		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
-	//	}
-	//}
-
-	
+	}	
 }
 void pacman::AI::FixedUpdate()
 {
@@ -117,6 +134,9 @@ void pacman::AI::FixedUpdate()
 #include <iostream>
 void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject)
 {
+	if (m_IsDying)
+		return;
+
 	auto msg = static_cast<MessageTypesDerived>(message);
 	switch (msg)
 	{
@@ -146,7 +166,33 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 			++m_GhostsEaten;
 		}
 		else
+		{
+			m_IsDying = true;
+			m_PauseAI = true;
+			m_PauseTime = 0.f;
+			//todo: ready text
 			std::cout << "Game Over" << std::endl;
+			
+		}
+		break;
+	}
+	case MessageTypesDerived::LEVEL_BEGIN:
+	{
+		std::cout << "Display AI" << std::endl;
+		GetOwner()->GetComponent<diji::Render>()->EnableRender();
+		GetOwner()->GetComponent<pacman::HealthCounter>()->DecreaseHealth();
+		break;
+	}
+	case MessageTypesDerived::LEVEL_START:
+	{
+		m_PauseAI = false;
+		m_PauseTime = 0.f;
+		m_TextureCompPtr->ResumeAnimation();
+		break;
+	}
+	case MessageTypesDerived::LEVEL_END:
+	{
+		Reset();
 		break;
 	}
 	default:
@@ -247,6 +293,34 @@ bool pacman::AI::IsGhostFrightened() const //super convoluted way of checking if
 
 	auto ghostAI = closestCollider->GetParent()->GetComponent<GhostAI>();
 	return ghostAI->IsFrightened();
+}
+
+void pacman::AI::Reset()
+{
+	constexpr glm::ivec2 originalPos{ 214, 439 };
+	m_TransformCompPtr->SetPosition(originalPos);
+	m_TransformCompPtr->SetMovement(diji::Movement::Right);
+
+	m_PreviousMovement = diji::Movement::Right;
+	m_SavedMovement = diji::Movement::Right;
+
+	m_TextureCompPtr->SetRotationAngle(static_cast<int>(diji::Movement::Right) * 90.f);
+
+	m_playeDeath = true;
+	m_IsDying = false;
+	m_PauseTime = 0.f;
+	m_PauseAI = true;
+	m_GhostsEaten = 0;
+
+	m_TextureCompPtr->PauseAnimation();
+
+	m_TextureCompPtr->SetTexture("pacmanSpriteSheet5.png");
+	m_TextureCompPtr->SetNrOfFrames(4);
+	m_TextureCompPtr->SetCurrentFrame(3);
+	m_TextureCompPtr->ResetFrameTime();
+	m_TextureCompPtr->SetAnimationTime(0.3f);
+	//Reset the collider to avoid collision in the next frame
+	m_ColliderCompPtr->Update();
 }
 
 //const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)

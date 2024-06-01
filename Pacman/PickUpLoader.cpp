@@ -9,6 +9,7 @@
 #include "GhostAI.h"
 #include "SceneManager.h"
 #include "GameState.h"
+#include "PelletCounter.h"
 pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter)
 {
 	diji::SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
@@ -29,7 +30,7 @@ pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::ve
 		else
 			for (const auto& pos : posVec)
 			{
-				AddPowerUp(gameObjects, "PowerPellet.png", 8, 8, pos, 50);
+				AddPowerUp(gameObjects, "PowerPellet.png", 8, 8, pos, 50, pelletCounter);
 			}
 		++idx;
 	}
@@ -48,10 +49,10 @@ void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, c
 
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), pelletCouter->GetComponent<PelletObserver>());
-
+	pelletCouter->GetComponent<PelletCounter>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_END), pickUp->GetComponent<PickUp>());
 }
 
-void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value)
+void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCouter)
 {
 	auto powerUp = m_ScenePtr->CreateGameObject();
 	powerUp->AddComponents<diji::Texture>(file, width, height);
@@ -65,4 +66,6 @@ void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& game
 	{
 		powerUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<GhostAI>());
 	}
+
+	pelletCouter->GetComponent<PelletCounter>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_END), powerUp->GetComponent<PickUp>());
 }

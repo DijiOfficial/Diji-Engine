@@ -79,6 +79,19 @@ void pacman::PickUp::Update()
 	}
 }
 
+void pacman::PickUp::OnNotify(diji::MessageTypes message, diji::Subject*)
+{
+	auto msg = static_cast<MessageTypesDerived>(message);
+	if (msg == MessageTypesDerived::LEVEL_END)
+	{
+		m_PowerUpInvisibleFrames = 0;
+		m_IsDisabled = false;
+		m_RenderCompPtr->EnableRender();
+		const auto& collider = GetOwner()->GetComponent<diji::Collider>();
+		diji::Collision::GetInstance().AddCollider(collider, collider->GetCollisionBox());
+	}
+}
+
 void pacman::PickUp::HandleCollision()
 {
 	m_IsDisabled = true;

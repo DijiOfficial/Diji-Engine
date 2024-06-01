@@ -43,13 +43,16 @@ namespace pacman {
 
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		const diji::Rectf CalculateNewPosition(diji::Movement movement);
-		bool m_PauseAI = false;
+		bool m_PauseAI = true;
 		//bool m_IsPoweredUp = false;
 		//float m_PowerUpTimer = 0.f;
-		float m_PauseTime = 0.f;
+		float m_PauseTime = -10.f;
 		int m_GhostsEaten = 0;
+		bool m_IsDying = false;
+		bool m_playeDeath = true;
 
 		bool IsGhostFrightened() const;
+		void Reset();
 	};
 }
 

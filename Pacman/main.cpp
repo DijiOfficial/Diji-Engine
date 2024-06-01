@@ -24,7 +24,7 @@
 #include "GhostsAlgorithm.h"
 #include "GameState.h"
 #include "LevelIntro.h"
-
+#include "PelletCounter.h"
 using namespace diji;
 void load()
 {
@@ -185,7 +185,9 @@ void Pacman()
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
 	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);
-
+	//todo: ReadyText should spawn when player respawns
+	//todo: Add Fruits
+	//todo: add lives when 4 ghost eatne?
 #pragma region LevelIntro
 	const auto& font = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
 	auto levelIntro = scene->CreateGameObject();
@@ -209,6 +211,7 @@ void Pacman()
 
 	auto pelletCounter = scene->CreateGameObject();
 	pelletCounter->AddComponents<pacman::PelletObserver>();
+	pelletCounter->AddComponents<pacman::PelletCounter>();
 
 	auto player = scene->CreateGameObject();
 	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
@@ -219,18 +222,13 @@ void Pacman()
 	player->AddComponents<pacman::ScoreCounter>(0);
 	player->AddComponents<Collider>(15, 15);
 	player->AddComponents<pacman::AI>();
-	//player->GetComponent<Render>()->EnableHitbox();
+	player->GetComponent<Render>()->DisableRender();
+	player->GetComponent<Texture>()->PauseAnimation();
 
-	auto livesCounter = scene->CreateGameObject();
-	livesCounter->AddComponents<Texture>("Lives.png", 80, 11, 1);
-	livesCounter->GetComponent<Texture>()->PauseAnimation();
-	livesCounter->AddComponents<Transform>(32, 581);
-	livesCounter->AddComponents<pacman::PacmanHealthObserver>();
-	livesCounter->AddComponents<Render>(2);
-
+#pragma region Ghosts
 	auto GhostTimers = scene->CreateGameObject();
 	GhostTimers->AddComponents<pacman::GhostsTimers>();
-#pragma region Ghosts
+
 	auto Blinky = scene->CreateGameObject();
 	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
 	Blinky->AddComponents<Transform>(212, 247);
@@ -238,6 +236,7 @@ void Pacman()
 	Blinky->AddComponents<Collider>(15, 15);
 	Blinky->AddComponents<pacman::RedAI>(player, pelletCounter, GhostTimers);
 	Blinky->AddComponents<pacman::GhostCollision>(player);
+	Blinky->GetComponent<Render>()->DisableRender();
 
 	auto Pinky = scene->CreateGameObject();
 	Pinky->AddComponents<Texture>("Pinky.png", 15, 15, 2);
@@ -246,6 +245,7 @@ void Pacman()
 	Pinky->AddComponents<Collider>(15, 15);
 	Pinky->AddComponents<pacman::Pinky>(player, pelletCounter, GhostTimers);
 	Pinky->AddComponents<pacman::GhostCollision>(player);
+	Pinky->GetComponent<Render>()->DisableRender();
 
 	auto Inky = scene->CreateGameObject();
 	Inky->AddComponents<Texture>("Inky.png", 15, 15, 2);
@@ -254,6 +254,7 @@ void Pacman()
 	Inky->AddComponents<Collider>(15, 15);
 	Inky->AddComponents<pacman::Inky>(player, pelletCounter, GhostTimers, Blinky);
 	Inky->AddComponents<pacman::GhostCollision>(player);
+	Inky->GetComponent<Render>()->DisableRender();
 
 	auto Clyde = scene->CreateGameObject();
 	Clyde->AddComponents<Texture>("Clyde.png", 15, 15, 2);
@@ -262,6 +263,7 @@ void Pacman()
 	Clyde->AddComponents<Collider>(15, 15);
 	Clyde->AddComponents<pacman::Clyde>(player, pelletCounter, GhostTimers);
 	Clyde->AddComponents<pacman::GhostCollision>(player);
+	Clyde->GetComponent<Render>()->DisableRender();
 
 	const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
 
@@ -302,6 +304,13 @@ void Pacman()
 	scoreCounter->AddComponents<pacman::ScoreObserver>("Score: 0", smallFont);
 	scoreCounter->AddComponents<Render>();
 	scoreCounter->SetParent(HUD, false);
+
+	auto livesCounter = scene->CreateGameObject();
+	livesCounter->AddComponents<Texture>("Lives.png", 80, 11, 1);
+	livesCounter->GetComponent<Texture>()->PauseAnimation();
+	livesCounter->AddComponents<Transform>(32, 581);
+	livesCounter->AddComponents<pacman::PacmanHealthObserver>();
+	livesCounter->AddComponents<Render>(2);
 #pragma endregion
 
 
@@ -324,22 +333,39 @@ void Pacman()
 #pragma endregion
 
 #pragma region Observers
+	//todo: reset audio as well and add quick reset animation
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), player->GetComponent<pacman::AI>());
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), Blinky->GetComponent<pacman::RedAI>());
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), Pinky->GetComponent<pacman::Pinky>());
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), Inky->GetComponent<pacman::Inky>());
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), Clyde->GetComponent<pacman::Clyde>());
+	//pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), player->GetComponent<pacman::AI>());//one for level intro?
+
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), PlayerText->GetComponent<pacman::IntroTextObserver>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), readyText->GetComponent<pacman::IntroTextObserver>());
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), GhostTimers->GetComponent<pacman::GhostsTimers>());
 
 	player->GetComponent<pacman::HealthCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::HEALTH_CHANGE), livesCounter->GetComponent<pacman::PacmanHealthObserver>());
 	player->GetComponent<pacman::ScoreCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::SCORE_CHANGE), scoreCounter->GetComponent<pacman::ScoreObserver>());
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), player->GetComponent<pacman::AI>());
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), player->GetComponent<pacman::AI>());
+	
+	//todo: rename redAI and AI
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::RedAI>());
-
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Blinky->GetComponent<pacman::RedAI>());
+	
 	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Pinky->GetComponent<pacman::Pinky>());
-
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Pinky->GetComponent<pacman::Pinky>());
+	
 	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Inky->GetComponent<pacman::Inky>());
-
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Inky->GetComponent<pacman::Inky>());
+	
 	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Clyde->GetComponent<pacman::Clyde>());
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Clyde->GetComponent<pacman::Clyde>());
 #pragma endregion
 
 

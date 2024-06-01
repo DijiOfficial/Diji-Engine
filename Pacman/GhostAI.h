@@ -38,7 +38,6 @@ namespace pacman
 	//                          ┌────┴────┐  If Spawn Reached  ┌───────┐  For 2 Seconds ┌───────┐  │         
 	//                          │ Respawn ◄────────────────────┤ Eaten ◄────────────────┤ Dying ◄──┘         
 	//                          └─────────┘                    └───────┘                └───────┘            
-	
 	class PelletObserver;
 	class GhostsTimers;
 	class GhostAI : public diji::Component, public diji::IObserver
@@ -69,6 +68,7 @@ namespace pacman
 		glm::vec2 GetScatterTarget() const { return m_ScatterTarget; };
 		GhostState* GetCurrentState() const { return m_CurrentStateUPtr.get(); };
 		int GetPelletCount() const;
+		const diji::GameObject* GetParent() const { return GetOwner(); };
 
 		bool IsFrightened() const { return m_IsFrightened; };
 		bool IsPowerAlmostOver() const { return m_PowerUpTimer >= 7.f; };
@@ -80,6 +80,7 @@ namespace pacman
 		void TurnAround() const;
 		void SetIsLastGhostEaten(bool isEaten) const { m_IsLastGhostEaten = isEaten; };
 		void SetGhostsVector(const std::vector<GhostAI*>& ghosts) { m_GhostsPtrs = ghosts; };
+		void SetGhostKilledPlayer() { m_IsPlayerKilled = true; };
 		std::vector<GhostAI*> GetGhostsAI() const { return m_GhostsPtrs; };
 
 	protected:
@@ -89,7 +90,7 @@ namespace pacman
 		glm::vec2 m_PersonnalSpawn = { 0, 0 };
 		glm::vec2 m_ScatterTarget = { 0, 0 };
 		std::string m_TexturePath = "";
-
+		int m_PelletsNeededForRespawn = 0;
 	private:
 		std::vector<GhostAI*> m_GhostsPtrs;
 		diji::Collider* m_PlayerColliderPtr;
@@ -102,7 +103,12 @@ namespace pacman
 		mutable float m_PowerUpTimer = 0.f;
 		mutable bool m_IsFrightened = false;
 		mutable bool m_IsLastGhostEaten = false;
+		bool m_IsPlayerKilled = false;
+		bool m_IsReset = false;
+		float m_PlayerDeathTimer = 0.f;
 		const float m_TunnelSpeed = 0.9375f;
+
+		void Reset();
 	};
 
 	class RedAI final : public GhostAI

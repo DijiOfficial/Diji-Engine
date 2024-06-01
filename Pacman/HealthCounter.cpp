@@ -15,6 +15,6 @@ void pacman::HealthCounter::DecreaseHealth()
 	--m_Health;
 
     Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::HEALTH_CHANGE));
-
-    diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanDie, -1);
+    //todo: add rhiss sound to collision instead
+    //diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanDie, -1);
 }

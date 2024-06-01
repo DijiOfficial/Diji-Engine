@@ -118,6 +118,7 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 		ghost->GetTexture()->SetStartingFrame(static_cast<int>(bestDirection) * 2);
 }
 
+//todo: not necessary?
 glm::vec2 pacman::GhostState::GetTargetTranslation(diji::Movement movement) const
 {
 	glm::vec2 translation{ 0, 0 };
@@ -235,7 +236,7 @@ void pacman::Respawn::OnExit(const GhostAI* ghost)
 		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
 		ghost->SetIsLastGhostEaten(false);
 	}
-	else if(not otherGhostEaten)
+	else if(not otherGhostEaten) //todo: check if sound playing is music or power pellet or check if shit is done or some
 		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PowerPellet, -1);
 }
 

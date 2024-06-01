@@ -21,7 +21,7 @@ namespace pacman
 		PickUpLoader& operator=(PickUpLoader&& other) = delete;
 
 		void AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCounter);
-		void AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value);
+		void AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCounter);
 	private:
 		std::vector<std::vector<glm::vec2>> m_PelletsVec;
 
