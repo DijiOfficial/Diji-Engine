@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include <SDL.h>
+#include "Collision.h"
 
 namespace diji
 {
@@ -8,11 +10,19 @@ namespace diji
 	class Texture;
 	class Text;
 
+	struct ShapeInfo
+	{
+		Rectf rect = {0, 0, 0, 0};
+		SDL_Color color = { 255, 255, 255, 255 };
+		int lineWidth = 1;
+	};
+
 	class Render final : public Component
 	{
 	public:
 		Render(GameObject* ownerPtr);
 		Render(GameObject* ownerPtr, int scale);
+		Render(GameObject* ownerPtr, ShapeInfo shape);
 		~Render() noexcept override = default;
 
 		Render(const Render& other) = delete;
@@ -30,8 +40,8 @@ namespace diji
 		void EnableRender() { m_Render = true; }
 		void EnableHitbox() { m_DisplayHitbox = true; }
 		void DisableHitbox() { m_DisplayHitbox = false; }
-		void SetTestBool(bool test) { testBool = test; }
-		
+		void SetIsShape() { m_IsShape = true; }
+		void UpdateShape(const Rectf& shape) { m_ShapeInfo.rect = shape; }
 		void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
 	private:
 		Transform* m_TransformCompPtr;
@@ -39,9 +49,11 @@ namespace diji
 		Texture* m_TextureCompPtr;
 		Text* m_TextCompPtr;
 
+		ShapeInfo m_ShapeInfo;
+
 		int m_Scale = 1;
 		bool m_Render = true;
 		bool m_DisplayHitbox = false;
-		bool testBool = false;
+		bool m_IsShape = false;
 	};
 }

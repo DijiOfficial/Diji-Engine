@@ -8,5 +8,8 @@ namespace pacman
         DEMO,
         MENU,
         LEVEL,
+        COOP,
+        VERSUS,
+        GAMEOVER,
     };
 }

@@ -8,12 +8,18 @@
 
 //temp
 #include "Command.h"
-#include "Collision.h"
 #include "Collider.h"
 diji::Render::Render(GameObject* ownerPtr, int scale) 
 	: Render(ownerPtr)
 {
 	m_Scale = scale;
+}
+
+diji::Render::Render(GameObject* ownerPtr, ShapeInfo shape)
+	: Component(ownerPtr)
+	, m_ShapeInfo{ shape }
+	, m_IsShape{ true }
+{
 }
 
 diji::Render::Render(GameObject* ownerPtr)
@@ -27,6 +33,9 @@ diji::Render::Render(GameObject* ownerPtr)
 
 void diji::Render::Init()
 {
+	if (m_IsShape)
+		return;
+
 	const auto& ownerPtr = GetOwner();
 
 	m_TransformCompPtr = ownerPtr->GetComponent<Transform>();
@@ -43,6 +52,12 @@ void diji::Render::RenderFrame() const
 {
 	if (not m_Render)
 		return;
+
+	if (m_IsShape)
+	{
+		Renderer::GetInstance().DrawRect(m_ShapeInfo.rect, m_ShapeInfo.color);
+		return;
+	}
 
 	const glm::vec3 pos = [this]()
 	{
@@ -69,42 +84,6 @@ void diji::Render::RenderFrame() const
 
 		for (const auto& rect : collision)
 			Renderer::GetInstance().DrawPolygon(rect);
-	}
-
-	if (testBool)
-	{
-		const auto& temppos = GetOwner()->GetComponent<Transform>()->m_target;
-		Renderer::GetInstance().DrawCircle((int)temppos.x, (int)temppos.y, 5);
-
-		const auto& test2 = GetOwner()->GetComponent<Transform>()->blinky;
-		Renderer::GetInstance().DrawCircle((int)test2.x, (int)test2.y, 5);
-
-		const auto& test3 = GetOwner()->GetComponent<Transform>()->firstTarget;
-		Renderer::GetInstance().DrawCircle((int)test3.x, (int)test3.y, 5);
-		//auto test= GetOwner()->GetComponent<Collider>()->GetCollisionBox();
-
-		//auto movement = m_TransformCompPtr->GetMovement();
-		//glm::vec2 translation{ 0, 0 };
-		//switch (movement)
-		//{
-		//case diji::Movement::Right:
-		//	translation.x = 16;
-		//	break;
-		//case diji::Movement::Down:
-		//	translation.y = 16;
-		//	break;
-		//case diji::Movement::Left:
-		//	translation.x = -16;
-		//	break;
-		//case diji::Movement::Up:
-		//	translation.y = -16;
-		//	break;
-		//}
-		//const glm::vec2 center(test.left + test.width * 0.5f, test.bottom + test.height * 0.5f);
-		//const glm::vec2 teste = center + translation;
-
-		//Renderer::GetInstance().DrawLine(center, teste, SDL_Color{255,255,255,255});
-
 	}
 }
 

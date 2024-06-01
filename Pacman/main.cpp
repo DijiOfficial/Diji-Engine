@@ -25,47 +25,12 @@
 #include "GameState.h"
 #include "LevelIntro.h"
 #include "PelletCounter.h"
+#include "Menu.h"
+
 using namespace diji;
-void load()
+void temp()
 {
-
-#ifndef NDEBUG
-	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLISoundSystem>()));
-#else
-	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
-#endif
-
-	//auto& ss = ServiceLocator::GetSoundSystem();
-	//ss.PlaySound(SoundId::PacmanDie, -1);
-
 	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::DEMO));
-
-#pragma region Base
-	//Background
-	auto background = scene->CreateGameObject();
-	background->AddComponents<Texture>("background.tga");
-	background->AddComponents<Render>();
-
-	//Logo
-	auto logo = scene->CreateGameObject();
-	logo->AddComponents<Texture>("logo.tga");
-	logo->AddComponents<Transform>(300, 140);
-	logo->AddComponents<Render>();
-
-	//Title
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
-	auto title = scene->CreateGameObject();
-	title->AddComponents<Text>("Programming 4 Assignment", font);
-	title->AddComponents<Transform>(220, 20);
-	title->AddComponents<Render>();
-
-	//FPS Counter
-	auto fpsCounter = scene->CreateGameObject();
-	fpsCounter->AddComponents<Text>("0 FPS", font);
-	fpsCounter->AddComponents<FPSCounter>();
-	fpsCounter->AddComponents<Transform>(0, 10);
-	fpsCounter->AddComponents<Render>();
-#pragma endregion
 
 #pragma region Players
 	//Player1
@@ -154,27 +119,51 @@ void load()
 #pragma endregion
 }
 
-void Pacman()
-{
-#ifndef NDEBUG
-	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLISoundSystem>()));
-#else
-	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
-#endif
+void PacmanMenu()
+{ 
 	constexpr glm::vec2 viewport{ 452, 608 };
 
-	//#pragma region Menu Scene
-	//	const auto& menuScene = SceneManager::GetInstance().CreateScene("Menu");
-	//	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
-	//
-	//	auto pushStart = menuScene->CreateGameObject();
-	//	pushStart->AddComponents<Text>("PUSH START BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
-	//	pushStart->AddComponents<Transform>(viewport.x * 0.5f, viewport.y * 0.5f);
-	//	pushStart->AddComponents<Render>();
-	//
-	//#pragma endregion
+	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
+	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+	
+	auto menuUI = menuScene->CreateGameObject(); //will handle the drawings and AI part of the menu
+	menuUI->AddComponents<Transform>(viewport.x * 0.5f, viewport.y * 0.5f);
+	menuUI->AddComponents<pacman::Menu>();
+	const ShapeInfo shapeInfo = { Rectf{0, 0, 0, 0}, SDL_Color{235, 235, 235}, 1 };
+	menuUI->AddComponents<Render>(shapeInfo);
+	//menuUI->GetComponent<Render>()->SetIsShape();
 
-	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::LEVEL));
+	auto singlePlayer = menuScene->CreateGameObject();
+	singlePlayer->AddComponents<Transform>(-120, 0);
+	singlePlayer->AddComponents<Texture>("SinglePlayer.png", 15 , 15);
+	singlePlayer->AddComponents<Render>(2);
+	singlePlayer->SetParent(menuUI, false);
+
+	auto coop = menuScene->CreateGameObject();
+	coop->AddComponents<Transform>(-45, 0);
+	coop->AddComponents<Texture>("Coop.png", 30, 15);
+	coop->AddComponents<Render>(2);
+	coop->SetParent(menuUI, false);
+
+	auto versus = menuScene->CreateGameObject();
+	versus->AddComponents<Transform>(60, 0);
+	versus->AddComponents<Texture>("Versus.png", 30, 15);
+	versus->AddComponents<Render>(2);
+	versus->SetParent(menuUI, false);
+
+
+	auto pushStart = menuScene->CreateGameObject();
+	pushStart->AddComponents<Text>("PUSH ENTER BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
+	pushStart->AddComponents<Transform>(0, 120);
+	pushStart->AddComponents<Render>();
+	pushStart->SetParent(menuUI, false);
+
+}
+
+void Pacman()
+{
+	constexpr glm::vec2 viewport{ 452, 608 };
+
 	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::LEVEL));
 	auto& input = InputManager::GetInstance();
 	//Background
@@ -376,10 +365,29 @@ void Pacman()
 	fpsCounter->AddComponents<Render>();
 }
 
+void HighScoreMenu() 
+{
+
+}
+
+void load()
+{
+#ifndef NDEBUG
+	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLISoundSystem>()));
+#else
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLISoundSystem>());
+#endif
+
+	PacmanMenu();
+	Pacman();
+	HighScoreMenu();
+
+	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::MENU));
+}
 
 int main(int, char*[]) {
 	diji::Minigin engine("../Data/");
-	//engine.Run(load);
-	engine.Run(Pacman);
+	engine.Run(load);
+	//engine.Run(Pacman);
     return 0;
 }

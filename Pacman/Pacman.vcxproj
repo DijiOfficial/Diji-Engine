@@ -207,6 +207,7 @@
     <ClCompile Include="HealthCounter.cpp" />
     <ClCompile Include="LevelIntro.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Observers.cpp" />
     <ClCompile Include="PelletCounter.cpp" />
     <ClCompile Include="PickUp.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="GhostStates.h" />
     <ClInclude Include="HealthCounter.h" />
     <ClInclude Include="LevelIntro.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Observers.h" />
     <ClInclude Include="PelletCounter.h" />
     <ClInclude Include="PickUp.h" />

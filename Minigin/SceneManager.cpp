@@ -2,6 +2,9 @@
 
 void diji::SceneManager::Update()
 {
+	if (m_NextScene != m_ActiveSceneId)
+		m_ActiveSceneId = m_NextScene;
+
 	m_ScenesUPtrMap.at(m_ActiveSceneId)->Update();
 }
 

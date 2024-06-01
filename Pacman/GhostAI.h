@@ -12,7 +12,6 @@ namespace diji
 	class Collider;
 	enum class Movement;
 	class Texture;
-	struct Rectf;
 }
 
 namespace pacman
