@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
-
+#include <unordered_map>
+#include <string>
 namespace diji 
 {
 	class Scene final
@@ -19,11 +20,17 @@ namespace diji
 		void Init();
 		void Render() const;
 		
-		GameObject* CreateGameObject();
+		GameObject* CreateGameObject(const std::string& name);
 		void Remove(GameObject* object);
+		void Remove(const std::string& name);
 		void RemoveAll();
-	
+		GameObject* GetGameObject(const std::string& name) const;
+
+		std::unique_ptr<GameObject> RemoveAndReturnGameObject(const GameObject* obj);
+		void AddExistingGameObject(std::unique_ptr<GameObject> object, const std::string& name);
+		std::string GetGameObjectName(const GameObject* object) const;
+		
 	private:
-		std::vector<std::unique_ptr<GameObject>> m_ObjectsUPtrVec;
+		std::unordered_map<std::string, std::unique_ptr<GameObject>> m_ObjectsUPtrMap;
 	};
 }

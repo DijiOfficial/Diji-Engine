@@ -6,6 +6,20 @@ void diji::SceneManager::Update()
 		m_ActiveSceneId = m_NextScene;
 
 	m_ScenesUPtrMap.at(m_ActiveSceneId)->Update();
+
+	if (m_SceneTransferInfoVec.empty())
+		return;
+
+	for (const auto& transferInfo : m_SceneTransferInfoVec)
+	{
+		const std::string& name = m_ScenesUPtrMap.at(transferInfo.fromScene)->GetGameObjectName(transferInfo.object);
+		std::unique_ptr<GameObject> removedObj = m_ScenesUPtrMap.at(transferInfo.fromScene)->RemoveAndReturnGameObject(transferInfo.object);
+		if (removedObj)
+		{
+			m_ScenesUPtrMap.at(transferInfo.toScene)->AddExistingGameObject(std::move(removedObj), name);
+		}
+	}
+	m_SceneTransferInfoVec.clear();
 }
 
 void diji::SceneManager::FixedUpdate()
@@ -49,4 +63,9 @@ diji::Scene* diji::SceneManager::CreateScene(const int id)
 
 	m_ScenesUPtrMap[id] = std::make_unique<Scene>();
 	return m_ScenesUPtrMap[id].get();
+}
+
+void diji::SceneManager::TranferScene(int fromScene, int toScene, const GameObject* object)
+{
+	m_SceneTransferInfoVec.push_back(SceneTransferInfo{ fromScene, toScene, object });
 }
