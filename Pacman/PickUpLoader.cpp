@@ -10,6 +10,8 @@
 #include "SceneManager.h"
 #include "GameState.h"
 #include "PelletCounter.h"
+
+#include <format>
 pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter)
 {
 	diji::SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
@@ -23,22 +25,31 @@ pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::ve
 	for (const auto& posVec : m_PelletsVec)
 	{
 		if (idx == 0)
+		{
+			//why the weird number? i don't know but setting it to zero just causes one pellet to not be rendered for ???
+			int pelletCounterIdx = -235;
 			for (const auto& pos : posVec)
 			{
-				AddPickUp("bruh.png", 4, 4, pos, 10, pelletCounter);
+				++pelletCounterIdx;
+				AddPickUp("bruh.png", 4, 4, pos, 10, pelletCounter, pelletCounterIdx);
 			}
+		}
 		else
+		{
+			int pelletCounterIdx = -2;
 			for (const auto& pos : posVec)
 			{
-				AddPowerUp(gameObjects, "PowerPellet.png", 8, 8, pos, 50, pelletCounter);
+				++pelletCounterIdx;
+				AddPowerUp(gameObjects, "PowerPellet.png", 8, 8, pos, 50, pelletCounter, pelletCounterIdx);
 			}
+		}
 		++idx;
 	}
 }
 
-void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCouter)
+void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCouter, int idx)
 {
-	auto pickUp = m_ScenePtr->CreateGameObject();
+	auto pickUp = m_ScenePtr->CreateGameObject(std::format("pickUp{}", idx));
 	pickUp->AddComponents<diji::Texture>(file, width, height);
 	pickUp->AddComponents<diji::Transform>(pos.x, pos.y);
 	pickUp->AddComponents<diji::Render>(2);
@@ -52,9 +63,9 @@ void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, c
 	pelletCouter->GetComponent<PelletCounter>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_END), pickUp->GetComponent<PickUp>());
 }
 
-void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCouter)
+void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& gameObjects, const std::string& file, const int width, const int height, const glm::vec2& pos, const int value, const diji::GameObject* pelletCouter, int idx)
 {
-	auto powerUp = m_ScenePtr->CreateGameObject();
+	auto powerUp = m_ScenePtr->CreateGameObject(std::format("powerPellet{}", idx));
 	powerUp->AddComponents<diji::Texture>(file, width, height);
 	powerUp->AddComponents<diji::Transform>(pos.x, pos.y);
 	powerUp->AddComponents<diji::Render>(2);

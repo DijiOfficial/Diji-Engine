@@ -5,6 +5,7 @@
 #include "PickUp.h"
 #include "Texture.h"
 #include "Render.h"
+#include "ScoreBoard.h"
 
 #include <format>
 
@@ -106,10 +107,12 @@ void pacman::IntroTextObserver::OnNotify(diji::MessageTypes message, diji::Subje
 pacman::HighScoreObserver::HighScoreObserver(diji::GameObject* ownerPtr, std::string text, diji::Font* font, const SDL_Color& color, bool isCentered)
 	: Text(ownerPtr, text, font, color, isCentered)
 {
-	//todo: load highscore from file
+	m_CurrentHighScore = ScoreBoard::GetInstance().GetHighestScore();
 	const int numDigits = m_CurrentHighScore > 0 ? static_cast<int>(std::log10(m_CurrentHighScore)) + 1 : 1;
 	const int numSpaces = std::max(0, 7 - numDigits);
 	const std::string formattedScore = std::format("{:>{}}", m_CurrentHighScore, numSpaces + numDigits);
+	
+	SetText(formattedScore);
 }
 
 void pacman::HighScoreObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
