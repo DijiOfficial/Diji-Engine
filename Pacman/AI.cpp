@@ -170,9 +170,7 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 			m_IsDying = true;
 			m_PauseAI = true;
 			m_PauseTime = 0.f;
-			//todo: ready text
-			std::cout << "Game Over" << std::endl;
-			
+			//todo: ready text			
 		}
 		break;
 	}
