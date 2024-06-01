@@ -31,6 +31,12 @@ diji::Text::Text(GameObject* ownerPtr, const std::string& text, Font* font, cons
 
 void diji::Text::Update()
 {
+	if (not m_FontPtr)
+	{
+		m_NeedsUpdate = false;
+		return;
+	}
+
 	if (m_NeedsUpdate)
 	{
 		//const SDL_Color color = { 255, 255, 255, 255 }; // only white text is supported now
@@ -49,12 +55,15 @@ void diji::Text::Update()
 		m_NeedsUpdate = false;
 
 		// need to update the pointer in Render this frame, Render update was already called so it has previous pointer information
-		GetOwner()->GetComponent<Render>()->UpdateText();
-
+		const auto& renderComp = GetOwner()->GetComponent<Render>();
+		if (renderComp)
+			renderComp->UpdateText();
+		
 		if (m_IsCentered)
 		{
 			const auto& pos = GetOwner()->GetComponent<Transform>()->GetPosition();
 			GetOwner()->GetComponent<Transform>()->SetPosition(pos.x - m_TexturePtr->GetSize().x * 0.5f, pos.y);
+			m_IsCentered = false;
 		}
 	}
 }
