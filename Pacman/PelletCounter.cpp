@@ -27,3 +27,8 @@ void pacman::PelletCounter::Update()
 		m_PelletCountAtNotification = m_PelletObserverPtr->GetPelletCount();
 	}
 }
+
+void pacman::PelletCounter::test()
+{
+	Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_END));
+}

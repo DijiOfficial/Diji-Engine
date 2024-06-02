@@ -89,6 +89,23 @@ namespace pacman
 		int m_PelletCount = 0;
 	};
 
+	class LevelObserver final : public diji::Component, public diji::IObserver
+	{
+	public:
+		LevelObserver(diji::GameObject* ownerPtr) : Component(ownerPtr) {};
+		~LevelObserver() noexcept override = default;
+
+		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+
+		void Init() override {};
+		void Update() override {};
+		void FixedUpdate() override {};
+		int GetLevel() const { return m_LevelCount; }
+
+	private:
+		int m_LevelCount = 0;
+	};
+
 	class IntroTextObserver final : public diji::Component, public diji::IObserver
 	{
 	public:

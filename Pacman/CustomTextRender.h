@@ -27,5 +27,23 @@ namespace pacman
 
 		void DrawCustomArrow(const glm::vec3& pos) const;
 	};
+
+	class LevelCounterRender final : public diji::Render
+	{
+	public:
+		LevelCounterRender(diji::GameObject* ownerPtr, int scale = 0) : Render(ownerPtr, scale) {};
+		~LevelCounterRender() noexcept override = default;
+
+		void Init() override;
+		void Update() override {};
+		void FixedUpdate() override {};
+
+		void RenderFrame() const override;
+		virtual void UpdateText() {};
+	private:
+		diji::Texture* m_TextureCompPtr = nullptr;
+		diji::Texture2D* m_Texture2DCompPtr = nullptr;
+		diji::Transform* m_TransformCompPtr = nullptr;
+	};
 }
 

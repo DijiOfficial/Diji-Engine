@@ -14,6 +14,7 @@ namespace pacman
 	class ScoreCounter;
 	enum class PointType;
 	class EnterName;
+	class PelletCounter;
 
 	class Move final : public diji::GameActorCommands
 	{
@@ -54,6 +55,17 @@ namespace pacman
 		EnterName* m_NameComp;
 		diji::Movement m_Movement;
 
+	};
+
+	class test final : public diji::GameActorCommands
+	{
+	public:
+		test(diji::GameObject* actor);
+		~test() noexcept override = default;
+
+		void Execute() override;
+	private:
+		PelletCounter* tester;
 	};
 
 	class ScoreCommand final : public diji::GameActorCommands

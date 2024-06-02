@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Text.h"
 #include "EnterName.h"
+#include "Texture.h"
 
 void pacman::CustomTextRender::Init()
 {
@@ -64,4 +65,24 @@ void pacman::CustomTextRender::DrawCustomArrow(const glm::vec3& pos) const
         diji::Renderer::GetInstance().DrawLine(downArrowP2_thick, downArrowP3_thick);
         diji::Renderer::GetInstance().DrawLine(downArrowP2_thick, downArrowP4_thick);
     }
+}
+
+void pacman::LevelCounterRender::Init()
+{
+    m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
+    m_TextureCompPtr = GetOwner()->GetComponent<diji::Texture>();
+    m_Texture2DCompPtr = m_TextureCompPtr->GetTexturePtr();
+}
+
+void pacman::LevelCounterRender::RenderFrame() const
+{
+    const glm::vec3 pos = [this]()
+        {
+            if (m_TransformCompPtr)
+                return m_TransformCompPtr->GetPosition();
+            else
+                return glm::vec3{ 0, 0, 0 };
+        }();
+
+        diji::Renderer::GetInstance().RenderTexture(*m_Texture2DCompPtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame(), m_Scale, 16);
 }

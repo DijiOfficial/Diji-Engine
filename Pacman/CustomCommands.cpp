@@ -7,6 +7,10 @@
 #include "EnterName.h"
 #include "SceneManager.h"
 #include "GameState.h"
+
+//temp
+#include "PelletCounter.h"
+
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
@@ -55,4 +59,15 @@ void pacman::NameChangeCommand::Execute()
 {
 	if (diji::SceneManager::GetInstance().GetActiveSceneId() == static_cast<int>(GameState::GAMEOVER))
 		m_NameComp->MoveLetter(m_Movement);
+}
+
+pacman::test::test(diji::GameObject* actor)
+	: GameActorCommands{ actor }
+{
+	tester = GetGameActor()->GetComponent<PelletCounter>();
+}
+
+void pacman::test::Execute()
+{
+	tester->test();
 }

@@ -204,6 +204,9 @@ void Pacman()
 	pelletCounter->AddComponents<pacman::PelletObserver>();
 	pelletCounter->AddComponents<pacman::PelletCounter>();
 
+	//auto levelCounter = scene->CreateGameObject("levelCounter");
+	//levelCounter->AddComponents<pacman::LevelObserver>();
+
 	auto player = scene->CreateGameObject("player");
 	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
 	player->GetComponent<Texture>()->SetRotation(true);
@@ -307,9 +310,18 @@ void Pacman()
 	auto livesCounter = scene->CreateGameObject("livesCounterHUD");
 	livesCounter->AddComponents<Texture>("Lives.png", 80, 11, 1);
 	livesCounter->GetComponent<Texture>()->PauseAnimation();
-	livesCounter->AddComponents<Transform>(32, 581);
+	livesCounter->AddComponents<Transform>(42, 581);
 	livesCounter->AddComponents<pacman::PacmanHealthObserver>();
 	livesCounter->AddComponents<Render>(2);
+
+	auto levelCounterHUD = scene->CreateGameObject("levelCounterHUD");
+	levelCounterHUD->AddComponents<Texture>("LevelDisplay.png", 16, 16, 1);
+	levelCounterHUD->GetComponent<Texture>()->PauseAnimation();
+	levelCounterHUD->GetComponent<Texture>()->SetStartingFrame(18);
+	levelCounterHUD->AddComponents<Transform>(420, 573);
+	levelCounterHUD->AddComponents<pacman::LevelObserver>();
+	levelCounterHUD->AddComponents<pacman::LevelCounterRender>(2);
+	levelCounterHUD->GetComponent<Render>()->DisableRender();
 #pragma endregion
 
 #pragma region Commands
@@ -324,6 +336,9 @@ void Pacman()
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 	input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
+
+	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_T, pelletCounter);
+
 #pragma endregion
 
 #pragma region Observers
@@ -334,7 +349,8 @@ void Pacman()
 	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), Inky->GetComponent<pacman::Inky>());
 	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), Clyde->GetComponent<pacman::Clyde>());
 	//pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), player->GetComponent<pacman::AI>());//one for level intro?
-
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), levelCounterHUD->GetComponent<pacman::LevelObserver>());
+	
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), PlayerText->GetComponent<pacman::IntroTextObserver>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), readyText->GetComponent<pacman::IntroTextObserver>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), GhostTimers->GetComponent<pacman::GhostsTimers>());
@@ -420,7 +436,7 @@ void load()
 	Pacman();
 	HighScoreMenu();
 
-	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::MENU));
+	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::LEVEL));
 }
 
 int main(int, char*[]) {

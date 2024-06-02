@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Render.h"
 #include "ScoreBoard.h"
+#include "Transform.h"
 
 #include <format>
 
@@ -133,5 +134,29 @@ void pacman::HighScoreObserver::OnNotify(diji::MessageTypes message, diji::Subje
 		const std::string formattedScore = std::format("{:>{}}", score, numSpaces + numDigits);
 
 		SetText(formattedScore);
+	}
+}
+
+void pacman::LevelObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
+{
+	(void)subject;
+	auto msg = static_cast<MessageTypesDerived>(message);
+	if (msg == MessageTypesDerived::LEVEL_END)
+	{
+		if (m_LevelCount == 0)
+			GetOwner()->GetComponent<diji::Render>()->EnableRender();
+		++m_LevelCount;
+		if (m_LevelCount < 8)
+		{
+			GetOwner()->GetComponent<diji::Texture>()->SetWidth(16 * m_LevelCount);
+			
+			const auto& transform = GetOwner()->GetComponent<diji::Transform>();
+			transform->SetPosition(transform->GetPosition().x - 32, transform->GetPosition().y);
+		}
+		if (m_LevelCount < 20)
+		{
+			const auto& texture = GetOwner()->GetComponent<diji::Texture>();
+			texture->SetCurrentFrame(texture->GetFrame() - 1);
+		}
 	}
 }
