@@ -20,6 +20,7 @@ namespace diji
 		void RenderTexture(const Texture2D& texture, const float x, const float y, int scale = 1);
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, int scale) const;
+		void RenderTexture(const Texture2D& texture, const float x, const float y, int width, int height, int idx, int scale, int originalWidth) const;
 		void RenderRotatedTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, float angle, int scale = 1) const;
 
 		void DrawCircle(int x, int y, int radius)

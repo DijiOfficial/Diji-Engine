@@ -43,6 +43,8 @@ namespace diji
 		void SetIsShape() { m_IsShape = true; }
 		void UpdateShape(const Rectf& shape) { m_ShapeInfo.rect = shape; }
 		void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
+	protected:
+		int m_Scale = 1;
 	private:
 		Transform* m_TransformCompPtr;
 		Texture2D* m_TexturePtr;
@@ -51,7 +53,6 @@ namespace diji
 
 		ShapeInfo m_ShapeInfo;
 
-		int m_Scale = 1;
 		bool m_Render = true;
 		bool m_DisplayHitbox = false;
 		bool m_IsShape = false;

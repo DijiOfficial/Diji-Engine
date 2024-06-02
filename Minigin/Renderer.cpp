@@ -87,6 +87,22 @@ void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
 }
 
+void diji::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, int width, int height, int idx, int scale, int originalWidth) const
+{
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(x);
+	dst.y = static_cast<int>(y);
+	dst.w = width * scale;
+	dst.h = height * scale;
+
+	SDL_Rect src{};
+	src.x = idx * originalWidth;
+	src.y = 0;
+	src.w = width;
+	src.h = height;
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
+}
+
 void diji::Renderer::RenderRotatedTexture(const Texture2D& texture, float x, float y, int width, int height, int idx, float angle, int scale) const
 {
 	SDL_Rect dst{};
