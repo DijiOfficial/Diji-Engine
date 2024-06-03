@@ -15,6 +15,7 @@ namespace diji
 	class Collision final : public Singleton<Collision>
 	{
 	public:
+		void Reset();
 		bool ParseLevelSVG(const std::string& file, const int yAdjust);
 		bool ParseIntersectionsSVG(const std::string& file, const int yAdjust);
 		

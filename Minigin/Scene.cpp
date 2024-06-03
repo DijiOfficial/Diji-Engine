@@ -5,6 +5,7 @@
 
 diji::Scene::~Scene()
 {
+	m_ObjectsUPtrMap.clear();
 };
 
 diji::GameObject* diji::Scene::CreateGameObject(const std::string& name)

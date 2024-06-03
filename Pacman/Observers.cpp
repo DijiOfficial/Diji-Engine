@@ -143,8 +143,6 @@ void pacman::LevelObserver::OnNotify(diji::MessageTypes message, diji::Subject* 
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (msg == MessageTypesDerived::LEVEL_END)
 	{
-		if (m_LevelCount == 0)
-			GetOwner()->GetComponent<diji::Render>()->EnableRender();
 		++m_LevelCount;
 		if (m_LevelCount < 8)
 		{

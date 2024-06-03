@@ -27,7 +27,7 @@ pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::ve
 		if (idx == 0)
 		{
 			//why the weird number? i don't know but setting it to zero just causes one pellet to not be rendered for ???
-			int pelletCounterIdx = -235;
+			int pelletCounterIdx = 0;
 			for (const auto& pos : posVec)
 			{
 				++pelletCounterIdx;
@@ -36,7 +36,7 @@ pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::ve
 		}
 		else
 		{
-			int pelletCounterIdx = -2;
+			int pelletCounterIdx = 0;
 			for (const auto& pos : posVec)
 			{
 				++pelletCounterIdx;

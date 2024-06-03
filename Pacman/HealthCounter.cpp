@@ -26,3 +26,9 @@ void pacman::HealthCounter::DecreaseHealth()
     Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::HEALTH_CHANGE));
 
 }
+
+void pacman::HealthCounter::AddLife()
+{
+    ++m_Health;
+	Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::HEALTH_CHANGE));
+}

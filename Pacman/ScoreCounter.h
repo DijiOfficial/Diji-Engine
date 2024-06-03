@@ -32,6 +32,8 @@ namespace pacman
 
 	private:
 		int m_Score;
+		bool m_Extralife = true;
+		void CheckForExtraLife();
 	};
 }
 

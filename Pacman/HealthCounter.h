@@ -19,7 +19,7 @@ namespace pacman
 		void Update() override {};
 		void FixedUpdate() override {};
 		void DecreaseHealth();
-
+		void AddLife();
 		int GetHealth() const { return m_Health; }
 
 	private:	

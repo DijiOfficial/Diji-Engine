@@ -22,7 +22,8 @@ namespace pacman
 		POWERUP_COLLISION,
 		LEVEL_BEGIN,
 		LEVEL_START,
-		LEVEL_END
+		LEVEL_END,
+		FRUIT_COLLISION,
 	};
 
 	class HealthObserver final : public diji::Text, public diji::IObserver
@@ -103,7 +104,7 @@ namespace pacman
 		int GetLevel() const { return m_LevelCount; }
 
 	private:
-		int m_LevelCount = 0;
+		int m_LevelCount = 1;
 	};
 
 	class IntroTextObserver final : public diji::Component, public diji::IObserver

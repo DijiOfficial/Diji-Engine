@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include <unordered_map>
+#include <map>
 #include <string>
 namespace diji 
 {
@@ -31,6 +31,6 @@ namespace diji
 		std::string GetGameObjectName(const GameObject* object) const;
 		
 	private:
-		std::unordered_map<std::string, std::unique_ptr<GameObject>> m_ObjectsUPtrMap;
+		std::map<std::string, std::unique_ptr<GameObject>> m_ObjectsUPtrMap;
 	};
 }

@@ -17,6 +17,7 @@ namespace diji
 		Music,
 		GhostEaten,
 		GameStart,
+		ExtraLife,
 	};
 
 	class ISoundSystem
@@ -50,7 +51,7 @@ namespace diji
 	public:
 		SDLISoundSystem();
 		~SDLISoundSystem() noexcept;
-		void AddSoundRequest(SoundId sound, int volume) override;
+		void AddSoundRequest(SoundId sound, int volume = -1) override;
 		
 	private:
 		void PlaySound(const SoundId sound, const int volume) const;

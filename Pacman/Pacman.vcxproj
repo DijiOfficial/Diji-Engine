@@ -202,6 +202,8 @@
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="CustomTextRender.cpp" />
     <ClCompile Include="EnterName.cpp" />
+    <ClCompile Include="Fruit.cpp" />
+    <ClCompile Include="GameLoader.cpp" />
     <ClCompile Include="GhostsAlgorithm.cpp" />
     <ClCompile Include="CustomCommands.cpp" />
     <ClCompile Include="GhostAI.cpp" />
@@ -223,6 +225,8 @@
     <ClInclude Include="AI.h" />
     <ClInclude Include="CustomTextRender.h" />
     <ClInclude Include="EnterName.h" />
+    <ClInclude Include="Fruit.h" />
+    <ClInclude Include="GameLoader.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GhostsAlgorithm.h" />
     <ClInclude Include="CustomCommands.h" />

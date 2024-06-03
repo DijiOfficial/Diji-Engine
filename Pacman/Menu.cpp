@@ -5,6 +5,9 @@
 #include "SceneManager.h"
 #include "GameState.h"
 
+#include "GameLoader.h"
+#include "SceneManager.h"
+
 void pacman::Menu::Update()
 {
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
@@ -16,6 +19,8 @@ void pacman::Menu::Update()
 		{
 		case 0:
 			state = GameState::LEVEL;
+			//Loader::PacmanLevel();
+			//diji::SceneManager::GetInstance().Init();
 			break;
 		case 1:
 			state = GameState::COOP;

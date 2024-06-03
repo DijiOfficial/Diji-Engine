@@ -11,6 +11,7 @@
 #include "ISoundSystem.h"
 #include "GhostAI.h"
 #include "HealthCounter.h"
+#include "Fruit.h"
 
 pacman::AI::AI(diji::GameObject* ownerPtr)
 	: Component(ownerPtr)
@@ -150,6 +151,14 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 		PickUp* pickUp = dynamic_cast<PickUp*>(subject);
 
 		const int value = pickUp->GetValue();
+		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
+		break;
+	}
+	case MessageTypesDerived::FRUIT_COLLISION:
+	{
+		Fruit* fruit = dynamic_cast<Fruit*>(subject);
+
+		const int value = fruit->GetValue();
 		GetOwner()->GetComponent<ScoreCounter>()->IncreaseScore(value);
 		break;
 	}

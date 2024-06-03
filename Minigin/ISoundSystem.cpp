@@ -22,7 +22,7 @@ namespace diji
             soundEffect = ResourceManager::GetInstance().LoadSoundEffect("pacman_death.wav");
             break;
         case SoundId::PacmanEatFruit:
-            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("pacman_eat_fruit.wav");
+            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("eat_fruit.wav");
             break;
         case SoundId::PelletPickUp:
             soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_1.wav");
@@ -47,6 +47,9 @@ namespace diji
 		case SoundId::GameStart:
 			music = ResourceManager::GetInstance().LoadMusic("game_start.wav");
 			repeat = true;
+			break;
+		case SoundId::ExtraLife:
+			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("extend.wav");
 			break;
         default:
             break;

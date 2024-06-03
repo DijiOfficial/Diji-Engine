@@ -51,7 +51,6 @@ namespace diji
 	{
 	public:
 		bool ProcessInput();
-		
 		template<typename T, typename... Args>
 			requires std::derived_from<T, GameActorCommands>
 		void BindCommand(PlayerIdx playerIdx, KeyState state, typename Input::InputType input, GameObject* actor, Args... args)
@@ -62,7 +61,6 @@ namespace diji
 			}
 			m_CommandsUPtrMap.emplace(state, std::make_pair(Input(input), PlayerCommand{ playerIdx, std::make_unique<T>(actor, std::forward<Args>(args)...) }));
 		}
-		
 	private:
 		struct PlayerCommand
 		{

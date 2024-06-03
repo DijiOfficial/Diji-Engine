@@ -36,15 +36,16 @@ namespace diji
 
 		virtual void RenderFrame() const;
 		virtual void UpdateText();
+		virtual void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
 		void DisableRender() { m_Render = false; }
 		void EnableRender() { m_Render = true; }
 		void EnableHitbox() { m_DisplayHitbox = true; }
 		void DisableHitbox() { m_DisplayHitbox = false; }
 		void SetIsShape() { m_IsShape = true; }
 		void UpdateShape(const Rectf& shape) { m_ShapeInfo.rect = shape; }
-		void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
 	protected:
 		int m_Scale = 1;
+		bool m_Render = true;
 	private:
 		Transform* m_TransformCompPtr;
 		Texture2D* m_TexturePtr;
@@ -53,7 +54,6 @@ namespace diji
 
 		ShapeInfo m_ShapeInfo;
 
-		bool m_Render = true;
 		bool m_DisplayHitbox = false;
 		bool m_IsShape = false;
 	};

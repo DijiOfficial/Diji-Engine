@@ -77,12 +77,47 @@ void pacman::LevelCounterRender::Init()
 void pacman::LevelCounterRender::RenderFrame() const
 {
     const glm::vec3 pos = [this]()
-        {
-            if (m_TransformCompPtr)
-                return m_TransformCompPtr->GetPosition();
-            else
-                return glm::vec3{ 0, 0, 0 };
-        }();
+    {
+        if (m_TransformCompPtr)
+            return m_TransformCompPtr->GetPosition();
+        else
+            return glm::vec3{ 0, 0, 0 };
+    }();
+    
+    diji::Renderer::GetInstance().RenderTexture(*m_Texture2DCompPtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame(), m_Scale, 16);
+}
 
+void pacman::FruitRender::Init()
+{
+    m_TextCompPtr = GetOwner()->GetComponent<diji::Text>();
+    m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
+    m_TextureCompPtr = GetOwner()->GetComponent<diji::Texture>();
+    m_Texture2DCompPtr = m_TextureCompPtr->GetTexturePtr();
+    m_Text2DCompPtr = m_TextCompPtr->GetTexture();
+}
+
+void pacman::FruitRender::RenderFrame() const
+{
+    if (not m_Render)
+        return;
+
+    const glm::vec3 pos = 
+    [this]()
+    {
+        if (m_TransformCompPtr)
+            return m_TransformCompPtr->GetPosition();
+        else
+            return glm::vec3{ 0, 0, 0 };
+    }();
+
+    if (m_RenderText)
+        diji::Renderer::GetInstance().RenderTexture(*m_Text2DCompPtr, pos.x - (m_Text2DCompPtr->GetSize().x + m_TextureCompPtr->GetWidth()) * 0.5f, pos.y + m_Text2DCompPtr->GetSize().y *0.5f, m_Scale);
+	else
         diji::Renderer::GetInstance().RenderTexture(*m_Texture2DCompPtr, pos.x, pos.y, m_TextureCompPtr->GetWidth(), m_TextureCompPtr->GetHeight(), m_TextureCompPtr->GetFrame(), m_Scale, 16);
+    
+}
+
+void pacman::FruitRender::UpdateText()
+{
+    m_Text2DCompPtr = m_TextCompPtr->GetTexture();
 }

@@ -1,6 +1,11 @@
 #include "Collision.h"
 #include "Collider.h"
 
+void diji::Collision::Reset()
+{
+	m_Colliders.clear();
+}
+
 bool diji::Collision::ParseLevelSVG(const std::string& file, const int yAdjust)
 {
 	return SVGParser::GetVerticesFromSvgFile(file, m_LevelCollider, yAdjust);
