@@ -77,7 +77,6 @@ void pacman::AI::Update()
 }
 void pacman::AI::FixedUpdate()
 {
-	//todo: fix collision not always working
 	//todo: make state machine for AI
 	if (m_PauseAI)
 		return;
@@ -85,7 +84,7 @@ void pacman::AI::FixedUpdate()
 	const auto& currentMovement = m_TransformCompPtr->GetMovement();
 
 	const auto& shape = CalculateNewPosition(currentMovement);
-	if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+	if (CheckIfDirectionIsValid(currentMovement) and not diji::Collision::GetInstance().IsCollidingWithWorld(shape))
 	{
 		m_TransformCompPtr->SetPosition(shape.left, shape.bottom);
 		if (m_PreviousMovement != currentMovement)
@@ -328,6 +327,45 @@ void pacman::AI::Reset()
 	m_TextureCompPtr->SetAnimationTime(0.3f);
 	//Reset the collider to avoid collision in the next frame
 	m_ColliderCompPtr->Update();
+}
+
+bool pacman::AI::CheckIfDirectionIsValid(const diji::Movement& movement)
+{
+	const float rayLength = 20.0f;
+	const auto& playerShape = m_ColliderCompPtr->GetCollisionBox();
+	const glm::vec2 playerCenter(playerShape.left + playerShape.width * 0.5f, playerShape.bottom + playerShape.height * 0.5f);
+
+	// Determine the movement direction vector
+	const glm::vec2 movementVector = m_TransformCompPtr->Get2DMovementVector(movement, rayLength);
+
+	// Calculate the corner points of the player shape
+	glm::vec2 rayStart1, rayStart2;
+
+	if (movement == diji::Movement::Up || movement == diji::Movement::Down)
+	{
+		// Vertical movement (Up or Down)
+		rayStart1 = glm::vec2(playerShape.left, playerCenter.y); // Left center
+		rayStart2 = glm::vec2(playerShape.left + playerShape.width, playerCenter.y); // Right center
+	}
+	else
+	{
+		// Horizontal movement (Left or Right)
+		rayStart1 = glm::vec2(playerCenter.x, playerShape.bottom); // Bottom center
+		rayStart2 = glm::vec2(playerCenter.x, playerShape.bottom + playerShape.height); // Top center
+	}
+
+	// Calculate the end points of the rays
+	const glm::vec2 rayEnd1 = rayStart1 + movementVector;
+	const glm::vec2 rayEnd2 = rayStart2 + movementVector;
+
+	// Check for collision with each ray
+	if (diji::Collision::GetInstance().IsCollidingWithWorld(rayStart1, rayEnd1) ||
+		diji::Collision::GetInstance().IsCollidingWithWorld(rayStart2, rayEnd2))
+	{
+		return false; // Movement is invalid if any ray intersects a wall
+	}
+
+	return true; // Movement is valid if no collision is detected
 }
 
 //const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)

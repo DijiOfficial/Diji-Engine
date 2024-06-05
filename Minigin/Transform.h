@@ -38,6 +38,7 @@ namespace diji
 		Movement GetLookingDirection() const { return m_LookingDirection; };
 		glm::vec3 GetMovementVector(const float value) const;
 		glm::vec2 Get2DMovementVector(const float value) const;
+		glm::vec2 Get2DMovementVector(const Movement& movement, const float value) const;
 
 		mutable glm::vec2 m_target = { -2, -2 };
 		mutable glm::vec2 blinky = { -2, -2 };

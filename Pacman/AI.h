@@ -53,6 +53,7 @@ namespace pacman {
 
 		bool IsGhostFrightened() const;
 		void Reset();
+		bool CheckIfDirectionIsValid(const diji::Movement& movement);
 	};
 }
 

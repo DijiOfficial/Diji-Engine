@@ -28,15 +28,19 @@
 
 using namespace diji;
 
+namespace loader
+{
+	constexpr glm::vec2 VIEWPORT{ 452, 608 };
+}
+
 void Loader::PacmanMenu()
 {
-	constexpr glm::vec2 viewport{ 452, 608 };
 
 	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
 
 	auto menuUI = menuScene->CreateGameObject("menuUI"); //will handle the drawings and AI part of the menu
-	menuUI->AddComponents<Transform>(viewport.x * 0.5f, viewport.y * 0.5f);
+	menuUI->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y * 0.5f);
 	menuUI->AddComponents<pacman::Menu>();
 	const ShapeInfo shapeInfo = { Rectf{0, 0, 0, 0}, SDL_Color{235, 235, 235}, 1 };
 	menuUI->AddComponents<Render>(shapeInfo);
@@ -68,28 +72,32 @@ void Loader::PacmanMenu()
 
 }
 
-void Loader::PacmanLevel()
+void Loader::CommonGameAssets(Scene* &scene)
 {
-	constexpr glm::vec2 viewport{ 452, 608 };
-
-	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::LEVEL));
-	auto& input = InputManager::GetInstance();
-	//input.Reset();
-	//Collision::GetInstance().Reset();
-
-	//Background
 	auto background = scene->CreateGameObject("A_background");
 	background->AddComponents<Texture>("BackgroundLevel.png");
 	background->AddComponents<Transform>(0, 78);
 	background->AddComponents<Render>(2);
 
-	//todo: ReadyText should spawn when player respawns
-	//todo: Add Fruits
-	//todo: add lives when 4 ghost eatne?
+	auto pelletCounter = scene->CreateGameObject("pelletCounter");
+	pelletCounter->AddComponents<pacman::PelletObserver>();
+	pelletCounter->AddComponents<pacman::PelletCounter>();
+
+	auto player = scene->CreateGameObject("player");
+	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
+	player->GetComponent<Texture>()->SetRotation(true);
+	player->AddComponents<Transform>(214, 439);
+	player->AddComponents<Render>(2);
+	player->AddComponents<pacman::HealthCounter>(4);
+	player->AddComponents<pacman::ScoreCounter>(0);
+	player->AddComponents<Collider>(15, 15);
+	player->AddComponents<pacman::AI>();
+	player->GetComponent<Render>()->DisableRender();
+	player->GetComponent<Texture>()->PauseAnimation();
 #pragma region LevelIntro
 	const auto& font = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
 	auto levelIntro = scene->CreateGameObject("levelIntro");
-	levelIntro->AddComponents<Transform>(viewport.x * 0.5f, 250.f);
+	levelIntro->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 250.f);
 	levelIntro->AddComponents<pacman::LevelIntro>();
 
 	auto PlayerText = scene->CreateGameObject("playerTextIntro");
@@ -106,25 +114,6 @@ void Loader::PacmanLevel()
 	readyText->AddComponents<Render>();
 	readyText->SetParent(levelIntro, false);
 #pragma endregion
-
-	auto pelletCounter = scene->CreateGameObject("pelletCounter");
-	pelletCounter->AddComponents<pacman::PelletObserver>();
-	pelletCounter->AddComponents<pacman::PelletCounter>();
-
-	//auto levelCounter = scene->CreateGameObject("levelCounter");
-	//levelCounter->AddComponents<pacman::LevelObserver>();
-
-	auto player = scene->CreateGameObject("player");
-	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
-	player->GetComponent<Texture>()->SetRotation(true);
-	player->AddComponents<Transform>(214, 439);
-	player->AddComponents<Render>(2);
-	player->AddComponents<pacman::HealthCounter>(5);
-	player->AddComponents<pacman::ScoreCounter>(0);
-	player->AddComponents<Collider>(15, 15);
-	player->AddComponents<pacman::AI>();
-	player->GetComponent<Render>()->DisableRender();
-	player->GetComponent<Texture>()->PauseAnimation();
 #pragma region Ghosts
 	auto GhostTimers = scene->CreateGameObject("ghostTimers");
 	GhostTimers->AddComponents<pacman::GhostsTimers>();
@@ -156,7 +145,7 @@ void Loader::PacmanLevel()
 	Inky->AddComponents<pacman::GhostCollision>(player);
 	Inky->GetComponent<Render>()->DisableRender();
 
-	auto Clyde = scene->CreateGameObject("z_CLyde");
+	auto Clyde = scene->CreateGameObject("z_Clyde");
 	Clyde->AddComponents<Texture>("Clyde.png", 15, 15, 2);
 	Clyde->AddComponents<Transform>(244, 300);
 	Clyde->AddComponents<Render>(2);
@@ -178,10 +167,6 @@ void Loader::PacmanLevel()
 	InkyAI->SetGhostsVector(ghostAIs);
 	ClydeAI->SetGhostsVector(ghostAIs);
 #pragma endregion
-	pacman::PickUpLoader pickUpLoader{ player, ghosts, pelletCounter };
-	//PickUpLoader::GetInstance().Initialize(player);
-
-	//make the hud it's own scene?
 #pragma region HUD
 	const auto& smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
 	const auto& textFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
@@ -202,13 +187,13 @@ void Loader::PacmanLevel()
 	playerText->SetParent(HUD, false);
 
 	auto highScoreText = scene->CreateGameObject("highScoreTextHUD");
-	highScoreText->AddComponents<Transform>(viewport.x * 0.5f - 10, 0.f);
+	highScoreText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 10, 0.f);
 	highScoreText->AddComponents<Text>("HIGH SCORE", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	highScoreText->AddComponents<Render>();
 	highScoreText->SetParent(HUD, false);
 
 	auto highScoreDisplay = scene->CreateGameObject("highScoreDisplayHUD");
-	highScoreDisplay->AddComponents<Transform>(viewport.x * 0.5f - 75.f, 20.f);
+	highScoreDisplay->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 75.f, 20.f);
 	highScoreDisplay->AddComponents<pacman::HighScoreObserver>("  ", textFont, SDL_Color{ 255, 255, 255, 255 }, false);
 	highScoreDisplay->AddComponents<Render>();
 	highScoreDisplay->SetParent(HUD, false);
@@ -242,8 +227,8 @@ void Loader::PacmanLevel()
 	fruit->AddComponents<Collider>(16, 16);
 	fruit->AddComponents<pacman::Fruit>(player, pelletCounter, levelCounterHUD);
 
-	
 #pragma region Commands
+	auto& input = InputManager::GetInstance();
 
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_W, player, Movement::Up);
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
@@ -257,9 +242,8 @@ void Loader::PacmanLevel()
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 	input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
 
-	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_T, pelletCounter);
+	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_F1, pelletCounter);
 #pragma endregion
-
 #pragma region Observers
 	//todo: reset audio as well and add quick reset animation
 	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), player->GetComponent<pacman::AI>());
@@ -299,34 +283,101 @@ void Loader::PacmanLevel()
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Clyde->GetComponent<pacman::Clyde>());
 #pragma endregion
 
-	
-
-
+	//optional
 	auto fpsCounter = scene->CreateGameObject("fpsCounter");
 	fpsCounter->AddComponents<Text>("0 FPS", smallFont);
 	fpsCounter->AddComponents<FPSCounter>();
-	fpsCounter->AddComponents<Transform>(0, static_cast<int>(viewport.y - 20));
+	fpsCounter->AddComponents<Transform>(0, static_cast<int>(loader::VIEWPORT.y - 20));
 	fpsCounter->AddComponents<Render>();
+}
+
+void Loader::PacmanLevel()
+{
+	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::LEVEL));
+
+	CommonGameAssets(scene);
+	//input.Reset();
+	//Collision::GetInstance().Reset();
+
+	//todo: ReadyText should spawn when player respawns
+	//todo: Fruits display the wrong fruit when at least one fruit is eatne?
+	//todo: add lives when 4 ghost eatne?
+	//todo: highscore should display other scoresa
+
+	//todo: should be different in every mode
+	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
+
+	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter") };
+
+	//todo: fruit add a second player with function
+}
+
+void Loader::VersusLevel()
+{
+	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::VERSUS));
+
+	CommonGameAssets(scene);
+
+	//const auto& Blinky = scene->GetGameObject("z_Blinky");
+
+	//auto Blinky = scene->CreateGameObject("z_Blinky");
+	//Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
+	//Blinky->AddComponents<Transform>(212, 247);
+	//Blinky->AddComponents<Render>(2);
+	//Blinky->AddComponents<Collider>(15, 15);
+	//Blinky->AddComponents<pacman::RedAI>(player, pelletCounter, GhostTimers);
+	//Blinky->AddComponents<pacman::GhostCollision>(player);
+	//Blinky->GetComponent<Render>()->DisableRender();
+
+	auto player2 = scene->CreateGameObject("player2");
+	player2->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
+	player2->GetComponent<Texture>()->SetRotation(true);
+	player2->AddComponents<Transform>(214, 439);
+	player2->AddComponents<Render>(2);
+	player2->AddComponents<pacman::HealthCounter>(4);
+	player2->AddComponents<pacman::ScoreCounter>(0);
+	player2->AddComponents<Collider>(15, 15);
+	player2->AddComponents<pacman::AI>();
+	player2->GetComponent<Render>()->DisableRender();
+	player2->GetComponent<Texture>()->PauseAnimation();
+}
+
+void Loader::CoopLevel()
+{
+	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::COOP));
+
+	CommonGameAssets(scene);
+
+	auto player2 = scene->CreateGameObject("player2");
+	player2->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
+	player2->GetComponent<Texture>()->SetRotation(true);
+	player2->AddComponents<Transform>(214, 439);
+	player2->AddComponents<Render>(2);
+	player2->AddComponents<pacman::HealthCounter>(4);
+	player2->AddComponents<pacman::ScoreCounter>(0);
+	player2->AddComponents<Collider>(15, 15);
+	player2->AddComponents<pacman::AI>();
+	player2->GetComponent<Render>()->DisableRender();
+	player2->GetComponent<Texture>()->PauseAnimation();
 }
 
 void Loader::HighScoreMenu()
 {
-	constexpr glm::vec2 viewport{ 452, 608 };
 	const auto& scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::GAMEOVER));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
 
 	auto gameOverText = scene->CreateGameObject("gameOverText");
-	gameOverText->AddComponents<Transform>(viewport.x * 0.5f, 120.f);
+	gameOverText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 120.f);
 	gameOverText->AddComponents<Text>("GAME OVER!", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	gameOverText->AddComponents<Render>();
 
 	auto enterYourName = scene->CreateGameObject("enterYourNameText");
-	enterYourName->AddComponents<Transform>(viewport.x * 0.5f, 200.f);
+	enterYourName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 200.f);
 	enterYourName->AddComponents<Text>("ENTER YOUR NAME:", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	enterYourName->AddComponents<Render>();
 
 	auto enterName = scene->CreateGameObject("name");
-	enterName->AddComponents<Transform>(viewport.x * 0.5f, 260.f);
+	enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 260.f);
 	enterName->AddComponents<Text>("AAA", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	enterName->AddComponents<pacman::EnterName>(SceneManager::GetInstance().GetScene(static_cast<int>(pacman::GameState::LEVEL))->GetGameObject("player"));
 	enterName->AddComponents<pacman::CustomTextRender>();

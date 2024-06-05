@@ -67,3 +67,20 @@ glm::vec2 diji::Transform::Get2DMovementVector(const float value) const
 		return glm::vec2(0, 0);
 	}
 }
+
+glm::vec2 diji::Transform::Get2DMovementVector(const Movement& movement, const float value) const
+{
+	switch (movement)
+	{
+	case Movement::Up:
+		return glm::vec2(0, -value);
+	case Movement::Down:
+		return glm::vec2(0, value);
+	case Movement::Left:
+		return glm::vec2(-value, 0);
+	case Movement::Right:
+		return glm::vec2(value, 0);
+	default:
+		return glm::vec2(0, 0);
+	}
+}
