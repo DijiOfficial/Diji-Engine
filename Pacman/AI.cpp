@@ -49,7 +49,7 @@ void pacman::AI::Update()
 			m_TextureCompPtr->SetRotationAngle(0);
 			m_TextureCompPtr->ResumeAnimation();
 
-			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanDie, -1);
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest("pacman_death.wav", false, -1);
 			m_playeDeath = false;
 		}
 		if (not m_playeDeath and m_PauseTime >= TOTAL_WAIT)

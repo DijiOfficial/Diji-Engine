@@ -11,11 +11,11 @@ pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* playe
 	, m_Value{ value }
 {
 	if (value == 10)
-		m_SoundId = diji::SoundId::PelletPickUp;
+		m_SoundId = SoundId::PelletPickUp;
 	else if (value == 50)
-		m_SoundId = diji::SoundId::PowerPellet;
+		m_SoundId = SoundId::PowerPellet;
 	else
-		m_SoundId = diji::SoundId::InvalidSoundId;
+		m_SoundId = SoundId::InvalidSoundId;
 	
 	m_PelletCounter = pelletCounter ? pelletCounter->GetComponent<PelletObserver>() : nullptr;
 	m_PlayerColliderPtr = player->GetComponent<diji::Collider>();
@@ -104,17 +104,17 @@ void pacman::PickUp::HandleCollision()
 
 	switch (m_SoundId)
 	{
-	case diji::SoundId::PelletPickUp:
+	case SoundId::PelletPickUp:
 		if ((m_PelletCounter->GetPelletCount() & 1) == 0)
-			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PelletPickUp, -1);
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest("munch_1.wav", false, -1);
 		else
-			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PelletPickUp2, -1);
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest("munch_2.wav", false, -1);
 		
 		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION));
 		break;
 
-	case diji::SoundId::PowerPellet:
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(m_SoundId, -1);
+	case SoundId::PowerPellet:
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("power_pellet.wav", true, -1);
 		
 		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION));
 		break;

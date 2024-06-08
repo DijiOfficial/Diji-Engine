@@ -116,7 +116,7 @@ void pacman::Fruit::HandleCollision()
 	m_Timer = 0.f;
 
 	diji::Collision::GetInstance().RemoveCollider(owner->GetComponent<diji::Collider>());
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PacmanEatFruit, -1);
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest("eat_fruit.wav", false, -1);
 	Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::FRUIT_COLLISION));
 	
 }

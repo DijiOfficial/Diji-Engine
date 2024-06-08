@@ -93,7 +93,7 @@ void pacman::GhostAI::Update()
 		{
 			m_IsFrightened = false;
 			m_PowerUpTimer = 0.f;
-			diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
 		}
 	}
 }

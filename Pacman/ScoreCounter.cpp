@@ -50,6 +50,6 @@ void pacman::ScoreCounter::CheckForExtraLife()
     {
         m_Extralife = false;
         GetOwner()->GetComponent<HealthCounter>()->AddLife();
-        diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::ExtraLife, -1);
+        diji::ServiceLocator::GetSoundSystem().AddSoundRequest("extend.wav", false, -1);
     }
 }

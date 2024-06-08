@@ -191,7 +191,7 @@ void pacman::Eaten::OnEnter(const GhostAI* ghost)
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("GhostEaten.png");
 	std::swap(m_Step, m_EatenSpeed);
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::GhostEaten, -1);
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest("retreating.wav", true, -1);
 }
 
 void pacman::Eaten::OnExit(const GhostAI*)
@@ -246,11 +246,11 @@ void pacman::Respawn::OnExit(const GhostAI* ghost)
 	
 	if (ghost->IsLastGhostEaten())
 	{
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
 		ghost->SetIsLastGhostEaten(false);
 	}
 	else if(not otherGhostEaten) //todo: check if sound playing is music or power pellet or check if shit is done or some
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::PowerPellet, -1);
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("power_pellet.wav", true, -1);
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)
@@ -529,7 +529,7 @@ std::unique_ptr<pacman::GhostState> pacman::ClydeChase::Execute(const GhostAI* g
 #pragma region Dying
 void pacman::Dying::OnEnter(const GhostAI* ghost)
 {
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::EatGhost, -1);
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest("eat_ghost.wav", false, -1);
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture(std::to_string(m_Points) + ".png");
 	texture->SetNrOfFrames(1);

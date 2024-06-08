@@ -13,6 +13,12 @@ namespace diji
 
 namespace pacman
 {
+	enum class SoundId 
+	{
+		PelletPickUp,	
+		PowerPellet,
+		InvalidSoundId
+	};
 	class PelletObserver;
 	class PickUp final : public diji::Component, public diji::Subject, public diji::IObserver
 	{
@@ -36,7 +42,7 @@ namespace pacman
 	private:
 		int m_PowerUpInvisibleFrames = 0;
 		const int m_Value;
-		diji::SoundId m_SoundId;
+		SoundId m_SoundId;
 		PelletObserver* m_PelletCounter;
 		diji::Collider* m_PlayerColliderPtr;
 		diji::Collider* m_Player2ColliderPtr;

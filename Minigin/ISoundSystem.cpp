@@ -9,51 +9,15 @@ namespace diji
 {
 	std::unique_ptr<ISoundSystem> ServiceLocator::_ss_instance{ std::make_unique<NullSoundSystem>() };
 
-	//todo: move this to pacman
-	void SDLISoundSystem::PlaySound(const SoundId sound, const int volume) const
+	void SDLISoundSystem::PlaySound(const std::string& audio, bool isMusic, const int volume) const
 	{
         SoundEffect* soundEffect = nullptr;
 		Music* music = nullptr;
-		bool repeat = false;
 
-        switch (sound)
-        {
-        case SoundId::PacmanDie:
-            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("pacman_death.wav");
-            break;
-        case SoundId::PacmanEatFruit:
-            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("eat_fruit.wav");
-            break;
-        case SoundId::PelletPickUp:
-            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_1.wav");
-            break;
-        case SoundId::PelletPickUp2:
-            soundEffect = ResourceManager::GetInstance().LoadSoundEffect("munch_2.wav");
-            break;
-		case SoundId::PowerPellet:
-			music = ResourceManager::GetInstance().LoadMusic("power_pellet.wav");
-			repeat = true;
-			break;
-		case SoundId::EatGhost:
-			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("eat_ghost.wav");
-			break;
-		case SoundId::Music:
-			music = ResourceManager::GetInstance().LoadMusic("siren_1.wav");
-			repeat = true;
-			break;
-		case SoundId::GhostEaten:
-			music = ResourceManager::GetInstance().LoadMusic("retreating.wav");
-			break;
-		case SoundId::GameStart:
-			music = ResourceManager::GetInstance().LoadMusic("game_start.wav");
-			repeat = true;
-			break;
-		case SoundId::ExtraLife:
-			soundEffect = ResourceManager::GetInstance().LoadSoundEffect("extend.wav");
-			break;
-        default:
-            break;
-        }
+		if (isMusic)
+			music = ResourceManager::GetInstance().LoadMusic(audio);
+		else
+			soundEffect = ResourceManager::GetInstance().LoadSoundEffect(audio);
 
         if (soundEffect)
         {
@@ -63,7 +27,7 @@ namespace diji
 
 		if (music)
 		{
-			music->Play(repeat);
+			music->Play(true);
 			music->SetVolume(volume);
 		}
 	}
@@ -86,21 +50,21 @@ namespace diji
 		}
 	}
 
-	void SDLISoundSystem::AddSoundRequest(SoundId sound, int volume)
+	void SDLISoundSystem::AddSoundRequest(const std::string& audio, bool isMusic, int volume)
 	{
 		std::lock_guard<std::mutex> lock(soundMutex_);
 		if (not m_SoundQueue.empty())
 		{
 			auto pendingSound = m_SoundQueue.front();
-			if (sound == pendingSound.first) // check volume and set the highest volume
+			if (audio == pendingSound.second) // check volume and set the highest volume
 				return;
 		}
 
-		m_SoundQueue.push({ sound, volume });
+		m_SoundQueue.push({ { isMusic, volume }, audio });
 		condition_.notify_one();
 	}
 
-	std::pair<SoundId, int> SDLISoundSystem::GetNextSoundRequest()
+	std::pair<std::pair<bool, int>, std::string> SDLISoundSystem::GetNextSoundRequest()
 	{
 		std::unique_lock<std::mutex> lock(soundMutex_);
 
@@ -108,7 +72,7 @@ namespace diji
 		condition_.wait(lock, [this] { return !m_SoundQueue.empty() || not m_IsRunning; });
 
 		if (!m_IsRunning)
-			return { SoundId::InvalidSoundId, 0 };
+			return { { false, 0 }, "invalid"};
 
 		auto request = m_SoundQueue.front();
 		m_SoundQueue.pop();
@@ -119,18 +83,18 @@ namespace diji
 		while (m_IsRunning)
 		{
 			auto request = GetNextSoundRequest();
-			PlaySound(request.first, request.second);
+			PlaySound(request.second, request.first.first, request.first.second);
 		}
 	}
 
-	void NullSoundSystem::AddSoundRequest(SoundId, int)
+	void NullSoundSystem::AddSoundRequest(const std::string& , bool , int)
 	{
 		std::cout << "No Sound System available\n";
 	}
 
-	void LoggingSoundSystem::AddSoundRequest(SoundId sound, int volume)
+	void LoggingSoundSystem::AddSoundRequest(const std::string& audio, bool isMusic, int volume)
 	{
-		_real_ss->AddSoundRequest(sound, volume);
-		std::cout << "Adding sound request " << static_cast<int>(sound) << " at volume " << volume << std::endl;
+		_real_ss->AddSoundRequest(audio, isMusic, volume);
+		std::cout << "Adding sound request " << audio << " at volume " << volume << std::endl;
 	}
 }

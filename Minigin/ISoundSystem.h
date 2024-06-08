@@ -4,33 +4,17 @@
 #include <mutex>
 namespace diji 
 {
-	enum class SoundId
-	{
-		InvalidSoundId = -1,
-		None,
-		PacmanDie,
-		PacmanEatFruit,
-		PelletPickUp,
-		PelletPickUp2,
-		PowerPellet,
-		EatGhost,
-		Music,
-		GhostEaten,
-		GameStart,
-		ExtraLife,
-	};
-
 	class ISoundSystem
 	{
 	public:
 		virtual ~ISoundSystem() noexcept = default;
-		virtual void AddSoundRequest(SoundId sound, int volume) = 0;
+		virtual void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) = 0;
 	};
 
 	class NullSoundSystem final : public ISoundSystem
 	{
 	public:
-		void AddSoundRequest(SoundId, int) override;
+		void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) override;
 	};
 
 	class ServiceLocator final
@@ -51,16 +35,16 @@ namespace diji
 	public:
 		SDLISoundSystem();
 		~SDLISoundSystem() noexcept;
-		void AddSoundRequest(SoundId sound, int volume = -1) override;
+		void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) override;
 		
 	private:
-		void PlaySound(const SoundId sound, const int volume) const;
-		std::pair<SoundId, int> GetNextSoundRequest();
+		void PlaySound(const std::string& audio, bool isMusic, const int volume) const;
+		std::pair<std::pair<bool, int>, std::string>  GetNextSoundRequest();
 	
 		void ProcessSounds();
 
 		std::jthread m_SoundThread;
-		std::queue<std::pair<SoundId, int>> m_SoundQueue;
+		std::queue<std::pair<std::pair<bool, int>, std::string>> m_SoundQueue;
 		std::mutex soundMutex_;
 		bool m_IsRunning = false;
 		// Allows threads to synchronize their execution based on certain conditions. 
@@ -74,7 +58,7 @@ namespace diji
 		explicit LoggingSoundSystem(std::unique_ptr<ISoundSystem>&& ss) : _real_ss{ std::move(ss) } {};
 		virtual ~LoggingSoundSystem() noexcept override = default;
 
-		void AddSoundRequest(SoundId sound, int volume) override;
+		void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) override;
 	private:
 		std::unique_ptr<ISoundSystem> _real_ss;
 	};

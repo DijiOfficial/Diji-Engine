@@ -10,7 +10,7 @@ void pacman::LevelIntro::Update()
 
 	if (not m_MusicStarted)
 	{
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::GameStart, -1);
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("game_start.wav", true, -1);
 		m_MusicStarted = true;
 	}
 
@@ -24,7 +24,7 @@ void pacman::LevelIntro::Update()
 
 	if (m_Timer >= 4.2f)
 	{
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest(diji::SoundId::Music, -1);
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
 		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_START));
 		m_StartLevel = true;
 	}
