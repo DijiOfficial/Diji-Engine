@@ -61,7 +61,6 @@ diji::Scene* diji::SceneManager::GetScene(const int id) const
 
 diji::Scene* diji::SceneManager::CreateScene(const int id)
 {
-	// Create a new Scene and overwrite any existing one
 	m_ScenesUPtrMap[id] = std::make_unique<Scene>();
 	return m_ScenesUPtrMap[id].get();
 }

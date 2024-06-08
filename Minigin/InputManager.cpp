@@ -98,7 +98,6 @@ void diji::InputManager::BindController(int controllerIdx)
 	}
 }
 
-
 void diji::InputManager::ProcessControllerInput()
 {	
 	for (const int index : m_ControllersIdxs)

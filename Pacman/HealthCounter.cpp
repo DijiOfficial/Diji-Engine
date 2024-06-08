@@ -3,6 +3,8 @@
 #include "Observers.h"
 #include "SceneManager.h"
 #include "GameState.h"
+#include "GameLoader.h"
+#include "ScoreCounter.h"
 
 pacman::HealthCounter::HealthCounter(diji::GameObject* ownerPtr, int health)
     : Component(ownerPtr)
@@ -18,8 +20,11 @@ void pacman::HealthCounter::DecreaseHealth()
 
     if (m_Health < 0)
     {
+        const auto& scoreCounter = GetOwner()->GetComponent<ScoreCounter>();
+        if (scoreCounter->IsPlayer2())
+            return;
         diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(GameState::GAMEOVER));
-        //diji::SceneManager::GetInstance().TranferScene(static_cast<int>(GameState::LEVEL), static_cast<int>(GameState::GAMEOVER), GetOwner());
+        Loader::HighScoreMenu(scoreCounter->GetScore());
         return;
     }
 

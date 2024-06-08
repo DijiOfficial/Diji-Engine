@@ -61,6 +61,7 @@ namespace diji
 			}
 			m_CommandsUPtrMap.emplace(state, std::make_pair(Input(input), PlayerCommand{ playerIdx, std::make_unique<T>(actor, std::forward<Args>(args)...) }));
 		}
+		void ResetCommands() { m_CommandsUPtrMap.clear(); };
 	private:
 		struct PlayerCommand
 		{

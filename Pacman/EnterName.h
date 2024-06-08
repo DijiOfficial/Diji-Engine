@@ -15,7 +15,7 @@ namespace pacman
 	class EnterName final : public diji::Component
 	{
 	public:
-		EnterName(diji::GameObject* ownerPtr, diji::GameObject* player);
+		EnterName(diji::GameObject* ownerPtr, int score);
 		~EnterName() noexcept override = default;
 
 		void Init() override;
@@ -24,13 +24,14 @@ namespace pacman
 
 		void MoveLetter(diji::Movement movement);
 		int GetCurrentIndex() const { return m_SelectedIndex; }
-	
+
 	private:
 		int m_SelectedIndex = 0;
 		std::string m_Name = "AAA";
 		bool m_IsDirty = false;
 		diji::Text* m_TextCompPtr = nullptr;
-		ScoreCounter* m_ScoreCounterCompPtr = nullptr;
+		//ScoreCounter* m_ScoreCounterCompPtr = nullptr;
+		int m_Score;
 	};
 }
 

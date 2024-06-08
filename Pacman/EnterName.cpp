@@ -7,10 +7,10 @@
 #include "SceneManager.h"
 #include "GameState.h"
 
-pacman::EnterName::EnterName(diji::GameObject* ownerPtr, diji::GameObject* player)
+pacman::EnterName::EnterName(diji::GameObject* ownerPtr, int score)
 	: diji::Component(ownerPtr)
 {
-	m_ScoreCounterCompPtr = player->GetComponent<ScoreCounter>();
+	m_Score = score;
 }
 
 void pacman::EnterName::Init()
@@ -49,7 +49,7 @@ void pacman::EnterName::MoveLetter(diji::Movement movement)
 		m_SelectedIndex %= 3;
 		break;
 	case diji::Movement::Idle:
-		ScoreBoard::GetInstance().AddScore(m_Name, m_ScoreCounterCompPtr->GetScore());
+		ScoreBoard::GetInstance().AddScore(m_Name, m_Score);
 		diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(GameState::MENU));
 		break;
 	default:

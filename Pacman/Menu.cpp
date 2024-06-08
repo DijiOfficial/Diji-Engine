@@ -14,23 +14,7 @@ void pacman::Menu::Update()
 
 	if (pStates[SDL_SCANCODE_RETURN])
 	{
-		GameState state = GameState::INVALID;
-		switch (m_SelectedIndex)
-		{
-		case 0:
-			state = GameState::LEVEL;
-			//Loader::PacmanLevel();
-			//diji::SceneManager::GetInstance().Init();
-			break;
-		case 1:
-			state = GameState::COOP;
-			break;
-		case 2:
-			state = GameState::VERSUS;
-			break;
-		}
-
-		diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(state));
+		ValidateChoice();
 		return;
 	}
 
@@ -42,14 +26,12 @@ void pacman::Menu::Update()
 
 	if ((pStates[SDL_SCANCODE_LEFT] or pStates[SDL_SCANCODE_A]) && !m_WasDownKey)
 	{
-		--m_SelectedIndex;
-		if (m_SelectedIndex < 0)
-			m_SelectedIndex = 2;
+		SwitchDown();
 		m_WasDownKey = true;
 	}
 	if ((pStates[SDL_SCANCODE_RIGHT] or pStates[SDL_SCANCODE_D]) && !m_WasUpKey)
 	{
-		m_SelectedIndex = (m_SelectedIndex + 1) % 3;
+		SwitchUp();
 		m_WasUpKey = true;
 	}
 
@@ -64,4 +46,39 @@ void pacman::Menu::Update()
 		m_Shape.left += 30.f;
 
 	GetOwner()->GetComponent<diji::Render>()->UpdateShape(m_Shape);
+}
+
+void pacman::Menu::ValidateChoice()
+{
+	GameState state = GameState::INVALID;
+	switch (m_SelectedIndex)
+	{
+	case 0:
+		state = GameState::LEVEL;
+		Loader::PacmanLevel();
+		//diji::SceneManager::GetInstance().Init();
+		break;
+	case 1:
+		state = GameState::COOP;
+		Loader::CoopLevel();
+		break;
+	case 2:
+		Loader::VersusLevel();
+		state = GameState::VERSUS;
+		break;
+	}
+
+	diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(state));
+}
+
+void pacman::Menu::SwitchDown()
+{
+	--m_SelectedIndex;
+	if (m_SelectedIndex < 0)
+		m_SelectedIndex = 2;
+}
+
+void pacman::Menu::SwitchUp()
+{
+	m_SelectedIndex = (m_SelectedIndex + 1) % 3;
 }

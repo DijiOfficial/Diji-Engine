@@ -15,6 +15,7 @@ namespace pacman
 	class EnterName;
 	class PelletCounter;
 	class GhostAI;
+	class Menu;
 
 	class Move final : public diji::GameActorCommands
 	{
@@ -27,6 +28,25 @@ namespace pacman
 	private:
 		diji::Movement m_Movement;
 		diji::Transform* m_TransformComponentPtr;
+	};
+
+	class MenuSwitch final : public diji::GameActorCommands
+	{
+	public:
+		enum class MenuButtons
+		{
+			Left,
+			Right,
+			Enter
+		};
+
+		MenuSwitch(diji::GameObject* actor, MenuButtons value);
+		~MenuSwitch() noexcept override = default;
+
+		void Execute() override;
+	private:
+		const MenuButtons m_Button;
+		pacman::Menu* m_MenuComponentPtr;	
 	};
 
 	class GhostSwitchState final : public diji::GameActorCommands

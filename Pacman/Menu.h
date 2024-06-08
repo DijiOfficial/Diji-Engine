@@ -14,6 +14,9 @@ namespace pacman
 		void Update() override;
 		void FixedUpdate() override {};
 
+		void ValidateChoice();
+		void SwitchUp();
+		void SwitchDown();
 	private:
 		diji::Rectf m_Shape{ 106.f, 304.f, 30.f, 30.f };
 		int m_SelectedIndex = 0;

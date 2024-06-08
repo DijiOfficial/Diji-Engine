@@ -29,6 +29,7 @@ namespace pacman
 		void IncreaseScore(const int score);
 		void SetAsPlayer2() { m_IsPlayer2 = true; }
 		int GetScore() const { return m_Score; }
+		bool IsPlayer2() const { return m_IsPlayer2; }
 
 	private:
 		int m_Score;

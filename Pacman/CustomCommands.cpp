@@ -9,7 +9,7 @@
 #include "GameState.h"
 #include "GhostAI.h"
 #include "PelletCounter.h"
-
+#include "Menu.h"
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
@@ -83,4 +83,33 @@ void pacman::GhostSwitchState::Execute()
 {
 	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
 		m_GhostAIComp->SetNextMovement(m_Movement);
+}
+
+pacman::MenuSwitch::MenuSwitch(diji::GameObject* actor, MenuButtons button)
+	: GameActorCommands{ actor }
+	, m_Button{ button }
+{
+	m_MenuComponentPtr = GetGameActor()->GetComponent<pacman::Menu>();
+}
+
+void pacman::MenuSwitch::Execute()
+{
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU))
+		return;
+
+	switch (m_Button)
+	{
+	case MenuButtons::Right:
+		m_MenuComponentPtr->SwitchUp();
+			break;
+	case MenuButtons::Left:
+		m_MenuComponentPtr->SwitchDown();
+		break;
+	case MenuButtons::Enter:
+		m_MenuComponentPtr->ValidateChoice();
+		break;
+
+	default:
+		break;
+	}
 }

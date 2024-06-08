@@ -35,7 +35,6 @@ namespace loader
 
 void Loader::PacmanMenu()
 {
-
 	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
 
@@ -70,10 +69,19 @@ void Loader::PacmanMenu()
 	pushStart->AddComponents<Render>();
 	pushStart->SetParent(menuUI, false);
 
+	auto& input = InputManager::GetInstance();
+
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::DPadLeft, menuUI, pacman::MenuSwitch::MenuButtons::Left);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::DPadRight, menuUI, pacman::MenuSwitch::MenuButtons::Right);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::Start, menuUI, pacman::MenuSwitch::MenuButtons::Enter);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::A, menuUI, pacman::MenuSwitch::MenuButtons::Enter);
+
 }
 
 void Loader::CommonGameAssets(Scene* &scene)
 {
+	Collision::GetInstance().Reset();
+
 	auto background = scene->CreateGameObject("A_background");
 	background->AddComponents<Texture>("BackgroundLevel.png");
 	background->AddComponents<Transform>(0, 78);
@@ -234,7 +242,7 @@ void Loader::CommonGameAssets(Scene* &scene)
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
-	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
+	//input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
 
 	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
 	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
@@ -403,8 +411,9 @@ void Loader::CoopLevel()
 #pragma endregion
 }
 
-void Loader::HighScoreMenu()
+void Loader::HighScoreMenu(int score)
 {
+	InputManager::GetInstance().ResetCommands();
 	const auto& scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::GAMEOVER));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
 
@@ -418,24 +427,24 @@ void Loader::HighScoreMenu()
 	enterYourName->AddComponents<Text>("ENTER YOUR NAME:", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	enterYourName->AddComponents<Render>();
 
-	//auto enterName = scene->CreateGameObject("name");
-	//enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 260.f);
-	//enterName->AddComponents<Text>("AAA", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
-	//enterName->AddComponents<pacman::EnterName>(SceneManager::GetInstance().GetScene(static_cast<int>(pacman::GameState::LEVEL))->GetGameObject("player"));
-	//enterName->AddComponents<pacman::CustomTextRender>();
+	auto enterName = scene->CreateGameObject("name");
+	enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 260.f);
+	enterName->AddComponents<Text>("AAA", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	enterName->AddComponents<pacman::EnterName>(score);
+	enterName->AddComponents<pacman::CustomTextRender>();
 
 	//input
-	//auto& input = InputManager::GetInstance();
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_W, enterName, Movement::Up);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_A, enterName, Movement::Left);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_S, enterName, Movement::Down);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_D, enterName, Movement::Right);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_UP, enterName, Movement::Up);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_LEFT, enterName, Movement::Left);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_DOWN, enterName, Movement::Down);
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RIGHT, enterName, Movement::Right);
+	auto& input = InputManager::GetInstance();
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_W, enterName, Movement::Up);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_A, enterName, Movement::Left);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_S, enterName, Movement::Down);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_D, enterName, Movement::Right);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_UP, enterName, Movement::Up);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_LEFT, enterName, Movement::Left);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_DOWN, enterName, Movement::Down);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RIGHT, enterName, Movement::Right);
 
-	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RETURN, enterName, Movement::Idle);
+	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RETURN, enterName, Movement::Idle);
 }
 
 void Loader::Load()
@@ -449,9 +458,9 @@ void Loader::Load()
 
 	PacmanMenu();
 	//PacmanLevel();
-	CoopLevel();
+	//CoopLevel();
 	//VersusLevel();
-	HighScoreMenu();
+	//HighScoreMenu();
 
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
