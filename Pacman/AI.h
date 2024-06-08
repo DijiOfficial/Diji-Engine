@@ -32,6 +32,7 @@ namespace pacman {
 		void FixedUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
 
+		void SetInitialMovementLeft() { m_PreviousMovement = diji::Movement::Left; m_SavedMovement = diji::Movement::Left; };
 		int GetGhostsEaten() const { return m_GhostsEaten; }
 		static constexpr float TOTAL_WIDTH = 452;
 	private:
@@ -51,7 +52,7 @@ namespace pacman {
 		bool m_IsDying = false;
 		bool m_playeDeath = true;
 
-		bool IsGhostFrightened() const;
+		bool IsGhostFrightened(diji::Subject* subject) const;
 		void Reset();
 		bool CheckIfDirectionIsValid(const diji::Movement& movement);
 	};

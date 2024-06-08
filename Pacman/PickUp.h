@@ -17,8 +17,8 @@ namespace pacman
 	class PickUp final : public diji::Component, public diji::Subject, public diji::IObserver
 	{
 	public:
-		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* pelletCounter, const int value);
-		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const int value);
+		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* player2, const diji::GameObject* pelletCounter, const int value);
+		PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* player2, const int value);
 		~PickUp() noexcept override = default;
 
 		PickUp(const PickUp& other) = delete;
@@ -39,6 +39,7 @@ namespace pacman
 		diji::SoundId m_SoundId;
 		PelletObserver* m_PelletCounter;
 		diji::Collider* m_PlayerColliderPtr;
+		diji::Collider* m_Player2ColliderPtr;
 		diji::Collider* m_OwnerColliderPtr;
 		diji::Render* m_RenderCompPtr;
 		bool m_IsPowerUp = false;

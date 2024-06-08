@@ -7,8 +7,7 @@
 #include "EnterName.h"
 #include "SceneManager.h"
 #include "GameState.h"
-
-//temp
+#include "GhostAI.h"
 #include "PelletCounter.h"
 
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
@@ -21,7 +20,7 @@ pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 
 void pacman::Move::Execute()
 {
-	if (diji::SceneManager::GetInstance().GetActiveSceneId() == static_cast<int>(GameState::LEVEL)) //todo: add other valid states
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
 		m_TransformComponentPtr->SetMovement(m_Movement);
 }
 
@@ -70,4 +69,18 @@ pacman::test::test(diji::GameObject* actor)
 void pacman::test::Execute()
 {
 	tester->test();
+}
+
+pacman::GhostSwitchState::GhostSwitchState(diji::GameObject* actor, diji::Movement movement)
+	: GameActorCommands{ actor }
+	, m_Movement{ movement }
+{
+	m_GhostAIComp = GetGameActor()->GetComponent<pacman::GhostAI>();
+	assert(m_GhostAIComp and "Move Command need to be initialized after GameObject Transform Component");
+}
+
+void pacman::GhostSwitchState::Execute()
+{
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
+		m_GhostAIComp->SetNextMovement(m_Movement);
 }

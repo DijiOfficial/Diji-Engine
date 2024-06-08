@@ -35,16 +35,6 @@ void diji::GameObject::Render() const
     if (m_RenderCompPtr) m_RenderCompPtr->RenderFrame();
 }
 
-void diji::GameObject::RemoveComponent(const Component& component)
-{
-	m_ComponentsPtrVec.erase(std::remove_if(m_ComponentsPtrVec.begin(), m_ComponentsPtrVec.end(),
-		[&](const auto& comp) 
-		{ 
-			return comp.get() == &component;
-		}),
-		m_ComponentsPtrVec.end());
-}
-
 void diji::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 {
     if (parent == m_ParentPtr || parent == this || IsChildOf(parent))

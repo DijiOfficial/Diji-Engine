@@ -2,7 +2,7 @@
 #include "Subject.h"
 #include "Component.h"
 #include "IObserver.h"
-
+#include <map>
 namespace diji
 {
 	enum class SoundId;
@@ -26,12 +26,14 @@ namespace pacman
 		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 		int GetValue() const { return m_Value; };
 		void HandleCollision();
+		void AddPlayer2Collider(diji::Collider* colliderPtr) { m_Player2ColliderPtr = colliderPtr; };
 
 	private:
 		int m_Value = 100;
 		PelletObserver* m_PelletCounter;
 		LevelObserver* m_LevelObserver;
 		diji::Collider* m_PlayerColliderPtr;
+		diji::Collider* m_Player2ColliderPtr = nullptr;
 		diji::Collider* m_OwnerColliderPtr;
 
 		bool m_IsDisabled = true;
@@ -65,7 +67,20 @@ namespace pacman
 			FruitType::Galaxian,
 			FruitType::Bell,
 			FruitType::Bell,
-			FruitType::Key };
+			FruitType::Key 
+		};
+
+		const std::map<int, int> m_FruitFrame = 
+		{
+			{ static_cast<int>(FruitType::Cherry), 17 },
+			{ static_cast<int>(FruitType::Strawberry), 16 },
+			{ static_cast<int>(FruitType::Orange), 15 },
+			{ static_cast<int>(FruitType::Apple), 13 },
+			{ static_cast<int>(FruitType::Melon), 11 },
+			{ static_cast<int>(FruitType::Galaxian), 9 },
+			{ static_cast<int>(FruitType::Bell), 7 },
+			{ static_cast<int>(FruitType::Key), 5 }
+		};
 	};
 }
 

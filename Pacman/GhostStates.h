@@ -130,7 +130,6 @@ namespace pacman
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 
 		void ResetUpdate() { m_IsUpdated = false; }
-		void SwitchSpeed();
 	private:
 		bool m_IsUpdated = false;
 		float m_FrightSpeed = 1.25f;
@@ -142,9 +141,9 @@ namespace pacman
 		using GhostState::GhostState;
 		~Chase() noexcept = default;
 
-		virtual void OnEnter(const GhostAI* ghost) override;
-		virtual void OnExit(const GhostAI*) override = 0;
-		virtual std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override = 0;
+		void OnEnter(const GhostAI* ghost) override;
+		void OnExit(const GhostAI*) override {};
+		std::unique_ptr<GhostState> Execute(const GhostAI*) override = 0;
 	};
 
 	class RedChase final : public Chase
@@ -163,7 +162,6 @@ namespace pacman
 		using Chase::Chase;
 		~PinkyChase() noexcept = default;
 
-		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		const float m_TargetDistance = 64.f;
@@ -175,7 +173,6 @@ namespace pacman
 		using Chase::Chase;
 		~InkyChase() noexcept = default;
 
-		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		const float m_TargetDistance = 32.f;
@@ -187,7 +184,6 @@ namespace pacman
 		using Chase::Chase;
 		~ClydeChase() noexcept = default;
 
-		void OnExit(const GhostAI*) override {};
 		std::unique_ptr<GhostState> Execute(const GhostAI* ghost) override;
 	private:
 		const float m_TargetDistance = 128.f;

@@ -12,6 +12,7 @@
 #include "GhostAI.h"
 #include "HealthCounter.h"
 #include "Fruit.h"
+#include "GhostCollision.h"
 
 pacman::AI::AI(diji::GameObject* ownerPtr)
 	: Component(ownerPtr)
@@ -75,6 +76,7 @@ void pacman::AI::Update()
 			return;
 	}	
 }
+
 void pacman::AI::FixedUpdate()
 {
 	//todo: make state machine for AI
@@ -131,7 +133,6 @@ void pacman::AI::FixedUpdate()
 
 }
 
-#include <iostream>
 void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject)
 {
 	if (m_IsDying)
@@ -164,8 +165,8 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	case MessageTypesDerived::ENEMY_COLLISION:
 	{
 		constexpr int EATEN_GHOST_POINTS = 200;
-
-		if (IsGhostFrightened())
+		//todo: make ghost eaten staatic?
+		if (IsGhostFrightened(subject))
 		{
 			m_PauseAI = true;
 			GetOwner()->GetComponent<diji::Render>()->DisableRender();
@@ -184,7 +185,6 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	}
 	case MessageTypesDerived::LEVEL_BEGIN:
 	{
-		std::cout << "Display AI" << std::endl;
 		GetOwner()->GetComponent<diji::Render>()->EnableRender();
 		GetOwner()->GetComponent<pacman::HealthCounter>()->DecreaseHealth();
 		break;
@@ -259,46 +259,13 @@ const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
 	return shape;
 }
 
-bool pacman::AI::IsGhostFrightened() const //super convoluted way of checking if the ghost is frightened, If ghost is subject I could dynamic cast it in the Notify
+bool pacman::AI::IsGhostFrightened(diji::Subject* subject) const
 {
-	auto colliders = diji::Collision::GetInstance().IsColliding(m_ColliderCompPtr);
-	colliders.erase(std::remove_if(colliders.begin(), colliders.end(),
-		[](const auto& collider)
-		{
-			return !collider->GetParent()->HasComponent<GhostAI>();
-		}), colliders.end());
-
-	if (colliders.empty())
-		return false;
-
-	if (colliders.size() == 1)
-	{
-		auto ghostAI = colliders.front()->GetParent()->GetComponent<GhostAI>();
-		return ghostAI->IsFrightened();
-	}
-
-	const auto& playerCollider = m_ColliderCompPtr->GetCollisionBox();
-	glm::vec2 playerCenter(playerCollider.left + playerCollider.width * 0.5f, playerCollider.bottom + playerCollider.height * 0.5f);
-
-	auto closestCollider = colliders.front();
-	float minDistance = std::numeric_limits<float>::max();
-
-	for (const auto& collider : colliders)
-	{
-		const auto& ghostCollider = collider->GetCollisionBox();
-		glm::vec2 ghostCenter(ghostCollider.left + ghostCollider.width * 0.5f, ghostCollider.bottom + ghostCollider.height * 0.5f);
-
-		const float distance = glm::distance(playerCenter, ghostCenter);
-
-		if (distance < minDistance)
-		{
-			minDistance = distance;
-			closestCollider = collider;
-		}
-	}
-
-	auto ghostAI = closestCollider->GetParent()->GetComponent<GhostAI>();
+	const auto ghost = dynamic_cast<GhostCollision*>(subject);
+	
+	auto ghostAI = ghost->GetParent()->GetComponent<GhostAI>();
 	return ghostAI->IsFrightened();
+
 }
 
 void pacman::AI::Reset()
@@ -339,28 +306,32 @@ bool pacman::AI::CheckIfDirectionIsValid(const diji::Movement& movement)
 	const glm::vec2 movementVector = m_TransformCompPtr->Get2DMovementVector(movement, rayLength);
 
 	// Calculate the corner points of the player shape
-	glm::vec2 rayStart1, rayStart2;
+	glm::vec2 rayStart1, rayStart2, rayStart3;
 
 	if (movement == diji::Movement::Up || movement == diji::Movement::Down)
 	{
 		// Vertical movement (Up or Down)
 		rayStart1 = glm::vec2(playerShape.left, playerCenter.y); // Left center
 		rayStart2 = glm::vec2(playerShape.left + playerShape.width, playerCenter.y); // Right center
+		rayStart3 = playerCenter; // Middle center
 	}
 	else
 	{
 		// Horizontal movement (Left or Right)
 		rayStart1 = glm::vec2(playerCenter.x, playerShape.bottom); // Bottom center
 		rayStart2 = glm::vec2(playerCenter.x, playerShape.bottom + playerShape.height); // Top center
+		rayStart3 = playerCenter; // Middle center
 	}
 
 	// Calculate the end points of the rays
 	const glm::vec2 rayEnd1 = rayStart1 + movementVector;
 	const glm::vec2 rayEnd2 = rayStart2 + movementVector;
+	const glm::vec2 rayEnd3 = rayStart3 + movementVector;
 
 	// Check for collision with each ray
 	if (diji::Collision::GetInstance().IsCollidingWithWorld(rayStart1, rayEnd1) ||
-		diji::Collision::GetInstance().IsCollidingWithWorld(rayStart2, rayEnd2))
+		diji::Collision::GetInstance().IsCollidingWithWorld(rayStart2, rayEnd2) ||
+		diji::Collision::GetInstance().IsCollidingWithWorld(rayStart3, rayEnd3))
 	{
 		return false; // Movement is invalid if any ray intersects a wall
 	}

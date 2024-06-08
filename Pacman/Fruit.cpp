@@ -47,7 +47,7 @@ void pacman::Fruit::Update()
 		m_Value = static_cast<int>(m_FruitCycle[level]);
 
 		const auto& texture = GetOwner()->GetComponent<diji::Texture>();
-		texture->SetStartingFrame(texture->GetFrame() - (level + 1));
+		texture->SetStartingFrame(m_FruitFrame.at(m_Value));
 		GetOwner()->GetComponent<diji::Text>()->SetText(std::to_string(m_Value));
 		GetOwner()->GetComponent<FruitRender>()->EnableRender();
 		const auto& collider = GetOwner()->GetComponent<diji::Collider>();
@@ -75,9 +75,9 @@ void pacman::Fruit::Update()
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{
-		if (collider == m_PlayerColliderPtr)
+		if (collider == m_PlayerColliderPtr or collider == m_Player2ColliderPtr)
 		{
-			const auto& playerBox = m_PlayerColliderPtr->GetCollisionBox();
+			const auto& playerBox = collider == m_PlayerColliderPtr ? m_PlayerColliderPtr->GetCollisionBox() : m_Player2ColliderPtr->GetCollisionBox();
 			const glm::vec2 playerCenter = { playerBox.left + playerBox.width * 0.5f, playerBox.bottom + playerBox.height * 0.5f };
 
 			const auto& pelletBox = m_OwnerColliderPtr->GetCollisionBox();

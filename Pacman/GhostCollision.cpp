@@ -26,9 +26,9 @@ void pacman::GhostCollision::Update()
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{
-		if (collider == m_PlayerColliderPtr)
+		if (collider == m_PlayerColliderPtr or collider == m_Player2ColliderPtr)
 		{
-			const auto& playerBox = m_PlayerColliderPtr->GetCollisionBox();
+			const auto& playerBox = collider == m_PlayerColliderPtr ? m_PlayerColliderPtr->GetCollisionBox() : m_Player2ColliderPtr->GetCollisionBox();
 			const glm::vec2 playerCenter = { playerBox.left + playerBox.width * 0.5f, playerBox.bottom + playerBox.height * 0.5f };
 
 			const auto& pelletBox = m_OwnerColliderPtr->GetCollisionBox();

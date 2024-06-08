@@ -6,7 +6,7 @@
 #include "Render.h"
 
 //todo: remove component from subject or observer that need no upadte
-pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* pelletCounter, const int value)
+pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* player2, const diji::GameObject* pelletCounter, const int value)
 	: Component(ownerPtr)
 	, m_Value{ value }
 {
@@ -19,12 +19,14 @@ pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* playe
 	
 	m_PelletCounter = pelletCounter ? pelletCounter->GetComponent<PelletObserver>() : nullptr;
 	m_PlayerColliderPtr = player->GetComponent<diji::Collider>();
+	if (player2)
+		m_Player2ColliderPtr = player2->GetComponent<diji::Collider>();
 	m_OwnerColliderPtr = nullptr;
 	m_RenderCompPtr = nullptr;
 }
 
-pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const int value)
-	: PickUp(ownerPtr, player, nullptr, value)
+pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* player2, const int value)
+	: PickUp(ownerPtr, player, player2, nullptr, value)
 {
 	m_IsPowerUp = true;
 }
@@ -60,9 +62,9 @@ void pacman::PickUp::Update()
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{
-		if (collider == m_PlayerColliderPtr)
+		if (collider == m_PlayerColliderPtr or collider == m_Player2ColliderPtr)
 		{
-			const auto& playerBox = m_PlayerColliderPtr->GetCollisionBox();
+			const auto& playerBox = collider == m_PlayerColliderPtr ? m_PlayerColliderPtr->GetCollisionBox() : m_Player2ColliderPtr->GetCollisionBox();
 			const glm::vec2 playerCenter = { playerBox.left + playerBox.width * 0.5f, playerBox.bottom + playerBox.height * 0.5f };
 
 			const auto& pelletBox = m_OwnerColliderPtr->GetCollisionBox();

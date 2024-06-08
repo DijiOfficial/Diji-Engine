@@ -16,8 +16,8 @@ namespace diji
 		GameObject() = default;
 		~GameObject() noexcept = default;
 
-		template<typename... Args>
-		GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested
+		//template<typename... Args>
+		//GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested
 
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -48,7 +48,28 @@ namespace diji
 			}
 		}
 
-		void RemoveComponent(const Component& component);
+		template<typename T>
+		void RemoveComponent()
+		{
+			static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+
+			auto it = std::remove_if(m_ComponentsPtrVec.begin(), m_ComponentsPtrVec.end(),
+				[](const std::unique_ptr<Component>& comp)
+				{
+					return dynamic_cast<T*>(comp.get()) != nullptr;
+				});
+
+			if (it != m_ComponentsPtrVec.end())
+			{
+				if constexpr (std::is_same_v<T, Transform>)
+					m_TransformCompPtr = nullptr;
+				else if constexpr (std::is_base_of_v<diji::Render, T>)
+					m_RenderCompPtr = nullptr;
+
+				m_ComponentsPtrVec.erase(it, m_ComponentsPtrVec.end());
+			}
+		}
+
 		const std::vector<std::unique_ptr<Component>>& GetComponents() const { return m_ComponentsPtrVec; };
 
 		template<typename T>

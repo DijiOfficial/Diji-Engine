@@ -70,10 +70,8 @@ void pacman::PacmanHealthObserver::Init()
 	m_TextureCompPtr = GetOwner()->GetComponent<diji::Texture>();
 }
 
-#include <iostream>
 void pacman::PacmanHealthObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
 {
-	std::cout << "decreasece health::OnNotify" << std::endl;
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (msg == MessageTypesDerived::HEALTH_CHANGE)
 	{

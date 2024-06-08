@@ -83,32 +83,46 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 	//I could use a bool passed in the arguments to change between Frightened and other States
 	//but I still need to pass a target and no other state has a target of { -1, -1 }
 	diji::Movement bestDirection = diji::Movement::Idle;
-
-	if (target == glm::vec2{ -1 , -1 }) //Frightened
-		bestDirection = ChooseRandomDirection(possibleDirections);
-	else
+	bool playerDirectionIsValid = false;
+	if (ghost->IsPLayerControlled() && (dynamic_cast<Chase*>(this) or dynamic_cast<Frightened*>(this)))
 	{
-		float smallestDistance = std::numeric_limits<float>::max();
+		const auto& playerChoice = ghost->GetNextMovement();
+		auto it = possibleDirections.find(playerChoice);
 
-		for (const auto& [direction, canMove] : possibleDirections)
+		if (it != possibleDirections.end() && it->second)
 		{
-			if (!canMove) continue;
+			bestDirection = playerChoice;
+			playerDirectionIsValid = true;
+		}
+	}
 
-			//todo not necessary
-			const glm::vec2 newPosition = center + GetTargetTranslation(direction);
-			const float distance = glm::distance(newPosition, target);
+	if (not playerDirectionIsValid)
+	{
+		if (target == glm::vec2{ -1 , -1 }) //Frightened
+			bestDirection = ChooseRandomDirection(possibleDirections);
+		else
+		{
+			float smallestDistance = std::numeric_limits<float>::max();
 
-			if (distance < smallestDistance)
+			for (const auto& [direction, canMove] : possibleDirections)
 			{
-				smallestDistance = distance;
-				bestDirection = direction;
-			}
-			else if (distance == smallestDistance)
-			{
-				if (static_cast<int>(direction) < static_cast<int>(bestDirection))
-					continue;
+				if (!canMove) continue;
 
-				bestDirection = direction;
+				const glm::vec2 newPosition = center + GetTargetTranslation(direction);
+				const float distance = glm::distance(newPosition, target);
+
+				if (distance < smallestDistance)
+				{
+					smallestDistance = distance;
+					bestDirection = direction;
+				}
+				else if (distance == smallestDistance)
+				{
+					if (static_cast<int>(direction) < static_cast<int>(bestDirection))
+						continue;
+
+					bestDirection = direction;
+				}
 			}
 		}
 	}
@@ -118,7 +132,6 @@ void pacman::GhostState::CalculateDirection(const GhostAI* ghost, const glm::vec
 		ghost->GetTexture()->SetStartingFrame(static_cast<int>(bestDirection) * 2);
 }
 
-//todo: not necessary?
 glm::vec2 pacman::GhostState::GetTargetTranslation(diji::Movement movement) const
 {
 	glm::vec2 translation{ 0, 0 };
@@ -322,7 +335,7 @@ std::unique_ptr<pacman::GhostState> pacman::ExitMaze::Execute(const GhostAI* gho
 		else if (glm::distance(glm::vec2{ currentPosition.x, currentPosition.y }, m_OutsidePosition) <= 2.f)
 		{
 			transform->SetPosition(m_OutsidePosition);
-			return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
+			return (ghost->GetIsInChaseState() or ghost->IsPLayerControlled()) ? ghost->GetChaseState() : std::make_unique<Scatter>();
 		}
 	}
 
@@ -343,6 +356,9 @@ void pacman::Scatter::OnEnter(const GhostAI* ghost)
 std::unique_ptr<pacman::GhostState> pacman::Scatter::Execute(const GhostAI* ghost)
 {
 	GoToTarget(ghost, m_Target);
+
+	if (ghost->IsPLayerControlled())
+		return ghost->GetChaseState();
 
 	if (ghost->GetIsInChaseState())
 		return ghost->GetChaseState();
@@ -402,14 +418,11 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 	}
 
 	if (not ghost->IsFrightened())
-		return ghost->GetIsInChaseState() ? ghost->GetChaseState() : std::make_unique<Scatter>();
+		return (ghost->GetIsInChaseState() or ghost->IsPLayerControlled()) ? ghost->GetChaseState() : std::make_unique<Scatter>();
 
 	return nullptr;
 }
 
-void pacman::Frightened::SwitchSpeed()
-{
-}
 #pragma endregion
 #pragma region Chase
 void pacman::Chase::OnEnter(const GhostAI* ghost)
@@ -427,12 +440,12 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 
 	GoToTarget(ghost, target);
 
-	//could add the additional check for pellets remaining here
-	if (not ghost->GetIsInChaseState())
-		return std::make_unique<Scatter>();
-
 	if (ghost->IsFrightened())
 		return std::make_unique<Frightened>();
+
+	//could add the additional check for pellets remaining here
+	if (not ghost->IsPLayerControlled() and not ghost->GetIsInChaseState())
+		return std::make_unique<Scatter>();
 	
 	return nullptr;
 }

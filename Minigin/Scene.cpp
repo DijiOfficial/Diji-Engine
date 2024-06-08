@@ -45,8 +45,9 @@ void diji::Scene::RemoveAll()
 
 diji::GameObject* diji::Scene::GetGameObject(const std::string& name) const
 {
-	//todo: check if the object exists otherwise throw an exception
-	return m_ObjectsUPtrMap.at(name).get();
+	auto it = m_ObjectsUPtrMap.find(name);
+	
+	return it != m_ObjectsUPtrMap.end() ? it->second.get() : nullptr;
 }
 
 std::unique_ptr<diji::GameObject> diji::Scene::RemoveAndReturnGameObject(const GameObject* object)

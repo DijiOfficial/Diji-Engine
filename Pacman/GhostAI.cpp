@@ -23,6 +23,7 @@ pacman::GhostAI::GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, c
 	m_ColliderCompPtr = nullptr;
 	m_TransformCompPtr = nullptr;
 	m_TextureCompPtr = nullptr;
+	m_NextDirection = diji::Movement::Left;
 }
 
 void pacman::GhostAI::Reset()
@@ -45,7 +46,7 @@ void pacman::GhostAI::Reset()
 	m_PlayerDeathTimer = 0.f;
 	m_IsPlayerKilled = false;
 	m_GhostsTimerPtr->Pause();
-	m_CurrentStateUPtr->OnEnter(this);//todo: necesarry?
+	m_CurrentStateUPtr->OnEnter(this);
 	GetOwner()->GetComponent<diji::Render>()->EnableRender();
 	//Reset the collider to avoid collision in the next frame
 	m_ColliderCompPtr->Update();

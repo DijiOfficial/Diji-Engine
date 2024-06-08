@@ -82,6 +82,12 @@ namespace pacman
 		void SetGhostKilledPlayer() { m_IsPlayerKilled = true; };
 		std::vector<GhostAI*> GetGhostsAI() const { return m_GhostsPtrs; };
 
+		//player controls
+		void SetAsPlayer() { m_IsPlayerControlled = true; };
+		void SetNextMovement(const diji::Movement movement) { m_NextDirection = movement; };
+		bool IsPLayerControlled() const { return m_IsPlayerControlled; };
+		diji::Movement GetNextMovement() const { return m_NextDirection; };
+
 	protected:
 		GhostAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers);
 
@@ -108,6 +114,10 @@ namespace pacman
 		const float m_TunnelSpeed = 0.9375f;
 
 		void Reset();
+
+		//player controls
+		bool m_IsPlayerControlled = false;
+		diji::Movement m_NextDirection;
 	};
 
 	class RedAI final : public GhostAI

@@ -11,7 +11,7 @@ namespace pacman
 	class PickUpLoader final
 	{
 	public:
-		PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter);
+		PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter, diji::Scene* scene, const diji::GameObject* player2 = nullptr);
 		~PickUpLoader() noexcept = default;
 
 
@@ -27,5 +27,6 @@ namespace pacman
 
 		diji::Scene* m_ScenePtr = nullptr;
 		const diji::GameObject* m_PlayerPtr = nullptr;
+		const diji::GameObject* m_Player2Ptr = nullptr;
 	};
 }

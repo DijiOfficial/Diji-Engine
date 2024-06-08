@@ -13,6 +13,9 @@ pacman::ScoreCounter::ScoreCounter(diji::GameObject* ownerPtr, int score)
 
 void pacman::ScoreCounter::IncreaseScore(PointType& pointType)
 {
+    if (m_IsPlayer2)
+        return;
+    
     switch (pointType)
     {
         case PointType::Enemy:
@@ -28,11 +31,13 @@ void pacman::ScoreCounter::IncreaseScore(PointType& pointType)
     Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::SCORE_CHANGE));
 
     CheckForExtraLife();
-
 }
 
 void pacman::ScoreCounter::IncreaseScore(const int score)
 {
+    if (m_IsPlayer2)
+        return;
+
     m_Score += score;
 	Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::SCORE_CHANGE));
 

@@ -12,21 +12,20 @@
 #include "PelletCounter.h"
 
 #include <format>
-pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter)
+// can get players from scene dont need to include it
+pacman::PickUpLoader::PickUpLoader(const diji::GameObject* player, const std::vector<diji::GameObject*>& gameObjects, const diji::GameObject* pelletCounter, diji::Scene* scene, const diji::GameObject* player2)
 {
 	diji::SVGParser::GetVerticesFromSvgFile("Pellets.svg", m_PelletsVec, 78);
 
-	//todo: Get Level scene
-	//m_ScenePtr = diji::SceneManager::GetInstance().CreateScene("PickUpLoader");
-	m_ScenePtr = diji::SceneManager::GetInstance().GetScene(static_cast<int>(pacman::GameState::LEVEL));
+	m_ScenePtr = scene;
 	m_PlayerPtr = player;
+	m_Player2Ptr = player2;
 
 	int idx = 0;
 	for (const auto& posVec : m_PelletsVec)
 	{
 		if (idx == 0)
 		{
-			//why the weird number? i don't know but setting it to zero just causes one pellet to not be rendered for ???
 			int pelletCounterIdx = 0;
 			for (const auto& pos : posVec)
 			{
@@ -56,9 +55,12 @@ void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, c
 	//pickUp->AddComponents<Collider>(width, height);
 	pickUp->AddComponents<diji::Collider>(1, 1, glm::vec2{ 2, 2 });
 	//pickUp->AddComponents<ScoreCounter>(0);
-	pickUp->AddComponents<PickUp>(m_PlayerPtr, pelletCouter, value);
+	pickUp->AddComponents<PickUp>(m_PlayerPtr, m_Player2Ptr, pelletCouter, value);
 
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
+	if (m_Player2Ptr)
+		pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_Player2Ptr->GetComponent<AI>());
+	
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), pelletCouter->GetComponent<PelletObserver>());
 	pelletCouter->GetComponent<PelletCounter>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_END), pickUp->GetComponent<PickUp>());
 }
@@ -70,9 +72,12 @@ void pacman::PickUpLoader::AddPowerUp(const std::vector<diji::GameObject*>& game
 	powerUp->AddComponents<diji::Transform>(pos.x, pos.y);
 	powerUp->AddComponents<diji::Render>(2);
 	powerUp->AddComponents<diji::Collider>(width, height);
-	powerUp->AddComponents<PickUp>(m_PlayerPtr, value);
+	powerUp->AddComponents<PickUp>(m_PlayerPtr, m_Player2Ptr, value);
 
 	powerUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), m_PlayerPtr->GetComponent<AI>());
+	if (m_Player2Ptr)
+		powerUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_Player2Ptr->GetComponent<AI>());
+
 	for (const auto& object : gameObjects)
 	{
 		powerUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<GhostAI>());

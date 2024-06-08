@@ -236,11 +236,11 @@ void Loader::CommonGameAssets(Scene* &scene)
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
 	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
 
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
-	input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
+	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
+	//input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
 
 	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_F1, pelletCounter);
 #pragma endregion
@@ -265,7 +265,6 @@ void Loader::CommonGameAssets(Scene* &scene)
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), player->GetComponent<pacman::AI>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), player->GetComponent<pacman::AI>());
 
-	//todo: rename redAI and AI
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::RedAI>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Blinky->GetComponent<pacman::RedAI>());
@@ -300,16 +299,12 @@ void Loader::PacmanLevel()
 	//Collision::GetInstance().Reset();
 
 	//todo: ReadyText should spawn when player respawns
-	//todo: Fruits display the wrong fruit when at least one fruit is eatne?
-	//todo: add lives when 4 ghost eatne?
 	//todo: highscore should display other scoresa
 
-	//todo: should be different in every mode
 	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
+	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene };
 
-	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter") };
-
-	//todo: fruit add a second player with function
+	//todo: add a second player to fruit with  a function
 }
 
 void Loader::VersusLevel()
@@ -329,17 +324,20 @@ void Loader::VersusLevel()
 	//Blinky->AddComponents<pacman::GhostCollision>(player);
 	//Blinky->GetComponent<Render>()->DisableRender();
 
-	auto player2 = scene->CreateGameObject("player2");
-	player2->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
-	player2->GetComponent<Texture>()->SetRotation(true);
-	player2->AddComponents<Transform>(214, 439);
-	player2->AddComponents<Render>(2);
-	player2->AddComponents<pacman::HealthCounter>(4);
-	player2->AddComponents<pacman::ScoreCounter>(0);
-	player2->AddComponents<Collider>(15, 15);
-	player2->AddComponents<pacman::AI>();
-	player2->GetComponent<Render>()->DisableRender();
-	player2->GetComponent<Texture>()->PauseAnimation();
+	const auto& player2 = scene->GetGameObject("z_Blinky");
+	player2->GetComponent<pacman::RedAI>()->SetAsPlayer();
+
+	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
+	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene };
+
+#pragma region Input
+	auto& input = InputManager::GetInstance();
+
+	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player2, Movement::Up);
+	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
+	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
+	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
+#pragma endregion
 }
 
 void Loader::CoopLevel()
@@ -352,13 +350,57 @@ void Loader::CoopLevel()
 	player2->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
 	player2->GetComponent<Texture>()->SetRotation(true);
 	player2->AddComponents<Transform>(214, 439);
+	player2->GetComponent<Transform>()->SetMovement(diji::Movement::Left);
 	player2->AddComponents<Render>(2);
 	player2->AddComponents<pacman::HealthCounter>(4);
 	player2->AddComponents<pacman::ScoreCounter>(0);
+	player2->GetComponent<pacman::ScoreCounter>()->SetAsPlayer2();
 	player2->AddComponents<Collider>(15, 15);
 	player2->AddComponents<pacman::AI>();
+	player2->GetComponent<pacman::AI>()->SetInitialMovementLeft();
 	player2->GetComponent<Render>()->DisableRender();
 	player2->GetComponent<Texture>()->PauseAnimation();
+	player2->GetComponent<Texture>()->SetRotationAngle(180.f);
+	
+
+	const auto& Blinky = scene->GetGameObject("z_Blinky");
+	const auto& Pinky = scene->GetGameObject("z_Pinky");
+	const auto& Inky = scene->GetGameObject("z_Inky");
+	const auto& Clyde = scene->GetGameObject("z_Clyde");
+
+	Blinky->GetComponent<pacman::GhostCollision>()->AddPLayer2Collider(player2->GetComponent<Collider>());
+	Pinky->GetComponent<pacman::GhostCollision>()->AddPLayer2Collider(player2->GetComponent<Collider>());
+	Inky->GetComponent<pacman::GhostCollision>()->AddPLayer2Collider(player2->GetComponent<Collider>());
+	Clyde->GetComponent<pacman::GhostCollision>()->AddPLayer2Collider(player2->GetComponent<Collider>());
+
+	const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
+	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene, player2 };
+
+	const auto& pelletCounter = scene->GetGameObject("pelletCounter");
+	//const auto& player = scene->GetGameObject("player");
+	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), player2->GetComponent<pacman::AI>());
+
+	const auto& fruit = scene->GetGameObject("w_fruit");
+	fruit->GetComponent<pacman::Fruit>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::FRUIT_COLLISION), player2->GetComponent<pacman::AI>());
+	fruit->GetComponent<pacman::Fruit>()->AddPlayer2Collider(player2->GetComponent<Collider>());
+
+	const auto& levelIntro = scene->GetGameObject("levelIntro");
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), player2->GetComponent<pacman::AI>());
+	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_START), player2->GetComponent<pacman::AI>());
+
+	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player2->GetComponent<pacman::AI>());
+	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player2->GetComponent<pacman::AI>());
+	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player2->GetComponent<pacman::AI>());
+	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player2->GetComponent<pacman::AI>());
+
+#pragma region Input
+	auto& input = InputManager::GetInstance();
+
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player2, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
+#pragma endregion
 }
 
 void Loader::HighScoreMenu()
@@ -376,24 +418,24 @@ void Loader::HighScoreMenu()
 	enterYourName->AddComponents<Text>("ENTER YOUR NAME:", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	enterYourName->AddComponents<Render>();
 
-	auto enterName = scene->CreateGameObject("name");
-	enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 260.f);
-	enterName->AddComponents<Text>("AAA", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
-	enterName->AddComponents<pacman::EnterName>(SceneManager::GetInstance().GetScene(static_cast<int>(pacman::GameState::LEVEL))->GetGameObject("player"));
-	enterName->AddComponents<pacman::CustomTextRender>();
+	//auto enterName = scene->CreateGameObject("name");
+	//enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 260.f);
+	//enterName->AddComponents<Text>("AAA", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	//enterName->AddComponents<pacman::EnterName>(SceneManager::GetInstance().GetScene(static_cast<int>(pacman::GameState::LEVEL))->GetGameObject("player"));
+	//enterName->AddComponents<pacman::CustomTextRender>();
 
 	//input
-	auto& input = InputManager::GetInstance();
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_W, enterName, Movement::Up);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_A, enterName, Movement::Left);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_S, enterName, Movement::Down);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_D, enterName, Movement::Right);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_UP, enterName, Movement::Up);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_LEFT, enterName, Movement::Left);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_DOWN, enterName, Movement::Down);
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RIGHT, enterName, Movement::Right);
+	//auto& input = InputManager::GetInstance();
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_W, enterName, Movement::Up);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_A, enterName, Movement::Left);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_S, enterName, Movement::Down);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_D, enterName, Movement::Right);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_UP, enterName, Movement::Up);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_LEFT, enterName, Movement::Left);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_DOWN, enterName, Movement::Down);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RIGHT, enterName, Movement::Right);
 
-	input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RETURN, enterName, Movement::Idle);
+	//input.BindCommand<pacman::NameChangeCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RETURN, enterName, Movement::Idle);
 }
 
 void Loader::Load()
@@ -406,7 +448,9 @@ void Loader::Load()
 	pacman::ScoreBoard::GetInstance().Init();
 
 	PacmanMenu();
-	PacmanLevel();
+	//PacmanLevel();
+	CoopLevel();
+	//VersusLevel();
 	HighScoreMenu();
 
 

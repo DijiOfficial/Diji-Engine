@@ -9,12 +9,12 @@ namespace diji
 
 namespace pacman
 {
-	//todo: remove iostreram include
 	class HealthCounter;
 	class ScoreCounter;
 	enum class PointType;
 	class EnterName;
 	class PelletCounter;
+	class GhostAI;
 
 	class Move final : public diji::GameActorCommands
 	{
@@ -25,9 +25,21 @@ namespace pacman
 		void Execute() override;
 
 	private:
-		const glm::vec2 m_Speed = { 160.f, 160.f }; //sets speed as universal, may change it to get it from the actor
 		diji::Movement m_Movement;
 		diji::Transform* m_TransformComponentPtr;
+	};
+
+	class GhostSwitchState final : public diji::GameActorCommands
+	{
+	public:
+		GhostSwitchState(diji::GameObject* actor, diji::Movement movement);
+		~GhostSwitchState() noexcept override = default;
+
+		void Execute() override;
+
+	private:
+		diji::Movement m_Movement;
+		GhostAI* m_GhostAIComp;
 	};
 
 	class HitCommand final : public diji::GameActorCommands
