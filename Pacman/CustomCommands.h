@@ -30,6 +30,18 @@ namespace pacman
 		diji::Transform* m_TransformComponentPtr;
 	};
 
+	class MuteCommand final : public diji::GameActorCommands
+	{
+	public:
+		MuteCommand(diji::GameObject* actor = nullptr);
+		~MuteCommand() noexcept override = default;
+
+		void Execute() override;
+
+	private:
+		bool m_IsMuted = false;
+	};
+
 	class MenuSwitch final : public diji::GameActorCommands
 	{
 	public:

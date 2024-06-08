@@ -18,7 +18,8 @@ namespace diji
 		Mix_Music* GetMusic() const;
 		void Play(bool repeat) const;
 		void SetVolume(const int volume) const;
-
+		void Pause() const;
+		void Resume() const;
 	private:
 		Mix_Music* m_MixMusicPtr;
 	};

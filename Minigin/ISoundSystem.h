@@ -2,6 +2,8 @@
 #include <memory>
 #include <queue>
 #include <mutex>
+
+#include <iostream>
 namespace diji 
 {
 	class ISoundSystem
@@ -9,12 +11,16 @@ namespace diji
 	public:
 		virtual ~ISoundSystem() noexcept = default;
 		virtual void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) = 0;
+		virtual void Pause() = 0;
+		virtual void Resume() = 0;
 	};
 
 	class NullSoundSystem final : public ISoundSystem
 	{
 	public:
 		void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) override;
+		void Pause() override {};
+		void Resume() override {};
 	};
 
 	class ServiceLocator final
@@ -25,7 +31,6 @@ namespace diji
 		{ 
 			_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss);
 		};
-
 	private:
 		static std::unique_ptr<ISoundSystem> _ss_instance;
 	};
@@ -36,17 +41,20 @@ namespace diji
 		SDLISoundSystem();
 		~SDLISoundSystem() noexcept;
 		void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) override;
-		
+		void Pause() override;
+		void Resume() override;
 	private:
-		void PlaySound(const std::string& audio, bool isMusic, const int volume) const;
+		void PlaySound(const std::string& audio, bool isMusic, const int volume);
 		std::pair<std::pair<bool, int>, std::string>  GetNextSoundRequest();
 	
 		void ProcessSounds();
 
+		std::string m_LastMusicPlayed = "";
 		std::jthread m_SoundThread;
 		std::queue<std::pair<std::pair<bool, int>, std::string>> m_SoundQueue;
 		std::mutex soundMutex_;
 		bool m_IsRunning = false;
+		bool m_IsPaused = false;
 		// Allows threads to synchronize their execution based on certain conditions. 
 		// It provides a way for one thread to notify other threads when a particular condition becomes true, allowing them to proceed with their execution
 		std::condition_variable condition_;
@@ -59,6 +67,8 @@ namespace diji
 		virtual ~LoggingSoundSystem() noexcept override = default;
 
 		void AddSoundRequest(const std::string& audio, bool isMusic, int volume = -1) override;
+		void Pause() override;
+		void Resume() override;
 	private:
 		std::unique_ptr<ISoundSystem> _real_ss;
 	};

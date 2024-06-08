@@ -251,6 +251,7 @@ void Loader::CommonGameAssets(Scene* &scene)
 	//input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
 
 	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_F1, pelletCounter);
+	input.BindCommand<pacman::MuteCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_M, nullptr);
 #pragma endregion
 #pragma region Observers
 	//todo: reset audio as well and add quick reset animation

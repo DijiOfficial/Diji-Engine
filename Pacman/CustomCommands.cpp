@@ -10,6 +10,7 @@
 #include "GhostAI.h"
 #include "PelletCounter.h"
 #include "Menu.h"
+#include "ISoundSystem.h"
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
@@ -66,6 +67,7 @@ pacman::test::test(diji::GameObject* actor)
 	tester = GetGameActor()->GetComponent<PelletCounter>();
 }
 
+//todo: rename
 void pacman::test::Execute()
 {
 	tester->test();
@@ -112,4 +114,20 @@ void pacman::MenuSwitch::Execute()
 	default:
 		break;
 	}
+}
+
+pacman::MuteCommand::MuteCommand(diji::GameObject* actor)
+	: GameActorCommands{ actor }
+{
+
+}
+
+void pacman::MuteCommand::Execute()
+{
+	if (m_IsMuted)
+		diji::ServiceLocator::GetSoundSystem().Resume();
+	else
+		diji::ServiceLocator::GetSoundSystem().Pause();
+
+	m_IsMuted = !m_IsMuted;
 }

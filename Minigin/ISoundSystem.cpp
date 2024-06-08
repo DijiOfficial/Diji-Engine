@@ -9,13 +9,20 @@ namespace diji
 {
 	std::unique_ptr<ISoundSystem> ServiceLocator::_ss_instance{ std::make_unique<NullSoundSystem>() };
 
-	void SDLISoundSystem::PlaySound(const std::string& audio, bool isMusic, const int volume) const
+	void SDLISoundSystem::PlaySound(const std::string& audio, bool isMusic, const int volume)
 	{
+
+		if (audio == "invalid")
+			return;
+
         SoundEffect* soundEffect = nullptr;
 		Music* music = nullptr;
 
 		if (isMusic)
+		{
 			music = ResourceManager::GetInstance().LoadMusic(audio);
+			m_LastMusicPlayed = audio;
+		}
 		else
 			soundEffect = ResourceManager::GetInstance().LoadSoundEffect(audio);
 
@@ -53,6 +60,10 @@ namespace diji
 	void SDLISoundSystem::AddSoundRequest(const std::string& audio, bool isMusic, int volume)
 	{
 		std::lock_guard<std::mutex> lock(soundMutex_);
+
+		if (m_IsPaused)
+			return;
+
 		if (not m_SoundQueue.empty())
 		{
 			auto pendingSound = m_SoundQueue.front();
@@ -62,6 +73,28 @@ namespace diji
 
 		m_SoundQueue.push({ { isMusic, volume }, audio });
 		condition_.notify_one();
+	}
+
+	void SDLISoundSystem::Pause()
+	{
+		m_IsPaused = true;
+
+		if (m_LastMusicPlayed != "")
+		{
+			Music* music = ResourceManager::GetInstance().LoadMusic(m_LastMusicPlayed);
+			music->Pause();
+		}
+	}
+
+	void SDLISoundSystem::Resume()
+	{
+		m_IsPaused = false;
+
+		if (m_LastMusicPlayed != "")
+		{
+			Music* music = ResourceManager::GetInstance().LoadMusic(m_LastMusicPlayed);
+			music->Resume();
+		}
 	}
 
 	std::pair<std::pair<bool, int>, std::string> SDLISoundSystem::GetNextSoundRequest()
@@ -96,5 +129,17 @@ namespace diji
 	{
 		_real_ss->AddSoundRequest(audio, isMusic, volume);
 		std::cout << "Adding sound request " << audio << " at volume " << volume << std::endl;
+	}
+
+	void LoggingSoundSystem::Pause()
+	{
+		_real_ss->Pause();
+		std::cout << "Pausing Audio\n";
+	}
+
+	void LoggingSoundSystem::Resume()
+	{
+		_real_ss->Resume();
+		std::cout << "Resuming Audio\n";
 	}
 }

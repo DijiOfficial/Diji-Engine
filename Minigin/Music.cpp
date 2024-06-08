@@ -27,3 +27,13 @@ void diji::Music::SetVolume(const int volume) const
 {
 	volume == -1 ? Mix_VolumeMusic(16) : Mix_VolumeMusic(volume);
 }
+
+void diji::Music::Pause() const
+{
+	Mix_PauseMusic();
+}
+
+void diji::Music::Resume() const
+{
+	Mix_ResumeMusic();
+}
