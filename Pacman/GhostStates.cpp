@@ -244,13 +244,20 @@ void pacman::Respawn::OnExit(const GhostAI* ghost)
 			otherGhostEaten = true;
 	}
 	
+	auto& ss = diji::ServiceLocator::GetSoundSystem();
+
 	if (ghost->IsLastGhostEaten())
 	{
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
+		ss.AddSoundRequest("siren_1.wav", true, -1);
 		ghost->SetIsLastGhostEaten(false);
 	}
-	else if(not otherGhostEaten) //todo: check if sound playing is music or power pellet or check if shit is done or some
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("power_pellet.wav", true, -1);
+	else if (not otherGhostEaten)
+	{
+		if (ghost->GetPowerUpTimer() < 10.f)
+			ss.AddSoundRequest("power_pellet.wav", true, -1);
+		else
+			ss.AddSoundRequest("siren_1.wav", true, -1);
+	}
 }
 
 std::unique_ptr<pacman::GhostState> pacman::Respawn::Execute(const GhostAI* ghost)

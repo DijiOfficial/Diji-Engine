@@ -73,6 +73,7 @@ namespace pacman
 		bool IsPowerAlmostOver() const { return m_PowerUpTimer >= 7.f; };
 		bool IsUpdatePaused() const;
 		bool IsLastGhostEaten() const { return m_IsLastGhostEaten; };
+		float GetPowerUpTimer() const { return m_PowerUpTimer; };
 
 		void ClearFrightened() const;
 		void SetGhostTexture() const;

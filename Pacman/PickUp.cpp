@@ -5,7 +5,6 @@
 #include "Observers.h"
 #include "Render.h"
 
-//todo: remove component from subject or observer that need no upadte
 pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* player, const diji::GameObject* player2, const diji::GameObject* pelletCounter, const int value)
 	: Component(ownerPtr)
 	, m_Value{ value }
@@ -19,8 +18,7 @@ pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* playe
 	
 	m_PelletCounter = pelletCounter ? pelletCounter->GetComponent<PelletObserver>() : nullptr;
 	m_PlayerColliderPtr = player->GetComponent<diji::Collider>();
-	if (player2)
-		m_Player2ColliderPtr = player2->GetComponent<diji::Collider>();
+	m_Player2ColliderPtr = player2 ? player2->GetComponent<diji::Collider>() : nullptr;
 	m_OwnerColliderPtr = nullptr;
 	m_RenderCompPtr = nullptr;
 }
