@@ -101,15 +101,15 @@ namespace pacman
 
 	};
 
-	class test final : public diji::GameActorCommands
+	class SkipLevel final : public diji::GameActorCommands
 	{
 	public:
-		test(diji::GameObject* actor);
-		~test() noexcept override = default;
+		SkipLevel(diji::GameObject* actor);
+		~SkipLevel() noexcept override = default;
 
 		void Execute() override;
 	private:
-		PelletCounter* tester;
+		PelletCounter* m_PelletCounterPtr;
 	};
 
 	class ScoreCommand final : public diji::GameActorCommands

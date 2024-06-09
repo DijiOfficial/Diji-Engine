@@ -61,16 +61,15 @@ void pacman::NameChangeCommand::Execute()
 		m_NameComp->MoveLetter(m_Movement);
 }
 
-pacman::test::test(diji::GameObject* actor)
+pacman::SkipLevel::SkipLevel(diji::GameObject* actor)
 	: GameActorCommands{ actor }
 {
-	tester = GetGameActor()->GetComponent<PelletCounter>();
+	m_PelletCounterPtr = GetGameActor()->GetComponent<PelletCounter>();
 }
 
-//todo: rename
-void pacman::test::Execute()
+void pacman::SkipLevel::Execute()
 {
-	tester->test();
+	m_PelletCounterPtr->SkipLevel();
 }
 
 pacman::GhostSwitchState::GhostSwitchState(diji::GameObject* actor, diji::Movement movement)

@@ -28,7 +28,7 @@ void pacman::PelletCounter::Update()
 	}
 }
 
-void pacman::PelletCounter::test()
+void pacman::PelletCounter::SkipLevel()
 {
 	Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::LEVEL_END));
 }

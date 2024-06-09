@@ -245,7 +245,7 @@ void Loader::CommonGameAssets(Scene* &scene)
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
 	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
 
-	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_F1, pelletCounter);
+	input.BindCommand<pacman::SkipLevel>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_F1, pelletCounter);
 	input.BindCommand<pacman::MuteCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_M, nullptr);
 	input.BindCommand<pacman::MuteCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, nullptr);
 

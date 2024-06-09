@@ -16,7 +16,7 @@ namespace pacman
 		void Update() override;
 		void FixedUpdate() override {};
 
-		void test();
+		void SkipLevel();
 	private:
 		PelletObserver* m_PelletObserverPtr = nullptr;
 		bool m_CanNotify = true;
