@@ -123,14 +123,6 @@ void pacman::AI::FixedUpdate()
 	if (currentMovement == diji::Movement::Right)
 		if (shape.left > TOTAL_WIDTH)
 			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
-
-	//std::cout << "AI: " << shape.left << " " << shape.bottom << std::endl;
-
-	//if (Collision::GetInstance().IsCollidingWithIntersection(shape))
-	//{
-	//	std::cout << "AI: Intersection Collision" << std::endl;
-	//}
-
 }
 
 void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject)
@@ -205,34 +197,12 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	}
 }
 
-//todo: clean up
 const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
 {
+	const auto position = m_TransformCompPtr->GetPosition() + glm::vec3{ m_TransformCompPtr->Get2DMovementVector(movement, 2.f), 0.f };
 	auto shape = m_ColliderCompPtr->GetCollisionBox();
-	//const auto& deltaTime = TimeSingleton::GetInstance().GetDeltaTime();
-	switch (movement)
-	{
-	case diji::Movement::Up:
-		//shape.bottom -= m_Speed.y * deltaTime;
-		//--shape.bottom;
-		shape.bottom -= 2;
-		break;
-	case diji::Movement::Down:
-		//shape.bottom += m_Speed.y * deltaTime;
-		//++shape.bottom;
-		shape.bottom += 2;
-		break;
-	case diji::Movement::Left:
-		//shape.left -= m_Speed.x * deltaTime;
-		//--shape.left;
-		shape.left -= 2;
-		break;
-	case diji::Movement::Right:
-		//shape.left += m_Speed.x * deltaTime;
-		//++shape.left;
-		shape.left += 2;
-		break;
-	}
+	shape.left = position.x;
+	shape.bottom = position.y;
 
 	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
 	{
@@ -293,6 +263,8 @@ void pacman::AI::Reset()
 	m_TextureCompPtr->SetAnimationTime(0.3f);
 	//Reset the collider to avoid collision in the next frame
 	m_ColliderCompPtr->Update();
+
+	diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
 }
 
 bool pacman::AI::CheckIfDirectionIsValid(const diji::Movement& movement)
@@ -337,36 +309,3 @@ bool pacman::AI::CheckIfDirectionIsValid(const diji::Movement& movement)
 
 	return true; // Movement is valid if no collision is detected
 }
-
-//const diji::Rectf pacman::AI::CalculateNewPosition(diji::Movement movement)
-//{
-//	//auto shape = m_ColliderCompPtr->GetCollisionBox() + m_TransformCompPtr->GetMovementVector(2.f);
-//
-//	const auto position = m_TransformCompPtr->GetPosition() + m_TransformCompPtr->GetMovementVector(2.f);
-//	auto shape = m_ColliderCompPtr->GetCollisionBox();
-//	shape.left = position.x;
-//	shape.bottom = position.y;
-//
-//	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
-//	{
-//		shape.left = std::round(shape.left);
-//		shape.bottom = std::round(shape.bottom);
-//		switch (movement)
-//		{
-//		case diji::Movement::Up:
-//			++shape.bottom;
-//			break;
-//		case diji::Movement::Down:
-//			--shape.bottom;
-//			break;
-//		case diji::Movement::Left:
-//			++shape.left;
-//			break;
-//		case diji::Movement::Right:
-//			--shape.left;
-//			break;
-//		}
-//	}
-//
-//	return shape;
-//}
