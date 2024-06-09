@@ -19,7 +19,7 @@ void pacman::GhostsTimers::Update()
 		}
 	}
 
-	if (m_CurrentCycle > m_ChaseScatterDuration.size() - 1)
+	if (m_CurrentCycle > static_cast<int>(m_ChaseScatterDuration.size()) - 1)
 		return;
 
 	m_TotalElapsedTime += deltaTime;
@@ -31,10 +31,8 @@ void pacman::GhostsTimers::Update()
 	}
 }
 
-void pacman::GhostsTimers::OnNotify(diji::MessageTypes message, diji::Subject* subject)
+void pacman::GhostsTimers::OnNotify(diji::MessageTypes message, diji::Subject*)
 {
-	//is this c style cast? anyways remove them and just delete subject from paramenter do that everywhere
-	(void)subject;
 	auto msg = static_cast<MessageTypesDerived>(message);
 	switch (msg)
 	{

@@ -7,9 +7,22 @@
 
 #include "GameLoader.h"
 #include "SceneManager.h"
+#include "TimeSingleton.h"
 
 void pacman::Menu::Update()
 {
+	m_DisplayTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
+	if (m_DisplayTimer >= 0.2f)
+	{
+		m_Display = !m_Display;
+		m_DisplayTimer = 0.f;
+	}
+
+	if (!m_Display)
+		GetOwner()->GetComponent<diji::Render>()->DisableRender();
+	else
+		GetOwner()->GetComponent<diji::Render>()->EnableRender();
+
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
 	if (pStates[SDL_SCANCODE_RETURN])
@@ -56,7 +69,6 @@ void pacman::Menu::ValidateChoice()
 	case 0:
 		state = GameState::LEVEL;
 		Loader::PacmanLevel();
-		//diji::SceneManager::GetInstance().Init();
 		break;
 	case 1:
 		state = GameState::COOP;

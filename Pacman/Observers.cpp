@@ -95,9 +95,8 @@ void pacman::IntroTextObserver::Init()
 	m_RenderCompPtr = GetOwner()->GetComponent<diji::Render>();
 }
 
-void pacman::IntroTextObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
+void pacman::IntroTextObserver::OnNotify(diji::MessageTypes message, diji::Subject*)
 {
-	(void)subject;
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (static_cast<int>(msg) == static_cast<int>(m_Message))
 		m_RenderCompPtr->DisableRender();
@@ -147,9 +146,8 @@ void pacman::HighScoreObserver::DisplayPossibleScore(int score)
 	SetText(formattedScore);
 }
 
-void pacman::LevelObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
+void pacman::LevelObserver::OnNotify(diji::MessageTypes message, diji::Subject*)
 {
-	(void)subject;
 	auto msg = static_cast<MessageTypesDerived>(message);
 	if (msg == MessageTypesDerived::LEVEL_END)
 	{

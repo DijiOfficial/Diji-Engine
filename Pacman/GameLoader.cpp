@@ -45,13 +45,18 @@ void Loader::PacmanMenu()
 	menuUI->AddComponents<pacman::Menu>();
 	const ShapeInfo shapeInfo = { Rectf{0, 0, 0, 0}, SDL_Color{235, 235, 235}, 1 };
 	menuUI->AddComponents<Render>(shapeInfo);
-	//menuUI->GetComponent<Render>()->SetIsShape();
 
 	auto singlePlayer = menuScene->CreateGameObject("singlePLayerTexture");
 	singlePlayer->AddComponents<Transform>(-120, 0);
 	singlePlayer->AddComponents<Texture>("SinglePlayer.png", 15, 15);
 	singlePlayer->AddComponents<Render>(2);
 	singlePlayer->SetParent(menuUI, false);
+
+	auto logo = menuScene->CreateGameObject("logo");
+	logo->AddComponents<Texture>("Logo.png");
+	logo->AddComponents<Transform>(-220, -250);
+	logo->AddComponents<Render>();
+	logo->SetParent(menuUI, false);
 
 	auto coop = menuScene->CreateGameObject("coopTexture");
 	coop->AddComponents<Transform>(-45, 0);
@@ -66,9 +71,10 @@ void Loader::PacmanMenu()
 	versus->SetParent(menuUI, false);
 
 	auto pushStart = menuScene->CreateGameObject("startTextMenu");
-	pushStart->AddComponents<Text>("PUSH ENTER BUTTON", mediumFont, SDL_Color{ 206, 176, 110, 255 }, true);
+	pushStart->AddComponents<Text>("PUSH ENTER BUTTON", mediumFont, SDL_Color{ 206, 206, 110, 255 }, true);
 	pushStart->AddComponents<Transform>(0, 120);
 	pushStart->AddComponents<Render>();
+	pushStart->AddComponents<pacman::BlinkingText>();
 	pushStart->SetParent(menuUI, false);
 
 	auto& input = InputManager::GetInstance();
@@ -322,17 +328,6 @@ void Loader::VersusLevel()
 
 	CommonGameAssets(scene);
 
-	//const auto& Blinky = scene->GetGameObject("z_Blinky");
-
-	//auto Blinky = scene->CreateGameObject("z_Blinky");
-	//Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
-	//Blinky->AddComponents<Transform>(212, 247);
-	//Blinky->AddComponents<Render>(2);
-	//Blinky->AddComponents<Collider>(15, 15);
-	//Blinky->AddComponents<pacman::RedAI>(player, pelletCounter, GhostTimers);
-	//Blinky->AddComponents<pacman::GhostCollision>(player);
-	//Blinky->GetComponent<Render>()->DisableRender();
-
 	scene->GetGameObject("playerTextHUD")->GetComponent<Text>()->SetText("2UP");
 	
 	const auto& player2 = scene->GetGameObject("z_Blinky");
@@ -397,7 +392,6 @@ void Loader::CoopLevel()
 	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene, player2 };
 
 	const auto& pelletCounter = scene->GetGameObject("pelletCounter");
-	//const auto& player = scene->GetGameObject("player");
 	pelletCounter->GetComponent<pacman::PelletCounter>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_END), player2->GetComponent<pacman::AI>());
 
 	const auto& fruit = scene->GetGameObject("w_fruit");

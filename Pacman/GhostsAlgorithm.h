@@ -24,7 +24,7 @@ namespace pacman
 		void Init() override {};
 		void Update();
 		void FixedUpdate() override {};
-		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 
 		bool IsInChaseState() const { return m_IsInChaseState; }
 

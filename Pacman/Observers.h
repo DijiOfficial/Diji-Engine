@@ -98,7 +98,7 @@ namespace pacman
 		LevelObserver(diji::GameObject* ownerPtr) : Component(ownerPtr) {};
 		~LevelObserver() noexcept override = default;
 
-		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 
 		void Init() override {};
 		void Update() override {};
@@ -119,7 +119,7 @@ namespace pacman
 		virtual void Update() {};
 		virtual void FixedUpdate() {};
 
-		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
+		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 
 	private:
 		MessageTypesDerived m_Message;

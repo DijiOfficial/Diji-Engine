@@ -23,6 +23,8 @@ namespace pacman
 
 		bool m_WasDownKey = false;
 		bool m_WasUpKey = false;
+		float m_DisplayTimer = 0.f;
+		bool m_Display = true;
 	};
 }
 
