@@ -25,9 +25,6 @@ namespace diji
 		void Remove(const std::string& name);
 		void RemoveAll();
 		GameObject* GetGameObject(const std::string& name) const;
-
-		std::unique_ptr<GameObject> RemoveAndReturnGameObject(const GameObject* obj);
-		void AddExistingGameObject(std::unique_ptr<GameObject> object, const std::string& name);
 		std::string GetGameObjectName(const GameObject* object) const;
 		
 	private:

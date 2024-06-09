@@ -6,9 +6,6 @@
 #include "Renderer.h"
 #include "GameObject.h"
 
-//temp
-#include "Command.h"
-#include "Collider.h"
 diji::Render::Render(GameObject* ownerPtr, int scale) 
 	: Render(ownerPtr)
 {
@@ -77,14 +74,6 @@ void diji::Render::RenderFrame() const
 	else
 		Renderer::GetInstance().RenderTexture(*m_TexturePtr, pos.x, pos.y, m_Scale);
 
-	if (m_DisplayHitbox)
-	{
-		Renderer::GetInstance().DrawRect(GetOwner()->GetComponent<Collider>()->GetCollisionBox());
-		const auto& collision = Collision::GetInstance().GetLevelCollider();
-
-		for (const auto& rect : collision)
-			Renderer::GetInstance().DrawPolygon(rect);
-	}
 }
 
 void diji::Render::UpdateText()

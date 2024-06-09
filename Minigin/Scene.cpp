@@ -50,29 +50,6 @@ diji::GameObject* diji::Scene::GetGameObject(const std::string& name) const
 	return it != m_ObjectsUPtrMap.end() ? it->second.get() : nullptr;
 }
 
-std::unique_ptr<diji::GameObject> diji::Scene::RemoveAndReturnGameObject(const GameObject* object)
-{
-	for (auto it = m_ObjectsUPtrMap.begin(); it != m_ObjectsUPtrMap.end(); ++it)
-	{
-		if (it->second.get() == object)
-		{
-			auto removedObj = std::move(it->second);
-			m_ObjectsUPtrMap.erase(it);
-			return removedObj;
-		}
-	}
-	return nullptr;
-}
-
-void diji::Scene::AddExistingGameObject(std::unique_ptr<GameObject> object, const std::string& name)
-{
-	if (m_ObjectsUPtrMap.find(name) != m_ObjectsUPtrMap.end())
-	{
-		throw std::runtime_error("A GameObject with the given name already exists in the target scene.");
-	}
-	m_ObjectsUPtrMap[name] = std::move(object);
-}
-
 std::string diji::Scene::GetGameObjectName(const GameObject* object) const
 {
 	for (const auto& pair : m_ObjectsUPtrMap)

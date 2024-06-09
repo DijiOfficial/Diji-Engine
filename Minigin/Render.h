@@ -39,8 +39,6 @@ namespace diji
 		virtual void UpdateTexture(Texture2D* texture) { m_TexturePtr = texture; };
 		void DisableRender() { m_Render = false; }
 		void EnableRender() { m_Render = true; }
-		void EnableHitbox() { m_DisplayHitbox = true; }
-		void DisableHitbox() { m_DisplayHitbox = false; }
 		void SetIsShape() { m_IsShape = true; }
 		void UpdateShape(const Rectf& shape) { m_ShapeInfo.rect = shape; }
 	protected:
@@ -54,7 +52,6 @@ namespace diji
 
 		ShapeInfo m_ShapeInfo;
 
-		bool m_DisplayHitbox = false;
 		bool m_IsShape = false;
 	};
 }

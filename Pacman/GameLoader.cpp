@@ -301,11 +301,8 @@ void Loader::PacmanLevel()
 	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::LEVEL));
 
 	CommonGameAssets(scene);
-	//input.Reset();
-	//Collision::GetInstance().Reset();
-
+	
 	//todo: ReadyText should spawn when player respawns
-	//todo: highscore should display other scoresa
 	auto& input = InputManager::GetInstance();
 	const auto& player = scene->GetGameObject("player");
 
@@ -317,7 +314,6 @@ void Loader::PacmanLevel()
 	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
 	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene };
 
-	//todo: add a second player to fruit with  a function
 }
 
 void Loader::VersusLevel()

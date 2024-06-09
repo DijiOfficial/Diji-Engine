@@ -2,7 +2,6 @@
 #include <SDL.h>
 #include "Singleton.h"
 
-//todo : temp debug stuff
 #include "Collision.h"
 namespace diji
 {

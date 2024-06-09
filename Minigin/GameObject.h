@@ -16,9 +16,6 @@ namespace diji
 		GameObject() = default;
 		~GameObject() noexcept = default;
 
-		//template<typename... Args>
-		//GameObject(Args&&... args) { AddComponents(std::forward<Args>(args)...); }; //untested
-
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
