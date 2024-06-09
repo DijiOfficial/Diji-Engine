@@ -25,6 +25,7 @@ namespace diji
 		void FixedUpdate();
 		void Init();
 		void Render() const;
+		void LateUpdate();
 
 #pragma region Components
 		template<typename T, typename... Args>

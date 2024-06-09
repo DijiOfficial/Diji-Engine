@@ -14,6 +14,7 @@ namespace diji
 		void FixedUpdate();
 		void Init();
 		void Render();
+		void LateUpdate();
 
 		void SetActiveScene(const int id) { m_ActiveSceneId = id; m_NextScene = id; };
 		void SetNextSceneToActivate(const int id) { m_NextScene = id; };

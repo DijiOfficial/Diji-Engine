@@ -23,6 +23,7 @@ namespace pacman
 		void Init() override;
 		void Update() override;
 		void FixedUpdate() override {};
+		void LateUpdate() override;
 		void OnNotify(diji::MessageTypes message, diji::Subject*) override;
 		int GetValue() const { return m_Value; };
 		void HandleCollision();

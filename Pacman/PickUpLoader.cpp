@@ -52,9 +52,7 @@ void pacman::PickUpLoader::AddPickUp(const std::string& file, const int width, c
 	pickUp->AddComponents<diji::Texture>(file, width, height);
 	pickUp->AddComponents<diji::Transform>(pos.x, pos.y);
 	pickUp->AddComponents<diji::Render>(2);
-	//pickUp->AddComponents<Collider>(width, height);
 	pickUp->AddComponents<diji::Collider>(1, 1, glm::vec2{ 2, 2 });
-	//pickUp->AddComponents<ScoreCounter>(0);
 	pickUp->AddComponents<PickUp>(m_PlayerPtr, m_Player2Ptr, pelletCouter, value);
 
 	pickUp->GetComponent<PickUp>()->AddObserver(static_cast<diji::MessageTypes>(MessageTypesDerived::PICKUP_COLLISION), m_PlayerPtr->GetComponent<AI>());

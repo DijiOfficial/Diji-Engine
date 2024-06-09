@@ -93,3 +93,11 @@ void diji::Scene::Render() const
 		object.second->Render();
 	}
 }
+
+void diji::Scene::LateUpdate()
+{
+	for (auto& object : m_ObjectsUPtrMap)
+	{
+		object.second->LateUpdate();
+	}
+}

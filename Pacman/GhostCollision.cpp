@@ -20,9 +20,8 @@ void pacman::GhostCollision::Init()
 	m_OwnerColliderPtr = GetOwner()->GetComponent<diji::Collider>();
 }
 
-void pacman::GhostCollision::Update()
+void pacman::GhostCollision::LateUpdate()
 {
-	//todo: late update
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{
@@ -46,6 +45,7 @@ void pacman::GhostCollision::Update()
 					dynamic_cast<const pacman::Dying*>(currentState) == nullptr)
 				{
 					Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::ENEMY_COLLISION));
+					break;
 				}
 			}
 

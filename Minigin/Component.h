@@ -16,7 +16,7 @@ namespace diji
 		virtual void Init() = 0;
 		virtual void Update() = 0;
 		virtual void FixedUpdate() = 0;
-
+		virtual void LateUpdate() {};
 	protected:
 		explicit Component(GameObject* ownerPtr) : m_OwnerPtr{ ownerPtr } {}
 		const GameObject* GetOwner() const { return m_OwnerPtr; }

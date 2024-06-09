@@ -120,7 +120,10 @@ void pacman::GhostAI::FixedUpdate()
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
 	}
-	//todo: late Update
+}
+
+void pacman::GhostAI::LateUpdate()
+{
 	auto currentMovement = m_TransformCompPtr->GetMovement();
 	auto shape = m_ColliderCompPtr->GetCollisionBox();
 	if (currentMovement == diji::Movement::Left)

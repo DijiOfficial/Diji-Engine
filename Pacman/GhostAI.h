@@ -52,6 +52,7 @@ namespace pacman
 		void Init() override;
 		void Update() override;
 		void FixedUpdate() override;
+		void LateUpdate() override;
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 
 		virtual std::unique_ptr<GhostState> GetChaseState() const = 0;

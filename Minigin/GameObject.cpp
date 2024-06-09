@@ -35,6 +35,14 @@ void diji::GameObject::Render() const
     if (m_RenderCompPtr) m_RenderCompPtr->RenderFrame();
 }
 
+void diji::GameObject::LateUpdate()
+{
+    for (const auto& component : m_ComponentsPtrVec)
+    {
+		component->LateUpdate();
+	}
+}
+
 void diji::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 {
     if (parent == m_ParentPtr || parent == this || IsChildOf(parent))

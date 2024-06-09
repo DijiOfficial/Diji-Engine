@@ -71,6 +71,11 @@ void pacman::Fruit::Update()
 		return;
 	}
 
+	
+}
+
+void pacman::Fruit::LateUpdate()
+{
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{

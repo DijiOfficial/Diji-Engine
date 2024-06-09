@@ -29,6 +29,11 @@ void diji::SceneManager::Render()
 	m_ScenesUPtrMap.at(m_ActiveSceneId)->Render();
 }
 
+void diji::SceneManager::LateUpdate()
+{
+	m_ScenesUPtrMap.at(m_ActiveSceneId)->LateUpdate();
+}
+
 diji::Scene* diji::SceneManager::CreateScene(const int id)
 {
 	m_ScenesUPtrMap[id] = std::make_unique<Scene>();

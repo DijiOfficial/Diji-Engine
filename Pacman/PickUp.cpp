@@ -54,9 +54,10 @@ void pacman::PickUp::Update()
 			m_PowerUpInvisibleFrames = 0;
 		}
 	}
+}
 
-	//this is rather slow, possible optimisation?
-	//todo: check collisions on late update
+void pacman::PickUp::LateUpdate()
+{
 	const auto& colliders = diji::Collision::GetInstance().IsColliding(m_OwnerColliderPtr);
 	for (const auto& collider : colliders)
 	{

@@ -19,8 +19,9 @@ namespace pacman
 		~GhostCollision() noexcept override = default;
 
 		void Init() override;
-		void Update() override;
+		void Update() override {};
 		void FixedUpdate() override {};
+		void LateUpdate() override;
 		void AddPLayer2Collider(diji::Collider* player2) { m_Player2ColliderPtr = player2; };
 		GhostState* GetCurrentState();
 		int GetGhostsEaten() const;

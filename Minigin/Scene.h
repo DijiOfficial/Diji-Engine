@@ -19,6 +19,7 @@ namespace diji
 		void FixedUpdate();
 		void Init();
 		void Render() const;
+		void LateUpdate();
 		
 		GameObject* CreateGameObject(const std::string& name);
 		void Remove(GameObject* object);
