@@ -189,6 +189,12 @@ void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject* subjec
 	}
 }
 
+void pacman::GhostAI::SetInMenu()
+{
+	m_IsInMenu = true;
+	m_CurrentStateUPtr = GetChaseState();
+};
+
 bool pacman::GhostAI::GetIsInChaseState() const
 {
 	return m_GhostsTimerPtr->IsInChaseState();

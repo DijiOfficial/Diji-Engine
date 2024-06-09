@@ -33,6 +33,7 @@ namespace pacman {
 		void LateUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
 
+		void SetActive();
 		void SetInitialMovementLeft() { m_PreviousMovement = diji::Movement::Left; m_SavedMovement = diji::Movement::Left; };
 		int GetGhostsEaten() const { return m_GhostsEaten; }
 		static constexpr float TOTAL_WIDTH = 452;
@@ -46,8 +47,7 @@ namespace pacman {
 		const glm::vec2 m_Speed = { 160.f, 160.f };
 		const diji::Rectf CalculateNewPosition(diji::Movement movement);
 		bool m_PauseAI = true;
-		//bool m_IsPoweredUp = false;
-		//float m_PowerUpTimer = 0.f;
+		bool m_IsInMenu = false;
 		float m_PauseTime = -10.f;
 		int m_GhostsEaten = 0;
 		bool m_IsDying = false;

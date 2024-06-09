@@ -27,7 +27,7 @@
 #include "Fruit.h"
 #include <format>
 #include "BlinkingText.h"
-
+#include "PickUp.h"
 using namespace diji;
 
 namespace loader
@@ -39,6 +39,97 @@ void Loader::PacmanMenu()
 {
 	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+
+
+	auto player = menuScene->CreateGameObject("player");
+	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
+	player->GetComponent<Texture>()->SetRotation(true);
+	player->AddComponents<Transform>(452, 439);
+	player->AddComponents<Render>(2);
+	player->AddComponents<pacman::HealthCounter>(4);
+	player->AddComponents<pacman::ScoreCounter>(0);
+	player->AddComponents<Collider>(15, 15);
+	player->AddComponents<pacman::AI>();
+	player->GetComponent<pacman::AI>()->SetActive();
+
+	player->GetComponent<Texture>()->SetRotationAngle(static_cast<int>(diji::Movement::Left) * 90.0f);
+
+	auto powerUp = menuScene->CreateGameObject("powerPellet");
+	powerUp->AddComponents<diji::Texture>("PowerPellet.png", 8, 8);
+	powerUp->AddComponents<diji::Transform>(70, 447);
+	powerUp->AddComponents<diji::Render>(2);
+	powerUp->AddComponents<diji::Collider>(8, 8);
+	powerUp->AddComponents<pacman::PickUp>(player, nullptr, 50);
+
+	powerUp->GetComponent<pacman::PickUp>()->AddObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), player->GetComponent<pacman::AI>());
+	
+	auto GhostTimers = menuScene->CreateGameObject("ghostTimers");
+	GhostTimers->AddComponents<pacman::GhostsTimers>();
+	GhostTimers->GetComponent<pacman::GhostsTimers>()->SetInMenu();
+
+	auto pelletCounter = menuScene->CreateGameObject("pelletCounter");
+	pelletCounter->AddComponents<pacman::PelletObserver>();
+	pelletCounter->AddComponents<pacman::PelletCounter>();
+
+	auto Blinky = menuScene->CreateGameObject("z_Blinky");
+	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
+	Blinky->AddComponents<Transform>(485, 439);
+	Blinky->AddComponents<Render>(2);
+	Blinky->AddComponents<Collider>(15, 15);
+	Blinky->AddComponents<pacman::RedAI>(player, pelletCounter, GhostTimers);
+	Blinky->AddComponents<pacman::GhostCollision>(player);
+	Blinky->GetComponent<pacman::RedAI>()->SetInMenu();
+	Blinky->GetComponent<Transform>()->SetMovement(diji::Movement::Left);
+	Blinky->GetComponent<Texture>()->SetStartingFrame(static_cast<int>(diji::Movement::Left) * 2);
+
+	//auto Pinky = menuScene->CreateGameObject("z_Pinky");
+	//Pinky->AddComponents<Texture>("Pinky.png", 15, 15, 2);
+	//Pinky->AddComponents<Transform>(490, 439);
+	//Pinky->AddComponents<Render>(2);
+	//Pinky->AddComponents<Collider>(15, 15);
+	//Pinky->AddComponents<pacman::Pinky>(player, pelletCounter, GhostTimers);
+	//Pinky->AddComponents<pacman::GhostCollision>(player);
+
+	//auto Inky = menuScene->CreateGameObject("z_Inky");
+	//Inky->AddComponents<Texture>("Inky.png", 15, 15, 2);
+	//Inky->AddComponents<Transform>(510, 439);
+	//Inky->AddComponents<Render>(2);
+	//Inky->AddComponents<Collider>(15, 15);
+	//Inky->AddComponents<pacman::Inky>(player, pelletCounter, GhostTimers, Blinky);
+	//Inky->AddComponents<pacman::GhostCollision>(player);
+
+	//auto Clyde = menuScene->CreateGameObject("z_Clyde");
+	//Clyde->AddComponents<Texture>("Clyde.png", 15, 15, 2);
+	//Clyde->AddComponents<Transform>(530, 439);
+	//Clyde->AddComponents<Render>(2);
+	//Clyde->AddComponents<Collider>(15, 15);
+	//Clyde->AddComponents<pacman::Clyde>(player, pelletCounter, GhostTimers);
+	//Clyde->AddComponents<pacman::GhostCollision>(player);
+
+	//const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
+	const std::vector<GameObject*> ghosts = { Blinky };
+
+	////Set the ghosts aware of each other
+	//const auto& BlinkyAI = Blinky->GetComponent<pacman::RedAI>();
+	//const auto& PinkyAI = Pinky->GetComponent<pacman::Pinky>();
+	//const auto& InkyAI = Inky->GetComponent<pacman::Inky>();
+	//const auto& ClydeAI = Clyde->GetComponent<pacman::Clyde>();
+	//const std::vector<pacman::GhostAI*> ghostAIs = { BlinkyAI, PinkyAI, InkyAI, ClydeAI };
+	//BlinkyAI->SetGhostsVector(ghostAIs);
+	//PinkyAI->SetGhostsVector(ghostAIs);
+	//InkyAI->SetGhostsVector(ghostAIs);
+	//ClydeAI->SetGhostsVector(ghostAIs);
+
+	for (const auto& object : ghosts)
+	{
+		powerUp->GetComponent<pacman::PickUp>()->AddObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<pacman::GhostAI>());
+	}
+
+	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::RedAI>());
+
+	//player->GetComponent<Render>()->DisableRender();
+	//player->GetComponent<Texture>()->PauseAnimation();
 
 	auto menuUI = menuScene->CreateGameObject("menuUI"); //will handle the drawings and AI part of the menu
 	menuUI->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y * 0.5f);
@@ -72,7 +163,7 @@ void Loader::PacmanMenu()
 
 	auto pushStart = menuScene->CreateGameObject("startTextMenu");
 	pushStart->AddComponents<Text>("PUSH ENTER BUTTON", mediumFont, SDL_Color{ 206, 206, 110, 255 }, true);
-	pushStart->AddComponents<Transform>(0, 120);
+	pushStart->AddComponents<Transform>(0, 200);
 	pushStart->AddComponents<Render>();
 	pushStart->AddComponents<pacman::BlinkingText>();
 	pushStart->SetParent(menuUI, false);

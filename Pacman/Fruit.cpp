@@ -23,7 +23,7 @@ void pacman::Fruit::Init()
 	const auto& ownerPtr = GetOwner();
 	m_OwnerColliderPtr = ownerPtr->GetComponent<diji::Collider>();
 }
-//todo: player cannot swithc direction when outside of the map (or make map bigger)
+
 void pacman::Fruit::Update()
 {
 	if (m_IsEaten)

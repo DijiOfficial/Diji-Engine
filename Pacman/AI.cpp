@@ -95,7 +95,7 @@ namespace pacman {
         const auto& currentMovement = m_TransformCompPtr->GetMovement();
         const auto& shape = CalculateNewPosition(currentMovement);
 
-        if (CheckIfDirectionIsValid(currentMovement) && !diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+        if (m_IsInMenu or (CheckIfDirectionIsValid(currentMovement) and !diji::Collision::GetInstance().IsCollidingWithWorld(shape)))
         {
             m_TransformCompPtr->SetPosition(shape.left, shape.bottom);
             if (m_PreviousMovement != currentMovement)
@@ -159,6 +159,11 @@ namespace pacman {
         switch (msg)
         {
         case MessageTypesDerived::POWERUP_COLLISION:
+            if (m_IsInMenu)
+            {
+                m_TransformCompPtr->SetMovement(diji::Movement::Right);
+                m_TextureCompPtr->SetRotationAngle(static_cast<int>(diji::Movement::Right) * 90.0f);
+            }
             m_GhostsEaten = 0;
             [[fallthrough]];
         case MessageTypesDerived::PICKUP_COLLISION:
@@ -216,6 +221,15 @@ namespace pacman {
         }
     }
 
+    void AI::SetActive()
+    {
+        m_PauseAI = false; 
+        m_IsInMenu = true;
+        m_PreviousMovement = diji::Movement::Left;
+        m_SavedMovement = diji::Movement::Left;
+        m_PauseTime = 0.0f;
+
+    }
     const diji::Rectf AI::CalculateNewPosition(diji::Movement movement)
     {
         const auto position = m_TransformCompPtr->GetPosition() + glm::vec3{ m_TransformCompPtr->Get2DMovementVector(movement, PLAYER_MOVE_DISTANCE), 0.0f };
@@ -223,7 +237,7 @@ namespace pacman {
         shape.left = position.x;
         shape.bottom = position.y;
 
-        if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+        if (not m_IsInMenu and diji::Collision::GetInstance().IsCollidingWithWorld(shape))
         {
             shape.left = std::round(shape.left);
             shape.bottom = std::round(shape.bottom);

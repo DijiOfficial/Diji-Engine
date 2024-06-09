@@ -30,7 +30,9 @@ namespace pacman
 
 		bool IsPaused() const { return m_IsPaused or m_IsInIntro; };
 		void Pause() { m_PauseTimer = 0.f; m_IsPaused = true; };
+		void SetInMenu() { m_IsInMenu = true; m_IsInIntro = false; m_IsInChaseState = true; m_IsPaused = false; m_PauseTimer = -12.0f; };
 	private:
+		bool m_IsInMenu = false;
 		bool m_IsInIntro = true;
 		bool m_IsInChaseState = false;
 		bool m_IsPaused = false;

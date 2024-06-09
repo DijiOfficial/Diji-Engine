@@ -23,7 +23,8 @@ void pacman::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& targe
 		if (pos != glm::vec2{ 0, 0 })
 		{
 			ghost->GetTransform()->SetPosition(pos.x - shape.width * 0.5f, pos.y - shape.height * 0.5f);
-			CalculateDirection(ghost, target);
+			if (not ghost->GetIsInMenu())
+				CalculateDirection(ghost, target);
 			m_TempLock = true;
 		}
 	}
@@ -451,8 +452,9 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 		return std::make_unique<Frightened>();
 
 	//could add the additional check for pellets remaining here
-	if (not ghost->IsPLayerControlled() and not ghost->GetIsInChaseState())
-		return std::make_unique<Scatter>();
+	if (not ghost->GetIsInMenu())
+		if (not ghost->IsPLayerControlled() and not ghost->GetIsInChaseState())
+			return std::make_unique<Scatter>();
 	
 	return nullptr;
 }

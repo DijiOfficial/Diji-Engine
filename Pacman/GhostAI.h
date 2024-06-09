@@ -55,6 +55,7 @@ namespace pacman
 		void LateUpdate() override;
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 
+		void SetInMenu();
 		virtual std::unique_ptr<GhostState> GetChaseState() const = 0;
 		virtual diji::Transform* GetSecondGhostTransform() const { return nullptr; };
 
@@ -74,6 +75,7 @@ namespace pacman
 		bool IsPowerAlmostOver() const { return m_PowerUpTimer >= 7.f; };
 		bool IsUpdatePaused() const;
 		bool IsLastGhostEaten() const { return m_IsLastGhostEaten; };
+		bool GetIsInMenu() const { return m_IsInMenu; };
 		float GetPowerUpTimer() const { return m_PowerUpTimer; };
 
 		void ClearFrightened() const;
@@ -98,6 +100,8 @@ namespace pacman
 		glm::vec2 m_ScatterTarget = { 0, 0 };
 		std::string m_TexturePath = "";
 		int m_PelletsNeededForRespawn = 0;
+		bool m_IsInMenu = false;
+
 	private:
 		std::vector<GhostAI*> m_GhostsPtrs;
 		diji::Collider* m_PlayerColliderPtr;
