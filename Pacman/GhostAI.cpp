@@ -82,17 +82,21 @@ void pacman::GhostAI::Update()
 	if (m_GhostsTimerPtr->IsPaused())
 		return;
 	
-	//todo: magic mumber removal?
+	constexpr float TUNNEL_Y_POSITION = 295.0f;
+	constexpr float TUNNEL_X_MIN = 90.0f;
+	constexpr float TUNNEL_X_MAX = 360.0f;
+	constexpr float POWER_UP_DURATION = 10.0f;
+
 	const auto& pos = m_TransformCompPtr->GetPosition();
-	m_CurrentStateUPtr->SetInTunnel(pos.y == 295 and (pos.x <= 90 or pos.x >= 360));
-	
+	m_CurrentStateUPtr->SetInTunnel(pos.y == TUNNEL_Y_POSITION and (pos.x <= TUNNEL_X_MIN or pos.x >= TUNNEL_X_MAX));
+
 	if (m_IsFrightened)
 	{
 		m_PowerUpTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
-		if (m_PowerUpTimer >= 10.f)
+		if (m_PowerUpTimer >= POWER_UP_DURATION)
 		{
 			m_IsFrightened = false;
-			m_PowerUpTimer = 0.f;
+			m_PowerUpTimer = 0.0f;
 			diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
 		}
 	}
