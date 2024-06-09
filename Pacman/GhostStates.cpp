@@ -253,10 +253,10 @@ void pacman::Respawn::OnExit(const GhostAI* ghost)
 	}
 	else if (not otherGhostEaten)
 	{
-		if (ghost->GetPowerUpTimer() < 10.f)
-			ss.AddSoundRequest("power_pellet.wav", true, -1);
-		else
+		if (ghost->GetPowerUpTimer() == 0.f)
 			ss.AddSoundRequest("siren_1.wav", true, -1);
+		else
+			ss.AddSoundRequest("power_pellet.wav", true, -1);
 	}
 }
 
