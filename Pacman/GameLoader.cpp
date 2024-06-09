@@ -25,6 +25,8 @@
 #include "CustomTextRender.h"
 #include "ScoreBoard.h"
 #include "Fruit.h"
+#include <format>
+#include "BlinkingText.h"
 
 using namespace diji;
 
@@ -176,7 +178,6 @@ void Loader::CommonGameAssets(Scene* &scene)
 	ClydeAI->SetGhostsVector(ghostAIs);
 #pragma endregion
 #pragma region HUD
-	const auto& smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
 	const auto& textFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
 
 	auto HUD = scene->CreateGameObject("HUD");
@@ -242,16 +243,12 @@ void Loader::CommonGameAssets(Scene* &scene)
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_A, player, Movement::Left);
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_S, player, Movement::Down);
 	input.BindCommand<pacman::Move>(PlayerIdx::KEYBOARD, KeyState::HELD, SDL_SCANCODE_D, player, Movement::Right);
-	//input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
-
-	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
-	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
-	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
-	//input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
-	//input.BindCommand<pacman::HitCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, player);
+	input.BindCommand<pacman::HitCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_C, player);
 
 	input.BindCommand<pacman::test>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_F1, pelletCounter);
 	input.BindCommand<pacman::MuteCommand>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_M, nullptr);
+	input.BindCommand<pacman::MuteCommand>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::X, nullptr);
+
 #pragma endregion
 #pragma region Observers
 	//todo: reset audio as well and add quick reset animation
@@ -290,12 +287,12 @@ void Loader::CommonGameAssets(Scene* &scene)
 	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Clyde->GetComponent<pacman::Clyde>());
 	levelIntro->GetComponent<pacman::LevelIntro>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::LEVEL_BEGIN), Clyde->GetComponent<pacman::Clyde>());
 #pragma endregion
+	const auto& smallFont = ResourceManager::GetInstance().LoadFont("Lingua.otf", 14);
 
-	//optional
 	auto fpsCounter = scene->CreateGameObject("fpsCounter");
 	fpsCounter->AddComponents<Text>("0 FPS", smallFont);
 	fpsCounter->AddComponents<FPSCounter>();
-	fpsCounter->AddComponents<Transform>(0, static_cast<int>(loader::VIEWPORT.y - 20));
+	fpsCounter->AddComponents<Transform>(static_cast<int>(loader::VIEWPORT.x - 75.f), 10);
 	fpsCounter->AddComponents<Render>();
 }
 
@@ -309,6 +306,13 @@ void Loader::PacmanLevel()
 
 	//todo: ReadyText should spawn when player respawns
 	//todo: highscore should display other scoresa
+	auto& input = InputManager::GetInstance();
+	const auto& player = scene->GetGameObject("player");
+
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 
 	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
 	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene };
@@ -333,6 +337,8 @@ void Loader::VersusLevel()
 	//Blinky->AddComponents<pacman::GhostCollision>(player);
 	//Blinky->GetComponent<Render>()->DisableRender();
 
+	scene->GetGameObject("playerTextHUD")->GetComponent<Text>()->SetText("2UP");
+	
 	const auto& player2 = scene->GetGameObject("z_Blinky");
 	player2->GetComponent<pacman::RedAI>()->SetAsPlayer();
 
@@ -346,6 +352,13 @@ void Loader::VersusLevel()
 	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
 	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
 	input.BindCommand<pacman::GhostSwitchState>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
+
+	const auto& player = scene->GetGameObject("player");
+
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 #pragma endregion
 }
 
@@ -354,6 +367,8 @@ void Loader::CoopLevel()
 	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::COOP));
 
 	CommonGameAssets(scene);
+
+	scene->GetGameObject("playerTextHUD")->GetComponent<Text>()->SetText("2UP");
 
 	auto player2 = scene->CreateGameObject("player2");
 	player2->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
@@ -409,6 +424,13 @@ void Loader::CoopLevel()
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
 	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
+
+	const auto& player = scene->GetGameObject("player");
+
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 #pragma endregion
 }
 
@@ -418,21 +440,53 @@ void Loader::HighScoreMenu(int score)
 	const auto& scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::GAMEOVER));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
 
-	auto gameOverText = scene->CreateGameObject("gameOverText");
-	gameOverText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 120.f);
-	gameOverText->AddComponents<Text>("GAME OVER!", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
-	gameOverText->AddComponents<Render>();
+	auto topTenText = scene->CreateGameObject("topTenText");
+	topTenText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 80.f);
+	topTenText->AddComponents<Text>("The 10 BEST PLAYERS!", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	topTenText->AddComponents<Render>();
 
 	auto enterYourName = scene->CreateGameObject("enterYourNameText");
-	enterYourName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 200.f);
+	enterYourName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y - 140.f);
 	enterYourName->AddComponents<Text>("ENTER YOUR NAME:", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	enterYourName->AddComponents<Render>();
+	enterYourName->AddComponents<pacman::BlinkingText>();
+
+	auto scoresTexts = scene->CreateGameObject("scoresTexts");
+	scoresTexts->AddComponents<Transform>(loader::VIEWPORT.x * 0.24f , 120.f);
+	scoresTexts->AddComponents<pacman::HighScoreRender>();
 
 	auto enterName = scene->CreateGameObject("name");
-	enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 260.f);
+	enterName->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y - 100.f);
 	enterName->AddComponents<Text>("AAA", mediumFont, SDL_Color{ 255, 255, 255, 255 }, true);
 	enterName->AddComponents<pacman::EnterName>(score);
 	enterName->AddComponents<pacman::CustomTextRender>();
+
+	const auto& textFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
+
+	auto HUD = scene->CreateGameObject("HUD");
+	HUD->AddComponents<Transform>(10, 10);
+
+	auto scoreCounter = scene->CreateGameObject("scoreCounterHUD");
+	scoreCounter->AddComponents<Transform>(-5, 20);
+	const int numDigits = score > 0 ? static_cast<int>(std::log10(score)) + 1 : 1;
+	const int numSpaces = std::max(0, 7 - numDigits);
+	const std::string formattedScore = std::format("{:>{}}", score, numSpaces + numDigits);
+	scoreCounter->AddComponents<pacman::ScoreObserver>(formattedScore, textFont);
+	scoreCounter->AddComponents<Render>();
+	scoreCounter->SetParent(HUD, false);
+
+	auto highScoreText = scene->CreateGameObject("highScoreTextHUD");
+	highScoreText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 10, 0.f);
+	highScoreText->AddComponents<Text>("HIGH SCORE", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	highScoreText->AddComponents<Render>();
+	highScoreText->SetParent(HUD, false);
+
+	auto highScoreDisplay = scene->CreateGameObject("highScoreDisplayHUD");
+	highScoreDisplay->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 75.f, 20.f);
+	highScoreDisplay->AddComponents<pacman::HighScoreObserver>("  ", textFont, SDL_Color{ 255, 255, 255, 255 }, false);
+	highScoreDisplay->GetComponent<pacman::HighScoreObserver>()->DisplayPossibleScore(score);
+	highScoreDisplay->AddComponents<Render>();
+	highScoreDisplay->SetParent(HUD, false);
 
 	//input
 	auto& input = InputManager::GetInstance();
@@ -458,11 +512,6 @@ void Loader::Load()
 	pacman::ScoreBoard::GetInstance().Init();
 
 	PacmanMenu();
-	//PacmanLevel();
-	//CoopLevel();
-	//VersusLevel();
-	//HighScoreMenu();
-
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
 	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);

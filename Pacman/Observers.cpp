@@ -135,6 +135,18 @@ void pacman::HighScoreObserver::OnNotify(diji::MessageTypes message, diji::Subje
 	}
 }
 
+void pacman::HighScoreObserver::DisplayPossibleScore(int score)
+{
+	if (score <= m_CurrentHighScore)
+		return;
+
+	const int numDigits = score > 0 ? static_cast<int>(std::log10(score)) + 1 : 1;
+	const int numSpaces = std::max(0, 7 - numDigits);
+	const std::string formattedScore = std::format("{:>{}}", score, numSpaces + numDigits);
+
+	SetText(formattedScore);
+}
+
 void pacman::LevelObserver::OnNotify(diji::MessageTypes message, diji::Subject* subject)
 {
 	(void)subject;

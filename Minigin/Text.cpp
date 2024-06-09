@@ -55,9 +55,12 @@ void diji::Text::Update()
 		m_NeedsUpdate = false;
 
 		// need to update the pointer in Render this frame, Render update was already called so it has previous pointer information
-		const auto& renderComp = GetOwner()->GetComponent<Render>();
-		if (renderComp)
-			renderComp->UpdateText();
+		if (GetOwner())
+		{
+			const auto& renderComp = GetOwner()->GetComponent<Render>();
+			if (renderComp)
+				renderComp->UpdateText();
+		}
 		
 		if (m_IsCentered)
 		{

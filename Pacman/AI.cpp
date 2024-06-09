@@ -165,7 +165,6 @@ void pacman::AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Sub
 	case MessageTypesDerived::ENEMY_COLLISION:
 	{
 		constexpr int EATEN_GHOST_POINTS = 200;
-		//todo: make ghost eaten staatic?
 		if (IsGhostFrightened(subject))
 		{
 			m_PauseAI = true;

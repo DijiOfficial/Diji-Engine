@@ -6,6 +6,9 @@
 #include "EnterName.h"
 #include "Texture.h"
 
+#include "ResourceManager.h"
+#include "ScoreBoard.h"
+
 void pacman::CustomTextRender::Init()
 {
 	m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
@@ -120,4 +123,88 @@ void pacman::FruitRender::RenderFrame() const
 void pacman::FruitRender::UpdateText()
 {
     m_Text2DCompPtr = m_TextCompPtr->GetTexture();
+}
+
+pacman::HighScoreRender::HighScoreRender(diji::GameObject* ownerPtr, int scale)
+	: Render(ownerPtr, scale)
+{
+    const auto& scoreboard = ScoreBoard::GetInstance().GetScoreboard();
+
+    int count = 0;
+    for (auto it = scoreboard.begin(); it != scoreboard.end() && count < 10; ++it, ++count)
+    {
+        m_ScoreboardMap.insert(*it);
+    }
+}
+
+void pacman::HighScoreRender::Init()
+{
+    m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
+    const auto& mediumFont = diji::ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+
+    // Reverse iterator to start with the highest score
+    auto rbegin = m_ScoreboardMap.rbegin();
+    auto rend = m_ScoreboardMap.rend();
+
+    int rank = 1;
+    size_t colorIndex = 0; // Index for cycling through colors vector
+    for (auto it = rbegin; it != rend && rank <= 10; ++it, ++rank)
+    {
+        const auto& scores = *it;
+
+        std::string rankString;
+        if (rank == 1)
+            rankString = "1st";
+        else if (rank == 2)
+            rankString = "2nd";
+        else if (rank == 3)
+            rankString = "3rd";
+        else
+            rankString = std::to_string(rank) + "th";
+
+        // Add space at the beginning if the rank is less than 10
+        if (rank < 10)
+            rankString = " " + rankString;
+
+        // Format: "1st \tName\tScore"
+        std::string formattedText = rankString + "\t" + scores.second + "\t" + std::to_string(scores.first);
+
+        // Assign color from colors vector
+        SDL_Color textColor = m_Colors[colorIndex];
+        colorIndex = (colorIndex + 1) % m_Colors.size(); // Cycle through colors
+
+        m_TextCompPtrVec.push_back(std::make_unique<diji::Text>(nullptr, formattedText, mediumFont, textColor, false));
+    }
+}
+
+void pacman::HighScoreRender::Update()
+{
+	for (auto& textComp : m_TextCompPtrVec)
+	{
+		textComp->Update();
+	}
+}
+
+void pacman::HighScoreRender::RenderFrame() const
+{
+
+    const glm::vec3 pos = [this]()
+        {
+            if (m_TransformCompPtr)
+                return m_TransformCompPtr->GetPosition();
+            else
+                return glm::vec3{ 0, 0, 0 };
+        }();
+
+    const float startY = pos.y;
+    const int yIncrement = 30;
+    float currentY = startY;
+    for (const auto& textComp : m_TextCompPtrVec)
+    {
+        if (textComp && textComp->GetTexture())
+        {
+            diji::Renderer::GetInstance().RenderTexture(*textComp->GetTexture(), pos.x, currentY, m_Scale);
+            currentY += yIncrement;
+        }
+    }
 }

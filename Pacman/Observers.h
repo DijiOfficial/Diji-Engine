@@ -69,6 +69,8 @@ namespace pacman
 
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 
+		void DisplayPossibleScore(int score);
+
 	private:
 		int m_CurrentHighScore = 0;
 	};

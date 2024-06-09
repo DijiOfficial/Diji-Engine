@@ -1,5 +1,7 @@
 #pragma once
 #include "Render.h"
+#include "Text.h"
+#include <memory>
 
 namespace pacman 
 {
@@ -68,6 +70,41 @@ namespace pacman
 		diji::Transform* m_TransformCompPtr = nullptr;
 
 		bool m_RenderText = false;
+	};
+
+	class HighScoreRender final : public diji::Render
+	{
+	public:
+		HighScoreRender(diji::GameObject* ownerPtr, int scale = 1);
+		~HighScoreRender() noexcept override = default;
+
+		void Init() override;
+		void Update() override;
+		void FixedUpdate() override {};
+
+		void RenderFrame() const override;
+		void UpdateText() override {};
+
+	private:
+		diji::Transform* m_TransformCompPtr = nullptr;
+		std::multimap<int, std::string> m_ScoreboardMap;
+
+		std::vector<std::unique_ptr<diji::Text>> m_TextCompPtrVec;
+
+		// Define vector of colors
+		const std::vector<SDL_Color> m_Colors = {
+			{255, 0, 0, 255},
+			{255, 165, 0, 255},
+			{255, 255, 0, 255},
+			{50, 205, 50, 255},
+			{0, 255, 255, 255},
+			{0, 0, 255, 255},
+			{128, 0, 128, 255},
+			{255, 105, 180, 255},
+			{0, 255, 255, 255},
+			{0, 128, 0, 255},
+		};
+
 	};
 }
 

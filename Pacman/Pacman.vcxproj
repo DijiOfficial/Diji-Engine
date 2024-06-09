@@ -200,6 +200,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="BlinkingText.cpp" />
     <ClCompile Include="CustomTextRender.cpp" />
     <ClCompile Include="EnterName.cpp" />
     <ClCompile Include="Fruit.cpp" />
@@ -223,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="BlinkingText.h" />
     <ClInclude Include="CustomTextRender.h" />
     <ClInclude Include="EnterName.h" />
     <ClInclude Include="Fruit.h" />
