@@ -124,14 +124,30 @@ namespace pacman {
 
             if (m_PreviousMovement != diji::Movement::Idle)
                 m_TransformCompPtr->SetLookingDirection(m_PreviousMovement);
-        }
+        }      
+    }
 
-        if (currentMovement == diji::Movement::Left)
+    void AI::LateUpdate()
+    {
+        const auto& shape = m_ColliderCompPtr->GetCollisionBox();
+
+        if (!m_TeleportedThisFrame)
+        {
             if (shape.left < 0 - shape.width)
+            {
                 m_TransformCompPtr->SetPosition(TOTAL_WIDTH, shape.bottom);
-        if (currentMovement == diji::Movement::Right)
-            if (shape.left > TOTAL_WIDTH)
+                m_TeleportedThisFrame = true;
+            }
+            else if (shape.left > TOTAL_WIDTH)
+            {
                 m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
+                m_TeleportedThisFrame = true;
+            }
+        }
+        else
+        {
+            m_TeleportedThisFrame = false;
+        }
     }
 
     void AI::OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject)

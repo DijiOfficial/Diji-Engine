@@ -30,6 +30,7 @@ namespace pacman {
 		void Init() override;
 		void Update() override;
 		void FixedUpdate() override;
+		void LateUpdate() override;
 		void OnNotify(diji::MessageTypes message, [[maybe_unused]] diji::Subject* subject) override;
 
 		void SetInitialMovementLeft() { m_PreviousMovement = diji::Movement::Left; m_SavedMovement = diji::Movement::Left; };
@@ -51,6 +52,8 @@ namespace pacman {
 		int m_GhostsEaten = 0;
 		bool m_IsDying = false;
 		bool m_playeDeath = true;
+
+		bool m_TeleportedThisFrame = false;
 
 		bool IsGhostFrightened(diji::Subject* subject) const;
 		void Reset();
