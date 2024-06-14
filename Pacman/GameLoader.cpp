@@ -403,10 +403,10 @@ void Loader::PacmanLevel()
 	auto& input = InputManager::GetInstance();
 	const auto& player = scene->GetGameObject("player");
 
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
-	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
 
 	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
 	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene };
