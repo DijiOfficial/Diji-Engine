@@ -210,6 +210,7 @@
     <ClCompile Include="GhostAI.cpp" />
     <ClCompile Include="GhostStates.cpp" />
     <ClCompile Include="HealthCounter.cpp" />
+    <ClCompile Include="Intro.cpp" />
     <ClCompile Include="LevelIntro.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -220,6 +221,7 @@
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="GhostCollision.cpp" />
+    <ClCompile Include="TimerComp.cpp" />
     <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +237,7 @@
     <ClInclude Include="GhostAI.h" />
     <ClInclude Include="GhostStates.h" />
     <ClInclude Include="HealthCounter.h" />
+    <ClInclude Include="Intro.h" />
     <ClInclude Include="LevelIntro.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Observers.h" />
@@ -244,6 +247,7 @@
     <ClInclude Include="ScoreBoard.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="GhostCollision.h" />
+    <ClInclude Include="TimerComp.h" />
     <ClInclude Include="TrashTheCache.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

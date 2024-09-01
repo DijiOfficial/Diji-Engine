@@ -13,6 +13,11 @@ pacman::PickUp::PickUp(diji::GameObject* ownerPtr, const diji::GameObject* playe
 		m_SoundId = SoundId::PelletPickUp;
 	else if (value == 50)
 		m_SoundId = SoundId::PowerPellet;
+	else if (value == -1)
+	{
+		m_SoundId = SoundId::PowerPellet;
+		m_IsMenuPickUp = true;
+	}
 	else
 		m_SoundId = SoundId::InvalidSoundId;
 	
@@ -84,7 +89,7 @@ void pacman::PickUp::LateUpdate()
 void pacman::PickUp::OnNotify(diji::MessageTypes message, diji::Subject*)
 {
 	auto msg = static_cast<MessageTypesDerived>(message);
-	if (msg == MessageTypesDerived::LEVEL_END)
+	if (msg == MessageTypesDerived::LEVEL_END or msg == MessageTypesDerived::RESET_MENU)
 	{
 		m_PowerUpInvisibleFrames = 0;
 		m_IsDisabled = false;
@@ -92,6 +97,10 @@ void pacman::PickUp::OnNotify(diji::MessageTypes message, diji::Subject*)
 		const auto& collider = GetOwner()->GetComponent<diji::Collider>();
 		diji::Collision::GetInstance().AddCollider(collider, collider->GetCollisionBox());
 	}
+	else if (msg == MessageTypesDerived::MENU_BEGIN or msg == MessageTypesDerived::MENU_BEGIN_TWO)
+		m_RenderCompPtr->EnableRender();
+	else if (msg == MessageTypesDerived::MENU_ANIMATION_BEGIN)
+		m_IsDisabled = false;
 }
 
 void pacman::PickUp::HandleCollision()
@@ -113,7 +122,8 @@ void pacman::PickUp::HandleCollision()
 		break;
 
 	case SoundId::PowerPellet:
-		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("power_pellet.wav", true, -1);
+		if (!m_IsMenuPickUp)
+			diji::ServiceLocator::GetSoundSystem().AddSoundRequest("power_pellet.wav", true, -1);
 		
 		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::POWERUP_COLLISION));
 		break;

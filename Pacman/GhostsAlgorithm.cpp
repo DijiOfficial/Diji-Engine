@@ -41,6 +41,14 @@ void pacman::GhostsTimers::OnNotify(diji::MessageTypes message, diji::Subject*)
 		m_IsInIntro = false;
 		break;
 	}
+	case MessageTypesDerived::MENU_ANIMATION_BEGIN:
+	{
+		m_IsInIntro = false;
+		m_IsInChaseState = true;
+		m_IsPaused = false;
+		m_PauseTimer = 0.f;
+		break;
+	}
 	default:
 		break;
 	}

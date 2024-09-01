@@ -7,6 +7,8 @@ namespace diji
 
 namespace Loader 
 {
+	void PacmanMenuReload(bool isFirstLoad = false);
+	void PacmanIntro();
 	void PacmanMenu();
 	void CommonGameAssets(diji::Scene* &scene);
 	void PacmanLevel();

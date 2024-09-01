@@ -11,5 +11,6 @@ namespace pacman
         COOP,
         VERSUS,
         GAMEOVER,
+        INTRO,
     };
 }

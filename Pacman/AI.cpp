@@ -70,6 +70,7 @@ namespace pacman {
             return;
         }
 
+        //clean up if statemetns
         if (m_PauseAI)
         {
             m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
@@ -80,7 +81,7 @@ namespace pacman {
                 GetOwner()->GetComponent<diji::Render>()->EnableRender();
                 m_TextureCompPtr->ResumeAnimation();
             }
-            else
+            else //huh?
             {
                 return;
             }
@@ -129,6 +130,9 @@ namespace pacman {
 
     void AI::LateUpdate()
     {
+        if (m_PauseAI)
+            return;
+
         const auto& shape = m_ColliderCompPtr->GetCollisionBox();
 
         if (!m_TeleportedThisFrame)
@@ -214,6 +218,12 @@ namespace pacman {
         case MessageTypesDerived::LEVEL_END:
         {
             Reset();
+            break;
+        }
+        case MessageTypesDerived::MENU_ANIMATION_BEGIN:
+        {
+            SetActive();
+            m_TransformCompPtr->SetMovement(diji::Movement::Left);
             break;
         }
         default:

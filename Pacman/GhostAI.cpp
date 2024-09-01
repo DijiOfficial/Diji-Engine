@@ -58,6 +58,8 @@ void pacman::GhostAI::Init()
 	m_ColliderCompPtr = ownerPtr->GetComponent<diji::Collider>();
 	m_TransformCompPtr = ownerPtr->GetComponent<diji::Transform>();
 	m_TextureCompPtr = ownerPtr->GetComponent<diji::Texture>();
+	const auto movement = GetIsInMenu() ? diji::Movement::Right : diji::Movement::Up;
+	m_TransformCompPtr->SetMovement(movement);
 }
 
 void pacman::GhostAI::Update()
@@ -117,6 +119,11 @@ void pacman::GhostAI::FixedUpdate()
 	}
 
 	auto state = m_CurrentStateUPtr->Execute(this);
+	
+	//no use of ternary to avoid dynamic casting when not in menu
+	bool reset = false;
+	if (m_IsInMenu and dynamic_cast<Eaten*>(state.get()) != nullptr)
+		reset = true;
 
 	if (state)
 	{
@@ -124,6 +131,9 @@ void pacman::GhostAI::FixedUpdate()
 		m_CurrentStateUPtr = std::move(state);
 		m_CurrentStateUPtr->OnEnter(this);
 	}
+
+	if (reset and m_IsLastGhostEaten)
+		Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::RESET_MENU));
 }
 
 void pacman::GhostAI::LateUpdate()
@@ -270,7 +280,6 @@ std::unique_ptr<pacman::GhostState> pacman::Pinky::GetChaseState() const
 void pacman::Pinky::Init()
 {
 	GhostAI::Init();
-	GetTransform()->SetMovement(diji::Movement::Up);
 	m_CurrentStateUPtr->OnEnter(this);
 }
 #pragma endregion
@@ -295,7 +304,6 @@ std::unique_ptr<pacman::GhostState> pacman::Inky::GetChaseState() const
 void pacman::Inky::Init()
 {
 	GhostAI::Init();
-	GetTransform()->SetMovement(diji::Movement::Up);
 	m_CurrentStateUPtr->OnEnter(this);
 }
 #pragma endregion
@@ -319,7 +327,6 @@ std::unique_ptr<pacman::GhostState> pacman::Clyde::GetChaseState() const
 void pacman::Clyde::Init()
 {
 	GhostAI::Init();
-	GetTransform()->SetMovement(diji::Movement::Up);
 	m_CurrentStateUPtr->OnEnter(this);
 }
 #pragma endregion

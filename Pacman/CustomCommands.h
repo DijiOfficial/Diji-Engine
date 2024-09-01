@@ -61,6 +61,22 @@ namespace pacman
 		pacman::Menu* m_MenuComponentPtr;	
 	};
 
+	class SingleCommands final : public diji::GameActorCommands
+	{
+	public:
+		enum class SingleCommandOption
+		{
+			SKIP_INTRO,
+		};
+
+		SingleCommands(diji::GameObject* actor, SingleCommandOption option);
+		~SingleCommands() noexcept override = default;
+
+		void Execute() override;
+	private:
+		const SingleCommandOption m_Option;
+	};
+
 	class GhostSwitchState final : public diji::GameActorCommands
 	{
 	public:

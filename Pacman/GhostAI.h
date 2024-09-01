@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "IObserver.h"
 #include "GhostStates.h"
+#include "Subject.h"
 
 #include <string>
 #include <vector>
@@ -39,7 +40,7 @@ namespace pacman
 	//                          └─────────┘                    └───────┘                └───────┘            
 	class PelletObserver;
 	class GhostsTimers;
-	class GhostAI : public diji::Component, public diji::IObserver
+	class GhostAI : public diji::Component, public diji::IObserver, public diji::Subject
 	{
 	public:
 		~GhostAI() noexcept = default;
@@ -115,7 +116,6 @@ namespace pacman
 		mutable bool m_IsFrightened = false;
 		mutable bool m_IsLastGhostEaten = false;
 		bool m_IsPlayerKilled = false;
-		bool m_IsReset = false;
 		float m_PlayerDeathTimer = 0.f;
 		const float m_TunnelSpeed = 0.9375f;
 

@@ -11,6 +11,8 @@
 #include "PelletCounter.h"
 #include "Menu.h"
 #include "ISoundSystem.h"
+#include "GameLoader.h"
+
 pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 	: GameActorCommands{ actor }
 	, m_Movement{ movement }
@@ -21,7 +23,7 @@ pacman::Move::Move(diji::GameObject* actor, diji::Movement movement)
 
 void pacman::Move::Execute()
 {
-	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::INTRO) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
 		m_TransformComponentPtr->SetMovement(m_Movement);
 }
 
@@ -82,7 +84,7 @@ pacman::GhostSwitchState::GhostSwitchState(diji::GameObject* actor, diji::Moveme
 
 void pacman::GhostSwitchState::Execute()
 {
-	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::INTRO) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::MENU) and diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::GAMEOVER))
 		m_GhostAIComp->SetNextMovement(m_Movement);
 }
 
@@ -129,4 +131,27 @@ void pacman::MuteCommand::Execute()
 		diji::ServiceLocator::GetSoundSystem().Pause();
 
 	m_IsMuted = !m_IsMuted;
+}
+
+pacman::SingleCommands::SingleCommands(diji::GameObject* actor, SingleCommandOption option)
+	: GameActorCommands{ actor }
+	, m_Option{ option }
+{
+
+}
+
+void pacman::SingleCommands::Execute()
+{
+	if (diji::SceneManager::GetInstance().GetActiveSceneId() != static_cast<int>(GameState::INTRO))
+		return;
+
+	switch (m_Option)
+	{
+	case SingleCommandOption::SKIP_INTRO:
+		Loader::PacmanMenu();
+		diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(GameState::MENU));
+		break;
+	default:
+		break;
+	}
 }

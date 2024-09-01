@@ -24,6 +24,10 @@ namespace pacman
 		LEVEL_START,
 		LEVEL_END,
 		FRUIT_COLLISION,
+		MENU_BEGIN,
+		MENU_BEGIN_TWO,
+		MENU_ANIMATION_BEGIN,
+		RESET_MENU,
 	};
 
 	class HealthObserver final : public diji::Text, public diji::IObserver

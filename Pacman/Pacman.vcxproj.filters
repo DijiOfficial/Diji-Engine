@@ -105,6 +105,12 @@
     <ClCompile Include="PelletCounter.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="TimerComp.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PickUpLoader.h">
@@ -171,6 +177,12 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="PelletCounter.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerComp.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Intro.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

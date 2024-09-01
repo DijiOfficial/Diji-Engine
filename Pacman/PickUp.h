@@ -39,6 +39,7 @@ namespace pacman
 		void OnNotify(diji::MessageTypes message, diji::Subject* subject) override;
 		int GetValue() const { return m_Value; };
 		void HandleCollision();
+		void DisablePickUp() { m_IsDisabled = true; };
 
 	private:
 		int m_PowerUpInvisibleFrames = 0;
@@ -51,6 +52,7 @@ namespace pacman
 		diji::Render* m_RenderCompPtr;
 		bool m_IsPowerUp = false;
 		bool m_IsDisabled = false;
+		bool m_IsMenuPickUp = false;
 	};
 }
 

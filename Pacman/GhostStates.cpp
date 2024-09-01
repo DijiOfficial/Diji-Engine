@@ -192,6 +192,15 @@ void pacman::Eaten::OnEnter(const GhostAI* ghost)
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("GhostEaten.png");
 	std::swap(m_Step, m_EatenSpeed);
+	
+	if (ghost->GetIsInMenu())
+	{
+		texture->SetNrOfFrames(1);
+		texture->SetCurrentFrame(9);
+		texture->PauseAnimation();
+		return;
+	}
+
 	diji::ServiceLocator::GetSoundSystem().AddSoundRequest("retreating.wav", true, -1);
 }
 
@@ -202,6 +211,9 @@ void pacman::Eaten::OnExit(const GhostAI*)
 
 std::unique_ptr<pacman::GhostState> pacman::Eaten::Execute(const GhostAI* ghost)
 {
+	if (ghost->GetIsInMenu())
+		return nullptr;
+
 	const auto& transform = ghost->GetTransform();
 	const auto& collider = ghost->GetCollider();
 	SeekTarget(ghost, m_SpawnPoint);
@@ -387,6 +399,10 @@ void pacman::Frightened::OnEnter(const GhostAI* ghost)
 	texture->SetStartingFrame(0);
 	m_DisplayDirection = false;
 	m_IsUpdated = false;
+	
+	if (ghost->GetIsInMenu())
+		m_FrightSpeed = 1.f;
+	
 	std::swap(m_Step, m_FrightSpeed);
 }
 
@@ -437,6 +453,9 @@ void pacman::Chase::OnEnter(const GhostAI* ghost)
 {
 	ghost->TurnAround();
 	ghost->GetTexture()->SetStartingFrame(static_cast<int>(ghost->GetTransform()->GetMovement()) * 2);
+	
+	if (ghost->GetIsInMenu())
+		m_Step = 2;
 }
 
 std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* ghost)
@@ -538,7 +557,9 @@ std::unique_ptr<pacman::GhostState> pacman::ClydeChase::Execute(const GhostAI* g
 #pragma region Dying
 void pacman::Dying::OnEnter(const GhostAI* ghost)
 {
-	diji::ServiceLocator::GetSoundSystem().AddSoundRequest("eat_ghost.wav", false, -1);
+	if (!ghost->GetIsInMenu())
+		diji::ServiceLocator::GetSoundSystem().AddSoundRequest("eat_ghost.wav", false, -1);
+
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture(std::to_string(m_Points) + ".png");
 	texture->SetNrOfFrames(1);

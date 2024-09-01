@@ -28,6 +28,7 @@
 #include <format>
 #include "BlinkingText.h"
 #include "PickUp.h"
+#include "Intro.h"
 using namespace diji;
 
 namespace loader
@@ -35,101 +36,321 @@ namespace loader
 	constexpr glm::vec2 VIEWPORT{ 452, 608 };
 }
 
-void Loader::PacmanMenu()
+void Loader::PacmanMenuReload(bool isFirstLoad)
 {
-	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
-	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+	//todo: const correctness the CreateGameObjects
+	const auto& introScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::INTRO));
+#pragma region Animation
+	const auto& characterNickname = introScene->GetGameObject("characterNickname");
+
+	if (!isFirstLoad)
+	{
+		const auto& player = introScene->GetGameObject("player");
+		const auto& powerPellet = introScene->GetGameObject("powerPelletTexture");
+		const auto& powerUp = introScene->GetGameObject("powerPellet");
+		const auto& GhostTimers = introScene->GetGameObject("ghostTimers");
+		const auto& Blinky = introScene->GetGameObject("z_Blinky");
+		const auto& Pinky = introScene->GetGameObject("z_Pinky");
+		const auto& Inky = introScene->GetGameObject("z_Inky");
+		const auto& Clyde = introScene->GetGameObject("z_Clyde");
+
+		powerUp->GetComponent<pacman::PickUp>()->RemoveObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), player->GetComponent<pacman::AI>());
+
+		characterNickname->GetComponent<pacman::IntroRender>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), player->GetComponent<pacman::AI>());
+		characterNickname->GetComponent<pacman::IntroRender>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), GhostTimers->GetComponent<pacman::GhostsTimers>());
+
+		characterNickname->GetComponent<pacman::IntroRender>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_BEGIN_TWO), powerUp->GetComponent<pacman::PickUp>());
+		characterNickname->GetComponent<pacman::IntroRender>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), powerUp->GetComponent<pacman::PickUp>());
+		characterNickname->GetComponent<pacman::IntroRender>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_BEGIN), powerPellet->GetComponent<pacman::PickUp>());
+		characterNickname->GetComponent<pacman::IntroRender>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), powerPellet->GetComponent<pacman::PickUp>());
+		
+		Clyde->GetComponent<pacman::Clyde>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::RESET_MENU), characterNickname->GetComponent<pacman::Intro>());
+		Clyde->GetComponent<pacman::Clyde>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::RESET_MENU), powerUp->GetComponent<pacman::PickUp>());
+		Clyde->GetComponent<pacman::Clyde>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::RESET_MENU), powerPellet->GetComponent<pacman::PickUp>());
+		
+		const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
+		for (const auto& ghost : ghosts)
+		{
+			powerUp->GetComponent<pacman::PickUp>()->RemoveObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), ghost->GetComponent<pacman::GhostAI>());
+		}
+
+		Blinky->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+		Blinky->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::RedAI>());
+		Pinky->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+		Pinky->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Pinky->GetComponent<pacman::Pinky>());
+		Inky->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+		Inky->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Inky->GetComponent<pacman::Inky>());
+		Clyde->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+		Clyde->GetComponent<pacman::GhostCollision>()->RemoveObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Clyde->GetComponent<pacman::Clyde>());
+
+		introScene->Remove("player");
+		introScene->Remove("powerPelletTexture");
+		introScene->Remove("powerPellet");
+		introScene->Remove("ghostTimers");
+		introScene->Remove("pelletCounter");
+		introScene->Remove("z_Blinky");
+		introScene->Remove("z_Pinky");
+		introScene->Remove("z_Inky");
+		introScene->Remove("z_Clyde");
+	}
+
+	const auto& player = introScene->CreateGameObject("player");
+	const auto& powerPellet = introScene->CreateGameObject("powerPelletTexture");
+	const auto& powerUp = introScene->CreateGameObject("powerPellet");
+	const auto& GhostTimers = introScene->CreateGameObject("ghostTimers");
+	const auto& pelletCounter = introScene->CreateGameObject("pelletCounter");
+	const auto& Blinky = introScene->CreateGameObject("z_Blinky");
+	const auto& Pinky = introScene->CreateGameObject("z_Pinky");
+	const auto& Inky = introScene->CreateGameObject("z_Inky");
+	const auto& Clyde = introScene->CreateGameObject("z_Clyde");
 
 
-	auto player = menuScene->CreateGameObject("player");
 	player->AddComponents<Texture>("pacmanSpriteSheet5.png", 15, 15, 4);
 	player->GetComponent<Texture>()->SetRotation(true);
-	player->AddComponents<Transform>(452, 439);
+	player->AddComponents<Transform>(452, 332);
 	player->AddComponents<Render>(2);
 	player->AddComponents<pacman::HealthCounter>(4);
 	player->AddComponents<pacman::ScoreCounter>(0);
 	player->AddComponents<Collider>(15, 15);
 	player->AddComponents<pacman::AI>();
-	player->GetComponent<pacman::AI>()->SetActive();
-
 	player->GetComponent<Texture>()->SetRotationAngle(static_cast<int>(diji::Movement::Left) * 90.0f);
 
-	auto powerUp = menuScene->CreateGameObject("powerPellet");
+	powerPellet->AddComponents<diji::Texture>("PowerPellet.png");
+	powerPellet->AddComponents<diji::Transform>(loader::VIEWPORT.x * 0.35f + 4.f, 440.f);
+	powerPellet->AddComponents<diji::Render>(2);
+	powerPellet->AddComponents<diji::Collider>(8, 8);
+	powerPellet->AddComponents<pacman::PickUp>(player, nullptr, -1);
+	powerPellet->GetComponent<Render>()->DisableRender();
+	powerPellet->GetComponent<pacman::PickUp>()->DisablePickUp();
+
 	powerUp->AddComponents<diji::Texture>("PowerPellet.png", 8, 8);
-	powerUp->AddComponents<diji::Transform>(70, 447);
+	powerUp->AddComponents<diji::Transform>(70, 340);
 	powerUp->AddComponents<diji::Render>(2);
 	powerUp->AddComponents<diji::Collider>(8, 8);
-	powerUp->AddComponents<pacman::PickUp>(player, nullptr, 50);
-
+	powerUp->AddComponents<pacman::PickUp>(player, nullptr, -1);
+	powerUp->GetComponent<Render>()->DisableRender();
+	powerUp->GetComponent<pacman::PickUp>()->DisablePickUp();
 	powerUp->GetComponent<pacman::PickUp>()->AddObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), player->GetComponent<pacman::AI>());
-	
-	auto GhostTimers = menuScene->CreateGameObject("ghostTimers");
-	GhostTimers->AddComponents<pacman::GhostsTimers>();
-	GhostTimers->GetComponent<pacman::GhostsTimers>()->SetInMenu();
 
-	auto pelletCounter = menuScene->CreateGameObject("pelletCounter");
+	GhostTimers->AddComponents<pacman::GhostsTimers>();
+
 	pelletCounter->AddComponents<pacman::PelletObserver>();
 	pelletCounter->AddComponents<pacman::PelletCounter>();
 
-	auto Blinky = menuScene->CreateGameObject("z_Blinky");
 	Blinky->AddComponents<Texture>("RedGhost.png", 15, 15, 2);
-	Blinky->AddComponents<Transform>(485, 439);
+	Blinky->AddComponents<Transform>(495, 332);
 	Blinky->AddComponents<Render>(2);
 	Blinky->AddComponents<Collider>(15, 15);
 	Blinky->AddComponents<pacman::RedAI>(player, pelletCounter, GhostTimers);
 	Blinky->AddComponents<pacman::GhostCollision>(player);
 	Blinky->GetComponent<pacman::RedAI>()->SetInMenu();
-	Blinky->GetComponent<Transform>()->SetMovement(diji::Movement::Left);
-	Blinky->GetComponent<Texture>()->SetStartingFrame(static_cast<int>(diji::Movement::Left) * 2);
 
-	//auto Pinky = menuScene->CreateGameObject("z_Pinky");
-	//Pinky->AddComponents<Texture>("Pinky.png", 15, 15, 2);
-	//Pinky->AddComponents<Transform>(490, 439);
-	//Pinky->AddComponents<Render>(2);
-	//Pinky->AddComponents<Collider>(15, 15);
-	//Pinky->AddComponents<pacman::Pinky>(player, pelletCounter, GhostTimers);
-	//Pinky->AddComponents<pacman::GhostCollision>(player);
+	Pinky->AddComponents<Texture>("Pinky.png", 15, 15, 2);
+	Pinky->AddComponents<Transform>(529, 332);
+	Pinky->AddComponents<Render>(2);
+	Pinky->AddComponents<Collider>(15, 15);
+	Pinky->AddComponents<pacman::Pinky>(player, pelletCounter, GhostTimers);
+	Pinky->AddComponents<pacman::GhostCollision>(player);
+	Pinky->GetComponent<pacman::Pinky>()->SetInMenu();
 
-	//auto Inky = menuScene->CreateGameObject("z_Inky");
-	//Inky->AddComponents<Texture>("Inky.png", 15, 15, 2);
-	//Inky->AddComponents<Transform>(510, 439);
-	//Inky->AddComponents<Render>(2);
-	//Inky->AddComponents<Collider>(15, 15);
-	//Inky->AddComponents<pacman::Inky>(player, pelletCounter, GhostTimers, Blinky);
-	//Inky->AddComponents<pacman::GhostCollision>(player);
+	Inky->AddComponents<Texture>("Inky.png", 15, 15, 2);
+	Inky->AddComponents<Transform>(563, 332);
+	Inky->AddComponents<Render>(2);
+	Inky->AddComponents<Collider>(15, 15);
+	Inky->AddComponents<pacman::Inky>(player, pelletCounter, GhostTimers, Blinky);
+	Inky->AddComponents<pacman::GhostCollision>(player);
+	Inky->GetComponent<pacman::Inky>()->SetInMenu();
 
-	//auto Clyde = menuScene->CreateGameObject("z_Clyde");
-	//Clyde->AddComponents<Texture>("Clyde.png", 15, 15, 2);
-	//Clyde->AddComponents<Transform>(530, 439);
-	//Clyde->AddComponents<Render>(2);
-	//Clyde->AddComponents<Collider>(15, 15);
-	//Clyde->AddComponents<pacman::Clyde>(player, pelletCounter, GhostTimers);
-	//Clyde->AddComponents<pacman::GhostCollision>(player);
-
-	//const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
-	const std::vector<GameObject*> ghosts = { Blinky };
+	Clyde->AddComponents<Texture>("Clyde.png", 15, 15, 2);
+	Clyde->AddComponents<Transform>(597, 332);
+	Clyde->AddComponents<Render>(2);
+	Clyde->AddComponents<Collider>(15, 15);
+	Clyde->AddComponents<pacman::Clyde>(player, pelletCounter, GhostTimers);
+	Clyde->AddComponents<pacman::GhostCollision>(player);
+	Clyde->GetComponent<pacman::Clyde>()->SetInMenu();
 
 	////Set the ghosts aware of each other
-	//const auto& BlinkyAI = Blinky->GetComponent<pacman::RedAI>();
-	//const auto& PinkyAI = Pinky->GetComponent<pacman::Pinky>();
-	//const auto& InkyAI = Inky->GetComponent<pacman::Inky>();
-	//const auto& ClydeAI = Clyde->GetComponent<pacman::Clyde>();
-	//const std::vector<pacman::GhostAI*> ghostAIs = { BlinkyAI, PinkyAI, InkyAI, ClydeAI };
-	//BlinkyAI->SetGhostsVector(ghostAIs);
-	//PinkyAI->SetGhostsVector(ghostAIs);
-	//InkyAI->SetGhostsVector(ghostAIs);
-	//ClydeAI->SetGhostsVector(ghostAIs);
+	const auto& BlinkyAI = Blinky->GetComponent<pacman::RedAI>();
+	const auto& PinkyAI = Pinky->GetComponent<pacman::Pinky>();
+	const auto& InkyAI = Inky->GetComponent<pacman::Inky>();
+	const auto& ClydeAI = Clyde->GetComponent<pacman::Clyde>();
+	const std::vector<pacman::GhostAI*> ghostAIs = { BlinkyAI, PinkyAI, InkyAI, ClydeAI };
+	BlinkyAI->SetGhostsVector(ghostAIs);
+	PinkyAI->SetGhostsVector(ghostAIs);
+	InkyAI->SetGhostsVector(ghostAIs);
+	ClydeAI->SetGhostsVector(ghostAIs);
 
-	for (const auto& object : ghosts)
+	const std::vector<GameObject*> ghosts = { Blinky, Pinky, Inky, Clyde };
+	for (const auto& ghost : ghosts)
 	{
-		powerUp->GetComponent<pacman::PickUp>()->AddObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), object->GetComponent<pacman::GhostAI>());
+		powerUp->GetComponent<pacman::PickUp>()->AddObserver(static_cast<diji::MessageTypes>(pacman::MessageTypesDerived::POWERUP_COLLISION), ghost->GetComponent<pacman::GhostAI>());
 	}
 
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
 	Blinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Blinky->GetComponent<pacman::RedAI>());
+	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Pinky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Pinky->GetComponent<pacman::Pinky>());
+	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Inky->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Inky->GetComponent<pacman::Inky>());
+	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), player->GetComponent<pacman::AI>());
+	Clyde->GetComponent<pacman::GhostCollision>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::ENEMY_COLLISION), Clyde->GetComponent<pacman::Clyde>());
+#pragma endregion
+	
+	characterNickname->GetComponent<pacman::IntroRender>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), player->GetComponent<pacman::AI>());
+	characterNickname->GetComponent<pacman::IntroRender>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), GhostTimers->GetComponent<pacman::GhostsTimers>());
 
-	//player->GetComponent<Render>()->DisableRender();
-	//player->GetComponent<Texture>()->PauseAnimation();
+	characterNickname->GetComponent<pacman::IntroRender>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_BEGIN_TWO), powerUp->GetComponent<pacman::PickUp>());
+	characterNickname->GetComponent<pacman::IntroRender>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), powerUp->GetComponent<pacman::PickUp>());
+	characterNickname->GetComponent<pacman::IntroRender>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_BEGIN), powerPellet->GetComponent<pacman::PickUp>());
+	characterNickname->GetComponent<pacman::IntroRender>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::MENU_ANIMATION_BEGIN), powerPellet->GetComponent<pacman::PickUp>());
+
+	Clyde->GetComponent<pacman::Clyde>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::RESET_MENU), powerUp->GetComponent<pacman::PickUp>());
+	Clyde->GetComponent<pacman::Clyde>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::RESET_MENU), powerPellet->GetComponent<pacman::PickUp>());
+	Clyde->GetComponent<pacman::Clyde>()->AddObserver(static_cast<MessageTypes>(pacman::MessageTypesDerived::RESET_MENU), characterNickname->GetComponent<pacman::Intro>());
+
+	if (!isFirstLoad)
+	{
+		player->Init();
+		powerPellet->Init();
+		powerUp->Init();
+		GhostTimers->Init();
+		pelletCounter->Init();
+		Blinky->Init();
+		Pinky->Init();
+		Inky->Init();
+		Clyde->Init();
+	}
+}
+
+void Loader::PacmanIntro()
+{
+	const auto& introScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::INTRO));
+	const auto& textFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
+
+	auto HUD = introScene->CreateGameObject("HUD");
+	HUD->AddComponents<Transform>(10, 10);
+
+	auto scoreCounter = introScene->CreateGameObject("scoreCounterHUD");
+	scoreCounter->AddComponents<Transform>(-5, 20);
+	scoreCounter->AddComponents<pacman::ScoreObserver>("     00", textFont);
+	scoreCounter->AddComponents<Render>();
+	scoreCounter->GetComponent<Render>()->DisableRender();
+	scoreCounter->SetParent(HUD, false);
+
+	auto playerText = introScene->CreateGameObject("playerTextHUD");
+	playerText->AddComponents<Transform>(65, 0);
+	playerText->AddComponents<Text>("1UP", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	playerText->AddComponents<Render>();
+	playerText->GetComponent<Render>()->DisableRender();
+	playerText->SetParent(HUD, false);
+
+	auto twoPlayerText = introScene->CreateGameObject("twoPlayerTextHUD");
+	twoPlayerText->AddComponents<Transform>(370, 0);
+	twoPlayerText->AddComponents<Text>("2UP", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	twoPlayerText->AddComponents<Render>();
+	twoPlayerText->GetComponent<Render>()->DisableRender();
+	twoPlayerText->SetParent(HUD, false);
+
+	auto highScoreText = introScene->CreateGameObject("highScoreTextHUD");
+	highScoreText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 10, 0.f);
+	highScoreText->AddComponents<Text>("HIGH SCORE", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	highScoreText->AddComponents<Render>();
+	highScoreText->GetComponent<Render>()->DisableRender();
+	highScoreText->SetParent(HUD, false);
+
+	auto highScoreDisplay = introScene->CreateGameObject("highScoreDisplayHUD");
+	highScoreDisplay->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 75.f, 20.f);
+	highScoreDisplay->AddComponents<pacman::HighScoreObserver>("  ", textFont, SDL_Color{ 255, 255, 255, 255 }, false);
+	highScoreDisplay->AddComponents<Render>();
+	highScoreDisplay->GetComponent<Render>()->DisableRender();
+	highScoreDisplay->SetParent(HUD, false);
+
+	auto characterNicknameTitle = introScene->CreateGameObject("characterNicknameTitle");
+	characterNicknameTitle->AddComponents<Transform>(loader::VIEWPORT.x * 0.50f, 80.f);
+	characterNicknameTitle->AddComponents<Text>("CHARACTER / NICKNAME", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	characterNicknameTitle->AddComponents<Render>();
+	characterNicknameTitle->GetComponent<Render>()->DisableRender();
+	characterNicknameTitle->SetParent(HUD, false);
+
+	auto credit = introScene->CreateGameObject("creditHUD");
+	credit->AddComponents<Transform>(100.f, loader::VIEWPORT.y - 50);
+	credit->AddComponents<Text>("credit  1", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	credit->AddComponents<Render>();
+	credit->GetComponent<Render>()->DisableRender();
+	credit->SetParent(HUD, false);
+
+#pragma region ghostsTextures
+	auto redGhostTexture = introScene->CreateGameObject("RedGhostTexture");
+	redGhostTexture->AddComponents<Texture>("RedGhost.png", 15, 15, 1);
+	redGhostTexture->AddComponents<Transform>(30.f, 115.f);
+	redGhostTexture->AddComponents<Render>(2);
+	redGhostTexture->GetComponent<Render>()->DisableRender();
+	redGhostTexture->GetComponent<Texture>()->PauseAnimation();
+	redGhostTexture->SetParent(HUD, false);
+
+	auto PinkyTexture = introScene->CreateGameObject("PinkyTexture");
+	PinkyTexture->AddComponents<Texture>("Pinky.png", 15, 15, 1);
+	PinkyTexture->AddComponents<Transform>(30.f, 165.f);
+	PinkyTexture->AddComponents<Render>(2);
+	PinkyTexture->GetComponent<Render>()->DisableRender();
+	PinkyTexture->GetComponent<Texture>()->PauseAnimation();
+	PinkyTexture->SetParent(HUD, false);
+
+	auto InkyTexture = introScene->CreateGameObject("InkyTexture");
+	InkyTexture->AddComponents<Texture>("Inky.png", 15, 15, 1);
+	InkyTexture->AddComponents<Transform>(30.f, 215.f);
+	InkyTexture->AddComponents<Render>(2);
+	InkyTexture->GetComponent<Render>()->DisableRender();
+	InkyTexture->GetComponent<Texture>()->PauseAnimation();
+	InkyTexture->SetParent(HUD, false);
+
+	auto ClydeTexture = introScene->CreateGameObject("ClydeTexture");
+	ClydeTexture->AddComponents<Texture>("Clyde.png", 15, 15, 1);
+	ClydeTexture->AddComponents<Transform>(30.f, 265.f);
+	ClydeTexture->AddComponents<Render>(2);
+	ClydeTexture->GetComponent<Render>()->DisableRender();
+	ClydeTexture->GetComponent<Texture>()->PauseAnimation();
+	ClydeTexture->SetParent(HUD, false);
+
+	auto pellet = introScene->CreateGameObject("pelletTexture");
+	pellet->AddComponents<Texture>("bruh.png");
+	pellet->AddComponents<Transform>(loader::VIEWPORT.x * 0.35f, 400.f);
+	pellet->AddComponents<Render>(2);
+	pellet->GetComponent<Render>()->DisableRender();
+	pellet->SetParent(HUD, false);
+#pragma endregion
+	auto brandName = introScene->CreateGameObject("brandNameHUD");
+	brandName->AddComponents<Transform>(loader::VIEWPORT.x * 0.50f, loader::VIEWPORT.y * 0.82f);
+	brandName->AddComponents<Text>("Burgisser Dylan", textFont, SDL_Color{ 255, 184, 222, 255 }, true);
+	brandName->AddComponents<Render>();
+	brandName->GetComponent<Render>()->DisableRender();
+	brandName->SetParent(HUD, false);
+
+	std::vector<Render*> ghostTextures = { redGhostTexture->GetComponent<Render>(), PinkyTexture->GetComponent<Render>(), InkyTexture->GetComponent<Render>(), ClydeTexture->GetComponent<Render>(), pellet->GetComponent<Render>(), brandName->GetComponent<Render>() };
+	std::vector<Render*> textsRenderer = { scoreCounter->GetComponent<Render>(), playerText->GetComponent<Render>(), twoPlayerText->GetComponent<Render>(), highScoreText->GetComponent<Render>(), highScoreDisplay->GetComponent<Render>(), characterNicknameTitle->GetComponent<Render>(), credit->GetComponent<Render>() };
+	auto characterNickname = introScene->CreateGameObject("characterNickname");
+	characterNickname->AddComponents<Transform>(85.f, 120.f);
+	characterNickname->AddComponents<pacman::Intro>();
+	characterNickname->AddComponents<pacman::IntroRender>();
+	characterNickname->GetComponent<pacman::IntroRender>()->AddGhostRender(std::move(ghostTextures));
+	characterNickname->GetComponent<pacman::IntroRender>()->AddTextsRender(std::move(textsRenderer));
+	characterNickname->SetParent(HUD, false);
+
+	PacmanMenuReload(true);
+
+	auto& input = InputManager::GetInstance();
+
+	input.BindCommand<pacman::SingleCommands>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::Start, HUD, pacman::SingleCommands::SingleCommandOption::SKIP_INTRO);
+	input.BindCommand<pacman::SingleCommands>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::A, HUD, pacman::SingleCommands::SingleCommandOption::SKIP_INTRO);
+
+	input.BindCommand<pacman::SingleCommands>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RETURN, HUD, pacman::SingleCommands::SingleCommandOption::SKIP_INTRO);
+	input.BindCommand<pacman::SingleCommands>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_ESCAPE, HUD, pacman::SingleCommands::SingleCommandOption::SKIP_INTRO);
+}
+
+void Loader::PacmanMenu()
+{
+	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
+	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
 
 	auto menuUI = menuScene->CreateGameObject("menuUI"); //will handle the drawings and AI part of the menu
 	menuUI->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y * 0.5f);
@@ -592,10 +813,12 @@ void Loader::Load()
 #endif
 	pacman::ScoreBoard::GetInstance().Init();
 
-	PacmanMenu();
+	//PacmanMenu();
+	PacmanIntro();
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
 	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);
 
-	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::MENU));
+	//SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::MENU));
+	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::INTRO));
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Render.h"
 #include "Text.h"
+#include "Subject.h"
+
 #include <memory>
 
 namespace pacman 
@@ -105,6 +107,47 @@ namespace pacman
 			{0, 128, 0, 255},
 		};
 
+	};
+
+	class Intro;
+	class IntroRender final : public diji::Render, public diji::Subject
+	{
+	public:
+		IntroRender(diji::GameObject* ownerPtr) : Render(ownerPtr) {};
+		~IntroRender() noexcept override = default;
+
+		void Reset();
+		void Init() override;
+		void Update() override;
+		void FixedUpdate() override {};
+		void RenderFrame() const override;
+		virtual void UpdateText() {};
+
+		void AddGhostRender(std::vector<Render*>&& renderVec) { m_GhostRenderCompPtrVec = std::move(renderVec); };
+		void AddTextsRender(std::vector<Render*>&& renderVec) { m_TextsRenderCompPtrVec = std::move(renderVec); };
+	private:
+		float m_Timer = -1.f;
+		int m_NameIndex = 0;
+		int m_NicknameIndex = 0;
+		int m_GhostIndex = 0;
+		bool m_IsTextRendered = false;
+		diji::Transform* m_TransformCompPtr = nullptr;
+		pacman::Intro* m_IntroCompPtr = nullptr;
+		std::vector<std::unique_ptr<diji::Text>> m_NamesTextCompUPtrVec;
+		std::vector<std::unique_ptr<diji::Text>> m_NicknamesTextCompUPtrVec;
+		std::vector<Render*> m_GhostRenderCompPtrVec;
+		std::vector<Render*> m_TextsRenderCompPtrVec;
+
+		std::unique_ptr<diji::Text> m_FirstPointUPtr;
+		std::unique_ptr<diji::Text> m_SecondPointUPtr;
+		std::unique_ptr<diji::Text> m_PointsUPtr;
+
+		const std::vector<SDL_Color> m_Colors = {
+			{255, 0, 0, 255},
+			{255, 184, 222, 255},
+			{0, 255, 255, 255},
+			{255, 184, 71, 255}
+		};
 	};
 }
 

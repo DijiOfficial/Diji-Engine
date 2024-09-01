@@ -8,7 +8,12 @@
 
 #include "ResourceManager.h"
 #include "ScoreBoard.h"
+#include "Intro.h"
+#include "TimeSingleton.h"
+#include "PickUp.h"
+#include "Observers.h"
 
+//add regions
 void pacman::CustomTextRender::Init()
 {
 	m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
@@ -187,7 +192,6 @@ void pacman::HighScoreRender::Update()
 
 void pacman::HighScoreRender::RenderFrame() const
 {
-
     const glm::vec3 pos = [this]()
         {
             if (m_TransformCompPtr)
@@ -206,5 +210,155 @@ void pacman::HighScoreRender::RenderFrame() const
             diji::Renderer::GetInstance().RenderTexture(*textComp->GetTexture(), pos.x, currentY, m_Scale);
             currentY += yIncrement;
         }
+    }
+}
+
+void pacman::IntroRender::Init()
+{
+    m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
+    m_IntroCompPtr = GetOwner()->GetComponent<pacman::Intro>();
+
+    const auto& textFont = diji::ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
+    const auto& smallFont = diji::ResourceManager::GetInstance().LoadFont("emulogic.ttf", 10);
+    const auto& text = m_IntroCompPtr->GetGhostNames();
+    for (size_t idx{ 0 }; idx < text.size(); ++idx)
+	{
+        m_NamesTextCompUPtrVec.push_back(std::make_unique<diji::Text>(nullptr, text[idx].first, textFont, m_Colors[idx], false));
+        m_NicknamesTextCompUPtrVec.push_back(std::make_unique<diji::Text>(nullptr, text[idx].second, textFont, m_Colors[idx], false));
+	}
+
+    m_FirstPointUPtr = std::make_unique<diji::Text>(nullptr, "10", textFont);
+    m_SecondPointUPtr = std::make_unique<diji::Text>(nullptr, "50", textFont);
+    m_PointsUPtr = std::make_unique<diji::Text>(nullptr, "PTS", smallFont);
+}
+
+void pacman::IntroRender::Update()
+{
+    //todo: put it at the end and early return when something is at max??
+    m_Timer += diji::TimeSingleton::GetInstance().GetDeltaTime();
+    
+    if (not m_IsTextRendered and m_Timer >= 0.f)
+    {
+        for (const auto& textRenderComp : m_TextsRenderCompPtrVec)
+            textRenderComp->EnableRender();
+
+        m_IsTextRendered = true;
+    }
+
+    float waitTime = 1.0f;
+    if (m_GhostIndex > m_NicknameIndex and m_NameIndex > m_NicknameIndex)
+        waitTime = 0.5f;
+    
+    if (m_NicknameIndex == 5 and m_Timer >= waitTime * 0.5f)
+    {
+        Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::MENU_ANIMATION_BEGIN));
+        ++m_NicknameIndex;
+    }
+
+    if (m_Timer >= waitTime)
+    {
+		m_Timer -= waitTime;
+
+        if (m_GhostIndex == m_NameIndex)
+        {
+            if (m_GhostIndex == m_NicknameIndex)
+            {
+                if (m_GhostIndex < 4)
+                    m_GhostRenderCompPtrVec[m_GhostIndex]->EnableRender();
+                else if (m_GhostIndex == 4)
+                {
+                    m_GhostRenderCompPtrVec[m_GhostIndex]->EnableRender();
+                    Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::MENU_BEGIN));
+                }
+                
+                ++m_GhostIndex;
+            }
+            else
+				m_NicknameIndex++;
+        }
+        else
+        {
+			++m_NameIndex;
+            if (m_NameIndex == 5)
+            {
+                Notify(static_cast<diji::MessageTypes>(MessageTypesDerived::MENU_BEGIN_TWO));
+                m_GhostRenderCompPtrVec[m_NameIndex]->EnableRender();
+            }
+        }
+	}
+
+    for (size_t idx{ 0 }; idx < m_NamesTextCompUPtrVec.size(); ++idx)
+    {
+        m_NamesTextCompUPtrVec[idx]->Update();
+        m_NicknamesTextCompUPtrVec[idx]->Update();
+    }
+
+    m_FirstPointUPtr->Update();
+    m_SecondPointUPtr->Update();
+    m_PointsUPtr->Update();
+}
+
+void pacman::IntroRender::Reset()
+{
+    m_NameIndex = 0;
+	m_NicknameIndex = 0;
+	m_GhostIndex = 0;
+	m_Timer = -1.f;
+    m_IsTextRendered = false;
+
+    for (auto& textRenderComp : m_TextsRenderCompPtrVec)
+		textRenderComp->DisableRender();
+
+    for (auto& ghostRender : m_GhostRenderCompPtrVec)
+    {
+		ghostRender->DisableRender();
+	}
+
+    m_NamesTextCompUPtrVec.clear();
+    m_NicknamesTextCompUPtrVec.clear();
+    const auto& textFont = diji::ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
+    const auto& text = m_IntroCompPtr->GetGhostNames();
+    for (size_t idx{ 0 }; idx < text.size(); ++idx)
+    {
+        m_NamesTextCompUPtrVec.push_back(std::make_unique<diji::Text>(nullptr, text[idx].first, textFont, m_Colors[idx], false));
+        m_NicknamesTextCompUPtrVec.push_back(std::make_unique<diji::Text>(nullptr, text[idx].second, textFont, m_Colors[idx], false));
+    }
+}
+
+void pacman::IntroRender::RenderFrame() const
+{
+    const glm::vec3 pos = [this]()
+    {
+        if (m_TransformCompPtr)
+            return m_TransformCompPtr->GetPosition();
+        else
+            return glm::vec3{ 0, 0, 0 };
+    }();
+
+    const float startY = pos.y;
+    const int yIncrement = 50;
+    float currentY = startY;
+    for (size_t idx{ 0 }; idx < m_NamesTextCompUPtrVec.size(); ++idx)
+    {
+        const auto& nameTextComp = m_NamesTextCompUPtrVec[idx];
+        if (idx < m_NameIndex)
+        {
+            diji::Renderer::GetInstance().RenderTexture(*nameTextComp->GetTexture(), pos.x, currentY, m_Scale);
+        }
+
+        if (idx < m_NicknameIndex)
+        {
+            diji::Renderer::GetInstance().RenderTexture(*m_NicknamesTextCompUPtrVec[idx]->GetTexture(), pos.x + nameTextComp->GetTexture()->GetSize().x, currentY, m_Scale);
+        }
+
+        currentY += yIncrement;
+    }
+
+    if (m_GhostIndex > 4)
+    {
+	    diji::Renderer::GetInstance().RenderTexture(*m_FirstPointUPtr->GetTexture(), pos.x + 100, 400, m_Scale);
+	    diji::Renderer::GetInstance().RenderTexture(*m_SecondPointUPtr->GetTexture(), pos.x + 100, 437, m_Scale);
+        diji::Renderer::GetInstance().RenderTexture(*m_PointsUPtr->GetTexture(), pos.x + 149, 406, m_Scale);
+        diji::Renderer::GetInstance().RenderTexture(*m_PointsUPtr->GetTexture(), pos.x + 149, 443, m_Scale);
     }
 }
