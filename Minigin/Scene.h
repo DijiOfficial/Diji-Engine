@@ -21,7 +21,7 @@ namespace diji
 		void Render() const;
 		void LateUpdate();
 		
-		GameObject* CreateGameObject(const std::string& name);
+		[[nodiscard]] GameObject* CreateGameObject(const std::string& name);
 		void Remove(GameObject* object);
 		void Remove(const std::string& name);
 		void RemoveAll();
