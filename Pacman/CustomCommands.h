@@ -49,6 +49,8 @@ namespace pacman
 		{
 			Left,
 			Right,
+			Up,
+			Down,
 			Enter
 		};
 

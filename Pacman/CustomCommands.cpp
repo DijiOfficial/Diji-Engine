@@ -102,10 +102,10 @@ void pacman::MenuSwitch::Execute()
 
 	switch (m_Button)
 	{
-	case MenuButtons::Right:
+	case MenuButtons::Up:
 		m_MenuComponentPtr->SwitchUp();
 			break;
-	case MenuButtons::Left:
+	case MenuButtons::Down:
 		m_MenuComponentPtr->SwitchDown();
 		break;
 	case MenuButtons::Enter:
