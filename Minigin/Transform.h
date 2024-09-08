@@ -33,6 +33,7 @@ namespace diji
 		void SetPosition(const glm::vec2 pos) { m_Position.x = pos.x; m_Position.y = pos.y; };
 		void SetMovement(const Movement& movement) { m_LastMovement = m_CurrentMovement; m_CurrentMovement = movement; };
 		void SetLookingDirection(const Movement& movement) { m_LookingDirection = movement; };
+		void AddOffset(const float x, const float y, const float z = 0);
 		Movement GetMovement() const { return m_CurrentMovement; };
 		Movement GetLastMovement() const { return m_LastMovement; };
 		Movement GetLookingDirection() const { return m_LookingDirection; };

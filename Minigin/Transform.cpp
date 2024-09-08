@@ -20,6 +20,13 @@ void diji::Transform::SetPosition(const float x, const float y)
 	SetPosition(x, y, 0.f);
 }
 
+void diji::Transform::AddOffset(const float x, const float y, const float z)
+{
+	m_Position.x += x;
+	m_Position.y += y;
+	m_Position.z += z;
+}
+
 glm::vec3 diji::Transform::GetMovementVector(const float value) const
 {
 	Movement movement = m_CurrentMovement == Movement::Idle ? m_LastMovement : m_CurrentMovement;
