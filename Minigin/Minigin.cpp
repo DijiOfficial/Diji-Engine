@@ -101,12 +101,11 @@ void diji::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 
 	auto lastFrameTime{ std::chrono::high_resolution_clock::now() };
-	bool doContinue = true;
 	float lag = 0.0f;
 
 	sceneManager.Init();
 
-	while (doContinue)
+	while (true)
 	{
 		GUI::GetInstance().NewFrame();
 
@@ -116,7 +115,8 @@ void diji::Minigin::Run(const std::function<void()>& load)
 		lag += deltaTime;
 
 		TimeSingleton::GetInstance().SetDeltaTime(deltaTime);
-		doContinue = input.ProcessInput();
+		if(not input.ProcessInput())
+			break;
 
 		while (lag >= FIXED_TIME_STEP)
 		{

@@ -53,7 +53,7 @@ bool diji::InputManager::ProcessInput()
 		ProcessControllerInput();
 	}
 
-	return true;
+	return m_Continue;
 }
 
 void diji::InputManager::ProcessKeyboardInput()
