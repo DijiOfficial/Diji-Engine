@@ -8,89 +8,199 @@
 #include "GameLoader.h"
 #include "SceneManager.h"
 #include "TimeSingleton.h"
+#include "InputManager.h"
+
+void pacman::Menu::Init()
+{
+	const auto& owner = GetOwner();
+	const auto& back = owner->GetChild(0);
+	//m_BackRenderCompPtr = back->GetComponent<diji::Render>();
+	m_BackTransformCompPtr = back->GetComponent<diji::Transform>();
+
+	for (int i = 1; i < 5; ++i)
+	{
+		m_MultiplayerRenderCompPtrVec.push_back(owner->GetChild(i)->GetComponent<diji::Render>());
+	}
+	m_MultiplayerRenderCompPtrVec.push_back(owner->GetChild(0)->GetComponent<diji::Render>());
+
+	for (int i = 5; i < 11; ++i)
+	{
+		m_TextRenderCompPtrVec.push_back(owner->GetChild(i)->GetComponent<diji::Render>());
+	}
+}
 
 void pacman::Menu::Update()
 {
-	m_DisplayTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
-	if (m_DisplayTimer >= 0.2f)
-	{
-		m_Display = !m_Display;
-		m_DisplayTimer = 0.f;
-	}
+    m_DisplayTimer += diji::TimeSingleton::GetInstance().GetDeltaTime();
+    if (m_DisplayTimer > 0.2f)
+    {
+        m_Display = !m_Display;
+        m_DisplayTimer -= 0.2f;
 
-	if (!m_Display)
-		GetOwner()->GetComponent<diji::Render>()->DisableRender();
-	else
-		GetOwner()->GetComponent<diji::Render>()->EnableRender();
+        const std::vector<diji::Render*>* renderCompPtrVec = GetCurrentStateRenderCompPtrVec();
 
-	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
+		const int displayIndex = GetDisplayIndex();
 
-	if (pStates[SDL_SCANCODE_RETURN])
-	{
-		ValidateChoice();
-		return;
-	}
-
-	if (!pStates[SDL_SCANCODE_LEFT] && !pStates[SDL_SCANCODE_A])
-		m_WasDownKey = false;
-
-	if (!pStates[SDL_SCANCODE_RIGHT] && !pStates[SDL_SCANCODE_D])
-		m_WasUpKey = false;
-
-	if ((pStates[SDL_SCANCODE_LEFT] or pStates[SDL_SCANCODE_A]) && !m_WasDownKey)
-	{
-		SwitchDown();
-		m_WasDownKey = true;
-	}
-	if ((pStates[SDL_SCANCODE_RIGHT] or pStates[SDL_SCANCODE_D]) && !m_WasUpKey)
-	{
-		SwitchUp();
-		m_WasUpKey = true;
-	}
-
-	//todo dirty flag
-	if (m_SelectedIndex > 0)
-		m_Shape.width = 60;
-	else
-		m_Shape.width = 30;
-
-	m_Shape.left = 106.f + m_SelectedIndex * 75.f;
-	if (m_SelectedIndex == 2)
-		m_Shape.left += 30.f;
-
-	GetOwner()->GetComponent<diji::Render>()->UpdateShape(m_Shape);
+        if (m_Display)
+            (*renderCompPtrVec)[displayIndex]->EnableRender();
+        else
+            (*renderCompPtrVec)[displayIndex]->DisableRender();
+    }
 }
 
 void pacman::Menu::ValidateChoice()
 {
+	const float backTextYOffset = 344.f;
 	GameState state = GameState::INVALID;
-	switch (m_SelectedIndex)
+	switch (m_MenuState)
 	{
-	case 0:
-		state = GameState::LEVEL;
-		Loader::PacmanLevel();
+	case pacman::MenuState::MENU:
+		switch (m_SelectedIndex)
+		{
+		case 0:
+			state = GameState::LEVEL;
+			Loader::PacmanLevel();
+			break;
+		case 1:
+			for (const auto& renderComp : m_TextRenderCompPtrVec)
+			{
+				renderComp->DisableRender();
+			}
+
+			m_MultiplayerRenderCompPtrVec[0]->EnableRender();
+			m_MultiplayerRenderCompPtrVec[1]->EnableRender();
+			m_MultiplayerRenderCompPtrVec[4]->EnableRender();
+
+			m_BackTransformCompPtr->SetPosition(m_BackTransformCompPtr->GetPosition().x, backTextYOffset - 20.f);
+			
+			m_MenuState = MenuState::MULTIPLAYER;
+			break;
+		case 2: //create level
+		case 3://options
+		case 4://highscores
+			break;
+		case 5:
+			diji::InputManager::GetInstance().Quit();
+			break;
+		}
 		break;
-	case 1:
-		state = GameState::COOP;
-		Loader::CoopLevel();
+	case pacman::MenuState::MULTIPLAYER:
+		switch (m_SelectedIndex)
+		{
+		case 0:
+			state = GameState::COOP;
+			Loader::CoopLevel();
+			break;
+		case 1:
+			m_MultiplayerRenderCompPtrVec[0]->DisableRender();
+			m_MultiplayerRenderCompPtrVec[1]->DisableRender();
+
+			m_MultiplayerRenderCompPtrVec[2]->EnableRender();
+			m_MultiplayerRenderCompPtrVec[3]->EnableRender();
+			m_MultiplayerRenderCompPtrVec[4]->EnableRender();
+
+			m_MenuState = MenuState::MULTIPLAYEROPTIONS;
+
+			break;
+		case 2:
+			m_MultiplayerRenderCompPtrVec[0]->DisableRender();
+			m_MultiplayerRenderCompPtrVec[1]->DisableRender();
+			m_MultiplayerRenderCompPtrVec[4]->DisableRender();
+			for (const auto& renderComp : m_TextRenderCompPtrVec)
+			{
+				renderComp->EnableRender();
+			}
+			m_MenuState = MenuState::MENU;
+			break;
+		}
 		break;
-	case 2:
-		Loader::VersusLevel();
-		state = GameState::VERSUS;
+	case pacman::MenuState::MULTIPLAYEROPTIONS:
+		switch (m_SelectedIndex)
+		{
+		case 0://Freemode versus
+			//state = GameState::VERSUS;
+			//Loader::CoopLevel();
+			break;
+		case 1:
+			state = GameState::VERSUS;
+			Loader::VersusLevel();
+			break;
+		case 2:
+			m_MultiplayerRenderCompPtrVec[0]->EnableRender();
+			m_MultiplayerRenderCompPtrVec[1]->EnableRender();
+
+			m_MultiplayerRenderCompPtrVec[2]->DisableRender();
+			m_MultiplayerRenderCompPtrVec[3]->DisableRender();
+			m_MultiplayerRenderCompPtrVec[4]->EnableRender();
+			
+			m_MenuState = MenuState::MULTIPLAYER;
+			break;
+		}
+		break;
+	case pacman::MenuState::OPTIONS:
+		break;
+	case pacman::MenuState::HIGHSCORE:
+		break;
+	default:
 		break;
 	}
 
-	diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(state));
+	m_SelectedIndex = 0;
+	if (state != GameState::INVALID)
+		diji::SceneManager::GetInstance().SetNextSceneToActivate(static_cast<int>(state));
 }
 
 void pacman::Menu::SwitchDown()
 {
-	--m_SelectedIndex;
-	if (m_SelectedIndex < 0)
-		m_SelectedIndex = 2;
+	(*GetCurrentStateRenderCompPtrVec())[GetDisplayIndex()]->EnableRender();
+	int maxIndex = static_cast<int>(m_MenuState);
+	if (m_MenuState == MenuState::MULTIPLAYEROPTIONS)
+		maxIndex = 3;
+
+	m_SelectedIndex = (m_SelectedIndex + 1) % maxIndex;
 }
 
 void pacman::Menu::SwitchUp()
 {
-	m_SelectedIndex = (m_SelectedIndex + 1) % 3;
+	(*GetCurrentStateRenderCompPtrVec())[GetDisplayIndex()]->EnableRender();
+	--m_SelectedIndex;
+	if (m_SelectedIndex < 0)
+	{
+		int maxIndex = static_cast<int>(m_MenuState) - 1;
+		if (m_MenuState == MenuState::MULTIPLAYEROPTIONS)
+			maxIndex = 2;
+		m_SelectedIndex = maxIndex;
+	}
+}
+
+std::vector<diji::Render*>* pacman::Menu::GetCurrentStateRenderCompPtrVec()
+{
+	switch (m_MenuState)
+	{
+	case pacman::MenuState::MENU:
+		return &m_TextRenderCompPtrVec;
+		break;
+
+	case pacman::MenuState::MULTIPLAYEROPTIONS:
+	case pacman::MenuState::MULTIPLAYER:
+		return &m_MultiplayerRenderCompPtrVec;
+		break;
+	case pacman::MenuState::OPTIONS:
+	case pacman::MenuState::HIGHSCORE:
+	default:
+		return nullptr;
+		//return std::vector<diji::Render*>;
+	}
+}
+
+int pacman::Menu::GetDisplayIndex() const
+{
+	int displayIndex = m_SelectedIndex;
+	if (m_MenuState == MenuState::MULTIPLAYEROPTIONS)
+		displayIndex = m_SelectedIndex + 2;
+
+	if ((m_MenuState == MenuState::MULTIPLAYER or m_MenuState == MenuState::MULTIPLAYEROPTIONS) and m_SelectedIndex == 2)
+		displayIndex = 4;
+
+	return displayIndex;
 }

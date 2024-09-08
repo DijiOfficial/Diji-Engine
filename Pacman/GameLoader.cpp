@@ -351,36 +351,121 @@ void Loader::PacmanMenu()
 {
 	const auto& menuScene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::MENU));
 	const auto& mediumFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 18);
+	const auto& textFont = ResourceManager::GetInstance().LoadFont("emulogic.ttf", 16);
 
 	auto menuUI = menuScene->CreateGameObject("menuUI"); //will handle the drawings and AI part of the menu
-	menuUI->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y * 0.5f);
+	menuUI->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, loader::VIEWPORT.y * 0.5f + 40.f);
 	menuUI->AddComponents<pacman::Menu>();
-	const ShapeInfo shapeInfo = { Rectf{0, 0, 0, 0}, SDL_Color{235, 235, 235}, 1 };
-	menuUI->AddComponents<Render>(shapeInfo);
+	menuUI->AddComponents<pacman::MenuRender>();
+#pragma region HUD
+	auto scoreCounter = menuScene->CreateGameObject("scoreCounterHUD");
+	scoreCounter->AddComponents<Transform>(5, 30);
+	scoreCounter->AddComponents<pacman::ScoreObserver>("     00", textFont);
+	scoreCounter->AddComponents<Render>();
 
-	auto singlePlayer = menuScene->CreateGameObject("singlePLayerTexture");
-	singlePlayer->AddComponents<Transform>(-120, 0);
-	singlePlayer->AddComponents<Texture>("SinglePlayer.png", 15, 15);
-	singlePlayer->AddComponents<Render>(2);
-	singlePlayer->SetParent(menuUI, false);
+	auto playerTextHUD = menuScene->CreateGameObject("playerTextHUD");
+	playerTextHUD->AddComponents<Transform>(75, 10);
+	playerTextHUD->AddComponents<Text>("1UP", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	playerTextHUD->AddComponents<Render>();
+
+	auto twoPlayerTextHUD = menuScene->CreateGameObject("twoPlayerTextHUD");
+	twoPlayerTextHUD->AddComponents<Transform>(380, 10);
+	twoPlayerTextHUD->AddComponents<Text>("2UP", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	twoPlayerTextHUD->AddComponents<Render>();
+
+	auto highScoreText = menuScene->CreateGameObject("highScoreTextHUD");
+	highScoreText->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f, 10.f);
+	highScoreText->AddComponents<Text>("HIGH SCORE", textFont, SDL_Color{ 255, 255, 255, 255 }, true);
+	highScoreText->AddComponents<Render>();
+
+	auto highScoreDisplay = menuScene->CreateGameObject("highScoreDisplayHUD");
+	highScoreDisplay->AddComponents<Transform>(loader::VIEWPORT.x * 0.5f - 65.f, 30.f);
+	highScoreDisplay->AddComponents<pacman::HighScoreObserver>("  ", textFont, SDL_Color{ 255, 255, 255, 255 }, false);
+	highScoreDisplay->AddComponents<Render>();
+#pragma endregion
+
+	auto backText = menuScene->CreateGameObject("backText");
+	backText->AddComponents<Transform>(-108, 130);
+	backText->AddComponents<Text>("BACK", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	backText->AddComponents<Render>();
+	backText->SetParent(menuUI, false);
+	backText->GetComponent<Render>()->DisableRender();
+
+#pragma region multiplayer
+	auto coopText = menuScene->CreateGameObject("coopText");
+	coopText->AddComponents<Transform>(-108, -120);
+	coopText->AddComponents<Text>("COOP", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	coopText->AddComponents<Render>();
+	coopText->SetParent(menuUI, false);
+	coopText->GetComponent<Render>()->DisableRender();
+
+	auto versusText = menuScene->CreateGameObject("versusText");
+	versusText->AddComponents<Transform>(-108, -70);
+	versusText->AddComponents<Text>("VERSUS", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	versusText->AddComponents<Render>();
+	versusText->SetParent(menuUI, false);
+	versusText->GetComponent<Render>()->DisableRender();
+
+#pragma region multiplayerSelection
+	auto freeMode = menuScene->CreateGameObject("freeMode");
+	freeMode->AddComponents<Transform>(-108, -120);
+	freeMode->AddComponents<Text>("FREEMODE", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	freeMode->AddComponents<Render>();
+	freeMode->SetParent(menuUI, false);
+	freeMode->GetComponent<Render>()->DisableRender();
+
+	auto ghostRules = menuScene->CreateGameObject("ghostRules");
+	ghostRules->AddComponents<Transform>(-108, -70);
+	ghostRules->AddComponents<Text>("GHOST RULES", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	ghostRules->AddComponents<Render>();
+	ghostRules->SetParent(menuUI, false);
+	ghostRules->GetComponent<Render>()->DisableRender();
+
+#pragma endregion
+#pragma endregion
+
+	auto playerText = menuScene->CreateGameObject("singlePlayerText");
+	playerText->AddComponents<Transform>(-108, -120);
+	playerText->AddComponents<Text>("1 PLAYER", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	playerText->AddComponents<Render>();
+	playerText->SetParent(menuUI, false);
+
+	auto twoPlayerText = menuScene->CreateGameObject("twoPlayerText");
+	twoPlayerText->AddComponents<Transform>(-108, -70);
+	twoPlayerText->AddComponents<Text>("2 PLAYERS", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	twoPlayerText->AddComponents<Render>();
+	twoPlayerText->SetParent(menuUI, false);
+
+	auto createLevel = menuScene->CreateGameObject("levelCreator");
+	createLevel->AddComponents<Transform>(0, -20);
+	createLevel->AddComponents<Text>("CREATE LEVEL", mediumFont, SDL_Color{ 244, 244, 244, 255 }, true);
+	createLevel->AddComponents<Render>();
+	createLevel->SetParent(menuUI, false);
+
+	//todo: in options add starting lives, addition life, sound ect...
+	auto options = menuScene->CreateGameObject("optionsHUD");
+	options->AddComponents<Transform>(-108, 30);
+	options->AddComponents<Text>("OPTIONS", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	options->AddComponents<Render>();
+	options->SetParent(menuUI, false);
+
+	auto highScores = menuScene->CreateGameObject("highScoresHUD");
+	highScores->AddComponents<Transform>(-108, 80);
+	highScores->AddComponents<Text>("HIGHSCORES", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	highScores->AddComponents<Render>();
+	highScores->SetParent(menuUI, false);
+
+	auto exitText = menuScene->CreateGameObject("exitText");
+	exitText->AddComponents<Transform>(-108, 130);
+	exitText->AddComponents<Text>("EXIT", mediumFont, SDL_Color{ 244, 244, 244, 255 }, false);
+	exitText->AddComponents<Render>();
+	exitText->SetParent(menuUI, false);
 
 	auto logo = menuScene->CreateGameObject("logo");
 	logo->AddComponents<Texture>("Logo.png");
 	logo->AddComponents<Transform>(-220, -250);
 	logo->AddComponents<Render>();
 	logo->SetParent(menuUI, false);
-
-	auto coop = menuScene->CreateGameObject("coopTexture");
-	coop->AddComponents<Transform>(-45, 0);
-	coop->AddComponents<Texture>("Coop.png", 30, 15);
-	coop->AddComponents<Render>(2);
-	coop->SetParent(menuUI, false);
-
-	auto versus = menuScene->CreateGameObject("versusTexture");
-	versus->AddComponents<Transform>(60, 0);
-	versus->AddComponents<Texture>("Versus.png", 30, 15);
-	versus->AddComponents<Render>(2);
-	versus->SetParent(menuUI, false);
 
 	auto pushStart = menuScene->CreateGameObject("startTextMenu");
 	pushStart->AddComponents<Text>("PUSH ENTER BUTTON", mediumFont, SDL_Color{ 206, 206, 110, 255 }, true);
@@ -389,13 +474,33 @@ void Loader::PacmanMenu()
 	pushStart->AddComponents<pacman::BlinkingText>();
 	pushStart->SetParent(menuUI, false);
 
+	//const std::vector<diji::Render*> textRenders = { 
+	//	playerText->GetComponent<Render>(), 
+	//	twoPlayerText->GetComponent<Render>(), 
+	//	createLevel->GetComponent<Render>(), 
+	//	options->GetComponent<Render>(), 
+	//	highScoreDisplay->GetComponent<Render>(), 
+	//	exitText->GetComponent<Render>(),
+	//	//freeMode->GetComponent<Render>(),
+	//	//ghostRules->GetComponent<Render>(),
+	//};
+
+	//menuUI->GetComponent<pacman::Menu>()->AddTextRender(textRenders);
+
 	auto& input = InputManager::GetInstance();
 
-	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::DPadLeft, menuUI, pacman::MenuSwitch::MenuButtons::Left);
-	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::DPadRight, menuUI, pacman::MenuSwitch::MenuButtons::Right);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::DPadDown, menuUI, pacman::MenuSwitch::MenuButtons::Down);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::DPadUp, menuUI, pacman::MenuSwitch::MenuButtons::Up);
 	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::Start, menuUI, pacman::MenuSwitch::MenuButtons::Enter);
 	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::PLAYER1, KeyState::PRESSED, Controller::Button::A, menuUI, pacman::MenuSwitch::MenuButtons::Enter);
 
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_DOWN, menuUI, pacman::MenuSwitch::MenuButtons::Down);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_S, menuUI, pacman::MenuSwitch::MenuButtons::Down);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_D, menuUI, pacman::MenuSwitch::MenuButtons::Down);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_UP, menuUI, pacman::MenuSwitch::MenuButtons::Up);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_W, menuUI, pacman::MenuSwitch::MenuButtons::Up);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_A, menuUI, pacman::MenuSwitch::MenuButtons::Up);
+	input.BindCommand<pacman::MenuSwitch>(PlayerIdx::KEYBOARD, KeyState::RELEASED, SDL_SCANCODE_RETURN, menuUI, pacman::MenuSwitch::MenuButtons::Enter);
 }
 
 void Loader::CommonGameAssets(Scene* &scene)
@@ -813,12 +918,10 @@ void Loader::Load()
 #endif
 	pacman::ScoreBoard::GetInstance().Init();
 
-	//PacmanMenu();
 	PacmanIntro();
 
 	Collision::GetInstance().ParseLevelSVG("BackgroundLevelBlack.svg", 78);
 	Collision::GetInstance().ParseIntersectionsSVG("Intersections.svg", 78);
 
-	//SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::MENU));
 	SceneManager::GetInstance().SetActiveScene(static_cast<int>(pacman::GameState::INTRO));
 }

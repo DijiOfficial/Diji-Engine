@@ -12,6 +12,7 @@
 #include "TimeSingleton.h"
 #include "PickUp.h"
 #include "Observers.h"
+#include "Menu.h"
 
 //add regions
 void pacman::CustomTextRender::Init()
@@ -361,4 +362,25 @@ void pacman::IntroRender::RenderFrame() const
         diji::Renderer::GetInstance().RenderTexture(*m_PointsUPtr->GetTexture(), pos.x + 149, 406, m_Scale);
         diji::Renderer::GetInstance().RenderTexture(*m_PointsUPtr->GetTexture(), pos.x + 149, 443, m_Scale);
     }
+}
+
+void pacman::MenuRender::Init()
+{
+    m_TransformCompPtr = GetOwner()->GetComponent<diji::Transform>();
+    m_MenuCompPtr = GetOwner()->GetComponent<pacman::Menu>();
+}
+
+void pacman::MenuRender::RenderFrame() const
+{
+    const glm::vec3 pos = [this]()
+    {
+        if (m_TransformCompPtr)
+            return m_TransformCompPtr->GetPosition();
+        else
+            return glm::vec3{ 0, 0, 0 };
+    }();
+    const int yIncrement = m_MenuCompPtr->GetSelectedIndex();
+    const glm::vec2 triangleCenter = { pos.x - 125.f, pos.y - 107 + yIncrement * 50 };
+
+    diji::Renderer::GetInstance().DrawFilledTriangle(triangleCenter, 14, SDL_Color{ 235, 235, 235, 255 });
 }

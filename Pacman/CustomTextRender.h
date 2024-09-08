@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace pacman 
+namespace pacman
 {
 	class EnterName;
 
@@ -19,7 +19,7 @@ namespace pacman
 		void Update() override {};
 		void FixedUpdate() override {};
 
-		void RenderFrame() const override;	
+		void RenderFrame() const override;
 		virtual void UpdateText();
 	private:
 		diji::Texture2D* m_TextureCompPtr = nullptr;
@@ -149,5 +149,24 @@ namespace pacman
 			{255, 184, 71, 255}
 		};
 	};
-}
 
+	class Menu;
+	class MenuRender final : public diji::Render
+	{
+	public:
+		MenuRender(diji::GameObject* ownerPtr) : Render(ownerPtr) {};
+		~MenuRender() noexcept override = default;
+
+		void Init() override;
+		void Update() override {};
+		void FixedUpdate() override {};
+
+		void RenderFrame() const override;
+		void UpdateText() override {};
+
+	private:
+		diji::Transform* m_TransformCompPtr = nullptr;
+		pacman::Menu* m_MenuCompPtr = nullptr;
+		bool m_RenderText = false;
+	};
+}

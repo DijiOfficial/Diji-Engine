@@ -221,7 +221,6 @@
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="ScoreCounter.cpp" />
     <ClCompile Include="GhostCollision.cpp" />
-    <ClCompile Include="TimerComp.cpp" />
     <ClCompile Include="TrashTheCache.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -247,7 +246,6 @@
     <ClInclude Include="ScoreBoard.h" />
     <ClInclude Include="ScoreCounter.h" />
     <ClInclude Include="GhostCollision.h" />
-    <ClInclude Include="TimerComp.h" />
     <ClInclude Include="TrashTheCache.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
