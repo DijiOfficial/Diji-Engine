@@ -14,15 +14,14 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
     - [Features](#features)
     - [Paterns]()
     - [Pipeline]()
-    - [Getting Started]()
-    - [Expansions Todo]
+    - [Expansions Todo]()
 - [Pacman]()
     - [intro]()
-    - Demo overview — what the Pacman project demonstrates about the engine
-    - Gameplay & controls — player controls, win/lose conditions, UI
-    - Level & asset structure — tilemap usage and asset layout used by the demo
-    - AI & systems used — how ghost behavior, collisions, and state transitions are implemented
-    - Running the demo — quick steps to build and run the Pacman example   
+    - [Demo overview]() — what the Pacman project demonstrates about the engine
+    - [Gameplay & controls]() — player controls, win/lose conditions, UI
+    - [Level & asset structure]() — tilemap usage and asset layout used by the demo
+    - [AI & systems]() used — how ghost behavior, collisions, and state transitions are implemented
+    - [Running the demo]() — quick steps to build and run the Pacman example   
 
 # The Engine
 
@@ -147,41 +146,67 @@ GameObjects support parent-child relationships with proper world/local position 
 
 These patterns allow me to provides a clean, maintainable code architecture.
 
+## Pipeline 
+
+As Mentionned before I kept the pipeline quite simple, not needing complex collision, rendering and such.
+
+(insert pipeline diagram)
+
+Now that you've got acquainted with the engine, let's see its flaws and avenues for improvements. 
+
+# Improvements and todos
+
+This section is dedicated to potential improvements for the engine. However if you've gotten this far you probably saw the [SFML Engine]() mentionned a couple of times. That engine is an upgraded version building on top of this one's framework, with many improvements made to the engine itself as well as more modernized code. So if you haven't already I invite to go over the the [SFML Engine GitHub Page]() to find out about the improved version of the engine!
+
+With all of that said, let's get into the example usage of this engine.
+
+# Pacman
+
+The Following sections will guide you through my implementation of the original Pacman arcade game that I made!
+
+## Intro
+
+I made Pacman alongside the Engine as both a showcase and a design reference for the engine. Developing it in parallel helped me shape key engine systems, and expose the potential flaws in the design.
+
+It’s a project I’m particularly proud of, the gameplay is a faithful replica of the original as I spent countless hours researching the original Arcade game exploring old research papers and abandinned threads on unkown forums to find the information I needed!
+
+I'm confident my game showcases my capabilities as a programmer so let me present it to you!
+
+## Overview
+
+First, let's start with how Pacman shaped the engine and thereof lack of. Indeed what makes my Engine Unique is that it's not built for general use but rahter specifically for the game. While it demonstrate my understanding of game engines I avoided superflous, unecessary code and feaatures that are not needed. That being said here are some of the Key Features:
+
+- **Modular Composition:** Every Element (player, ghosts, pellets, UI) is made by combining reusable components, I can even demonstrate such a use with the players and ghost being very similar in different game modes while keeping and even the Intro! All of that simply by adding or removing the right components!
+
+  (gifs of different ghost/player behaviors)
+
+- **Efficient Collision & Level Parsing:** Uses SVG-based collision map and pellet collection through optimized Collision queries and Events!
+
+- **Smooth Input & Audio:** Handles keyboard/controller input with the Command pattern and processes sound effects/music asynchronously on a separate thread—demonstrating multithreading and event-queue expertise.
+
+- **Dynamic UI & Observers:** Updates score, lives, and level displays in real time via an Observer pattern, highlighting clean separation of game logic and presentation.
+
+- **Multiple Modes:** Includes single-player, cooperative, and versus modes, demonstrating the use of deifferent scenes and the flexibility of the engine.
+
+
+Scene & Object Lifecycle Management
+Scene loading, unloading, and object cleanup are fully managed using the engine’s internal systems — enabling smooth transitions, resets, and object pooling behavior.
+
+
+The demo isn’t just a sample — it’s been instrumental in shaping the engine’s feature set, making sure everything from input to rendering holds up in an actual game scenario.
+
+this game showcases my knowlegde in engine architecture, design patterns, and clean, maintainable C++ code.
+With that out of the way let's get to the intersting part. The game Itself!
 
 
 
+    - [Demo overview]() — what the Pacman project demonstrates about the engine
+    - [Gameplay & controls]() — player controls, win/lose conditions, UI
+    - [Level & asset structure]() — tilemap usage and asset layout used by the demo
+    - [AI & systems]() used — how ghost behavior, collisions, and state transitions are implemented
+    - [Running the demo]() — quick steps to build and run the Pacman example  
 
 
-
-4. Project Structure
-
-A brief explanation of the directory layout (e.g., src/, examples/, build/, docs/). Use a tree snippet or simple list.
-
-5. Getting Started / Usage
-
-Steps to compile/build quickly.
-
-How to run example projects if any.
-
-Dependencies (like SFML version).
-
-6. How It Works / Architecture
-
-Short narrative explaining core parts (e.g., how the rendering loop is structured, how modules interact).
-
-Provide an overview of data flow or main classes.
-
-7. Examples / Demos
-
-Mention any sample projects included (e.g., Pac-Man clone, demo scenes).
-
-Screenshots or links to visuals (if applicable).
-
-8. Planned Improvements / Roadmap
-
-Features you intend to add later (e.g., physics integration, scripting, editor tools).
-
-Invite contributions if it's open to it.
 
 9. About / Credits
 
