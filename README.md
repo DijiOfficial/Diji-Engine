@@ -174,24 +174,80 @@ I'm confident my game showcases my capabilities as a programmer so let me presen
 
 ## Overview
 
-First, let's start with how Pacman shaped the engine and thereof lack of. Indeed what makes my Engine Unique is that it's not built for general use but rahter specifically for the game. While it demonstrate my understanding of game engines I avoided superflous, unecessary code and feaatures that are not needed. That being said here are some of the Key Features:
-
-this game showcases my knowlegde in engine architecture, design patterns, and clean, maintainable C++ code.
+I once again won't be showing much code as it would make for a very boring read. But feel free to have a read through the code or look at my [SFML Engine]() for a more up-to-date code style.
 With that out of the way let's get to the intersting part. The game Itself!
 
-Stuff about the game
+I first tried to replicate the intro closely to the original. You can find a video of the arcade game [here]() for a reference. However the first "boot up" section seemed hard to replicate as it almost looks like it's clearing the memory and using that to display visuals on the screen. I ended up starting right after that on the classic start menu.
+
+(insert gif)
+
+Here's a fun fact while researching the menu for pacman I found that depending on the version or rather location of the game the names on display would vary.
+After pressing start, is where you will find the bigges difference with the original! An actual Menu!
+
+(insert menu images)
+
+Here you will find multiple options:
+- [**1 player**](#single-player)
+- **2 players**
+	- [**COOP**](#co-op)
+	- [**VERSUS**](#versus)
+ 		- [**FREEMODE**](#freemode)
+   		- [**GHOST RULES**](#ghost-rules) 
+- [CREATE LEVEL]()
+- OPTIONS
+- HIGHSCORES
+- EXIT
+
+I had planned for an option settings allowing some graphics and audio settings, but ran out of time and decided to cut it from the game. It is still present if I want to revisit it.
+The highscores though currently broken should take you to the end screen where all the highscores are displayed!
 
 ## Gameplay & Controls
-## Level & Assets
-## AI
+
+| Keyboard          | Controller 				  | Action                       |  
+|-------------------|-----------------------------|------------------------------|  
+| **W, A, S, D**    | **D-PAD**/**LEFT JOYSTICK** | Move                         |  
+| **ENTER**  		| **BUTTON DOWN**			  | Select / Next  		         |  
+
+## Single Player
+// talk about all that you added to the game
+#### AI
+
+## CO-OP
+
+The Coop mode was a way to showcase how the engine handles multiple inputs as well as how composition made this an easy process since all the necessary building blocks where already present.
+
+For Coop I decided to count both players as one, the biggest issue I wanted to avoid was having one player die and having to watch the other keep playing. 
+I also wanted to avoid competition as well so both players work together to complete the game! If one dies both die, points and lives are shared!
+
+(video demo)
+
+## VERSUS
+
+I made two versus mode, although similar it was so I could both show the capacities of the engine as well as some balance.
+
+### FREEMODE
+
+Freemode is the first option, allowing the second player to control the red ghost. At the time I didn't think of removing the other 3 ghosts for balance but simply put allowing the ghost to be controlled by a player made it already very unfair for player 1.
+
+(video demo)
+### GHOST RULES
+And so I made Ghost Rules, where the second player still controls the red ghost but it must abide by ghost rules. forcing movement at all times as well as not allowing certain movements.
+
+(video demo)
+
+
+## Create Level
+// blabla
+
+
 ## Playing the Game
 
-    - [Demo overview]() — what the Pacman project demonstrates about the engine
-    - [Gameplay & controls]() — player controls, win/lose conditions, UI
-    - [Level & asset structure]() — tilemap usage and asset layout used by the demo
-    - [AI & systems]() used — how ghost behavior, collisions, and state transitions are implemented
-    - [Running the demo]() — quick steps to build and run the Pacman example  
+If you want to play the game you can do so here.
 
+
+# Conclusion
+
+## References
 
 
 9. About / Credits
