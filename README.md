@@ -154,7 +154,7 @@ As Mentionned before I kept the pipeline quite simple, not needing complex colli
 
 Now that you've got acquainted with the engine, let's see its flaws and avenues for improvements. 
 
-# Improvements and todos
+## Improvements and todos
 
 This section is dedicated to potential improvements for the engine. However if you've gotten this far you probably saw the [SFML Engine]() mentionned a couple of times. That engine is an upgraded version building on top of this one's framework, with many improvements made to the engine itself as well as more modernized code. So if you haven't already I invite to go over the the [SFML Engine GitHub Page]() to find out about the improved version of the engine!
 
