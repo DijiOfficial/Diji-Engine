@@ -198,7 +198,12 @@ The demo isn’t just a sample — it’s been instrumental in shaping the engin
 this game showcases my knowlegde in engine architecture, design patterns, and clean, maintainable C++ code.
 With that out of the way let's get to the intersting part. The game Itself!
 
+Stuff about the game
 
+## Gameplay & Controls
+## Level & Assets
+## AI
+## Playing the Game
 
     - [Demo overview]() — what the Pacman project demonstrates about the engine
     - [Gameplay & controls]() — player controls, win/lose conditions, UI
