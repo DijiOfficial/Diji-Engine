@@ -111,7 +111,7 @@ I made a template-based Singleton implementation used throughout the codebase. W
 ### Game Loop
 The main loop handles timing, input processing, and separates game logic updates from rendering with fixed updates as well, ensuring consistent gameplay across different hardware.
 
-#### Update Method
+### Update Method
 I used a simple update method pattern with multiple phases:
 
 `Init() - Component initialization`, While initialy not present within the game loop, it was quickly added as it would GREATLY simplify initialization for gameobejcts and their compoentns.
