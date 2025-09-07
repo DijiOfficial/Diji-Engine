@@ -4,7 +4,7 @@
 
 # Overview
 
-I based it of the [Unity Pipeline]() simplifying it for an easier use of handling graphics, inputs and basic game-loop logic, allowing me to focus on building gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it serves both as a teaching tool and as a basis for future custom game engine. One such Expansion is my [custom SFML engine]() which I greatly encourage you to check out as it is simply better in every way possible.
+I based it of the [Unity Pipeline]() simplifying it for an easier use of handling graphics, inputs and basic game-loop logic, allowing me to focus on building gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it serves both as a learning tool and as a basis for future custom game engine. One such Expansion is my [custom SFML engine]() which I greatly encourage you to check out as it is simply better in every way possible.
 
 The Pacman demo included in this repo serves as proof of the engine's capabilites. A complete, playable example that ties the engine’s core systems together.
 
