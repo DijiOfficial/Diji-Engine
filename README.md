@@ -176,25 +176,6 @@ I'm confident my game showcases my capabilities as a programmer so let me presen
 
 First, let's start with how Pacman shaped the engine and thereof lack of. Indeed what makes my Engine Unique is that it's not built for general use but rahter specifically for the game. While it demonstrate my understanding of game engines I avoided superflous, unecessary code and feaatures that are not needed. That being said here are some of the Key Features:
 
-- **Modular Composition:** Every Element (player, ghosts, pellets, UI) is made by combining reusable components, I can even demonstrate such a use with the players and ghost being very similar in different game modes while keeping and even the Intro! All of that simply by adding or removing the right components!
-
-  (gifs of different ghost/player behaviors)
-
-- **Efficient Collision & Level Parsing:** Uses SVG-based collision map and pellet collection through optimized Collision queries and Events!
-
-- **Smooth Input & Audio:** Handles keyboard/controller input with the Command pattern and processes sound effects/music asynchronously on a separate thread—demonstrating multithreading and event-queue expertise.
-
-- **Dynamic UI & Observers:** Updates score, lives, and level displays in real time via an Observer pattern, highlighting clean separation of game logic and presentation.
-
-- **Multiple Modes:** Includes single-player, cooperative, and versus modes, demonstrating the use of deifferent scenes and the flexibility of the engine.
-
-
-Scene & Object Lifecycle Management
-Scene loading, unloading, and object cleanup are fully managed using the engine’s internal systems — enabling smooth transitions, resets, and object pooling behavior.
-
-
-The demo isn’t just a sample — it’s been instrumental in shaping the engine’s feature set, making sure everything from input to rendering holds up in an actual game scenario.
-
 this game showcases my knowlegde in engine architecture, design patterns, and clean, maintainable C++ code.
 With that out of the way let's get to the intersting part. The game Itself!
 
