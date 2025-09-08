@@ -209,8 +209,55 @@ The highscores though currently broken should take you to the end screen where a
 | **ENTER**  		| **BUTTON DOWN**			  | Select / Next  		         |  
 
 ## Single Player
-// talk about all that you added to the game
-#### AI
+
+I won't go in too much details about the singleplayer, it's a close replica but not an exact one. 
+Some of the details I didn't get around to are:
+- varying speeds
+	- In the original ghosts speed increase depending on the level, then decreases around level 17 and stabilizes onwards.
+ 	- In the original the player speed seems very inconsistent. It turns out that the player stops for 1frame every time he eats a pellet! (I may have added that I'm not sure)
+- Level Transitions
+	- When completing a level, the level flashes for a bit before reseting. My version loads the next level immideatly.
+ 
+### AI
+
+The AI, the whole reason for this Pacman section!
+The AI is an exact replica of the original, I followed [this video by ...]() as a reference for the ghost AI. As for the code itself I used the state Pattern combined with some components and commands.
+
+I won't go in too much details about the AI itself, rather I'll show the structure of it. Below you can find the "Brain" of the AI.
+```
+	                                                                      If Power                         
+	                                    If In Chase Mode    ┌───────┐   Pellet Eaten                       
+	                               ┌────────────────────────► Chase ◄──────────────────┐                   
+	                               │                        └───▲───┘   Power Ran Out  │                   
+	                               │                            │                      │                   
+	                               │                            │                      │                   
+	                               │                          If│Time            ┌─────▼──────┐            
+	                               │                          To│Switch          │ Frightened ├──┐         
+	                               │                            │                └─────▲──────┘  │         
+	                               │                            │                      │         │         
+	               Complex         │            If In           │         If Power     │         │         
+	 ┌─────────┐  Algorithm  ┌─────┴──────┐  Scatter Mode  ┌────▼────┐  Pellet Eaten   │         │         
+	 │ Waiting ├─────────────► Enter Maze ├────────────────► Scatter ◄─────────────────┘         │If       
+	 └─────────┘             └─────▲──────┘                └─────────┘  Power Ran Out            │Colliding
+	                               │                                                             │With     
+	                      Personnal│Spawn                                                        │Player   
+	                         Is Reached                                                          │         
+	                               │                                  Update Paused For          │         
+	                          ┌────┴────┐  If Spawn Reached  ┌───────┐  For 2 Seconds ┌───────┐  │         
+	                          │ Respawn ◄────────────────────┤ Eaten ◄────────────────┤ Dying ◄──┘         
+	                          └─────────┘                    └───────┘                └───────┘
+```
+The ghosts are then Handled by a GhostAI component, The GhostAI then manages the GhostState Component amongst other things. If a state switch condition is met it is then handled by the GhostAI as well.
+
+Each ghost as a Unique GhostAI component for their unique Chase states
+(insert image)
+Each Ghost State is then Inherited from the GhostState Template using the state pattern.
+(insert image)
+Finally all of the states are handled by the GhostAI
+(insert image)
+
+Comprehesible, flexibeal and expandable!
+
 
 ## CO-OP
 
@@ -237,7 +284,8 @@ And so I made Ghost Rules, where the second player still controls the red ghost 
 
 
 ## Create Level
-// blabla
+
+As I was making the game and the engine I quickly realised the potential it had, with composition being a puzzle you arrange the way you want it I thought I could make a level editor. With pieces and sections of the original map cut up to be rearranged into any shape you desire, plopping upgrades and pellets and whatever else you need how you want it. With file IO it would be easy to save and share those maps. Unfortunately it was very ambitious and never made it in. Likely I will never get around to making it but it may serve as an idea for future games. Perhaps I could even incorporate some [WFC]() into it, have random maps every time!
 
 
 ## Playing the Game
