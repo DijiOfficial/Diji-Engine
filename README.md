@@ -129,14 +129,14 @@ Drawing inspiration from [**Robert Nystrom's "Game Programming Patterns"**](http
 I will link to each pattern from the book at then end of each pattern sections for reference.
 
 ### <ins>Command Pattern</ins>
-Created a base Command class providing a pure `virtual Execute()` method, allowing me to **encapsulate input requests as objects.** This allows me to **map inputs to actions** easily like [**Unreal Engine Input System**](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine).
+Created a base Command class providing a pure `virtual Execute()` method, allowing me to encapsulate input requests as objects. This allows me to map inputs to actions easily like [**Unreal Engine Input System**](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine).
 
 [**Command Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/command.html)
 
 ### <ins>Observer Pattern</ins>
 I implemented a default system using IObserver and Subject classes. Allowing me to decouple object further by using messages as events, all components are both observers and subjects, allowing each components to listen for events/messages and execute code accordingly. 
 
-My current Implementation has one big weakness and that is it doesn't allow events to pass information with it. This could be fixed with templates, however in my newer [SFML Engine](https://github.com/DijiOfficial/SFML-Engine) I completely changed this system to mimick the [Unreal Engine's event system](https://dev.epicgames.com/documentation/en-us/unreal-engine/custom-events-in-unreal-engine) using templates, making it much cleaner and easier to use, decoupling it even further.
+My current Implementation has one big weakness and that is it doesn't allow events to pass information with it. This could be fixed with templates, however in my newer [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine) I completely changed this system to mimick the [**Unreal Engine's Event System**](https://dev.epicgames.com/documentation/en-us/unreal-engine/custom-events-in-unreal-engine) using templates, making it much cleaner and easier to use, decoupling it even further.
 
 [**Observer Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/observer.html)
 
@@ -169,7 +169,7 @@ Used in rendering with SDL2's built-in double buffering system. having no other 
 [**Double Buffer Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/double-buffer.html)
 
 ### <ins>Component Pattern</ins>
-Composition over Inheritance! Featuring a complete Entity-Component system where GameObjects are composed and hanndle various components. this makes for simple and flexible game object creation.
+**Composition over Inheritance!** Featuring a complete Entity-Component system where GameObjects are composed and hanndle various components. this makes for simple and flexible game object creation.
 
 In my version GameObjects come bare without any components. Altough this was changed midway through development the Transform was moved outside the GameObject into it's own component. It has remained the same in my [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine). I marked it asa future improvement that every gameobject upon creation will come with a transform component.
 
@@ -181,7 +181,7 @@ Used in different context, including the Transform component and GameObject hier
 [**Dirty Flag Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/dirty-flag.html)
 
 ### <ins>State Pattern</ins>
-Not found in the engine as it would not simplify already simple beahviours, however it is extensively used in the [**Pac-Man**](#pac-man) example through the [**ghost AI system**](#ai). simplifying the headache that is the state transitions and behavior management of the [**ghost AI**](#ai).
+Not found in the engine as it would not simplify already simple beahviours, however it is extensively used in the [**Pac-Man**](#pac-man) example through the [**Ghost AI System**](#ai). simplifying the headache that is the state transitions and behavior management of the [**Ghost AI**](#ai).
 
 [**State Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/state.html)
 
@@ -212,28 +212,28 @@ Now that you've got acquainted with the engine, let's see its flaws and avenues 
 
 ## <ins>Improvements & todos</ins>
 
-This section is dedicated to potential improvements for the engine. However if you've gotten this far you probably saw the [SFML Engine]() mentionned a couple of times. That engine is an upgraded version building on top of this one's framework, with many improvements made to the engine itself as well as more modernized code. So if you haven't already I invite to go over the the [SFML Engine GitHub Page]() to find out about the improved version of the engine!
+This section is dedicated to potential improvements for the engine. However if you've gotten this far you probably saw the [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine) mentionned a couple of times. That engine is an upgraded version building on top of this one's framework, with many improvements made to the engine itself as well as more modernized code. So if you haven't already I invite to go over the the [**SFML Engine GitHub Page**](https://github.com/DijiOfficial/SFML-Engine) to find out about the improved version of the engine!
 
 With all of that said, let's get into the example usage of this engine.
 
 # <ins>Pac-Man</ins>
 
-The Following sections will guide you through my implementation of the original Pacman arcade game that I made!
+The Following sections will guide you through my implementation of the original [**Pac-Man**](#pac-man) arcade game that I made!
 
 ## <ins>Intro</ins>
 
-I made Pacman alongside the Engine as both a showcase and a design reference for the engine. Developing it in parallel helped me shape key engine systems, and expose the potential flaws in the design.
+I made [**Pac-Man**](#pac-man) alongside the [**Engine**](#the-engine) as both a showcase and a design reference for the engine. Developing it in parallel helped me shape key engine systems, and expose the potential flaws in the design.
 
-It’s a project I’m particularly proud of, the gameplay is a faithful replica of the original as I spent countless hours researching the original Arcade game exploring old research papers and abandinned threads on unkown forums to find the information I needed!
+It’s a project I’m particularly proud of, the gameplay is a faithful replica of the original as I spent countless hours researching [**the original Arcade Game**](https://en.wikipedia.org/wiki/Pac-Man) exploring old research papers and abandinned threads on unkown forums to find the information I needed!
 
 I'm confident my game showcases my capabilities as a programmer so let me present it to you!
 
 ## <ins>Overview</ins>
 
-I once again won't be showing much code as it would make for a very boring read. But feel free to have a read through the code or look at my [SFML Engine]() for a more up-to-date code style.
+I once again won't be showing much code as it would make for a very boring read. But feel free to have a read through the code or look at my [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine) for a more up-to-date code style.
 With that out of the way let's get to the intersting part. The game Itself!
 
-I first tried to replicate the intro closely to the original. You can find a video of the arcade game [here]() for a reference. However the first "boot up" section seemed hard to replicate as it almost looks like it's clearing the memory and using that to display visuals on the screen. I ended up starting right after that on the classic start menu.
+I first tried to replicate the intro closely to the original. You can find a [**video of the arcade game**](https://youtu.be/dScq4P5gn4A) for reference. However the first "boot up" section seemed hard to replicate so I ended up starting right after that on the classic start menu.
 
 (insert gif)
 
@@ -268,16 +268,16 @@ The highscores though currently broken should take you to the end screen where a
 
 I won't go in too much details about the singleplayer, it's a close replica but not an exact one. 
 Some of the details I didn't get around to are:
-- varying speeds
+- **Varying Speeds**
 	- In the original ghosts speed increase depending on the level, then decreases around level 17 and stabilizes onwards.
- 	- In the original the player speed seems very inconsistent. It turns out that the player stops for 1frame every time he eats a pellet! (I may have added that I'm not sure)
-- Level Transitions
+ 	- In the original the player speed seems very inconsistent. It turns out that the player stops for 1frame every time he eats a pellet!
+- **Level Transitions**
 	- When completing a level, the level flashes for a bit before reseting. My version loads the next level immideatly.
  
 ### <ins>AI</ins>
 
 The AI, the whole reason for this Pacman section!
-The AI is an exact replica of the original, I followed [this video by ...]() as a reference for the ghost AI. As for the code itself I used the state Pattern combined with some components and commands.
+The AI is an exact replica of the original, I followed [Retro Game Mechanics Explained by Retro Game Mechanics Explained](https://youtu.be/ataGotQ7ir8) as a reference for the [**Ghost AI**](#ai). As for the code itself I used the state pattern combined with some components and commands.
 
 I won't go in too much details about the AI itself, rather I'll show the structure of it. Below you can find the "Brain" of the AI.
 ```
@@ -341,12 +341,12 @@ And so I made Ghost Rules, where the second player still controls the red ghost 
 
 ## <ins>Create Level</ins>
 
-As I was making the game and the engine I quickly realised the potential it had, with composition being a puzzle you arrange the way you want it I thought I could make a level editor. With pieces and sections of the original map cut up to be rearranged into any shape you desire, plopping upgrades and pellets and whatever else you need how you want it. With file IO it would be easy to save and share those maps. Unfortunately it was very ambitious and never made it in. Likely I will never get around to making it but it may serve as an idea for future games. Perhaps I could even incorporate some [WFC]() into it, have random maps every time!
+As I was making the game and the engine I quickly realised the potential it had, with composition being a puzzle you arrange the way you want it I thought I could make a level editor. With pieces and sections of the original map cut up to be rearranged into any shape you desire, plopping upgrades and pellets and whatever else you need how you want it. With file IO it would be easy to save and share those maps. Unfortunately it was very ambitious and never made it in. Likely I will never get around to making it but it may serve as an idea for future games. Perhaps I could even incorporate some [**WFC**](https://github.com/DijiOfficial/WaveFunctionCollapse) into it, have random maps every time!
 
 
 ## <ins>Play The Game</ins>
 
-You can [play a web version of the game here](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) or [download the C++ version here]().
+You can [**play a web version of the game here**](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) or [**download the C++ version here**]().
 
 # <ins>Conclusion</ins>
 
