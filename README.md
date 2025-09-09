@@ -35,7 +35,7 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
     - [Improvements & todos](#improvements--todos)
 - [Pacman](#pacman)
     - [Intro](#intro)
-    - [Overview](#overview)
+    - [Overview](#overview-1)
     - [Controls](#controls)
     - [Single Player](#single-player)
     	- [AI](#ai) 
@@ -226,7 +226,7 @@ Here you will find multiple options:
 I had planned for an option settings allowing some graphics and audio settings, but ran out of time and decided to cut it from the game. It is still present if I want to revisit it.
 The highscores though currently broken should take you to the end screen where all the highscores are displayed!
 
-## <ins>Gameplay & Controls</ins>
+## <ins>Controls</ins>
 
 | Keyboard          | Controller 				  | Action                       |  
 |-------------------|-----------------------------|------------------------------|  
