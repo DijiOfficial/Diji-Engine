@@ -30,7 +30,7 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
     	- [Dirty Flag](#dirty-flag) 
     	- [Event Queue Pattern](#event-queue-pattern) 
     	- [Service Locator Pattern](#service-locator-pattern) 
-    	- [GameObject Parent-Child Relationship](#gameobjects-parent-child-relationship) 
+    	- [GameObject Parent-Child Relationship](#gameobjects-parent-child-relationships) 
     - [Pipeline](#pipeline)
     - [Improvements & todos](#improvements--todos)
 - [Pacman](#pacman)
