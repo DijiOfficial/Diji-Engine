@@ -52,6 +52,7 @@ The [Pacman demo](#pacman) included in this repo serves as proof of the engine's
 
 <details>
 	 <summary>Click to expand engine details</summary>
+	
 ## <ins>Features & Architecture</ins>
 
 ### <ins>Core Engine Systems</ins>
