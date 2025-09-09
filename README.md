@@ -218,7 +218,7 @@ Here you will find multiple options:
 	- [**VERSUS**](#versus)
  		- [**FREEMODE**](#freemode)
    		- [**GHOST RULES**](#ghost-rules) 
-- [CREATE LEVEL](#create=level)
+- [CREATE LEVEL](#create-level)
 - OPTIONS
 - HIGHSCORES
 - EXIT
