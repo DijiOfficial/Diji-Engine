@@ -13,7 +13,7 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
 - [The Engine](#the-engine)
     - [Features](#features--architecture)
     	- [Core Engine Systems](#core-engine-systems)
-     	- [Component Systemm](#component-system)
+     	- [Component System](#component-system)
       	- [Graphics & Rendering](#graphics--rendering)
       	- [Audio System](#audio-system)
       	- [Input & Controls](#inpput--controls)
