@@ -1,4 +1,4 @@
-# Pacman and the Diji-Engine
+# <ins>Pacman and the Diji-Engine</ins>
 
 **Diji-Engine is a lightweight C++ engine built with SDL and GLM, with a Pacman demo that showcases its capabilities, implemented following the C++ Core Guidelines.**
 
