@@ -16,7 +16,7 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
      	- [Component System](#component-system)
       	- [Graphics & Rendering](#graphics--rendering)
       	- [Audio System](#audio-system)
-      	- [Input & Controls](#inpput--controls)
+      	- [Input & Controls](#input--controls)
       	- [Advanced Features](#advanced-features)
       	- [Development Tools](#development-tools)
     - [Game Programming Patterns](#game-programming-patterns)
@@ -101,7 +101,7 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
 - **Multi-format Audio:** Support for music and sound effects through SDL_mixer integration.
 - **Audio Management:** Separate Music and SoundEffect classes with mute/volume control capabilities.
 
-### Input & Control</ins>
+### Input & Controls</ins>
 - **Input Management:** Centralized InputManager with support for keyboard and controller input.
 - **Command Pattern:** Built-in command system for handling player actions and game commands.
 - **Controller Support:** Game controller integration for multiple input devices.
