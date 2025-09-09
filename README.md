@@ -1,12 +1,12 @@
 # <ins>Pacman and the Diji-Engine</ins>
 
-**Diji-Engine is a lightweight C++ engine built with SDL and GLM, with a Pacman demo that showcases its capabilities, implemented following the C++ Core Guidelines.**
+**Diji-Engine is a lightweight C++ engine built with [SDL](https://github.com/libsdl-org/SDL) and [GLM](https://github.com/g-truc/glm), with a [Pacman demo](#pacman) that showcases its capabilities, implemented following the C++ Core Guidelines.**
 
 # <ins>Overview</ins>
 
-I based it of the [Unity Pipeline]() simplifying it for an easier use of handling graphics, inputs and basic game-loop logic, allowing me to focus on building gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it serves both as a learning tool and as a basis for future custom game engine. One such Expansion is my [custom SFML engine]() which I greatly encourage you to check out as it is simply better in every way possible.
+I based it of the [Unity Pipeline](https://docs.unity3d.com/6000.2/Documentation/Manual/execution-order.html) simplifying it for my use case, allowing me to focus on building simple and efficient gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it served both as a learning tool and as a basis for future custom game engines. One such Expansion is my [custom SFML engine](https://github.com/DijiOfficial/SFML-Engine) which I greatly encourage you to check out as it is simply better in every way possible.
 
-The Pacman demo included in this repo serves as proof of the engine's capabilites. A complete, playable example that ties the engine’s core systems together.
+The [Pacman demo](#pacman) included in this repo serves as proof of the engine's capabilites. A complete, [playable example](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) that ties the engine’s core systems together.
 
 # <ins>Contents</ins>
 
@@ -50,6 +50,8 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
 
 # <ins>The Engine</ins>
 
+<details>
+	 <summary>Click to expand engine details</summary>
 ## <ins>Features & Architecture</ins>
 
 ### <ins>Core Engine Systems</ins>
@@ -84,46 +86,44 @@ The Pacman demo included in this repo serves as proof of the engine's capabilite
 	}
 ```
 
-- **Scene Management:** General System for managing scenes. 
-- **Resource Management:** Centralized ResourceManager for handling textures, fonts, sounds, and other game assets to keep memory usage optimal.
+- **Scene Management:** Global System for managing scenes. 
+- **Resource Management:** Global ResourceManager for handling textures, fonts, sounds, and other game assets to keep memory usage optimal.
 
 ### <ins>Component System</ins>
-- **GameObject Architecture:** GameObject system allowing modular game object composition with Components. Focusing the game towards Composition over Inheritence.
+- **GameObject Architecture:** GameObject system allowing modular game object composition with [Components](#component-pattern). Focusing the game towards Composition over Inheritence.
 - **Built-in Components:** Default components including Transform, Render, Text, Texture2D, Collider, Controller, and more.
 - **Component Lifecycle:** Managed by their Owning GameObjects themselves managed by the scene.
 
 ### <ins>Graphics & Rendering</ins>
-- **2D Rendering Pipeline:** OpenGL-accelerated SDL2 renderer with texture rendering, sprite animation, and rotation support.
-- **Texture Management:** Advanced texture rendering with support for sprite sheets, scaling, rotation, and animation frames.
-- **ImGui Integration:** Built-in immediate mode GUI system for debug interfaces and development tools.
+- **2D Rendering Pipeline:** Simple SDL2 renderer with texture rendering, sprite animation, rotation support, shapes and more.
+- **ImGui Integration:** Built-in ImGUI system for debug interfaces and development tools.
 
 ### <ins>Audio System</ins>
 - **Multi-format Audio:** Support for music and sound effects through SDL_mixer integration.
 - **Audio Management:** Separate Music and SoundEffect classes with mute/volume control capabilities.
 
 ### <ins>Input & Controls</ins>
-- **Input Management:** Centralized InputManager with support for keyboard and controller input.
+- **Input Management:** Global InputManager with support for keyboard and controller input.
 - **Command Pattern:** Built-in command system for handling player actions and game commands.
-- **Controller Support:** Game controller integration for multiple input devices.
 
 ### <ins>Advanced Features</ins>
 - **Transform Hierarchy:** Parent-child GameObject relationships with world/local position management and dirty flag optimization.
-- **Collision System:** Basic collision detection with Collider components for game physics.
+- **Collision System:** Basic collision detection with Collider components for game physics inspired from [Unreal Engine Collision system](https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview).
 - **Observer Pattern:** Event system with Subject/Observer implementation.
 - ~~**Steam Integration:** Steam Achievements system for Steam platform integration.~~ Since removed as it causes issues with controller inputs.
 
 ### <ins>Development Tools</ins>
 - **SVG Parser:** Custom SVG parsing capabilities for vector graphics importation.
 - **FPS Counter:** Built-in frame rate monitoring and display.
-- **Visual Leak Detector:** Memory leak detection integration for development builds. (may incorrectly report leaks with static objects)
 
-This overall Architecture provides a solid foundation for a 2D game engine. Which can easily be expanded upon as shown in my [SFML Engine]().
+This overall Architecture provides a solid foundation for a 2D game engine. Which can easily be expanded upon as shown in my [SFML Engine](https://github.com/DijiOfficial/SFML-Engine).
+</details>
 
 ## <ins>Game Programming Patterns</ins>
-Drawing inspiration from [Robert Nystrom's "Game Programming Patterns"](), I implemented several key design patterns that provide structure and flexibility for game development.
+Drawing inspiration from [Robert Nystrom's "Game Programming Patterns"](https://gameprogrammingpatterns.com), I implemented several key design patterns that provide structure and flexibility for game development.
 
 ### <ins>Command Pattern</ins>
-Created a  base Command class providing a pure virtual Execute() method, allowing me to encapsulate input requests as objects. This allows me to map inputs to actions easily like in Unreal Engine.
+Created a base Command class providing a pure `virtual Execute()` method, allowing me to encapsulate input requests as objects. This allows me to map inputs to actions easily like [Unreal Engine Input system](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine).
 
 ### <ins>Observer Pattern</ins>
 I implemented a default system using IObserver and Subject classes. Allowing me to decouple object further by using messages as events, all components are both observers and subjects, allowing each components to listen for events/messages and execute code accordingly. 
