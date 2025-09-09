@@ -223,12 +223,12 @@ Once again won't be showing much code as it would make for a very boring read. B
 
 I first tried to replicate the intro closely to the original. You can find a [**video of the arcade game**](https://youtu.be/dScq4P5gn4A) for reference. However the first "boot up" was hard to replicate so I started right after that on the classic start menu.
 
-(insert gif)
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/PacmanIntroGif.gif)
 
 Here's a fun fact, while researching the menu for pacman I found that depending on the version or rather location of the game the names on display would vary.
 After pressing start, is where you will find the biggest difference with the original! An actual Menu!
 
-(insert menu images)
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/MenuGif.gif)
 
 Here you will find multiple options:
 - [**1 player**](#single-player)
@@ -295,11 +295,16 @@ I won't go in too much details about the AI itself, rather I'll show the structu
 The ghosts are handled by a GhostAI component, which manages the GhostState component and others. If a state switch condition is met, it’s also handled by GhostAI through the state pattern.
 
 Each ghost has a unique GhostAI component for their unique chase behaviours.
-(insert image)
+
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/GhostAICode.png)
+
 Each Ghost State is then inherited from the GhostState Template using the state pattern.
-(insert image)
+
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/GhostAIStateCode.png)
+
 Finally, all states are managed by the GhostAI.
-(insert image)
+
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/GhostAIStateSwitch.png)
 
 Comprehensible, flexible, and expandable!
 
