@@ -195,7 +195,9 @@ These patterns allow me to provides a clean and maintainable code architecture.
 
 As mentionned before, I kept the pipeline quite simple not needing complex collision, rendering and such.
 
-(insert pipeline diagram) 
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/Pipeline.png)
+
+In my pipeline, I check for scene changes after the `Update` method. This isn’t ideal, as it effectively skips a frame. I addressed this in my [SFML Engine](https://github.com/DijiOfficial/SFML-Engine), moving the check to the end of the game loop for a more robust and less error-prone system..
 
 ## <ins>Improvements & todos</ins>
 
