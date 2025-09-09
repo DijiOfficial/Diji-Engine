@@ -290,8 +290,7 @@ As I was making the game and the engine I quickly realised the potential it had,
 
 ## Playing the Game
 
-If you want to play the game you can do so here.
-
+You can [play a web version of the game here](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) or [download the C++ version here]().
 
 # Conclusion
 
