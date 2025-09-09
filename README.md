@@ -1,14 +1,14 @@
-# <ins>Pac-Man and the Diji-Engine</ins>
+# <ins>**Pac-Man and the Diji-Engine**</ins>
 
-**Diji-Engine is a lightweight C++ engine built with [SDL](https://github.com/libsdl-org/SDL) and [GLM](https://github.com/g-truc/glm), with a [Pacman demo](#pacman) that showcases its capabilities, implemented following the C++ Core Guidelines.**
+**Diji-Engine is a lightweight C++ engine built with [SDL](https://github.com/libsdl-org/SDL) and [GLM](https://github.com/g-truc/glm), with a [Pac-Man demo](#pac-man) that showcases its capabilities, implemented following the C++ Core Guidelines.**
 
-# <ins>Overview</ins>
+# <ins>**Overview**</ins>
 
 I based it of the [**Unity Pipeline**](https://docs.unity3d.com/6000.2/Documentation/Manual/execution-order.html) simplifying it for my use case, allowing me to focus on building simple and efficient gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it served both as a learning tool and as a basis for future custom game engines. One such Expansion is my [**custom SFML engine**](https://github.com/DijiOfficial/SFML-Engine) which I greatly encourage you to check out as it is simply better in every way possible.
 
 The [**Pac-Man demo**](#pac-man) included in this repo serves as proof of the engine's capabilites. A complete, [**playable example**](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) that ties the engine’s core systems together.
 
-# <ins>Contents</ins>
+# <ins>**Contents**</ins>
 
 - [**The Engine**](#the-engine)
     - [**Features**](#features--architecture)
@@ -109,7 +109,7 @@ The [**Pac-Man demo**](#pac-man) included in this repo serves as proof of the en
 
 ### <ins>Advanced Features</ins>
 - **Transform Hierarchy:** **Parent-child GameObject relationships** with world/local position management and dirty flag optimization.
-- **Collision System:** Basic **collision** detection with **Collider components** for **game physics** inspired from [**Unreal Engine Collision system**](https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview).
+- **Collision System:** Basic **collision** detection with **Collider components** for **game physics** inspired from [**Unreal Engine Collision System**](https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview).
 - **Observer Pattern: Event system** with Subject/Observer implementation.
 - ~~**Steam Integration:** Steam Achievements system for Steam platform integration.~~ Since removed as it causes issues with controller inputs.
 
@@ -124,12 +124,12 @@ This overall Architecture provides a **solid foundation** for a **2D game engine
 Drawing inspiration from [**Robert Nystrom's "Game Programming Patterns"**](https://gameprogrammingpatterns.com), I implemented several key design patterns that provide structure and flexibility for game development.
 
 <details>
-	 <summary>Click to expand <bold>Game Programming Patterns Section</bold></summary>
+	 <summary>Click to expand Game Programming Patterns Section</summary>
 
 I will link to each pattern from the book at then end of each pattern sections for reference.
 
 ### <ins>Command Pattern</ins>
-Created a base Command class providing a pure `virtual Execute()` method, allowing me to encapsulate input requests as objects. This allows me to map inputs to actions easily like [Unreal Engine Input system](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine).
+Created a base Command class providing a pure `virtual Execute()` method, allowing me to **encapsulate input requests as objects.** This allows me to **map inputs to actions** easily like [**Unreal Engine Input System**](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine).
 
 [**Command Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/command.html)
 
@@ -188,11 +188,15 @@ Not found in the engine as it would not simplify already simple beahviours, howe
 ### <ins>Event Queue Pattern</ins>
 The audio system implements an event queue through the SDLISoundSystem class. Sound requests are queued using `std::queue` and processed asynchronously on a separate thread.
 
+[**Event Queue Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/event-queue.html)
+
 ### <ins>Service Locator Pattern</ins>
 The audio system also implements the Service Locator pattern through the ServiceLocator class, providing global access to audio services while maintaining flexibility in implementation choice.
 
+[**Service Locator Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/event-queue.html)
+
 ### <ins>GameObjects Parent-Child Relationships</ins>
-GameObjects support parent-child relationships with proper world/local position management, implementing a scene graph pattern common in game engines.
+GameObjects support parent-child relationships with proper world/local position management, implementing a scene graph common in game engines.
 
 These patterns allow me to provides a clean, maintainable code architecture.
 
