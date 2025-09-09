@@ -1,52 +1,52 @@
-# <ins>Pacman and the Diji-Engine</ins>
+# <ins>Pac-Man and the Diji-Engine</ins>
 
 **Diji-Engine is a lightweight C++ engine built with [SDL](https://github.com/libsdl-org/SDL) and [GLM](https://github.com/g-truc/glm), with a [Pacman demo](#pacman) that showcases its capabilities, implemented following the C++ Core Guidelines.**
 
 # <ins>Overview</ins>
 
-I based it of the [Unity Pipeline](https://docs.unity3d.com/6000.2/Documentation/Manual/execution-order.html) simplifying it for my use case, allowing me to focus on building simple and efficient gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it served both as a learning tool and as a basis for future custom game engines. One such Expansion is my [custom SFML engine](https://github.com/DijiOfficial/SFML-Engine) which I greatly encourage you to check out as it is simply better in every way possible.
+I based it of the [**Unity Pipeline**](https://docs.unity3d.com/6000.2/Documentation/Manual/execution-order.html) simplifying it for my use case, allowing me to focus on building simple and efficient gameplay systems while allowing easy expansions on needed engine systems. Applying modern practices, it served both as a learning tool and as a basis for future custom game engines. One such Expansion is my [**custom SFML engine**](https://github.com/DijiOfficial/SFML-Engine) which I greatly encourage you to check out as it is simply better in every way possible.
 
-The [Pacman demo](#pacman) included in this repo serves as proof of the engine's capabilites. A complete, [playable example](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) that ties the engine’s core systems together.
+The [**Pac-Man demo**](#pac-man) included in this repo serves as proof of the engine's capabilites. A complete, [**playable example**](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) that ties the engine’s core systems together.
 
 # <ins>Contents</ins>
 
-- [The Engine](#the-engine)
-    - [Features](#features--architecture)
-    	- [Core Engine Systems](#core-engine-systems)
-     	- [Component System](#component-system)
-      	- [Graphics & Rendering](#graphics--rendering)
-      	- [Audio System](#audio-system)
-      	- [Input & Controls](#input--controls)
-      	- [Advanced Features](#advanced-features)
-      	- [Development Tools](#development-tools)
-    - [Game Programming Patterns](#game-programming-patterns)
-    	- [Command Pattern](#command-pattern) 
-    	- [Observer Pattern](#observer-pattern) 
-    	- [Singleton Pattern](#singleton-pattern) 
-    	- [Game Loop](#game-loop) 
-    	- [Update Method](#update-method) 
-    	- [Double Buffer](#double-buffer) 
-    	- [Component Pattern](#component-pattern) 
-    	- [Dirty Flag](#dirty-flag) 
-    	- [Event Queue Pattern](#event-queue-pattern) 
-    	- [Service Locator Pattern](#service-locator-pattern) 
-    	- [GameObject Parent-Child Relationship](#gameobjects-parent-child-relationships) 
-    - [Pipeline](#pipeline)
-    - [Improvements & todos](#improvements--todos)
-- [Pacman](#pacman)
-    - [Intro](#intro)
-    - [Overview](#overview-1)
-    - [Controls](#controls)
-    - [Single Player](#single-player)
-    	- [AI](#ai) 
-    - [CO-OP](#co-op)
-    - [VERSUS](#versus)
-    	- [FREEMODE](#freemode)
-    	- [GHOST RULES](#ghost-rules)
-     - [Create Level](#create-level)
-     - [Play The Game](#play-the-game)
-  - [Conclusion](#conclusion)
-    - [References](#references) 
+- [**The Engine**](#the-engine)
+    - [**Features**](#features--architecture)
+    	- [**Core Engine Systems**](#core-engine-systems)
+     	- [**Component System**](#component-system)
+      	- [**Graphics & Rendering**](#graphics--rendering)
+      	- [**Audio System**](#audio-system)
+      	- [**Input & Controls**](#input--controls)
+      	- [**Advanced Features**](#advanced-features)
+      	- [**Development Tools**](#development-tools)
+    - [**Game Programming Patterns**](#game-programming-patterns)
+    	- [**Command Pattern**](#command-pattern) 
+    	- [**Observer Pattern**](#observer-pattern) 
+    	- [**Singleton Pattern**](#singleton-pattern) 
+    	- [**Game Loop**](#game-loop) 
+    	- [**Update Method**](#update-method) 
+    	- [**Double Buffer**](#double-buffer) 
+    	- [**Component Pattern**](#component-pattern) 
+    	- [**Dirty Flag**](#dirty-flag) 
+    	- [**Event Queue Pattern**](#event-queue-pattern) 
+    	- [**Service Locator Pattern**](#service-locator-pattern) 
+    	- [**GameObject Parent-Child Relationship**](#gameobjects-parent-child-relationships) 
+    - [**Pipeline**](#pipeline)
+    - [**Improvements & todos**](#improvements--todos)
+- [**Pac-Man**](#pac-man)
+    - [**Intro**](#intro)
+    - [**Overview**](#overview-1)
+    - [**Controls**](#controls)
+    - [**Single Player**](#single-player)
+    	- [**AI**](#ai) 
+    - [**CO-OP**](#co-op)
+    - [**VERSUS**](#versus)
+    	- [**FREEMODE**](#freemode)
+    	- [**GHOST RULES**](#ghost-rules)
+     - [**Create Level**](#create-level)
+     - [**Play The Game**](#play-the-game)
+  - [**Conclusion**](#conclusion)
+    - [**References**](#references) 
 
 # <ins>The Engine</ins>
 
@@ -56,8 +56,8 @@ The [Pacman demo](#pacman) included in this repo serves as proof of the engine's
 ## <ins>Features & Architecture</ins>
 
 ### <ins>Core Engine Systems</ins>
-- **SDL2 Integration:** Setup with SDL2, SDL_image, SDL_ttf, and SDL_mixer for graphics, audio, and multimedia support.
-- **Game Loop Architecture:** Comprised of an Initialization phase, Input processing, FixedUpdate for physics, Update, LateUpdate and Rendering pass.
+- **SDL2 Integration:** Setup with [**SDL2**](https://github.com/libsdl-org/SDL), **SDL_image**, **SDL_ttf**, and **SDL_mixer** for graphics, audio, and multimedia support.
+- **Game Loop Architecture:** Comprised of an **Initialization** phase, **Input processing**, **FixedUpdate** for physics, **Update**, **LateUpdate** and **Rendering** pass.
 
 ```c++
 	sceneManager.Init();
@@ -88,78 +88,102 @@ The [Pacman demo](#pacman) included in this repo serves as proof of the engine's
 ```
 
 - **Scene Management:** Global System for managing scenes. 
-- **Resource Management:** Global ResourceManager for handling textures, fonts, sounds, and other game assets to keep memory usage optimal.
+- **Resource Management:** Global **ResourceManager** for handling textures, fonts, sounds, and other game assets for an **optimal memory usage**.
 
 ### <ins>Component System</ins>
-- **GameObject Architecture:** GameObject system allowing modular game object composition with [Components](#component-pattern). Focusing the game towards Composition over Inheritence.
-- **Built-in Components:** Default components including Transform, Render, Text, Texture2D, Collider, Controller, and more.
+- **GameObject Architecture:** **GameObject** system allowing modular game object composition with [**Components**](#component-pattern). Focusing the game towards **Composition over Inheritence**.
+- **Built-in Components:** Default components including **Transform, Render, Text, Texture2D, Collider, Controller**, and more.
 - **Component Lifecycle:** Managed by their Owning GameObjects themselves managed by the scene.
 
 ### <ins>Graphics & Rendering</ins>
-- **2D Rendering Pipeline:** Simple SDL2 renderer with texture rendering, sprite animation, rotation support, shapes and more.
-- **ImGui Integration:** Built-in ImGUI system for debug interfaces and development tools.
+- **2D Rendering Pipeline:** Simple [**SDL2**](https://github.com/libsdl-org/SDL) renderer with **texture rendering**, **sprite animation**, **rotation** support, **various shapes** and more.
+- **ImGui Integration:** Built-in **ImGui** system for debug interfaces and development tools.
 
 ### <ins>Audio System</ins>
-- **Multi-format Audio:** Support for music and sound effects through SDL_mixer integration.
+- **Multi-format Audio:** Support for **music** and **sound effect**s through **SDL_mixer** integration.
 - **Audio Management:** Separate Music and SoundEffect classes with mute/volume control capabilities.
 
 ### <ins>Input & Controls</ins>
-- **Input Management:** Global InputManager with support for keyboard and controller input.
+- **Input Management:** Global **InputManager** on separate thread with support for **keyboard** and **controller** input.
 - **Command Pattern:** Built-in command system for handling player actions and game commands.
 
 ### <ins>Advanced Features</ins>
-- **Transform Hierarchy:** Parent-child GameObject relationships with world/local position management and dirty flag optimization.
-- **Collision System:** Basic collision detection with Collider components for game physics inspired from [Unreal Engine Collision system](https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview).
-- **Observer Pattern:** Event system with Subject/Observer implementation.
+- **Transform Hierarchy:** **Parent-child GameObject relationships** with world/local position management and dirty flag optimization.
+- **Collision System:** Basic **collision** detection with **Collider components** for **game physics** inspired from [**Unreal Engine Collision system**](https://dev.epicgames.com/documentation/en-us/unreal-engine/collision-in-unreal-engine---overview).
+- **Observer Pattern: Event system** with Subject/Observer implementation.
 - ~~**Steam Integration:** Steam Achievements system for Steam platform integration.~~ Since removed as it causes issues with controller inputs.
 
 ### <ins>Development Tools</ins>
-- **SVG Parser:** Custom SVG parsing capabilities for vector graphics importation.
-- **FPS Counter:** Built-in frame rate monitoring and display.
+- **SVG Parser:** Custom **SVG parsing** capabilities for vector graphics importation.
+- **FPS Counter:** Built-in **frame rate monitoring** and display.
 
-This overall Architecture provides a solid foundation for a 2D game engine. Which can easily be expanded upon as shown in my [SFML Engine](https://github.com/DijiOfficial/SFML-Engine).
+This overall Architecture provides a **solid foundation** for a **2D game engine**. Which can easily be **expanded upon** as shown in my [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine).
 </details>
 
 ## <ins>Game Programming Patterns</ins>
-Drawing inspiration from [Robert Nystrom's "Game Programming Patterns"](https://gameprogrammingpatterns.com), I implemented several key design patterns that provide structure and flexibility for game development.
+Drawing inspiration from [**Robert Nystrom's "Game Programming Patterns"**](https://gameprogrammingpatterns.com), I implemented several key design patterns that provide structure and flexibility for game development.
+
+<details>
+	 <summary>Click to expand <bold>Game Programming Patterns Section</bold></summary>
+
+I will link to each pattern from the book at then end of each pattern sections for reference.
 
 ### <ins>Command Pattern</ins>
 Created a base Command class providing a pure `virtual Execute()` method, allowing me to encapsulate input requests as objects. This allows me to map inputs to actions easily like [Unreal Engine Input system](https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine).
 
+[**Command Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/command.html)
+
 ### <ins>Observer Pattern</ins>
 I implemented a default system using IObserver and Subject classes. Allowing me to decouple object further by using messages as events, all components are both observers and subjects, allowing each components to listen for events/messages and execute code accordingly. 
 
-My current Implementation has one big weakness and that is it doesn't allow events to pass information with it. This could be fixed with templates, however in my newer [SFML Engine]() I completely changed this system to mimick the [Unreal Engine's event system]() using templates, making it much easier and cleaner to use.
+My current Implementation has one big weakness and that is it doesn't allow events to pass information with it. This could be fixed with templates, however in my newer [SFML Engine](https://github.com/DijiOfficial/SFML-Engine) I completely changed this system to mimick the [Unreal Engine's event system](https://dev.epicgames.com/documentation/en-us/unreal-engine/custom-events-in-unreal-engine) using templates, making it much cleaner and easier to use, decoupling it even further.
+
+[**Observer Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/observer.html)
 
 ### <ins>Singleton Pattern</ins>
 I made a template-based Singleton implementation used throughout the codebase. While I'm aware of the pattern's controversial nature, it's use can far outweight its downsides if used correctly as presented in the engine.
 
+[**Singleton Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/singleton.html)
+
 ### <ins>Game Loop</ins>
-The main loop handles timing, input processing, and separates game logic updates from rendering with fixed updates as well, ensuring consistent gameplay across different hardware.
+The main loop handles timing, input processing and separates game logic updates from rendering with fixed and late updates as well, ensuring consistent gameplay across different hardware.
+
+[**Game Loop Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/game-loop.html)
 
 ### <ins>Update Method</ins>
-I used a simple update method pattern with multiple phases:
+reused the pattern for different methods making it much sompler and easier to initialize update and render components:
 
-`Init() - Component initialization`, While initialy not present within the game loop, it was quickly added as it would GREATLY simplify initialization for gameobejcts and their compoentns.
+`Init()` - While initialy not present within the game loop, it was quickly added as it would GREATLY simplify initialization for gameobejcts and their compoentns.
 
-`Update() - Regular frame updates` In my case using a TimeSingleton to hold DeltaTime instead of passing it dowm. A design choice I'm still debating to this day!
+`Update()` In my case using a TimeSingleton to hold DeltaTime instead of passing it dowm. A design choice I'm still debating to this day!
 
-`FixedUpdate() - Fixed timestep physics/logic updates`
+`FixedUpdate()` as per the name, an update with a fixed frame rate, capable of iterating multiple times per frame to catch up on lower frame rates keeping physics consistent.
 
-`LateUpdate() - Post-update update to ensure that dependant components have the correct updated data for their own updates`
+`LateUpdate()` - Post-update update to ensure that dependant components have the correct updated data for their own updates`
+
+[**Update Method Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/update-method.html)
 
 ### <ins>Double Buffer</ins>
 Used in rendering with SDL2's built-in double buffering system. having no other uses it is currently it's only usage.
 
+[**Double Buffer Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/double-buffer.html)
+
 ### <ins>Component Pattern</ins>
-Composition over Inheritance! Featuring a complete Entity-Component system where GameObjects are composed of various components. This promotes modularity and reusability, allowing for flexible game object creation without deep inheritance hierarchies.
-In my version GameObjects come bare without any components. Altough this was changed midway through development the Transform was moved outside the GameObject into it's own component. It has remained the same in my [SFML Engine](). I marked it asa future improvement that every gameobject upon creation will come with a transform component. As 99% of uses need one.
+Composition over Inheritance! Featuring a complete Entity-Component system where GameObjects are composed and hanndle various components. this makes for simple and flexible game object creation.
+
+In my version GameObjects come bare without any components. Altough this was changed midway through development the Transform was moved outside the GameObject into it's own component. It has remained the same in my [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine). I marked it asa future improvement that every gameobject upon creation will come with a transform component.
+
+[**Component Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/component.html)
 
 ### <ins>Dirty Flag</ins>
-Used in different context, as well as the Transform component and GameObject hierarchy system. used to optimize expensive operations like world position calculations, only recalculating when necessary.
+Used in different context, including the Transform component and GameObject hierarchy system. used to optimize expensive operations like world position calculations, only recalculating when necessary.
+
+[**Dirty Flag Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/dirty-flag.html)
 
 ### <ins>State Pattern</ins>
-Not found in the engine as I found that simpler GameState did the trick much better, however it is extensively used in the Pac-Man example through the ghost AI system. simplifying the headache that is  the state transitions and behavior management of the ghost AI.
+Not found in the engine as it would not simplify already simple beahviours, however it is extensively used in the [**Pac-Man**](#pac-man) example through the [**ghost AI system**](#ai). simplifying the headache that is the state transitions and behavior management of the [**ghost AI**](#ai).
+
+[**State Pattern by Robert Nystrom**](https://gameprogrammingpatterns.com/state.html)
 
 ### <ins>Event Queue Pattern</ins>
 The audio system implements an event queue through the SDLISoundSystem class. Sound requests are queued using `std::queue` and processed asynchronously on a separate thread.
@@ -171,6 +195,8 @@ The audio system also implements the Service Locator pattern through the Service
 GameObjects support parent-child relationships with proper world/local position management, implementing a scene graph pattern common in game engines.
 
 These patterns allow me to provides a clean, maintainable code architecture.
+
+</details>
 
 ## <ins>Pipeline</ins>
 
@@ -186,7 +212,7 @@ This section is dedicated to potential improvements for the engine. However if y
 
 With all of that said, let's get into the example usage of this engine.
 
-# <ins>Pacman</ins>
+# <ins>Pac-Man</ins>
 
 The Following sections will guide you through my implementation of the original Pacman arcade game that I made!
 
