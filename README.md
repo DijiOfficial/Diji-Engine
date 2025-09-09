@@ -346,7 +346,7 @@ As I was making the game and the engine I quickly realised the potential it had,
 
 ## <ins>Play The Game</ins>
 
-You can [**play a web version of the game here**](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) or [**download the C++ version here**]().
+You can [**play a web version of the game here**](https://dijiofficial.github.io/MyPortfolio/Projects/Pacman.html#status) or [**download the C++ executable here**](https://github.com/DijiOfficial/Diji-Engine/releases/tag/v1.0).
 
 # <ins>Conclusion</ins>
 
