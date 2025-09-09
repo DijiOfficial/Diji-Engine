@@ -193,7 +193,7 @@ These patterns allow me to provides a clean and maintainable code architecture.
 
 ## <ins>Pipeline</ins>
 
-As mentionned before, I kept the pipeline quite simple not needing complex collision, rendering and such.
+As mentioned before, I kept the pipeline quite simple not needing complex collision, rendering and such.
 
 ![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/Pipeline.png)
 
@@ -201,7 +201,7 @@ In my pipeline, I check for scene changes after the `Update` method. This isn’
 
 ## <ins>Improvements & todos</ins>
 
-If you’ve gotten this far, you’ve seen the [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine) mentionned a couple of times. That engine is an upgraded version building on top of this one's framework, with many improvements made to the engine itself as well as more modernized code. So if you haven't already I invite to go over the the [**SFML Engine GitHub Page**](https://github.com/DijiOfficial/SFML-Engine) to find out about the improved version of the engine!
+If you’ve gotten this far, you’ve seen the [**SFML Engine**](https://github.com/DijiOfficial/SFML-Engine) mentioned a couple of times. That engine is an upgraded version building on top of this one's framework, with many improvements made to the engine itself as well as more modernized code. So if you haven't already I invite to go over the the [**SFML Engine GitHub Page**](https://github.com/DijiOfficial/SFML-Engine) to find out about the improved version of the engine!
 
 With all of that said, let's get into the example usage of this engine.
 
