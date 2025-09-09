@@ -353,5 +353,9 @@ If you’ve read this far, thank you. I hope this gave you a clear picture of wh
 
 - [**Pac-Man (Arcade Game)**](https://en.wikipedia.org/wiki/Pac-Man)  
 - [**Original Pac-Man Gameplay (Video)**](https://youtu.be/dScq4P5gn4A)  
-- [**Retro Game Mechanics Explained – Ghost AI**](https://youtu.be/ataGotQ7ir8)  
-- [**Unity Execution Order (Reference for Engine Pipeline)**](https://docs.unity3d.com/6000.2/Documentation/Manual/execution-order.html)   
+- [**Retro Game Mechanics Explained – Pac-Man Ghost AI Explained**](https://youtu.be/ataGotQ7ir8)  
+- [**Retro Game Mechanics Explained – How Frightened Ghosts Decide Where to Go**](https://youtu.be/eFP0_rkjwlY?list=PLHQ0utQyFw5IQyWhyR5Ec8_aQ3-BrLJZ9 )  
+- [**Unity Execution Order (Reference for Engine Pipeline)**](https://docs.unity3d.com/6000.2/Documentation/Manual/execution-order.html)  
+- [**Unreal Engine Doc**](https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5-6-documentation)
+- [**Unity Doc**](https://docs.unity.com/en-us)
+
