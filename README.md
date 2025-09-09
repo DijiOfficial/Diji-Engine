@@ -306,7 +306,7 @@ Finally, all states are managed by the GhostAI.
 
 ![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/GhostAIStateSwitch.png)
 
-Comprehensible, flexible, and expandable!
+Comprehensible, flexible, and expandable! (P.S. seeing the code I now realise I could have held the state as an enum class and used that instead of dynamic casting!)
 
 ## <ins>CO-OP</ins>
 
