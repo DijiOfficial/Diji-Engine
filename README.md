@@ -316,7 +316,7 @@ For co-op, I decided to count both players as one. The biggest issue I wanted to
 
 I also wanted to avoid competition. Both players work together to complete the game. If one dies, both die. Points and lives are shared.
 
-(video demo)
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/PacManCoopGif.gif)
 
 ## <ins>VERSUS</ins>
 
