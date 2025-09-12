@@ -326,11 +326,12 @@ I made two versus modes. Though similar, they help demonstrate the engine’s ca
 
 Freemode is the first option, allowing the second player to control the red ghost. At the time I didn't think of removing the other 3 ghosts for balance. So allowing the ghost to be controlled by a player made it very unfair for player 1.
 
-(video demo)
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/PacmanFreemodeGif.gif)
+
 ### <ins>GHOST RULES</ins>
 I then made Ghost Rules, where the second player still controls the red ghost but it must abide by ghost rules. Forcing movement at all times and restricted directions.
 
-(video demo)
+![Picture of the Pipeline](https://github.com/DijiOfficial/Diji-Engine/blob/master/GitHubAssets/GhostRules.gif)
 
 ## <ins>Create Level</ins>
 
