@@ -1,3 +1,4 @@
+// ReSharper disable CppClangTidyClangDiagnosticImplicitExceptionSpecMismatch
 #include <stdexcept>
 #define WIN32_LEAN_AND_MEAN 
 #include <windows.h>
@@ -90,13 +91,13 @@ diji::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void diji::Minigin::Run(const std::function<void()>& load)
+void diji::Minigin::Run(const std::function<void()>& load) const
 {
 	load();
 	//Enable vSync
 	SDL_GL_SetSwapInterval(1);
 
-	auto& renderer = Renderer::GetInstance();
+	const auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 

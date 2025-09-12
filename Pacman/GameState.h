@@ -12,5 +12,6 @@ namespace pacman
         VERSUS,
         GAMEOVER,
         INTRO,
+        FREEMODE
     };
 }

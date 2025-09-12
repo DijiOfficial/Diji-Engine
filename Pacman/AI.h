@@ -37,6 +37,8 @@ namespace pacman {
 		void SetInitialMovementLeft() { m_PreviousMovement = diji::Movement::Left; m_SavedMovement = diji::Movement::Left; };
 		int GetGhostsEaten() const { return m_GhostsEaten; }
 		static constexpr float TOTAL_WIDTH = 452;
+		static constexpr float PLAYER_MOVE_DISTANCE = 2.0f;
+		static bool CheckIfDirectionIsValid(const diji::Movement& movement, diji::Collider* collider, diji::Transform* transform, bool isInTunnel = false);
 	private:
 		diji::Texture* m_TextureCompPtr;
 		diji::Transform* m_TransformCompPtr;
@@ -45,7 +47,6 @@ namespace pacman {
 		diji::Movement m_SavedMovement = diji::Movement::Right;
 
 		const glm::vec2 m_Speed = { 160.f, 160.f };
-		const diji::Rectf CalculateNewPosition(diji::Movement movement);
 		bool m_PauseAI = true;
 		bool m_IsInMenu = false;
 		float m_PauseTime = -10.f;
@@ -55,9 +56,9 @@ namespace pacman {
 
 		bool m_TeleportedThisFrame = false;
 
+		const diji::Rectf CalculateNewPosition(diji::Movement movement);
 		bool IsGhostFrightened(diji::Subject* subject) const;
 		void Reset();
-		bool CheckIfDirectionIsValid(const diji::Movement& movement);
 	};
 }
 

@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "Texture.h"
 #include "ISoundSystem.h"
+#include "AI.h"
 
 #pragma region GhostState
 void pacman::GhostState::SeekTarget(const GhostAI* ghost, const glm::vec2& target)
@@ -185,6 +186,80 @@ diji::Movement pacman::GhostState::ChooseRandomDirection(const std::map<diji::Mo
 
 	return availableDirections[randomIndex];
 }
+
+void pacman::GhostState::FreeModeMovement(const GhostAI* ghost)
+{
+	const auto& transform = ghost->GetTransform();
+	const auto& collider = ghost->GetCollider();
+	const auto& texture = ghost->GetTexture();
+
+	const auto& currentMovement = transform->GetMovement();
+	const auto& shape = CalculateNewPosition(currentMovement, collider, transform);
+
+	if (pacman::AI::CheckIfDirectionIsValid(currentMovement, collider, transform, m_IsInTunnel) and !diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+	{
+		transform->SetPosition(shape.left, shape.bottom);
+		if (m_PreviousMovement != currentMovement)
+		{
+			if (m_PreviousMovement == diji::Movement::Idle)
+				texture->ResumeAnimation();
+			if (currentMovement == diji::Movement::Idle)
+				texture->PauseAnimation();
+			else
+				texture->SetRotationAngle(static_cast<int>(currentMovement) * 90.0f);
+
+			m_PreviousMovement = currentMovement;
+		}
+
+		if (currentMovement != diji::Movement::Idle)
+			transform->SetLookingDirection(currentMovement);
+	}
+	else
+	{
+		const auto& oldShape = CalculateNewPosition(m_PreviousMovement, collider, transform);
+
+		if (!diji::Collision::GetInstance().IsCollidingWithWorld(oldShape))
+			transform->SetPosition(oldShape.left, oldShape.bottom);
+		else
+			transform->SetMovement(diji::Movement::Idle);
+
+		if (m_PreviousMovement != diji::Movement::Idle)
+			transform->SetLookingDirection(m_PreviousMovement);
+	}
+}
+
+const diji::Rectf pacman::GhostState::CalculateNewPosition(const diji::Movement& movement, diji::Collider* collider, diji::Transform* transform)
+{
+	const float speed = m_IsInTunnel ? m_TunnelSpeed : m_Step;
+	const auto position = transform->GetPosition() + glm::vec3{ transform->Get2DMovementVector(movement, speed), 0.0f };
+	auto shape = collider->GetCollisionBox();
+	shape.left = position.x;
+	shape.bottom = position.y;
+
+	if (diji::Collision::GetInstance().IsCollidingWithWorld(shape))
+	{
+		shape.left = std::round(shape.left);
+		shape.bottom = std::round(shape.bottom);
+		switch (movement)
+		{
+		case diji::Movement::Up:
+			++shape.bottom;
+			break;
+		case diji::Movement::Down:
+			--shape.bottom;
+			break;
+		case diji::Movement::Left:
+			++shape.left;
+			break;
+		case diji::Movement::Right:
+			--shape.left;
+			break;
+		}
+	}
+
+	return shape;
+}
+
 #pragma endregion
 #pragma region Eaten
 void pacman::Eaten::OnEnter(const GhostAI* ghost)
@@ -377,7 +452,7 @@ std::unique_ptr<pacman::GhostState> pacman::Scatter::Execute(const GhostAI* ghos
 {
 	GoToTarget(ghost, m_Target);
 
-	if (ghost->IsPLayerControlled())
+	if (ghost->IsPLayerControlled() or ghost->IsInFreeMode())
 		return ghost->GetChaseState();
 
 	if (ghost->GetIsInChaseState())
@@ -392,7 +467,9 @@ std::unique_ptr<pacman::GhostState> pacman::Scatter::Execute(const GhostAI* ghos
 #pragma region Frightened
 void pacman::Frightened::OnEnter(const GhostAI* ghost)
 {
-	ghost->TurnAround();
+	if (not ghost->IsInFreeMode())
+		ghost->TurnAround();
+
 	const auto& texture = ghost->GetTexture();
 	texture->SetTexture("Frightened.png");
 	texture->SetNrOfFrames(2);
@@ -420,19 +497,24 @@ void pacman::Frightened::OnExit(const GhostAI* ghost)
 
 std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* ghost)
 {
-	const auto& transform = ghost->GetTransform();
-	const auto& collider = ghost->GetCollider();
+	if (ghost->IsInFreeMode())
+		FreeModeMovement(ghost);
+	else
+	{
+		const auto& transform = ghost->GetTransform();
+		const auto& collider = ghost->GetCollider();
 
-	SeekTarget(ghost, glm::vec2{ -1, -1 });
+		SeekTarget(ghost, glm::vec2{ -1, -1 });
 
-	const auto position = transform->GetPosition() + transform->GetMovementVector(m_Step);
+		const auto position = transform->GetPosition() + transform->GetMovementVector(m_Step);
 
-	auto shape = collider->GetCollisionBox();
-	shape.left = position.x;
-	shape.bottom = position.y;
+		auto shape = collider->GetCollisionBox();
+		shape.left = position.x;
+		shape.bottom = position.y;
 
-	//if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
-		transform->SetPosition(position);
+		//if (not diji::Collision::GetInstance().IsCollidingWithWorld(shape)) //check for collision just in case ghost goes over intersection trigger
+			transform->SetPosition(position);
+	}
 
 	if (not m_IsUpdated and ghost->IsPowerAlmostOver())
 	{
@@ -442,7 +524,7 @@ std::unique_ptr<pacman::GhostState> pacman::Frightened::Execute(const GhostAI* g
 	}
 
 	if (not ghost->IsFrightened())
-		return (ghost->GetIsInChaseState() or ghost->IsPLayerControlled()) ? ghost->GetChaseState() : std::make_unique<Scatter>();
+		return (ghost->GetIsInChaseState() or ghost->IsPLayerControlled() or ghost->IsInFreeMode()) ? ghost->GetChaseState() : std::make_unique<Scatter>();
 
 	return nullptr;
 }
@@ -465,12 +547,18 @@ std::unique_ptr<pacman::GhostState> pacman::RedChase::Execute(const GhostAI* gho
 	const auto& playerPos = player->GetCollisionBox();
 	const glm::vec2 target(playerPos.left + playerPos.width * 0.5f, playerPos.bottom + playerPos.height * 0.5f);
 
-	GoToTarget(ghost, target);
+	if (ghost->IsInFreeMode())
+		FreeModeMovement(ghost);
+	else
+		GoToTarget(ghost, target);
 
 	if (ghost->IsFrightened())
 		return std::make_unique<Frightened>();
 
-	//could add the additional check for pellets remaining here
+	if (ghost->IsInFreeMode())
+		return nullptr;
+
+	//todo: could add the additional check for pellets remaining here
 	if (not ghost->GetIsInMenu())
 		if (not ghost->IsPLayerControlled() and not ghost->GetIsInChaseState())
 			return std::make_unique<Scatter>();

@@ -14,6 +14,7 @@ namespace Loader
 	void PacmanLevel();
 	void VersusLevel();
 	void CoopLevel();
+	void FreemodeLevel();
 	void HighScoreMenu(int score = 0);
 	void Load();
 

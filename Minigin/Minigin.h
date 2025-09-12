@@ -15,7 +15,7 @@ namespace diji
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
 
-		void Run(const std::function<void()>& load);
+		void Run(const std::function<void()>& load) const;
 
 	private:
 		static constexpr float FIXED_TIME_STEP{ 1 / 60.f };

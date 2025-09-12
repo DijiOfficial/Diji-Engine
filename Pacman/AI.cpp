@@ -21,10 +21,8 @@ namespace pacman {
     constexpr int DEATH_ANIMATION_FRAMES = 13;
     constexpr float PAUSE_AI_TIME = 2.0f;
     constexpr int GHOST_EATEN_BASE_POINTS = 200;
-    constexpr float PLAYER_MOVE_DISTANCE = 2.0f;
     constexpr glm::ivec2 ORIGINAL_POSITION{ 214, 439 };
     constexpr float TILE_SIZE = 20.0f;
-    constexpr float TOTAL_WIDTH = 452.0f;
 
     AI::AI(diji::GameObject* ownerPtr)
         : Component(ownerPtr)
@@ -70,7 +68,7 @@ namespace pacman {
             return;
         }
 
-        //clean up if statemetns
+        //todo: clean up if statemetns
         if (m_PauseAI)
         {
             m_PauseTime += diji::TimeSingleton::GetInstance().GetDeltaTime();
@@ -96,7 +94,7 @@ namespace pacman {
         const auto& currentMovement = m_TransformCompPtr->GetMovement();
         const auto& shape = CalculateNewPosition(currentMovement);
 
-        if (m_IsInMenu or (CheckIfDirectionIsValid(currentMovement) and !diji::Collision::GetInstance().IsCollidingWithWorld(shape)))
+        if (m_IsInMenu or (CheckIfDirectionIsValid(currentMovement, m_ColliderCompPtr, m_TransformCompPtr) and !diji::Collision::GetInstance().IsCollidingWithWorld(shape)))
         {
             m_TransformCompPtr->SetPosition(shape.left, shape.bottom);
             if (m_PreviousMovement != currentMovement)
@@ -306,11 +304,14 @@ namespace pacman {
         diji::ServiceLocator::GetSoundSystem().AddSoundRequest("siren_1.wav", true, -1);
     }
 
-    bool AI::CheckIfDirectionIsValid(const diji::Movement& movement)
+    bool AI::CheckIfDirectionIsValid(const diji::Movement& movement, diji::Collider* collider, diji::Transform* transform, bool isInTunnel)
     {
-        const auto& playerShape = m_ColliderCompPtr->GetCollisionBox();
+        if (isInTunnel and (movement == diji::Movement::Up or movement == diji::Movement::Down))
+            return false;
+
+        const auto& playerShape = collider->GetCollisionBox();
         const glm::vec2 playerCenter(playerShape.left + playerShape.width * 0.5f, playerShape.bottom + playerShape.height * 0.5f);
-        const glm::vec2 movementVector = m_TransformCompPtr->Get2DMovementVector(movement, TILE_SIZE);
+        const glm::vec2 movementVector = transform->Get2DMovementVector(movement, TILE_SIZE);
 
         glm::vec2 rayStart1, rayStart2, rayStart3;
         if (movement == diji::Movement::Up || movement == diji::Movement::Down)

@@ -36,8 +36,17 @@ void pacman::GhostAI::Reset()
 	{
 		constexpr glm::ivec2 BLINKY_SPAWN = { 212, 247 };
 		m_TransformCompPtr->SetPosition(BLINKY_SPAWN);
-		m_TransformCompPtr->SetMovement(diji::Movement::Right);
-		m_CurrentStateUPtr = std::make_unique<Scatter>();
+		if (m_IsInFreeMode) 
+		{
+			m_TransformCompPtr->SetMovement(diji::Movement::Left);
+			m_CurrentStateUPtr = std::make_unique<RedChase>();
+		}
+		else
+		{
+			m_TransformCompPtr->SetMovement(diji::Movement::Right);
+			m_CurrentStateUPtr = std::make_unique<Scatter>();
+		}
+		
 	}
 	m_TextureCompPtr->SetTexture(m_TexturePath);
 	m_PowerUpTimer = 0.f;
@@ -89,7 +98,10 @@ void pacman::GhostAI::Update()
 	constexpr float TUNNEL_X_MAX = 360.0f;
 	constexpr float POWER_UP_DURATION = 10.0f;
 
-	const auto& pos = m_TransformCompPtr->GetPosition();
+	glm::vec3 pos = m_TransformCompPtr->GetPosition();
+	if (m_IsInFreeMode)
+		pos.y = floor(pos.y);
+	
 	m_CurrentStateUPtr->SetInTunnel(pos.y == TUNNEL_Y_POSITION and (pos.x <= TUNNEL_X_MIN or pos.x >= TUNNEL_X_MAX));
 
 	if (m_IsFrightened)
@@ -107,9 +119,7 @@ void pacman::GhostAI::Update()
 void pacman::GhostAI::FixedUpdate()
 {
 	if (m_IsPlayerKilled)
-	{
 		return;
-	}
 
 	if (m_GhostsTimerPtr->IsPaused() and
 		dynamic_cast<const pacman::Respawn*>(m_CurrentStateUPtr.get()) == nullptr and
@@ -138,14 +148,38 @@ void pacman::GhostAI::FixedUpdate()
 
 void pacman::GhostAI::LateUpdate()
 {
-	auto currentMovement = m_TransformCompPtr->GetMovement();
-	auto shape = m_ColliderCompPtr->GetCollisionBox();
-	if (currentMovement == diji::Movement::Left)
-		if (shape.left < 0 - shape.width)
-			m_TransformCompPtr->SetPosition(AI::TOTAL_WIDTH, shape.bottom);
-	if (currentMovement == diji::Movement::Right)
-		if (shape.left > AI::TOTAL_WIDTH)
-			m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
+	if (m_IsInFreeMode)
+	{
+		const auto& shape = m_ColliderCompPtr->GetCollisionBox();
+		if (!m_TeleportedThisFrame)
+		{
+			if (shape.left < 0 - shape.width)
+			{
+				m_TransformCompPtr->SetPosition(AI::TOTAL_WIDTH, shape.bottom);
+				m_TeleportedThisFrame = true;
+			}
+			else if (shape.left > AI::TOTAL_WIDTH)
+			{
+				m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
+				m_TeleportedThisFrame = true;
+			}
+		}
+		else
+		{
+			m_TeleportedThisFrame = false;
+		}
+	}
+	else
+	{
+		auto currentMovement = m_TransformCompPtr->GetMovement();
+		auto shape = m_ColliderCompPtr->GetCollisionBox();
+		if (currentMovement == diji::Movement::Left)
+			if (shape.left < 0 - shape.width)
+				m_TransformCompPtr->SetPosition(AI::TOTAL_WIDTH, shape.bottom);
+		if (currentMovement == diji::Movement::Right)
+			if (shape.left > AI::TOTAL_WIDTH)
+				m_TransformCompPtr->SetPosition(0 - shape.width, shape.bottom);
+	}
 }
 
 void pacman::GhostAI::OnNotify(diji::MessageTypes message, diji::Subject* subject)

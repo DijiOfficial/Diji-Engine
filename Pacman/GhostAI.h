@@ -89,8 +89,10 @@ namespace pacman
 
 		//player controls
 		void SetAsPlayer() { m_IsPlayerControlled = true; };
+		void SetFreeMovement() { m_IsInFreeMode = true; };
 		void SetNextMovement(const diji::Movement movement) { m_NextDirection = movement; };
 		bool IsPLayerControlled() const { return m_IsPlayerControlled; };
+		bool IsInFreeMode() const { return m_IsInFreeMode; };
 		diji::Movement GetNextMovement() const { return m_NextDirection; };
 
 	protected:
@@ -123,6 +125,8 @@ namespace pacman
 
 		//player controls
 		bool m_IsPlayerControlled = false;
+		bool m_IsInFreeMode = false;
+		bool m_TeleportedThisFrame = false;
 		diji::Movement m_NextDirection;
 	};
 
@@ -130,7 +134,7 @@ namespace pacman
 	{
 	public:
 		RedAI(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers);
-		~RedAI() noexcept = default;
+		~RedAI() noexcept override = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;
 
@@ -141,7 +145,7 @@ namespace pacman
 	{
 	public:
 		Pinky(diji::GameObject* ownerPtr, diji::GameObject* player, const diji::GameObject* pelletCounter, const diji::GameObject* timers);
-		~Pinky() noexcept = default;
+		~Pinky() noexcept override = default;
 
 		std::unique_ptr<GhostState> GetChaseState() const override;
 

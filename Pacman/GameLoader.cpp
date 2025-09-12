@@ -841,6 +841,41 @@ void Loader::CoopLevel()
 #pragma endregion
 }
 
+void Loader::FreemodeLevel()
+{
+	auto scene = SceneManager::GetInstance().CreateScene(static_cast<int>(pacman::GameState::FREEMODE));
+
+	CommonGameAssets(scene);
+
+	scene->GetGameObject("playerTextHUD")->GetComponent<Text>()->SetText("2UP");
+	//todo: change AI and RedAI names
+	//todo: add a pause menu
+	//todo: add option to choose which player controlls ghost
+	//todo: add little sounds for the menu
+	//todo: fix the ghost not looking the right direction
+	const auto& player2 = scene->GetGameObject("z_Blinky");
+	player2->GetComponent<pacman::RedAI>()->SetFreeMovement();
+
+	const std::vector<GameObject*> ghosts = { scene->GetGameObject("z_Blinky"), scene->GetGameObject("z_Pinky"), scene->GetGameObject("z_Inky"), scene->GetGameObject("z_Clyde") };
+	pacman::PickUpLoader pickUpLoader{ scene->GetGameObject("player"), ghosts, scene->GetGameObject("pelletCounter"), scene };
+
+#pragma region Input
+	auto& input = InputManager::GetInstance();
+
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadUp, player2, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadLeft, player2, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadDown, player2, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER1, KeyState::HELD, Controller::Button::DPadRight, player2, Movement::Right);
+
+	const auto& player = scene->GetGameObject("player");
+
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadUp, player, Movement::Up);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadLeft, player, Movement::Left);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadDown, player, Movement::Down);
+	input.BindCommand<pacman::Move>(PlayerIdx::PLAYER2, KeyState::HELD, Controller::Button::DPadRight, player, Movement::Right);
+#pragma endregion
+}
+
 void Loader::HighScoreMenu(int score)
 {
 	InputManager::GetInstance().ResetCommands();

@@ -3,10 +3,14 @@
 #include <map>
 #include <glm/vec2.hpp>
 #include <array>
+#include "Command.h"
 
 namespace diji
 {
 	enum class Movement;
+	struct Rectf;
+	class Collider;
+	class Transform;
 }
 
 namespace pacman 
@@ -36,6 +40,11 @@ namespace pacman
 		const glm::vec2 m_SpawnPoint = { 227, 262 };
 		float m_Step = 1.875f;
 		bool m_DisplayDirection = true;
+		
+		void FreeModeMovement(const GhostAI* ghost);
+		const diji::Rectf CalculateNewPosition(const diji::Movement& movement, diji::Collider* collider, diji::Transform* transform);
+		diji::Movement m_PreviousMovement = diji::Movement::Right;
+
 	private:
 		static constexpr std::array<glm::vec2, 4> m_BlockedIntersections = { {{202, 262}, {250, 262}, {202, 454}, {250, 454}} };
 		bool m_TempLock = false;
@@ -52,8 +61,8 @@ namespace pacman
 	class Waiting final : public GhostState
 	{
 	public:
-		Waiting(const int pellets);
-		~Waiting() noexcept = default;
+		explicit Waiting(const int pellets);
+		~Waiting() noexcept override = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override;
@@ -69,7 +78,7 @@ namespace pacman
 	{
 	public:
 		using GhostState::GhostState;
-		~Eaten() noexcept = default;
+		~Eaten() noexcept override = default;
 
 		void OnEnter(const GhostAI* ghost) override;
 		void OnExit(const GhostAI*) override;

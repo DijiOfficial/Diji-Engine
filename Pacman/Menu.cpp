@@ -117,9 +117,9 @@ void pacman::Menu::ValidateChoice()
 	case pacman::MenuState::MULTIPLAYEROPTIONS:
 		switch (m_SelectedIndex)
 		{
-		case 0://Freemode versus
-			//state = GameState::VERSUS;
-			//Loader::CoopLevel();
+		case 0:
+			state = GameState::FREEMODE;
+			Loader::FreemodeLevel();
 			break;
 		case 1:
 			state = GameState::VERSUS;
